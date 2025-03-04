@@ -22,7 +22,7 @@ class ApiUserController extends AbstractController
             return new JsonResponse([
                 'status' => "Bad Request",
                 'statusCode' => 400
-            ]);
+            ], 400);
         }
         $user = $entityManager->getRepository(User::class)->find($data['id']);
         if (!$user) {
@@ -44,8 +44,16 @@ class ApiUserController extends AbstractController
             return new JsonResponse([
                 'status' => "Bad Request",
                 'statusCode' => 400
-            ]);
+            ], 400);
         }
+        $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        if ($existingUser) {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'statusCode' => 403
+            ], 403);
+        }
+
         $user = new User();
         $user->setEmail($data['email']);
         $user->setPassword($data['password']);
@@ -55,11 +63,10 @@ class ApiUserController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        //Todo : Check si l'email existe déjà
         return new JsonResponse([
             'status' => "Created",
             'statusCode' => 201
-        ]);
+        ], 201);
     }
 
     #[Route('/edit', methods: ['PUT'])]
@@ -71,14 +78,14 @@ class ApiUserController extends AbstractController
             return new JsonResponse([
                 'status' => "Bad Request",
                 'statusCode' => 400
-            ]);
+            ], 400);
         }
         $user = $entityManager->getRepository(User::class)->find($data['id']);
         if (!$user) {
             return new JsonResponse([
                 'status' => "Not Found",
                 'statusCode' => 404
-            ]);
+            ], 404);
         }
 
         if (isset($data['email'])) $user->setEmail($data['email']);
@@ -86,14 +93,20 @@ class ApiUserController extends AbstractController
         if (isset($data['name'])) $user->setName($data['name']);
         if (isset($data['surname'])) $user->setSurname($data['surname']);
 
+        if ($existingUser) {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'statusCode' => 403
+            ], 403);
+        }
+
         $entityManager->persist($user);
         $entityManager->flush();
 
-        //Todo : Check si l'email existe déjà
         return new JsonResponse([
             'status' => "OK",
             'statusCode' => 200
-        ]);
+        ], 200);
     }
 
     #[Route('/delete', methods: ['DELETE'])]
@@ -105,20 +118,20 @@ class ApiUserController extends AbstractController
             return new JsonResponse([
                 'status' => "Bad Request",
                 'statusCode' => 400
-            ]);
+            ], 400);
         }
         $user = $entityManager->getRepository(User::class)->find($data['id']);
         if (!$user) {
             return new JsonResponse([
                 'status' => "Not Found",
                 'statusCode' => 404
-            ]);
+            ], 404);
         }
         $entityManager->remove($user);
         $entityManager->flush();
         return new JsonResponse([
             'status' => "OK",
             'statusCode' => 200
-        ]);
+        ], 200);
     }
 }
