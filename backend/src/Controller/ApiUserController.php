@@ -10,9 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 #[Route('/api/user', name: 'api_user')]
 class ApiUserController extends AbstractController
 {
+    private $hasher;
+    public function __construct(UserPasswordHasherInterface $hasher) 
+    {
+        $this->hasher = $hasher;
+    }
     #[Route('/get', methods: ['POST'])]
     public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -56,7 +63,7 @@ class ApiUserController extends AbstractController
 
         $user = new User();
         $user->setEmail($data['email']);
-        $user->setPassword($data['password']);
+        $user->setPassword($this->hasher->hashPassword($user,$data['password']));
         $user->setName($data['name']);
         $user->setSurname($data['surname']);
 
