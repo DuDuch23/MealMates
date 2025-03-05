@@ -16,6 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class ApiUserController extends AbstractController
 {
     private $hasher;
+    private $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
     public function __construct(UserPasswordHasherInterface $hasher) 
     {
         $this->hasher = $hasher;
@@ -29,8 +30,8 @@ class ApiUserController extends AbstractController
         {
             return new JsonResponse([
                 'status' => "Bad Request",
-                'statusCode' => 400,
-                'message' => "400 Bad Request : Missing 'id' parameter."
+                'code' => 400,
+                'message' => "Missing 'id' parameter."
             ], 400);
         }
         $user = $entityManager->getRepository(User::class)->find($data['id']);
@@ -38,14 +39,13 @@ class ApiUserController extends AbstractController
         {
             return new JsonResponse([
                 'status' => "Not Found",
-                'statusCode' => 404,
-                'message' => "404 Not Found : User doesn't exist "
+                'code' => 404,
+                'message' => "User doesn't exist "
             ], 404);
         }
         return new JsonResponse([
             'status' => "OK",
-            'statusCode' => 200,
-            'message' => "200 OK",
+            'code' => 200,
             'data' => [
                 'email' => $user->getEmail(),
                 'name' => $user->getName(),
@@ -63,16 +63,24 @@ class ApiUserController extends AbstractController
         {
             return new JsonResponse([
                 'status' => "Bad Request",
-                'statusCode' => 400,
-                'message' => "400 Bad Request : Missing parameters."
+                'code' => 400,
+                'message' => "Missing parameters."
             ], 400);
         }
         $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
         if ($existingUser) {
             return new JsonResponse([
                 'status' => "Forbidden",
-                'statusCode' => 403,
-                'message' => "403 Forbidden : Email already exists"
+                'code' => 403,
+                'message' => "Email already exists"
+            ], 403);
+        }
+        if (!preg_match($this->regex, $data["password"]))
+        {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'code' => 403,
+                'message' => "Password must be 8+ characters, contain 1 lowercase, 1 uppercase, 1 digit, 1 special character."
             ], 403);
         }
 
@@ -87,8 +95,7 @@ class ApiUserController extends AbstractController
 
         return new JsonResponse([
             'status' => "Created",
-            'statusCode' => 201,
-            'message' => "201 Created"
+            'code' => 201,
         ], 201);
     }
 
@@ -100,8 +107,8 @@ class ApiUserController extends AbstractController
         {
             return new JsonResponse([
                 'status' => "Bad Request",
-                'statusCode' => 400,
-                'message' => "400 Bad Request : Missing 'id' parameter."
+                'code' => 400,
+                'message' => "Missing 'id' parameter."
             ], 400);
         }
         $user = $entityManager->getRepository(User::class)->find($data['id']);
@@ -109,16 +116,16 @@ class ApiUserController extends AbstractController
         {
             return new JsonResponse([
                 'status' => "Not Found",
-                'statusCode' => 404,
-                'message' => "404 Not Found : User doesn't exist "
+                'code' => 404,
+                'message' => "User doesn't exist "
             ], 404);
         }
         if ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
         {
             return new JsonResponse([
                 'status' => "Unauthorized",
-                'statusCode' => 401,
-                'message' => "401 Unauthorized : You are not abilitated to perform this action"
+                'code' => 401,
+                'message' => "You are not abilitated to perform this action"
             ], 401);
         }
         if (isset($data['email'])) {
@@ -127,10 +134,18 @@ class ApiUserController extends AbstractController
             {
                 return new JsonResponse([
                     'status' => "Forbidden",
-                    'statusCode' => 403,
-                    'message' => "403 Forbidden : Email already exists"
+                    'code' => 403,
+                    'message' => "Email already exists"
                 ], 403);
             }
+        }
+        if (isset($data['password']) && !preg_match($this->regex, $data["password"]))
+        {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'code' => 403,
+                'message' => "Password must be 8+ characters, contain 1 lowercase, 1 uppercase, 1 digit, 1 special character."
+            ], 403);
         }
 
         if (isset($data['email'])) $user->setEmail($data['email']);
@@ -143,7 +158,7 @@ class ApiUserController extends AbstractController
 
         return new JsonResponse([
             'status' => "OK",
-            'statusCode' => 200,
+            'code' => 200,
             'message' => "200 OK"
         ], 200);
     }
@@ -156,33 +171,32 @@ class ApiUserController extends AbstractController
         if (!isset($data['id'])) {
             return new JsonResponse([
                 'status' => "Bad Request",
-                'statusCode' => 400,
-                'message' => "400 Bad Request : Missing 'id' parameter"
+                'code' => 400,
+                'message' => "Missing 'id' parameter"
             ], 400);
         }
         $user = $entityManager->getRepository(User::class)->find($data['id']);
         if (!$user) {
             return new JsonResponse([
                 'status' => "Not Found",
-                'statusCode' => 404,
-                'message' => "404 Not Found : User doesn't exist"
+                'code' => 404,
+                'message' => "User doesn't exist"
             ], 404);
         }
         if ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
         {
             return new JsonResponse([
                 'status' => "Unauthorized",
-                'statusCode' => 401,
-                'message' => "401 Unauthorized : You are not abilitated to perform this action"
+                'code' => 401,
+                'message' => "You are not abilitated to perform this action"
             ], 401);
         }
-        
+
         $entityManager->remove($user);
         $entityManager->flush();
         return new JsonResponse([
             'status' => "OK",
-            'statusCode' => 200,
-            'message' => "200 OK"
+            'code' => 200,
         ], 200);
     }
 }
