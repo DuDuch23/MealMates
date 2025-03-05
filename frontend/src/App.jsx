@@ -1,19 +1,21 @@
 import { Route,Routes } from 'react-router-dom';
 import Header from './components/Header';
+import NavLayout from './NavLayout';
+import Home from './pages/Home'
+import Connexion from './pages/Connexion';
 import Inscription from './pages/Inscription';
 
 function App() {
   return (
    <>
-    <Header/>
-      <div>
-    <Routes>        
-      <Route path="/" element="" />
+    <Routes>
+      <Route element={<NavLayout />}>
+        <Route path="/" element={<Home/>} />
+      </Route>
+      <Route path="/connexion" element={<Connexion/>}/>
       <Route path="/inscription" element={<Inscription/>} />
     </Routes>
-    </div>
-    </>
-   
+  </> 
   );
 }
 
