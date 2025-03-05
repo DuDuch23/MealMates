@@ -83,12 +83,21 @@ class ApiUserController extends AbstractController
                 'message' => "Password must be 8+ characters, contain 1 lowercase, 1 uppercase, 1 digit, 1 special character."
             ], 403);
         }
+        if (isset($data["role"]) && $data["role"]!= "ROLE_USER" && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
+        {
+            return new JsonResponse([
+                'status' => "Unauthorized",
+                'code' => 401,
+                'message' => "You are not abilitated to perform this action."
+            ], 403);
+        }
 
         $user = new User();
         $user->setEmail($data['email']);
         $user->setPassword($this->hasher->hashPassword($user,$data['password']));
         $user->setName($data['name']);
         $user->setSurname($data['surname']);
+        $user->setRoles(isset($data['role']) ? [$data['role']] : ["ROLE_USER"]);
 
         $entityManager->persist($user);
         $entityManager->flush();
@@ -147,11 +156,20 @@ class ApiUserController extends AbstractController
                 'message' => "Password must be 8+ characters, contain 1 lowercase, 1 uppercase, 1 digit, 1 special character."
             ], 403);
         }
+        if (isset($data["role"]) && $data["role"]!= "ROLE_USER" && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
+        {
+            return new JsonResponse([
+                'status' => "Unauthorized",
+                'code' => 401,
+                'message' => "You are not abilitated to perform this action."
+            ], 403);
+        }
 
         if (isset($data['email'])) $user->setEmail($data['email']);
         if (isset($data['password'])) $user->setPassword($data['password']);
         if (isset($data['name'])) $user->setName($data['name']);
         if (isset($data['surname'])) $user->setSurname($data['surname']);
+        if (isset($data['role'])) $user->setRoles([$data['role']]);
 
         $entityManager->persist($user);
         $entityManager->flush();
