@@ -1,0 +1,41 @@
+body {
+  background-color: #444444;
+  margin: 0;
+  overflow-y: hidden;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  height: 58px;
+  padding: 20px;
+}
+header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-family: "Delius";
+  font-weight: 700;
+}
+header nav {
+  width: 400px;
+}
+header nav ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: grid;
+  gap: 34px;
+}
+header nav ul li {
+  text-align: center;
+}
+header nav ul li a {
+  font-size: 24px;
+  color: #B8E3E9;
+  text-decoration: none;
+}
+header nav ul .btn {
+  padding: 20px;
+  background-color: #242424;
+  border-radius: 15px;
+}/*# sourceMappingURL=main.css.map */
