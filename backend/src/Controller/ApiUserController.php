@@ -59,7 +59,7 @@ class ApiUserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        if (!(isset($data['email']) && isset($data['name']) && isset($data['surname'])&& isset($data['password'])))
+        if (!(isset($data['email']) && isset($data['name']) && isset($data['surname'])&& isset($data['password']) && isset($data['password_confirm'])))
         {
             return new JsonResponse([
                 'status' => "Bad Request",
@@ -68,7 +68,8 @@ class ApiUserController extends AbstractController
             ], 400);
         }
         $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
-        if ($existingUser) {
+        if ($existingUser) 
+        {
             return new JsonResponse([
                 'status' => "Forbidden",
                 'code' => 403,
@@ -81,6 +82,14 @@ class ApiUserController extends AbstractController
                 'status' => "Forbidden",
                 'code' => 403,
                 'message' => "Password must be 8+ characters, contain 1 lowercase, 1 uppercase, 1 digit, 1 special character."
+            ], 403);
+        }
+        if ($data["password"] != $data["password_confirm"])
+        {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'code' => 403,
+                'message' => "Password and password confirmation don't match"
             ], 403);
         }
         if (isset($data["role"]) && $data["role"]!= "ROLE_USER" && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
@@ -156,6 +165,14 @@ class ApiUserController extends AbstractController
                 'message' => "Password must be 8+ characters, contain 1 lowercase, 1 uppercase, 1 digit, 1 special character."
             ], 403);
         }
+        if ((isset($data["password"]) || isset($data["password_confirm"])) && ($data["password"] != $data["password_confirm"]))
+        {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'code' => 403,
+                'message' => "Password and password confirmation don't match"
+            ], 403);
+        }
         if (isset($data["role"]) && $data["role"]!= "ROLE_USER" && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
         {
             return new JsonResponse([
@@ -166,7 +183,7 @@ class ApiUserController extends AbstractController
         }
 
         if (isset($data['email'])) $user->setEmail($data['email']);
-        if (isset($data['password'])) $user->setPassword($data['password']);
+        if (isset($data['password'])) $user->setPassword($this->hasher->hashPassword($user,$data['password']));
         if (isset($data['name'])) $user->setName($data['name']);
         if (isset($data['surname'])) $user->setSurname($data['surname']);
         if (isset($data['role'])) $user->setRoles([$data['role']]);
@@ -177,7 +194,6 @@ class ApiUserController extends AbstractController
         return new JsonResponse([
             'status' => "OK",
             'code' => 200,
-            'message' => "200 OK"
         ], 200);
     }
 
