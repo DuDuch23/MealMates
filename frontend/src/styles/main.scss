@@ -1,0 +1,45 @@
+@import "_globals.scss";
+@import '_mixins.scss';
+@import "_variables.scss";
+
+body{
+    background-color: #444444;
+    margin: 0;
+    overflow-y: hidden;
+}
+header{
+    h1{
+        margin: 0;
+        font-size: 24px;
+        font-family: "Delius";
+        font-weight: 700;
+    }
+    display: flex;
+    justify-content: space-between;
+    height: 58px;
+    padding: 20px;
+
+    nav{
+        width: 400px;
+        ul{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            display: grid;
+            gap: 34px;
+            li{
+                text-align: center;
+                a{
+                    font-size: 24px;
+                    color: $colorPowerBlue;
+                    text-decoration: none;
+                }
+            }
+            .btn{
+                padding: 20px;
+                background-color: $colorBlack;
+                border-radius: 15px;
+            }
+        }
+    }
+}
