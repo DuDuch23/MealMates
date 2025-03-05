@@ -1,4 +1,4 @@
-function App(){
+function Inscription(){
     return(
         <div>
             <h1>Inscription</h1>
@@ -6,4 +6,4 @@ function App(){
     )
 }
 
-export default App;
+export default Inscription;
