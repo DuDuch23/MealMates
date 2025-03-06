@@ -109,7 +109,6 @@ class ApiUserController extends AbstractController
         $user->setName($data['name']);
         $user->setSurname($data['surname']);
         $user->setRoles($data['role'] ?? ["ROLE_USER"]);
-        $user->setPreferences(array_filter(array_map(fn($p) => PreferenceEnum::tryFrom($p), $data['preferences'] ?? [])));
 
         $entityManager->persist($user);
         $entityManager->flush();

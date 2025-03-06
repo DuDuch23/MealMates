@@ -46,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\" : \"email2@example.com\",\n    \"password\" : \"Example123*\",\n    \"password_confirm\" : \"Example123*\",\n    \"name\" : \"Name\",\n    \"surname\" : \"Surname\",\n    \"preferences\" : [\"Végan\", \"Sans lactose\"]\n}",
+							"raw": "{\n    \"email\" : \"email2@example.com\",\n    \"password\" : \"Example123*\",\n    \"password_confirm\" : \"Example123*\",\n    \"name\" : \"Name\",\n    \"surname\" : \"Surname\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -76,7 +76,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\" : 1,\n    \"email\" : \"email@example.com\",\n    \"password\" : \"Example123*\",\n    \"password_confirm\" : \"Example123*\",\n    \"name\" : \"Name\",\n    \"surname\" : \"Surname\",\n    \"preferences\" : [\"Végan\"]\n}",
+							"raw": "{\n    \"id\" : 1,\n    \"email\" : \"email@example.com\",\n    \"password\" : \"Example123*\",\n    \"password_confirm\" : \"Example123*\",\n    \"name\" : \"Name\",\n    \"surname\" : \"Surname\",\n    \"preferences\" : [\"Végan\", \"Sans lactose\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
