@@ -35,17 +35,36 @@ function Connexion(){
             <img src={backgroundImage} alt="" />
             <div className="content">
                 <h1>MealMates</h1>
-                <form action="#" onSubmit={handleSubmit}>
-                    <div>
-                        <label htmlFor="email">Email</label>
-                        <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
+                <div className="action">
+                    <form action="#" onSubmit={handleSubmit}>
+                        <div>
+                            <label htmlFor="email">Email</label>
+                            <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
+                        </div>
+                        <div>
+                            <label htmlFor="password">Mot de Passe:</label>
+                            <input type="password" name="password" placeholder="password" onChange={handlePassword}/>
+                        </div>
+                        <div>
+                            <div>
+                                <label htmlFor="#">Se souvenir de moi</label>
+                                <input type="checkbox" name=""/>
+                            </div>
+                            <a href="">
+                                Mot de passe oublié ?
+                            </a>
+                        </div>
+                        <button type="submit">Connexion</button>
+                    </form>
+                    <div className="otherAction">
+                        <p> Ou connexion avec </p>
+                        <ul>
+                            <li>G</li>
+                            <li>A</li>
+                            <li>F</li>
+                        </ul>
                     </div>
-                    <div>
-                        <label htmlFor="password">Mot de Passe:</label>
-                        <input type="password" name="password" placeholder="password" onChange={handlePassword}/>
-                    </div>
-                    <button type="submit">valider</button>
-                </form>
+                </div>
             </div>
         </div>
     </>
