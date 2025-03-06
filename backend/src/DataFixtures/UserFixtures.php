@@ -44,6 +44,8 @@ class UserFixtures extends Fixture
             $obj->setRoles([$user["role"]]);
             $obj->setPreferences($user["preferences"]);
 
+            $this->addReference($user["email"], $obj);
+
             $manager->persist($obj);
         }
         $manager->flush();
