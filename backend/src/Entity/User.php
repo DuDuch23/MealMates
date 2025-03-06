@@ -4,10 +4,14 @@ namespace App\Entity;
 
 use App\Enum\PreferenceEnum;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -16,31 +20,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["public", "private"])]
     private ?int $id = null;
-
     #[ORM\Column(length: 180)]
+    #[Groups(["private"])]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["public", "private"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["public", "private"])]
     private ?string $surname = null;
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: PreferenceEnum::class)]
+    #[Groups(["private"])]
     private ?array $preferences = null;
+
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rater', orphanRemoval: true)]
+    private Collection $ratingsGiven;
+
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rated', orphanRemoval: true)]
+    #[Groups(["private"])]
+    private Collection $ratingsReceived;
+
+    public function __construct()
+    {
+        $this->ratingsGiven = new ArrayCollection();
+        $this->ratingsReceived = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -152,6 +167,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPreferences(?array $preferences): static
     {
         $this->preferences = $preferences;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatingsGiven(): Collection
+    {
+        return $this->ratingsGiven;
+    }
+
+    public function addRatingGiven(Rating $ratingGiven): static
+    {
+        if (!$this->ratingsGiven->contains($ratingGiven)) {
+            $this->ratingsGiven->add($ratingGiven);
+            $ratingGiven->setRater($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRatingGiven(Rating $ratingGiven): static
+    {
+        if ($this->ratingsGiven->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($ratingGiven->getRater() === $this) {
+                $ratingGiven->setRater(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatingsReceived(): Collection
+    {
+        return $this->ratingsReceived;
+    }
+
+    public function addRatingsReceived(Rating $ratingsReceived): static
+    {
+        if (!$this->ratingsReceived->contains($ratingsReceived)) {
+            $this->ratingsReceived->add($ratingsReceived);
+            $ratingsReceived->setRated($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRatingsReceived(Rating $ratingsReceived): static
+    {
+        if ($this->ratingsReceived->removeElement($ratingsReceived)) {
+            // set the owning side to null (unless already changed)
+            if ($ratingsReceived->getRated() === $this) {
+                $ratingsReceived->setRated(null);
+            }
+        }
 
         return $this;
     }

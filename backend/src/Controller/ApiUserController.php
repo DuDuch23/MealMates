@@ -44,15 +44,12 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist "
             ], 404);
         }
+        $scope = ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
+        $data = json_decode($serializer->serialize($user, 'json', ['groups' =>[ $scope]]), true);
         return new JsonResponse([
             'status' => "OK",
             'code' => 200,
-            'data' => [
-                'email' => $user->getEmail(),
-                'name' => $user->getName(),
-                'surname' => $user->getSurname(),
-                'preferences' => $user->getPreferences()
-            ]
+            'data' => $data
         ], 200);
     }
 
