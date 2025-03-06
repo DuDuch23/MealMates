@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { logIn } from "../service/requestApi";
-import backgroundImage from "../image/background/background-form.webp";
+import { logIn } from "../../service/requestApi";
+import backgroundImage from "../../image/background/background-form.webp";
 
 // css
-import "./Connexion.css";
+// import "./Inscription.css";
 
-function Connexion(){
+function Inscription(){
     const [formData,setData] = useState([]);
     const [email,setEmail] = useState([]);
     const [password,setPassword] = useState([]);
@@ -71,4 +71,4 @@ function Connexion(){
     )
 }
 
-export default Connexion;
+export default Inscription;

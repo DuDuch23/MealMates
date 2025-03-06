@@ -14,18 +14,6 @@ export async function logIn(data) {
             },
         });
 
-        if(!request.ok){
-            const errorDetails = await request.json();
-            console.error(
-                `Erreur API(Statut ${request.status});`,
-                errorDetails
-            );
-            
-            throw new Error(
-                `Erreur lors de la récupération de l'utilisateur : ${errorDetails.error.message}`
-            );
-        }
-
         return await request.json();
 
     }catch(error){
@@ -44,19 +32,6 @@ export async function getUser(id) {
                 "id": id,
             }
         });
-
-        if(!request.ok){
-            const errorDetails = await request.json();
-            console.error(
-                `Erreur API(Statut ${request.status});`,
-                errorDetails
-            );
-            
-            throw new Error(
-                `Erreur lors de la récupération de l'utilisateur : ${errorDetails.error.message}`
-            );
-        }
-
         return await request.json();
 
     }catch(error){
@@ -79,18 +54,6 @@ export async function newUser(data) {
                 "surname" : data[surname],   
             },
         });
-
-        if(!request.ok){
-            const errorDetails = await request.json();
-            console.error(
-                `Erreur API(Statut ${request.status});`,
-                errorDetails
-            );
-            
-            throw new Error(
-                `Erreur lors de la récupération de l'utilisateur : ${errorDetails.error.message}`
-            );
-        }
         
         return await request.json();
 
@@ -114,18 +77,6 @@ export async function editUser(data) {
                 "surname" : data[surname],   
             },
         });
-
-        if(!request.ok){
-            const errorDetails = await request.json();
-            console.error(
-                `Erreur API(Statut ${request.status});`,
-                errorDetails
-            );
-            
-            throw new Error(
-                `Erreur lors de la récupération de l'utilisateur : ${errorDetails.error.message}`
-            );
-        }
         
         return await request.json();
 
@@ -145,18 +96,6 @@ export async function deleteUser(id) {
                 "id":id 
             },
         });
-
-        if(!request.ok){
-            const errorDetails = await request.json();
-            console.error(
-                `Erreur API(Statut ${request.status});`,
-                errorDetails
-            );
-            
-            throw new Error(
-                `Erreur lors de la récupération de l'utilisateur : ${errorDetails.error.message}`
-            );
-        }
         
         return await request.json();
 
