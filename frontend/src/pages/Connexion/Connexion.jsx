@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { logIn } from "../../service/requestApi";
 import backgroundImage from "../../image/background/background-form.webp";
 
@@ -6,9 +6,9 @@ import backgroundImage from "../../image/background/background-form.webp";
 import "./Connexion.css";
 
 function Connexion(){
-    const [formData,setData] = useState([]);
     const [email,setEmail] = useState([]);
     const [password,setPassword] = useState([]);
+    const [data,setData] = useState([]);
 
     const handleEmail = (element) => {
         const email = element.target.value;
@@ -23,10 +23,8 @@ function Connexion(){
     const handleSubmit = (event) => {
 
       event.preventDefault();
-      const data = [email,password];
-      setData(data);
-
-      logIn(formData);
+       const data = {"email":email,"password":password};
+        logIn(data);
     };
 
     return(
@@ -42,8 +40,8 @@ function Connexion(){
                     <label htmlFor="password">Mot de Passe:</label>
                     <input type="password" name="password" placeholder="password" onChange={handlePassword}/>
                 </div>
-                <div className="content-element-form">
-                    <div>
+                <div className="content-element-form two-input">
+                    <div className="two-input" id='password'>
                         <label htmlFor="#">Se souvenir de moi</label>
                         <input type="checkbox" name=""/>
                     </div>
@@ -54,6 +52,7 @@ function Connexion(){
                 <button type="submit">Connexion</button>
             </form>
             <div className="otherAction">
+                <div className="fill">
                 <p> Ou connexion avec </p>
                 <ul>
                     <li>
@@ -152,6 +151,7 @@ function Connexion(){
                         </svg>
                     </li>
                 </ul>
+                </div>
             </div>
         </div>
     </>

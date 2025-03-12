@@ -3,16 +3,23 @@ const token = '';
 // User
 
 // login user
-export async function logIn(data) {
+export async function logIn({email,password}) {
     try{
         const request = await fetch ("http://localhost:8000/api/login",{
-            method: "GET",
-            headers: {Authorization: `Bearer ${token}`},
+            method: "POST",
+            headers:{
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
             body:{
-                "username" : data[email],
-                "password" : data[password],
+                "username" : email,
+                "password" : password
             },
         });
+
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status}`);
+        }
 
         return await request.json();
 
