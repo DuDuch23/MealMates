@@ -3,6 +3,12 @@
 @import "_variables.scss";
 @import "page/_home.scss";
 
+*,::before,::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body{
     background-color: #444444;
     margin: 0;

@@ -1,9 +1,9 @@
-import { Route,Routes } from 'react-router-dom';
+import { Route,Routes } from 'react-router';
 import Header from './components/Header';
 import NavLayout from './NavLayout';
 import Home from './pages/Home'
-import Connexion from './pages/Connexion';
-import Inscription from './pages/Inscription';
+import Connexion from './pages/Connexion/Connexion';
+import Inscription from './pages/Inscription/Inscription';
 
 function App() {
   return (

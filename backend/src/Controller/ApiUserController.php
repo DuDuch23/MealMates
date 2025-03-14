@@ -17,10 +17,12 @@ class ApiUserController extends AbstractController
 {
     private $hasher;
     private $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+    
     public function __construct(UserPasswordHasherInterface $hasher) 
     {
         $this->hasher = $hasher;
     }
+    
     #[Route('/get', methods: ['POST'])]
     public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
