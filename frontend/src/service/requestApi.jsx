@@ -3,28 +3,23 @@ const token = '';
 // User
 
 // login user
-export async function logIn({email,password}) {
-    try{
-        const request = await fetch ("http://localhost:8000/api/login",{
+export async function logIn({ email, password }) {
+    try {
+        const response = await fetch("https://localhost:8000/api/login", {
             method: "POST",
-            headers:{
-                "Accept": "application/json",
+            headers: {
                 "Content-Type": "application/json",
             },
-            body:{
-                "username" : email,
-                "password" : password
-            },
+            body:({
+                username: email,
+                password: password
+            }),
         });
 
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP : ${response.status}`);
-        }
+        return await response.json();
 
-        return await request.json();
-
-    }catch(error){
-        console.error("erreur api :", error);
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }
