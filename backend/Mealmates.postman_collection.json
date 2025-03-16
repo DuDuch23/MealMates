@@ -46,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\" : \"email@example.com\",\n    \"password\" : \"Example123*\",\n    \"password_confirm\" : \"Example123*\",\n    \"name\" : \"Name\",\n    \"surname\" : \"Surname\"\n}",
+							"raw": "{\n    \"email\" : \"email2@example.com\",\n    \"password\" : \"Example123*\",\n    \"password_confirm\" : \"Example123*\",\n    \"name\" : \"Name\",\n    \"surname\" : \"Surname\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -76,7 +76,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\" : 1,\n    \"email\" : \"email@example.com\",\n    \"password\" : \"Example123*\",\n    \"password_confirm\" : \"Example123*\",\n    \"name\" : \"Name\",\n    \"surname\" : \"Surname\"\n}",
+							"raw": "{\n    \"id\" : 1,\n    \"email\" : \"email@example.com\",\n    \"password\" : \"Example123*\",\n    \"password_confirm\" : \"Example123*\",\n    \"name\" : \"Name\",\n    \"surname\" : \"Surname\",\n    \"preferences\" : [\"Végan\", \"Sans lactose\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -156,11 +156,14 @@
 		{
 			"name": "Login",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"email@example.com\",\n    \"password\": \"example\"\n}\n",
+					"raw": "{\n    \"username\": \"admin@example.com\",\n    \"password\": \"example\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -188,7 +191,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDExODE3NjAsImV4cCI6MTc0MTE4NTM2MCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiZW1haWxAZXhhbXBsZS5jb20ifQ.NdnotZkXFmTytLHFICmhdiMZth5HH4-kIfq66s9HO9RbvTwm6MeeFiCAMx3uxFGRUCYexpc12OmL02y76ifhFvLbj7RSxNDy_o9ttm0C7c9ucTSfXGtmrZSX9x6C1BinVIAcyDL8oHLl-ZRVWqJNJoNIa2bR2WtTvkXubDin_Bsmc6DD0EMo2j7Nn0IDTIMKxbkp1h2cltNYNXXthB6R7gkuNHzlDcbBPOO9I5qwA_FI88zypiY2vbfCA-UwdtW35kXLru6WTdGVkvgaXjLl1UcXvt5H3owVhJkJ5_-uJPqLZCuwPf1gmB9hEodRizW6gOPAFWEWM1zgmztlwpSDrw",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDEyNTI5OTgsImV4cCI6MTc0MTI1NjU5OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGV4YW1wbGUuY29tIn0.cfYRcO016CzmKoLt3sxeSh9cVkZxBwah_NxIdnVY0RPTt5myg1gBhqHmI089SQv9Csxuh3P_w24zw2rZRLjEU8-oMhjQwmMocgvEQS_DNvAkQS760FFDgUhXgl1AA_b_31sKvMQzveprrJnAhi1m1QpQaoqrMDWA7Py4XvaXCMYlr0jugXSdiVSPuwximS8SXE9ipkemqIEihCSt9hp_Hye5mRK5Jq5Iifu9STSlYFgmIbosFADR3v6mgxs3sfnPZy_ZYvVHtwtI90A4-NL8jRz38UzZuskY34G8MreiRTgcVmW5PHVtMVolpI1O70WTxlU5Njj0d6jfX-VdrRmhfA",
 				"type": "string"
 			}
 		]
