@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Enum\PreferenceEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,14 +46,12 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist "
             ], 404);
         }
+        $scope = ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
+        $data = json_decode($serializer->serialize($user, 'json', ['groups' =>[ $scope]]), true);
         return new JsonResponse([
             'status' => "OK",
             'code' => 200,
-            'data' => [
-                'email' => $user->getEmail(),
-                'name' => $user->getName(),
-                'surname' => $user->getSurname()
-            ]
+            'data' => $data
         ], 200);
     }
 
@@ -108,7 +107,7 @@ class ApiUserController extends AbstractController
         $user->setPassword($this->hasher->hashPassword($user,$data['password']));
         $user->setName($data['name']);
         $user->setSurname($data['surname']);
-        $user->setRoles(isset($data['role']) ? [$data['role']] : ["ROLE_USER"]);
+        $user->setRoles($data['role'] ?? ["ROLE_USER"]);
 
         $entityManager->persist($user);
         $entityManager->flush();
@@ -189,6 +188,7 @@ class ApiUserController extends AbstractController
         if (isset($data['name'])) $user->setName($data['name']);
         if (isset($data['surname'])) $user->setSurname($data['surname']);
         if (isset($data['role'])) $user->setRoles([$data['role']]);
+        if (isset($data['preferences'])) $user->setPreferences(array_filter(array_map(fn($p) => PreferenceEnum::tryFrom($p), $data['preferences'] ?? [])));
 
         $entityManager->persist($user);
         $entityManager->flush();
