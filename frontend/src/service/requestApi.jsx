@@ -25,14 +25,14 @@ export async function logIn({ email, password }) {
 }
 
 // recuperer un user
-export async function getUser(id) {
+export async function getUser({id}) {
     try{
         const request = await fetch ("https://127.0.0.1:8000/api/user/get/",{
             method: "POST",
             headers: {Authorization: `Bearer ${token}`},
-            body:{
+            body:JSON.stringify({
                 "id": id,
-            }
+            })
         });
         return await request.json();
 
@@ -43,18 +43,18 @@ export async function getUser(id) {
 }
 
 // creer un utilisateur
-export async function newUser(data) {
+export async function newUser({email,password,password_confirm,nameUser,surname}) {
     try{
         const request = await fetch ("https://127.0.0.1:8000/api/user/new/",{
             method: "GET",
             headers: {Authorization: `Bearer ${token}`},
-            body : {
-                "email" : data[email],
-                "password" : data[password],
-                "password_confirm" : data[password],
-                "name" : data[nameUser],
-                "surname" : data[surname],   
-            },
+            body : JSON.stringify({
+                "email" : email,
+                "password" : password,
+                "password_confirm" : password_confirm,
+                "name" : nameUser,
+                "surname" : surname, 
+            }),
         });
         
         return await request.json();
@@ -66,18 +66,18 @@ export async function newUser(data) {
 }
 
 // modifier un user
-export async function editUser(data) {
+export async function editUser({data}) {
     try{
         const request = await fetch ("https://127.0.0.1:8000/api/user/edit/",{
             method: "GET",
             headers: {Authorization: `Bearer ${token}`},
-            body : {
+            body : JSON.stringify({
                 "email" : data[email],
                 "password" : data[password],
                 "password_confirm" : data[password],
                 "name" : data[nameUser],
                 "surname" : data[surname],   
-            },
+            }),
         });
         
         return await request.json();
@@ -94,9 +94,9 @@ export async function deleteUser(id) {
         const request = await fetch ("https://127.0.0.1:8000/api/user/delete/",{
             method: "GET",
             headers: {Authorization: `Bearer ${token}`},
-            body : { 
+            body : JSON.stringify({ 
                 "id":id 
-            },
+            }),
         });
         
         return await request.json();
