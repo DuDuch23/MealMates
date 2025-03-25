@@ -1,7 +1,4 @@
-const token = '';
-
-// User
-
+/* User*/
 // login user
 export async function logIn({ email, password }) {
     try {
@@ -26,18 +23,19 @@ export async function logIn({ email, password }) {
 
 // recuperer un user
 export async function getUser({id}) {
-    try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/get/",{
+    try {
+        const response = await fetch(`https://127.0.0.1:8000/api/user/get`, {
             method: "POST",
-            headers: {Authorization: `Bearer ${token}`},
-            body:JSON.stringify({
-                "id": id,
-            })
+            headers: {
+                "Authorization": `Bearer ${encodeURIComponent(token)}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id: id }),
         });
-        return await request.json();
 
-    }catch(error){
-        console.error("erreur api :", error);
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }

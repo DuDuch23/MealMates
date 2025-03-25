@@ -1,0 +1,19 @@
+@import "../../styles/globals";
+@import '../../styles/_mixins.scss';
+@import "../../styles/_variables.scss";
+@import "../../styles/main.scss";
+
+
+#root{
+    width: 768px;
+    max-width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    background-repeat: no-repeat;
+    background-size: contain;
+    overflow: hidden;
+}
+
+h2{
+    border: 1px solid red;
+}

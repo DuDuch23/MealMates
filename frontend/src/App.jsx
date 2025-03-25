@@ -1,21 +1,25 @@
-import { Route,Routes } from 'react-router';
-import Header from './components/Header';
-import NavLayout from './NavLayout';
-import Home from './pages/Home'
-import Connexion from './pages/Connexion/Connexion';
-import Inscription from './pages/Inscription/Inscription';
+import { lazy, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import NavLayout from './Layout/NavLayout';
+
+// Chargement différé des composants
+const Home = lazy(() => import('./pages/Home'));
+const Connexion = lazy(() => import('./pages/Connexion/Connexion'));
+const Inscription = lazy(() => import('./pages/Inscription/Inscription'));
+const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
 
 function App() {
   return (
-   <>
-    <Routes>
-      <Route element={<NavLayout />}>
-        <Route path="/" element={<Home/>} />
-      </Route>
-      <Route path="/connexion" element={<Connexion/>}/>
-      <Route path="/inscription" element={<Inscription/>} />
-    </Routes>
-  </> 
+    <Suspense fallback={<div className="text-center p-4">Chargement...</div>}>
+      <Routes>
+        <Route element={<NavLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/profileUser/:id" element={<UserProfile />} />
+        </Route>
+        <Route path="/connexion" element={<Connexion />} />
+        <Route path="/inscription" element={<Inscription /> } />
+      </Routes>
+    </Suspense>
   );
 }
 

@@ -10,6 +10,7 @@ function Inscription(){
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword,setConfirmPassword] = useState("");
     const [data, setData] = useState(null);
 
     const handleEmail = (event) => setEmail(event.target.value);
@@ -20,7 +21,7 @@ function Inscription(){
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await newUser({ email, password });
+            const response = await newUser({ email, password, confirmPassword, name,lastName});
             setData(response);
             console.log("Réponse API :", response);
         } catch (error) {
@@ -52,7 +53,7 @@ function Inscription(){
                         <input type="password" name="password" placeholder="mon mot de passe" onChange={handlePassword}/>
                     </div>
                     <div className="content-element-form">
-                        <label htmlFor="password">Confimer le mot de passe:</label>
+                        <label htmlFor="confirm-password">Confimer le mot de passe:</label>
                         <input type="password" name="confirm-password" placeholder="Confirmer le mot de passe" onChange={handlePassword}/>
                     </div>
                     <div className="content-element-form two-input">
@@ -170,7 +171,7 @@ function Inscription(){
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default Inscription;
