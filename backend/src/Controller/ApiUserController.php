@@ -140,7 +140,8 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist "
             ], 404);
         }
-        if ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
+        $currentUser = $this->getUser();
+        if ($data['id'] != $currentUser->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
         {
             return new JsonResponse([
                 'status' => "Unauthorized",
