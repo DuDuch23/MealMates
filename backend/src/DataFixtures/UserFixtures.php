@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Enum\PreferenceEnum;
 
 class UserFixtures extends Fixture
 {
@@ -16,14 +17,16 @@ class UserFixtures extends Fixture
                 "password" => "example",
                 "name" => "Name",
                 "surname" => "Surname",
-                "role" => "ROLE_USER"
+                "role" => "ROLE_USER",
+                "preferences" => [PreferenceEnum::Vegan]
         ],
         [
             "email" => "admin@example.com",
                 "password" => "example",
                 "name" => "Name",
                 "surname" => "Surname",
-                "role" => "ROLE_ADMIN"
+                "role" => "ROLE_ADMIN",
+                "preferences" => [PreferenceEnum::Vegan, PreferenceEnum::SansLactose]
         ]
     ];
     public function __construct(UserPasswordHasherInterface $hasher) 
@@ -39,6 +42,9 @@ class UserFixtures extends Fixture
             $obj->setEmail($user["email"]);
             $obj->setPassword($this->hasher->hashPassword($obj, $user["password"]));
             $obj->setRoles([$user["role"]]);
+            $obj->setPreferences($user["preferences"]);
+
+            $this->addReference($user["email"], $obj);
 
             $manager->persist($obj);
         }
