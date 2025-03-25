@@ -1,34 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useState, useEffect } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import Login from "./components/login";
+import Logout from "./components/logout";
+
+const clientId = "947326609144-oed76j74qvdqh2ie1e4cdfobrtmpiq66.apps.googleusercontent.com";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <GoogleOAuthProvider clientId={clientId}>
+      <div className="App">
+        <h1>Authentification Google SSO</h1>
+
+        {user ? (
+          <div>
+            <h3>Bienvenue, {user.name} !</h3>
+            <img src={user.picture} alt="Avatar" style={{ borderRadius: "50%", width: "80px" }} />
+            <Logout setUser={setUser} />
+          </div>
+        ) : (
+          <Login setUser={setUser} />
+        )}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </GoogleOAuthProvider>
+  );
 }
 
-export default App
+export default App;
