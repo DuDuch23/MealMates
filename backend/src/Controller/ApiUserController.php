@@ -47,7 +47,7 @@ class ApiUserController extends AbstractController
             ], 404);
         }
         $currentUser = $this->getUser();
-        $scope = ($data['id'] != $currentUser->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
+        $scope = ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
         $data = json_decode($serializer->serialize($user, 'json', ['groups' =>[ $scope]]), true);
         return new JsonResponse([
             'status' => "OK",
@@ -141,7 +141,7 @@ class ApiUserController extends AbstractController
             ], 404);
         }
         $currentUser = $this->getUser();
-        if ($data['id'] != $currentUser->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
+        if ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
         {
             return new JsonResponse([
                 'status' => "Unauthorized",
@@ -221,7 +221,7 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist"
             ], 404);
         }
-        if ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
+        if ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
         {
             return new JsonResponse([
                 'status' => "Unauthorized",
