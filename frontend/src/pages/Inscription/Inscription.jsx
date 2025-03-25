@@ -3,7 +3,7 @@ import { newUser } from "../../service/requestApi";
 import backgroundImage from "../../image/background/background-form.webp";
 
 // css
-import "./Inscription.css";
+import "./Inscription.scss";
 
 function Inscription(){
     const [name, setName] = useState("");

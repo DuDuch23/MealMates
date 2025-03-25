@@ -1,6 +1,199 @@
 @import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
-body {
-  margin: 1px;
+@import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
+#root {
+  width: 768px;
+  max-width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  background: #242424;
+  background-image: url("../../image/background/background-form.jpg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+h1 {
+  text-align: center;
+  height: 30%;
+  color: #F1F1F1;
+}
+
+.action {
+  height: 70%;
+}
+.action form {
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+.action form .content-element-form {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+.action form label {
+  color: white;
+}
+.action form input {
+  outline: none;
+  height: 4vh;
+  border: 1px solid #F1F1F1;
+  border-radius: 5px;
+  background: linear-gradient(0.25turn, #11BC2E, #0B8620);
+}
+.action form input::placeholder {
+  color: #F1F1F1;
+}
+.action form button {
+  height: 10%;
+  width: 80%;
+  background: #11BC2E;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+.action form .two-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
+}
+.action form #password {
+  width: 50%;
+}
+.action .otherAction {
+  height: 40%;
+  position: relative;
+}
+.action .otherAction .fill {
+  height: 100%;
+  background: linear-gradient(0%, #2D2E32, 100%, #111110);
+}
+.action .otherAction p {
+  text-align: center;
+}
+.action .otherAction ul {
+  list-style: none;
+  width: 70%;
+  height: 40%;
+  margin: 2% auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.action .otherAction ul li {
+  width: 33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.action .otherAction ul li svg {
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  width: 768px;
+  max-width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  background: #242424;
+  background-image: url("../../image/background/background-form.jpg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+h1 {
+  text-align: center;
+  height: 30%;
+  color: #F1F1F1;
+}
+
+.action {
+  height: 70%;
+}
+.action form {
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+.action form .content-element-form {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+.action form label {
+  color: white;
+}
+.action form input {
+  outline: none;
+  height: 4vh;
+  border: 1px solid #F1F1F1;
+  border-radius: 5px;
+  background: linear-gradient(0.25turn, #11BC2E, #0B8620);
+}
+.action form input::placeholder {
+  color: #F1F1F1;
+}
+.action form button {
+  height: 10%;
+  width: 80%;
+  background: #11BC2E;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+.action form .two-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
+}
+.action form #password {
+  width: 50%;
+}
+.action .otherAction {
+  height: 40%;
+  position: relative;
+}
+.action .otherAction .fill {
+  height: 100%;
+  background: linear-gradient(0%, #2D2E32, 100%, #111110);
+}
+.action .otherAction p {
+  text-align: center;
+}
+.action .otherAction ul {
+  list-style: none;
+  width: 70%;
+  height: 40%;
+  margin: 2% auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.action .otherAction ul li {
+  width: 33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.action .otherAction ul li svg {
+  width: 100%;
+  height: 100%;
+}
+
+.content-element {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.content-element .content-element-form {
+  width: 49% !important;
 }
 
 *, ::before, ::after {
@@ -13,6 +206,13 @@ body {
   background-color: #444444;
   margin: 0;
   overflow-x: hidden;
+}
+
+.container {
+  max-width: 100%;
+  width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 @keyframes slideToLeftHeader {
@@ -179,4 +379,6 @@ body {
 }
 .header-primary .container-menu-mobile .menu-mobile ul .btn a {
   padding: 20px 0;
-}/*# sourceMappingURL=main.css.map */
+}
+
+/*# sourceMappingURL=main.css.map */

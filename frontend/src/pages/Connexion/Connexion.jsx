@@ -3,7 +3,7 @@ import { logIn } from "../../service/requestApi";
 import backgroundImage from "../../image/background/background-form.webp";
 
 // css
-import "./Connexion.css";
+import "./Connexion.scss";
 
 function Connexion(){
     const [email, setEmail] = useState("");

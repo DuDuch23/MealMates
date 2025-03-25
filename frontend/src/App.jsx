@@ -1,7 +1,7 @@
 import { Route,Routes } from 'react-router';
 import Header from './components/Header';
 import NavLayout from './NavLayout';
-import Home from './pages/Home'
+import Home from './pages/Home/Home'
 import Connexion from './pages/Connexion/Connexion';
 import Inscription from './pages/Inscription/Inscription';
 
