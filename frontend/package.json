@@ -9,9 +9,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "watch": "vite --watch",
-    "scss": "sass --watch src/styles/main.scss:src/styles/main.css" 
+    "scss": "sass --watch src/styles/main.scss:src/styles/main.css"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.1",
+    "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.2.0"
@@ -26,6 +28,6 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "sass-embedded": "^1.86.0",
-    "vite": "^6.2.0"
+    "vite": "^6.2.3"
   }
 }
