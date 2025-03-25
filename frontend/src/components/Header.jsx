@@ -43,8 +43,8 @@ export default function App() {
                             <li><Link to="/">Accueil</Link></li>
                             <li><Link to="/">Suggestions</Link></li>
                             <li><Link to="/">Mon panier</Link></li>
-                            <li className='btn'><Link to="/">Inscription</Link></li>
-                            <li className='btn'><Link to="/">Se connecter</Link></li>
+                            <li className='btn'><Link to="/inscription">Inscription</Link></li>
+                            <li className='btn'><Link to="/connexion">Se connecter</Link></li>
                         </ul>
                     </nav>
                 </div>

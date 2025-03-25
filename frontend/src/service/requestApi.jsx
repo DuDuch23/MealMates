@@ -106,3 +106,21 @@ export async function deleteUser(id) {
         throw error;
     }
 }
+
+// Offres
+export async function getOffers() {
+    try{
+        const request = await fetch ("https://127.0.0.1:8000/api/offers",{
+            method: "GET",
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+        });
+        return await request.json();
+
+    }catch(error){
+        console.error("erreur api :", error);
+        throw error;
+    }
+}

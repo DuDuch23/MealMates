@@ -1,3 +1,9 @@
+import { Route,Routes } from 'react-router';
+import Header from './components/Header';
+import NavLayout from './NavLayout';
+import Home from './pages/Home/Home'
+import Connexion from './pages/Connexion/Connexion';
+import Inscription from './pages/Inscription/Inscription';
 import React, { useState, useEffect } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Login from "./components/login";

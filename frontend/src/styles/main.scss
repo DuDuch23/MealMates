@@ -1,7 +1,9 @@
-@import "_globals.scss";
-@import '_mixins.scss';
-@import "_variables.scss";
-@import "page/_home.scss";
+@import "./globals";
+@import './_mixins';
+@import "./_variables";
+@import "../pages/Connexion/Connexion.scss";
+@import "../pages/Inscription/Inscription.scss";
+
 
 *,::before,::after{
     margin: 0;
@@ -13,6 +15,13 @@ body{
     background-color: #444444;
     margin: 0;
     overflow-x: hidden;
+}
+
+.container{
+    max-width: 100%;
+    width: 1440px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
 @keyframes slideToLeftHeader {

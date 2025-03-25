@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "watch": "vite --watch",
+    "scss": "sass --watch src/styles/main.scss:src/styles/main.css" 
   },
   "dependencies": {
     "react": "^19.0.0",
