@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { logIn } from "../../service/requestApi";
 import backgroundImage from "../../image/background/background-form.webp";
+import GoogleLoginButton from "../../components/ssoGoogle";
 
 // css
-import "./Connexion.css";
+import "./Connexion.scss";
 
 function Connexion(){
     const [email, setEmail] = useState("");
@@ -50,6 +51,8 @@ function Connexion(){
                 <div className="otherAction">
                     <div className="fill">
                     <p> Ou connexion avec </p>
+                  
+                    <GoogleLoginButton setUser={setUser} />
                     <ul>
                         <li>
                             <svg width="212" height="101" viewBox="0 0 212 101" fill="none" xmlns="http://www.w3.org/2000/svg">
