@@ -1,112 +1,193 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Offer;
-use App\Entity\Category;
-use App\Repository\OfferRepository;
-use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use ApiPlatform\Metadata\UrlGeneratorInterface;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/api/offers')]
-#[IsGranted('ROLE_USER')]
+#[Route('/api/offers', name: 'api_offer')]
 class ApiOfferController extends AbstractController
 {
-    #[Route('', name: 'api_offers_index', methods: ['GET'])]
-    public function index(OfferRepository $offerRepository, SerializerInterface $serializer, Request $request): JsonResponse
+    #[Route('', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request): JsonResponse
     {
-        $page = $request->get('page', 1);
-        $limit = $request->get('limit', 5);
+        $offers = $entityManager->getRepository(Offer::class)->findAll();
 
-        $offers = $offerRepository->findAllWithPagination($page, $limit);
-
-        $json = $serializer->serialize($offers, 'json', ['groups' => 'offer:read']);
-
-        return new JsonResponse($json, Response::HTTP_OK, [], true);
-    }
-
-    #[Route('/{id}', name: 'api_offers_show', methods: ['GET'])]
-    public function show(Offer $offer, SerializerInterface $serializer): JsonResponse
-    {
-        $json = $serializer->serialize($offer, 'json', ['groups' => 'offer:read']);
-
-        return new JsonResponse($json, Response::HTTP_OK, [], true);
-    }
-
-    #[Route('/new', name: 'api_offer_new', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function new(Request $request, EntityManagerInterface $em, SerializerInterface $serializer, CategoryRepository $categoryRepository, UrlGeneratorInterface $urlGenerator): JsonResponse
-    {
-        $offer = $serializer->deserialize($request->getContent(), Offer::class, 'json');
-        $em->persist($offer);
-        $em->flush();
-
-        // Gestion des catégories (ajout d'une ou plusieurs catégories)
-        $categoryIds = $request->request->get('category_ids');
-        if (is_array($categoryIds)) {
-            foreach ($categoryIds as $categoryId) {
-                $category = $categoryRepository->find($categoryId);
-                if ($category) {
-                    $offer->addCategory($category);
-                }
-            }
-            $em->persist($offer);
-            $em->flush();
+        if (empty($offers)) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "No offers found."
+            ], 404);
         }
 
-        $location = $urlGenerator->generate(
-            'api_offer_show', // La route de l'offre
-            ['id' => $offer->getId()],
-            UrlGeneratorInterface::ABS_URL
-        );
+        $offersSerialized = $serializer->serialize($offers, 'json', ['groups' => 'public']);
 
-        return $this->json($offer, Response::HTTP_CREATED, ["Location" => $location], ['groups' => 'getOffer']);
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+            'data' => json_decode($offersSerialized, true),
+        ], 200);
     }
 
-    #[Route('/{id}', name: 'api_offer_update', methods: ['PUT'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function update(Request $request, Offer $currentOffer, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
+    #[Route('/get', methods: ['POST'])]
+    public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
-        $updatedOffer = $serializer->deserialize($request->getContent(), Offer::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $currentOffer]);
+        $data = json_decode($request->getContent(), true);
 
-        $categoryIds = $request->request->get('category_ids');
-        if (is_array($categoryIds)) {
-            foreach ($categoryIds as $categoryId) {
-                $category = $em->getRepository(Category::class)->find($categoryId);
-                if ($category) {
-                    $updatedOffer->addCategory($category);
-                }
-            }
+        if (!isset($data['id'])) {
+            return $this->json([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'id' parameter."
+            ], 400);
         }
 
-        $em->persist($updatedOffer);
-        $em->flush();
+        $offer = $entityManager->getRepository(Offer::class)->find($data['id']);
+        if (!$offer) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "Offer doesn't exist."
+            ], 404);
+        }
 
-        $location = $urlGenerator->generate(
-            'api_offer_show',
-            ['id' => $updatedOffer->getId()],
-            UrlGeneratorInterface::ABS_URL
-        );
-
-        return $this->json(['status' => 'success'], Response::HTTP_OK, ["Location" => $location]);
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+            'data' => json_decode($serializer->serialize($offer, 'json', ['groups' => 'public']), true),
+        ], 200);
     }
 
-    #[Route('/{id}', name: 'api_offer_delete', methods: ['DELETE'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function delete(Offer $offer, EntityManagerInterface $em): JsonResponse
+    #[Route('/new', methods: ['POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $em->remove($offer);
-        $em->flush();
+        $data = json_decode($request->getContent(), true);
 
-        return $this->json(['status' => 'Offer deleted successfully', 'offer' => $offer->getTitle()], Response::HTTP_OK);
+        if (!isset($data['name'])) {
+            return $this->json([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'name' parameter."
+            ], 400);
+        }
+
+        $existingOffer = $entityManager->getRepository(Offer::class)->findOneBy(['name' => $data['name']]);
+        if ($existingOffer) {
+            return $this->json([
+                'status' => "Forbidden",
+                'code' => 403,
+                'message' => "Offer already exists."
+            ], 403);
+        }
+
+        $offer = new Offer();
+        $offer->setProduct($data['product']);
+        $offer->setDescription($data['description']);
+        $offer->setQuantity($data['quantity']);
+        $offer->setExpirationDate(new \DateTime($data['expirationDate']));
+        $offer->setPrice($data['price']);
+        $offer->setIsDonation($data['isDonation']);
+        $offer->setPickupLocation($data['pickupLocation']);
+        $offer->setAvailableSlots($data['availableSlots']);
+        $offer->setIsRecurring($data['isRecurring']);
+        $offer->setPhotosFileOffers($data['photos_offer']);
+        // $offer->setCreatedAt(new \DateTimeImmutable());
+        $offer->setUpdatedAt(new \DateTimeImmutable());
+        $offer->setUser($this->getUser()); // Assurez-vous que l'utilisateur est connecté
+
+
+        $entityManager->persist($offer);
+        $entityManager->flush();
+
+        return $this->json([
+            'status' => "Created",
+            'code' => 201,
+        ], 201);
+    }
+
+    #[Route('/edit', methods: ['PUT'])]
+    public function edit(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['id']) || !isset($data['name'])) {
+            return $this->json([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'id' or 'name' parameter."
+            ], 400);
+        }
+
+        $offer = $entityManager->getRepository(Offer::class)->find($data['id']);
+        if (!$offer) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "Offer doesn't exist."
+            ], 404);
+        }
+
+        // Vérification des permissions (seul un admin ou le propriétaire peut éditer)
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->json([
+                'status' => "Unauthorized",
+                'code' => 401,
+                'message' => "You are not authorized to perform this action."
+            ], 401);
+        }
+
+        $offer->setName($data['name']);
+
+        $entityManager->flush();
+
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+        ], 200);
+    }
+
+    #[Route('/delete', methods: ['DELETE'])]
+    public function delete(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['id'])) {
+            return $this->json([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'id' parameter."
+            ], 400);
+        }
+
+        $offer = $entityManager->getRepository(Offer::class)->find($data['id']);
+        if (!$offer) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "Offer doesn't exist."
+            ], 404);
+        }
+
+        // Vérification des permissions
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->json([
+                'status' => "Unauthorized",
+                'code' => 401,
+                'message' => "You are not authorized to perform this action."
+            ], 401);
+        }
+
+        $entityManager->remove($offer);
+        $entityManager->flush();
+
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+        ], 200);
     }
 }
