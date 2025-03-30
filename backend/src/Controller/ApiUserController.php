@@ -66,6 +66,7 @@ class ApiUserController extends AbstractController
             return new JsonResponse([
                 'status' => "Bad Request",
                 'code' => 400,
+                'data' => $data,
                 'message' => "Missing parameters."
             ], 400);
         }

@@ -41,24 +41,27 @@ export async function getUser({id}) {
 }
 
 // creer un utilisateur
-export async function newUser({email,password,password_confirm,nameUser,surname}) {
-    try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/new/",{
-            method: "GET",
-            headers: {Authorization: `Bearer ${token}`},
-            body : JSON.stringify({
-                "email" : email,
-                "password" : password,
-                "password_confirm" : password_confirm,
-                "name" : nameUser,
-                "surname" : surname, 
+export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
+    try {
+        console.log({ email, password, confirmPassword, firstName, lastName });
+
+        const request = await fetch("https://localhost:8000/api/user/new", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                password_confirm: confirmPassword, 
+                name: firstName,
+                surname: lastName,
             }),
         });
-        
-        return await request.json();
 
-    }catch(error){
-        console.error("erreur api :", error);
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }

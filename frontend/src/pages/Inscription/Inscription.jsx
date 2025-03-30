@@ -6,7 +6,7 @@ import backgroundImage from "../../image/background/background-form.webp";
 import "./Inscription.css";
 
 function Inscription(){
-    const [name, setName] = useState("");
+    const [firstName, setName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -17,11 +17,12 @@ function Inscription(){
     const handlePassword = (event) => setPassword(event.target.value);
     const handleName = (event) => setName(event.target.value);
     const handleLastName = (event) => setLastName(event.target.value);
+    const handleConfirmPassword = (event) => setConfirmPassword(event.target.value);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await newUser({ email, password, confirmPassword, name,lastName});
+            const response = await newUser({ email, password, confirmPassword, firstName , lastName});
             setData(response);
             console.log("Réponse API :", response);
         } catch (error) {
@@ -37,24 +38,24 @@ function Inscription(){
                     <div className="content-element">
                         <div className="content-element-form">
                             <label htmlFor="name">Prénom</label>
-                            <input type="name" name="name" placeholder="exemple: James" onChange={handleName}/>
+                            <input type="name" name="name" placeholder="exemple: James" value={firstName} onChange={handleName}/>
                         </div>
                         <div className="content-element-form">
                             <label htmlFor="last-name">Nom de famille</label>
-                            <input type="last-name" name="last-name" placeholder="exemple: Jonson" onChange={handleLastName}/>
+                            <input type="last-name" name="last-name" placeholder="exemple: Jonson" value={lastName} onChange={handleLastName}/>
                         </div>
                     </div>
                     <div className="content-element-form">
                         <label htmlFor="email">Email</label>
-                        <input type="email" name="email" placeholder="test : Test@email.com" onChange={handleEmail}/>
+                        <input type="email" name="email" placeholder="test : Test@email.com" value={email} onChange={handleEmail}/>
                     </div>
                     <div className="content-element-form">
                         <label htmlFor="password">Mot de Passe:</label>
-                        <input type="password" name="password" placeholder="mon mot de passe" onChange={handlePassword}/>
+                        <input type="password" name="password" placeholder="mon mot de passe" value={password} onChange={handlePassword}/>
                     </div>
                     <div className="content-element-form">
                         <label htmlFor="confirm-password">Confimer le mot de passe:</label>
-                        <input type="password" name="confirm-password" placeholder="Confirmer le mot de passe" onChange={handlePassword}/>
+                        <input type="password" name="confirm-password" placeholder="Confirmer le mot de passe" value={confirmPassword} onChange={handleConfirmPassword}/>
                     </div>
                     <div className="content-element-form two-input">
                         <div className="two-input" id='password'>
