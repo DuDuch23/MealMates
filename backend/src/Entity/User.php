@@ -34,13 +34,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Groups(["public", "private"])]
-    private ?string $name = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(["public", "private"])]
-    private ?string $surname = null;
+    private ?string $lastName = null;
 
-    #[ORM\Column(type: 'json', nullable: true)]
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[Groups(["private"])]
     private Collection $preferences;
@@ -150,26 +149,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(string $name): static
+    public function setFirstName(string $firstName): static
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getSurname(): ?string
+    public function getLastName(): ?string
     {
-        return $this->surname;
+        return $this->lastName;
     }
 
-    public function setSurname(string $surname): static
+    public function setLastName(string $lastName): static
     {
-        $this->surname = $surname;
+        $this->lastName = $lastName;
 
         return $this;
     }

@@ -27,8 +27,8 @@ class UserFixtures extends Fixture
         $user1 = new User();
         $user1->setEmail("user@example.com");
         $user1->setPassword($this->hasher->hashPassword($user1, "password123"));
-        $user1->setName("Alice");
-        $user1->setSurname("Doe");
+        $user1->setFirstName("Alice");
+        $user1->setLastName("Doe");
         $user1->setRoles(["ROLE_USER"]);
         $user1->setLocation("Paris, France");
         $user1->setEmailVerified(true);
@@ -48,8 +48,8 @@ class UserFixtures extends Fixture
         $user2 = new User();
         $user2->setEmail("admin@example.com");
         $user2->setPassword($this->hasher->hashPassword($user2, "adminpass"));
-        $user2->setName("Bob");
-        $user2->setSurname("Smith");
+        $user2->setFirstName("Bob");
+        $user2->setLastName("Smith");
         $user2->setRoles(["ROLE_ADMIN"]);
         $user2->setLocation("Lyon, France");
         $user2->setEmailVerified(true);

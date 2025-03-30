@@ -46,7 +46,8 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist "
             ], 404);
         }
-        $scope = ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
+        $currentUser = $this->getUser();
+        $scope = ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
         $data = json_decode($serializer->serialize($user, 'json', ['groups' =>[ $scope]]), true);
         return new JsonResponse([
             'status' => "OK",
@@ -60,10 +61,11 @@ class ApiUserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        if (!(isset($data['email']) && isset($data['name']) && isset($data['surname'])&& isset($data['password']) && isset($data['password_confirm'])))
+        if (!(isset($data['email']) && isset($data['firstName']) && isset($data['lastName'])&& isset($data['password']) && isset($data['password_confirm'])))
         {
             return new JsonResponse([
                 'status' => "Bad Request",
+                'data' => $data,
                 'code' => 400,
                 'message' => "Missing parameters."
             ], 400);
@@ -105,8 +107,8 @@ class ApiUserController extends AbstractController
         $user = new User();
         $user->setEmail($data['email']);
         $user->setPassword($this->hasher->hashPassword($user,$data['password']));
-        $user->setName($data['name']);
-        $user->setSurname($data['surname']);
+        $user->setFirstName($data['firstName']);
+        $user->setLastName($data['lastName']);
         $user->setRoles($data['role'] ?? ["ROLE_USER"]);
 
         $entityManager->persist($user);
@@ -139,7 +141,8 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist "
             ], 404);
         }
-        if ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
+        $currentUser = $this->getUser();
+        if ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
         {
             return new JsonResponse([
                 'status' => "Unauthorized",
@@ -185,8 +188,8 @@ class ApiUserController extends AbstractController
 
         if (isset($data['email'])) $user->setEmail($data['email']);
         if (isset($data['password'])) $user->setPassword($this->hasher->hashPassword($user,$data['password']));
-        if (isset($data['name'])) $user->setName($data['name']);
-        if (isset($data['surname'])) $user->setSurname($data['surname']);
+        if (isset($data['firstName'])) $user->setFirstName($data['firstName']);
+        if (isset($data['lastName'])) $user->setLastName($data['lastName']);
         if (isset($data['role'])) $user->setRoles([$data['role']]);
         if (isset($data['preferences'])) $user->setPreferences(array_filter(array_map(fn($p) => PreferenceEnum::tryFrom($p), $data['preferences'] ?? [])));
 
@@ -219,7 +222,7 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist"
             ], 404);
         }
-        if ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
+        if ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
         {
             return new JsonResponse([
                 'status' => "Unauthorized",

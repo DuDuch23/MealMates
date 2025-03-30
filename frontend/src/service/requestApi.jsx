@@ -5,13 +5,13 @@ const token = '';
 // login user
 export async function logIn({ email, password }) {
     try {
-        const response = await fetch("https://localhost:8000/api/login", {
+        const response = await fetch("https://127.0.0.1:8000/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                username: email,
+                email: email,
                 password: password
             }),
         });
@@ -27,9 +27,12 @@ export async function logIn({ email, password }) {
 // recuperer un user
 export async function getUser({id}) {
     try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/get/",{
+        const request = await fetch (`https://127.0.0.1:8000/api/user/get`,{
             method: "POST",
-            headers: {Authorization: `Bearer ${token}`},
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
             body:JSON.stringify({
                 "id": id,
             })
@@ -43,17 +46,21 @@ export async function getUser({id}) {
 }
 
 // creer un utilisateur
-export async function newUser({email,password,password_confirm,nameUser,surname}) {
+export async function newUser({email, password, passwordConfirm, firstName, lastName}) {
+    console.log("Données envoyées :", { email, password, passwordConfirm, firstName, lastName });
     try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/new/",{
-            method: "GET",
-            headers: {Authorization: `Bearer ${token}`},
+        const request = await fetch ("https://127.0.0.1:8000/api/user/new",{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // Authorization: `Bearer ${token}`
+            },
             body : JSON.stringify({
                 "email" : email,
                 "password" : password,
-                "password_confirm" : password_confirm,
-                "name" : nameUser,
-                "surname" : surname, 
+                "password_confirm" : passwordConfirm,
+                "firstName" : firstName,
+                "lastName" : lastName,
             }),
         });
         

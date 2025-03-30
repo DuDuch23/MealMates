@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { logIn } from "../../service/requestApi";
 import backgroundImage from "../../image/background/background-form.webp";
+// import GoogleLoginButton from "../../components/SsoGoogle.jsx";
 
 // css
 import "./Connexion.scss";
@@ -18,6 +20,11 @@ function Connexion(){
             const response = await logIn({ email, password });
             setData(response);
             console.log("Réponse API :", response);
+            if (response.success) { // Vérifie si la connexion est réussie
+                navigate("/"); // Redirige vers la page d'accueil
+            } else {
+                console.error("Connexion échouée :", response.message);
+            }
         } catch (error) {
             console.error("Erreur lors de la connexion :", error);
         }
@@ -50,6 +57,8 @@ function Connexion(){
                 <div className="otherAction">
                     <div className="fill">
                     <p> Ou connexion avec </p>
+
+                    {/* <GoogleLoginButton setUser={setUser} /> */}
                     <ul>
                         <li>
                             <svg width="212" height="101" viewBox="0 0 212 101" fill="none" xmlns="http://www.w3.org/2000/svg">

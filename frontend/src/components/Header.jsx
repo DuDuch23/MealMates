@@ -12,12 +12,12 @@ export default function App() {
 
     const closeMenuMobile = () => {
         setClose(true);
-        setTimeout(() => {
+        const timeOut = setTimeout(() => {
             setMenuMobile(false);
             setClose(false);
         }, 500);
         return () => clearTimeout(timeOut);
-    }
+    };
 
     return (
         <>

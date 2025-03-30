@@ -2,247 +2,116 @@
 
 namespace App\Entity;
 
-use App\Repository\OfferRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\OfferRepository;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Offer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'offers')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "offers")]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $seller = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[ORM\Column(type: "string", length: 255)]
+    #[Assert\NotBlank]
+    private string $product;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?int $quantity = null;
+    #[ORM\Column(type: "integer")]
+    #[Assert\Positive]
+    private int $quantity;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $expirationDate = null;
+    #[ORM\Column(type: "datetime")]
+    #[Assert\NotBlank]
+    private \DateTimeInterface $expirationDate;
 
-    #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $photos = null;
-
-    #[ORM\Column]
+    #[ORM\Column(type: "float", nullable: true)]
+    #[Assert\GreaterThanOrEqual(0)]
     private ?float $price = null;
 
-    #[ORM\Column]
-    private ?bool $isDonation = null;
+    #[ORM\Column(type: "boolean")]
+    private bool $isDonation = false;
 
-    #[ORM\Column]
-    private ?bool $isRecurring = null;
+    #[ORM\Column(type: "json", nullable: true)]
+    private ?array $photos = [];
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'offers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Collection $categories = null;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $pickupLocation = null;
 
-    #[ORM\Column(type: 'json')]
-    private array $pickupSlots = [];
+    #[ORM\Column(type: "json", nullable: true)]
+    private ?array $availableSlots = [];
 
-    #[ORM\Column(length: 255)]
-    private ?string $location = null;
+    #[ORM\Column(type: "boolean")]
+    private bool $isRecurring = false;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(type: "datetime")]
+    private \DateTimeInterface $createdAt;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->photos = [];
+        $this->availableSlots = [];
     }
 
-    public function getId(): ?int
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): void
     {
-        return $this->id;
+        $this->updatedAt = new \DateTime();
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
+    // Getters et Setters
 
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
+    public function getId(): ?int { return $this->id; }
 
-        return $this;
-    }
+    public function getUser(): ?User { return $this->seller; }
+    public function setUser(?User $seller): static { $this->seller = $seller; return $this; }
 
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
+    public function getProduct(): string { return $this->product; }
+    public function setProduct(string $product): static { $this->product = $product; return $this; }
 
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
+    public function getDescription(): ?string { return $this->description; }
+    public function setDescription(?string $description): static { $this->description = $description; return $this; }
 
-        return $this;
-    }
+    public function getQuantity(): int { return $this->quantity; }
+    public function setQuantity(int $quantity): static { $this->quantity = $quantity; return $this; }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+    public function getExpirationDate(): \DateTimeInterface { return $this->expirationDate; }
+    public function setExpirationDate(\DateTimeInterface $expirationDate): static { $this->expirationDate = $expirationDate; return $this; }
 
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
+    public function getPrice(): ?float { return $this->price; }
+    public function setPrice(?float $price): static { $this->price = $price; return $this; }
 
-        return $this;
-    }
+    public function getIsDonation(): bool { return $this->isDonation; }
+    public function setIsDonation(bool $isDonation): static { $this->isDonation = $isDonation; return $this; }
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
+    public function getPhotos(): array { return $this->photos; }
+    public function setPhotos(array $photos): static { $this->photos = $photos; return $this; }
 
-    public function setQuantity(int $quantity): static
-    {
-        $this->quantity = $quantity;
+    public function getPickupLocation(): ?string { return $this->pickupLocation; }
+    public function setPickupLocation(?string $pickupLocation): static { $this->pickupLocation = $pickupLocation; return $this; }
 
-        return $this;
-    }
+    public function getAvailableSlots(): array { return $this->availableSlots; }
+    public function setAvailableSlots(array $availableSlots): static { $this->availableSlots = $availableSlots; return $this; }
 
-    public function getExpirationDate(): ?\DateTimeInterface
-    {
-        return $this->expirationDate;
-    }
+    public function getIsRecurring(): bool { return $this->isRecurring; }
+    public function setIsRecurring(bool $isRecurring): static { $this->isRecurring = $isRecurring; return $this; }
 
-    public function setExpirationDate(\DateTimeInterface $expirationDate): static
-    {
-        $this->expirationDate = $expirationDate;
+    public function getCreatedAt(): \DateTimeInterface { return $this->createdAt; }
 
-        return $this;
-    }
-
-    public function getPhotos(): ?array
-    {
-        return $this->photos;
-    }
-
-    public function setPhotos(?array $photos): static
-    {
-        $this->photos = $photos;
-
-        return $this;
-    }
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): static
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function isDonation(): ?bool
-    {
-        return $this->isDonation;
-    }
-
-    public function setIsDonation(bool $isDonation): static
-    {
-        $this->isDonation = $isDonation;
-
-        return $this;
-    }
-
-    public function isRecurring(): ?bool
-    {
-        return $this->isRecurring;
-    }
-
-    public function setIsRecurring(bool $isRecurring): static
-    {
-        $this->isRecurring = $isRecurring;
-
-        return $this;
-    }
-
-    public function getCategories(): \Doctrine\Common\Collections\Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): static
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): static
-    {
-        $this->categories->removeElement($category);
-
-        return $this;
-    }
-
-    public function getPickupSlots(): array
-    {
-        return $this->pickupSlots;
-    }
-
-    public function setPickupSlots(array $pickupSlots): static
-    {
-        $this->pickupSlots = $pickupSlots;
-
-        return $this;
-    }
-
-    public function getLocation(): ?string
-    {
-        return $this->location;
-    }
-
-    public function setLocation(string $location): static
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
+    public function getUpdatedAt(): ?\DateTimeInterface { return $this->updatedAt; }
 }

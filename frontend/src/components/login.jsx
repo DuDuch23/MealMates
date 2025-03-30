@@ -1,6 +1,6 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const Login = ({ setUser }) => {
   const handleSuccess = (response) => {
