@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router'
 import { getUser } from "../../service/requestApi";
+import Avis from "../../components/Avis/Avis";
 
 import './UserProfile.css';
 
@@ -34,9 +35,7 @@ function UserProfile(){
                 </ul>
 
                 {/* creer un composant pour le slider avis afin de pouvoir gerer le fait que certain utilisateur n'ont pas d'avis */}
-                <div id="slider-avis">
-
-                </div>
+                <Avis />
             </div>
         </>
     );

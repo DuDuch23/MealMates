@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
 
-export default function App() {
+export default function Header() {
     const [menuMobile, setMenuMobile] = useState(false);
     const [close, setClose] = useState(false);
 
