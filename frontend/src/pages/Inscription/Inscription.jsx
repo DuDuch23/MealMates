@@ -173,7 +173,7 @@ function Inscription(){
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default Inscription;

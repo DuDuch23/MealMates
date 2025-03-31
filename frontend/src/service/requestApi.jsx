@@ -1,7 +1,4 @@
-const token = '';
-
-// User
-
+/* User*/
 // login user
 export async function logIn({ email, password }) {
     try {
@@ -37,10 +34,10 @@ export async function getUser({id}) {
                 "id": id,
             })
         });
-        return await request.json();
 
-    }catch(error){
-        console.error("erreur api :", error);
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }

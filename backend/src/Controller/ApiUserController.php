@@ -67,6 +67,7 @@ class ApiUserController extends AbstractController
                 'status' => "Bad Request",
                 'data' => $data,
                 'code' => 400,
+                'data' => $data,
                 'message' => "Missing parameters."
             ], 400);
         }
