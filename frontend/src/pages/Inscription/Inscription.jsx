@@ -3,10 +3,10 @@ import { newUser } from "../../service/requestApi";
 import backgroundImage from "../../image/background/background-form.webp";
 
 // css
-import "./Inscription.css";
+import "./Inscription.scss";
 
 function Inscription(){
-    const [firstName, setName] = useState("");
+    const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,14 +15,15 @@ function Inscription(){
 
     const handleEmail = (event) => setEmail(event.target.value);
     const handlePassword = (event) => setPassword(event.target.value);
-    const handleName = (event) => setName(event.target.value);
+    const handleFirstName = (event) => setFirstName(event.target.value);
     const handleLastName = (event) => setLastName(event.target.value);
     const handleConfirmPassword = (event) => setConfirmPassword(event.target.value);
 
     const handleSubmit = async (event) => {
+        console.log("handleSubmit", { email, password, confirmPassword, firstName, lastName});
         event.preventDefault();
         try {
-            const response = await newUser({ email, password, confirmPassword, firstName , lastName});
+            const response = await newUser({ email, password, confirmPassword, firstName, lastName});
             setData(response);
             console.log("Réponse API :", response);
         } catch (error) {
@@ -38,11 +39,11 @@ function Inscription(){
                     <div className="content-element">
                         <div className="content-element-form">
                             <label htmlFor="name">Prénom</label>
-                            <input type="name" name="name" placeholder="exemple: James" value={firstName} onChange={handleName}/>
+                            <input type="name" name="firstName" placeholder="exemple: James" value={firstName} onChange={handleFirstName}/>
                         </div>
                         <div className="content-element-form">
                             <label htmlFor="last-name">Nom de famille</label>
-                            <input type="last-name" name="last-name" placeholder="exemple: Jonson" value={lastName} onChange={handleLastName}/>
+                            <input type="last-name" name="lastName" placeholder="exemple: Jonson" value={lastName} onChange={handleLastName}/>
                         </div>
                     </div>
                     <div className="content-element-form">
@@ -55,7 +56,7 @@ function Inscription(){
                     </div>
                     <div className="content-element-form">
                         <label htmlFor="confirm-password">Confimer le mot de passe:</label>
-                        <input type="password" name="confirm-password" placeholder="Confirmer le mot de passe" value={confirmPassword} onChange={handleConfirmPassword}/>
+                        <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" value={confirmPassword} onChange={handleConfirmPassword}/>
                     </div>
                     <div className="content-element-form two-input">
                         <div className="two-input" id='password'>

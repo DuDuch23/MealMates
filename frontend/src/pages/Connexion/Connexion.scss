@@ -1,19 +1,6 @@
 @import "../../styles/globals";
-@import '../../styles/_mixins.scss';
-@import "../../styles/_variables.scss";
-@import "../../styles/main.scss";
-
-
-#root{
-    width: 768px;
-    max-width: 100%;
-    height: 100vh;
-    margin: 0 auto;
-    background: $colorBlack;
-    background-image: url('../../image/background/background-form.jpg');
-    background-repeat: no-repeat;
-    background-size: contain;
-}
+@import '../../styles/mixins';
+@import "../../styles/variables";
 
 h1{
     text-align: center;

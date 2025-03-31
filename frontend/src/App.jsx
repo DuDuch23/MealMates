@@ -1,16 +1,16 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import NavLayout from './Layout/NavLayout';
+import NavLayout from './NavLayout';
 
 // Chargement différé des composants
-const Home = lazy(() => import('./pages/Home'));
+const Home = lazy(() => import('./pages/Home/Home'));
 const Connexion = lazy(() => import('./pages/Connexion/Connexion'));
 const Inscription = lazy(() => import('./pages/Inscription/Inscription'));
-const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
+const UserProfile = lazy(() => import('./pages/userProfile/UserProfile'));
 
 function App() {
   return (
-    <Suspense fallback={<div className="text-center p-4">Chargement...</div>}>
+    <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
       <Routes>
         <Route element={<NavLayout />}>
           <Route path="/" element={<Home />} />

@@ -12,14 +12,14 @@ class RatingFixtures extends Fixture implements DependentFixtureInterface
 {
     public const RATINGS = [
         [
-            "rater" => "email@example.com",
+            "rater" => "user@example.com", // Utiliser une clé de référence valide
             "rated" => "admin@example.com",
             "score" => 5,
             "comment" => "Great user!"
         ],
         [
-            "rater" => "admin@example.com",
-            "rated" => "email@example.com",
+            "rater" => "admin@example.com", // Utiliser une clé de référence valide
+            "rated" => "user@example.com",
             "score" => 4,
             "comment" => "Good communication"
         ]
@@ -27,25 +27,27 @@ class RatingFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        foreach ($this::RATINGS as $rating) {
+        foreach (self::RATINGS as $ratingData) {
+            // Référence valide pour récupérer les utilisateurs
+            $rater = $this->getReference($ratingData["rater"], User::class);
+            $rated = $this->getReference($ratingData["rated"], User::class);
 
-            $obj = new Rating();
-            $obj->setRater($this->getReference($rating["rater"], User::class));
-            $obj->setRated($this->getReference($rating["rated"], User::class));
-            $obj->setScore($rating["score"]);
-            $obj->setComment($rating["comment"]);
+            $rating = new Rating();
+            $rating->setRater($rater);
+            $rating->setRated($rated);
+            $rating->setScore($ratingData["score"]);
+            $rating->setComment($ratingData["comment"]);
 
-            $manager->persist($obj);
+            $manager->persist($rating);
         }
 
         $manager->flush();
     }
 
-    // Ensures UserFixtures runs first
     public function getDependencies(): array
     {
         return [
-            UserFixtures::class,
+            UserFixtures::class, 
         ];
     }
 }

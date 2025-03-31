@@ -61,10 +61,11 @@ class ApiUserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        if (!(isset($data['email']) && isset($data['name']) && isset($data['surname'])&& isset($data['password']) && isset($data['password_confirm'])))
+        if (!(isset($data['email']) && isset($data['firstName']) && isset($data['lastName'])&& isset($data['password']) && isset($data['password_confirm'])))
         {
             return new JsonResponse([
                 'status' => "Bad Request",
+                'data' => $data,
                 'code' => 400,
                 'data' => $data,
                 'message' => "Missing parameters."
@@ -107,8 +108,8 @@ class ApiUserController extends AbstractController
         $user = new User();
         $user->setEmail($data['email']);
         $user->setPassword($this->hasher->hashPassword($user,$data['password']));
-        $user->setName($data['name']);
-        $user->setSurname($data['surname']);
+        $user->setFirstName($data['firstName']);
+        $user->setLastName($data['lastName']);
         $user->setRoles($data['role'] ?? ["ROLE_USER"]);
 
         $entityManager->persist($user);
@@ -188,8 +189,8 @@ class ApiUserController extends AbstractController
 
         if (isset($data['email'])) $user->setEmail($data['email']);
         if (isset($data['password'])) $user->setPassword($this->hasher->hashPassword($user,$data['password']));
-        if (isset($data['name'])) $user->setName($data['name']);
-        if (isset($data['surname'])) $user->setSurname($data['surname']);
+        if (isset($data['firstName'])) $user->setFirstName($data['firstName']);
+        if (isset($data['lastName'])) $user->setLastName($data['lastName']);
         if (isset($data['role'])) $user->setRoles([$data['role']]);
         if (isset($data['preferences'])) $user->setPreferences(array_filter(array_map(fn($p) => PreferenceEnum::tryFrom($p), $data['preferences'] ?? [])));
 
