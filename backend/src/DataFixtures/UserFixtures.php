@@ -31,8 +31,6 @@ class UserFixtures extends Fixture
         $user1->setLastName("Doe");
         $user1->setRoles(["ROLE_USER"]);
         $user1->setLocation("Paris, France");
-        $user1->setEmailVerified(true);
-        $user1->setSsoId(null);
 
         // Ajouter les catégories comme préférences pour l'utilisateur 1
         $user1->addPreferences($category1);
@@ -52,8 +50,6 @@ class UserFixtures extends Fixture
         $user2->setLastName("Smith");
         $user2->setRoles(["ROLE_ADMIN"]);
         $user2->setLocation("Lyon, France");
-        $user2->setEmailVerified(true);
-        $user2->setSsoId("12345-abcdef");
 
         // Ajouter les catégories comme préférences pour l'utilisateur 2
         $user2->addPreferences($category1);

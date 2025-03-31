@@ -17,38 +17,41 @@ function App(){
         );
     }, []);
 
-    return(
+    return (
         <>
-        <section className="home">
-            <h1>Et si ce que l’on consommait sauverai le monde et nos économies ?</h1>
-
-            <Swiper
-                spaceBetween={50}
-                slidesPerView={1.2}
-                onSlideChange={() => console.log('slide change')}
-                onSwiper={(swiper) => console.log(swiper)}
-                breakpoints={{
-                    768: {
-                    slidesPerView: 2,  
-                    },
-                    769: {
-                    slidesPerView: 4,
-                    },
-                }}>
-                {offers.map((offer) => (
-                    <a key={offer.id} href="" className='card'>
-                        <SwiperSlide className='card__container'>
+            <section className="home">
+                <h1>Et si ce que l’on consommait sauverai le monde et nos économies ?</h1>
+    
+                <Swiper
+                    spaceBetween={50}
+                    slidesPerView={1.2}
+                    // onSlideChange={() => 
+                    //     console.log('slide change')
+                    // }
+                    // onSwiper={(swiper) =>
+                    //      console.log(swiper)
+                    //     }
+                    breakpoints={{
+                        768: {
+                            slidesPerView: 2,  
+                        },
+                        769: {
+                            slidesPerView: 4,
+                        },
+                    }}
+                >
+                    {offers.map((offer) => (  // Fixed here
+                        <SwiperSlide key={offer.id} className='card__container'>
                             <div className='card__images-container'>
                                 <Swiper
-                                spaceBetween={50}
-                                slidesPerView={1}
-                                onSlideChange={() => console.log('slide change')}
-                                onSwiper={(swiper) => console.log(swiper)}
+                                    spaceBetween={50}
+                                    slidesPerView={1}
+                                    // onSlideChange={() => console.log('slide change')}
+                                    // onSwiper={(swiper) => console.log(swiper)}
                                 >
                                     {offer.photosNameOffer?.map((photo, index) => (
-                                        <SwiperSlide className='card'>
+                                        <SwiperSlide key={index} className='card'>  {/* Added key prop */}
                                             <img 
-                                                key={index} 
                                                 src={`${BASE_URL}${UPLOADS_URL}${photo}`} 
                                                 alt={`Photo ${index + 1}`} 
                                                 className='card-image'
@@ -62,12 +65,11 @@ function App(){
                             <p className='price'>{offer.price} €</p>
                             <button className='btn'>Acheter</button>
                         </SwiperSlide>
-                    </a>
-                ))}
-            </Swiper>
-        </section>
+                    ))}
+                </Swiper>
+            </section>
         </>
-    )
+    )    
 }
 
 export default App;

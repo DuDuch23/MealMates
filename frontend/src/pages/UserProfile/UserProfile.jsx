@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router'
 import { getUser } from "../../service/requestApi";
-<<<<<<< HEAD
 import Avis from "../../components/Avis/Avis";
-=======
->>>>>>> baae903d7101c3e927cc85eab0bdbcec22aaf37b
 
 import './UserProfile.css';
 
