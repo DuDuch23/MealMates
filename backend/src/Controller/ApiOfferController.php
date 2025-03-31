@@ -2,12 +2,13 @@
 namespace App\Controller;
 
 use App\Entity\Offer;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/api/offers', name: 'api_offer')]
 class ApiOfferController extends AbstractController
@@ -97,7 +98,7 @@ class ApiOfferController extends AbstractController
         $offer->setIsRecurring($data['isRecurring']);
         $offer->setPhotosFileOffers($data['photos_offer']);
         // $offer->setCreatedAt(new \DateTimeImmutable());
-        $offer->setUpdatedAt(new \DateTimeImmutable());
+        $offer->setUpdatedAt(new DateTimeImmutable());
         $offer->setUser($this->getUser()); // Assurez-vous que l'utilisateur est connecté
 
 

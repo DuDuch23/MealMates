@@ -14,13 +14,15 @@ function Connexion(){
     const handleEmail = (event) => setEmail(event.target.value);
     const handlePassword = (event) => setPassword(event.target.value);
 
+    const navigate = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const response = await logIn({ email, password });
             setData(response);
+            console.log("Données de connexion :", response);
             console.log("Réponse API :", response);
-            if (response.success) { // Vérifie si la connexion est réussie
+            if (response.token) { // Vérifie si la connexion est réussie
                 navigate("/"); // Redirige vers la page d'accueil
             } else {
                 console.error("Connexion échouée :", response.message);

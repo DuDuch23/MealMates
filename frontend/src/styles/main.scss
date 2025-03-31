@@ -3,6 +3,7 @@
 @import "./variables";
 @import "../pages/Connexion/Connexion.scss";
 @import "../pages/Inscription/Inscription.scss";
+@import "../pages/Home/Home.scss";
 
 
 *,::before,::after{
@@ -48,6 +49,22 @@ body{
 }
 .slide-right-header {
     animation: slideToRightHeader 0.5s ease-in-out forwards;
+}
+
+form{
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    input{
+        width: 100%;
+        padding: 6px;
+        border-radius: 4px;
+        border: none;
+        background-color: darkgrey;
+    }
+    button{
+        display: none;
+    }
 }
 
 .header-primary{
@@ -121,6 +138,7 @@ body{
         left: 100%;
         display: flex;
         justify-content: end;
+        z-index: 19000;
         .menu-mobile{
             background-color: #444444;
             width: 400px;
@@ -204,7 +222,6 @@ body{
         max-width: 100%;
         height: 100vh;
         margin: 0 auto;
-        background: $colorBlack;
     }
 }
 
@@ -214,6 +231,5 @@ body{
         max-width: 100%;
         height: 100vh;
         margin: 0 auto;
-        background: $colorBlack;
     }
 }

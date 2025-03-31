@@ -46,31 +46,47 @@ export async function getUser({id}) {
 }
 
 // creer un utilisateur
-export async function newUser({email, password, passwordConfirm, firstName, lastName}) {
-    console.log("Données envoyées :", { email, password, passwordConfirm, firstName, lastName });
-    try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/new",{
+export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
+    try {
+        console.log({ email, password, confirmPassword, firstName, lastName });
+
+        if (!email || !password || !confirmPassword || !firstName || !lastName) {
+            throw new Error("All fields are required.");
+        }
+
+        if (password !== confirmPassword) {
+            throw new Error("Passwords do not match.");
+        }
+
+        const request = await fetch("https://localhost:8000/api/user/new", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                // Authorization: `Bearer ${token}`
             },
-            body : JSON.stringify({
-                "email" : email,
-                "password" : password,
-                "password_confirm" : passwordConfirm,
-                "firstName" : firstName,
-                "lastName" : lastName,
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                password_confirm: confirmPassword,
+                firstName: firstName,
+                lastName: lastName,
             }),
         });
-        
-        return await request.json();
 
-    }catch(error){
-        console.error("erreur api :", error);
+        // Check if the response is successful (status 200-299)
+        if (!request.ok) {
+            const textResponse = await request.text(); // Get the raw response as text
+            console.error("Server error response: ", textResponse); // Log the raw response for debugging
+            throw new Error(textResponse); // Throw error with raw response text
+        }
+
+        // Parse the JSON response
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }
+
 
 // modifier un user
 export async function editUser({data}) {
@@ -82,8 +98,8 @@ export async function editUser({data}) {
                 "email" : data[email],
                 "password" : data[password],
                 "password_confirm" : data[password],
-                "name" : data[nameUser],
-                "surname" : data[surname],   
+                "firstName" : data[firstName],
+                "lastName" : data[lastName],   
             }),
         });
         

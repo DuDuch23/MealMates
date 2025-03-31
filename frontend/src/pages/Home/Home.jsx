@@ -23,24 +23,39 @@ function App(){
             <h1>Et si ce que l’on consommait sauverai le monde et nos économies ?</h1>
 
             <Swiper
-            spaceBetween={50}
-            slidesPerView={3}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
-            >
-                
+                spaceBetween={50}
+                slidesPerView={1.2}
+                onSlideChange={() => console.log('slide change')}
+                onSwiper={(swiper) => console.log(swiper)}
+                breakpoints={{
+                    768: {
+                    slidesPerView: 2,  
+                    },
+                    769: {
+                    slidesPerView: 4,
+                    },
+                }}>
                 {offers.map((offer) => (
-                    <a href="">
-                        <SwiperSlide key={offer.id} className='card'>
-                            <div className='card-images'>
-                                {offer.photosNameOffer?.map((photo, index) => (
-                                    <img 
-                                        key={index} 
-                                        src={`${BASE_URL}${UPLOADS_URL}${photo}`} 
-                                        alt={`Photo ${index + 1}`} 
-                                        className='card-image'
-                                    />
-                                ))}
+                    <a key={offer.id} href="" className='card'>
+                        <SwiperSlide className='card__container'>
+                            <div className='card__images-container'>
+                                <Swiper
+                                spaceBetween={50}
+                                slidesPerView={1}
+                                onSlideChange={() => console.log('slide change')}
+                                onSwiper={(swiper) => console.log(swiper)}
+                                >
+                                    {offer.photosNameOffer?.map((photo, index) => (
+                                        <SwiperSlide className='card'>
+                                            <img 
+                                                key={index} 
+                                                src={`${BASE_URL}${UPLOADS_URL}${photo}`} 
+                                                alt={`Photo ${index + 1}`} 
+                                                className='card-image'
+                                            />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
                             </div>
                             <h2>{offer.title}</h2>
                             <p>{offer.description}</p>
