@@ -54,12 +54,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $location = null;
 
-    #[ORM\Column]
-    private ?bool $emailVerified = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $ssoId = null;
-
     /**
      * @var Collection<int, Offer>
      */
@@ -265,30 +259,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLocation(?string $location): static
     {
         $this->location = $location;
-
-        return $this;
-    }
-
-    public function isEmailVerified(): ?bool
-    {
-        return $this->emailVerified;
-    }
-
-    public function setEmailVerified(bool $emailVerified): static
-    {
-        $this->emailVerified = $emailVerified;
-
-        return $this;
-    }
-
-    public function getSsoId(): ?string
-    {
-        return $this->ssoId;
-    }
-
-    public function setSsoId(?string $ssoId): static
-    {
-        $this->ssoId = $ssoId;
 
         return $this;
     }
