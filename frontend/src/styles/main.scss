@@ -22,7 +22,7 @@ body{
 .container{
     max-width: 100%;
     width: 1440px;
-    margin: 0 auto;
+    margin: 50px auto;
     padding: 0 24px;
 }
 
@@ -51,25 +51,12 @@ body{
     animation: slideToRightHeader 0.5s ease-in-out forwards;
 }
 
-form{
-    padding: 24px;
-    display: flex;
-    justify-content: center;
-    input{
-        width: 100%;
-        padding: 6px;
-        border-radius: 4px;
-        border: none;
-        background-color: darkgrey;
-    }
-    button{
-        display: none;
-    }
-}
-
 .header-primary{
     right: 0px;
     position: relative;
+    img{
+        width: 32px;
+    }
     .disable{
         display: none !important;
     }
@@ -85,14 +72,22 @@ form{
         letter-spacing: 1px;
         color: $colorPowerBlue;
     }
-    .btn-menu-mobile{
+    &__btn-menu-desktop{
+        width: 300px;
+        text-align: center;
+        background-color: azure;
+        border: none;
+        border-radius: 2px;
+        margin-right: 200px;
+    }
+    &__btn-menu-mobile{
         background: none;
         border: none;
         cursor: pointer;
         background-color: #D9D9D9;
         border-radius: 6px;
         padding: 4px 8px;
-        display: flex;
+        display: none;
         justify-content: center;
         align-items: center;
         svg{
@@ -216,20 +211,42 @@ form{
     }
 }
 
-@media screen and (max-width: 1440px){
-    #root{
-        width: 768px;
-        max-width: 100%;
-        height: 100vh;
-        margin: 0 auto;
+.search-offer{
+    width: 100%;
+    margin: 0 50px 0 200px;
+    display: flex;
+    justify-content: center;
+    &__input{
+        width: 100%;
+        padding: 6px;
+        border-radius: 4px;
+        border: none;
+        background-color: darkgrey;
     }
 }
 
+@media screen and (max-width: 1440px){
+    // #root{
+    //     width: 768px;
+    //     max-width: 100%;
+    //     height: 100vh;
+    //     margin: 0 auto;
+    // }
+}
+
 @media screen and (max-width: 768px){
-    #root{
-        width: 768px;
-        max-width: 100%;
-        height: 100vh;
-        margin: 0 auto;
+    .header-primary{
+        &__btn-menu-desktop{
+            display: none;
+        }
+        &__btn-menu-mobile{
+            display: flex;
+        }
     }
+    // #root{
+    //     width: 768px;
+    //     max-width: 100%;
+    //     height: 100vh;
+    //     margin: 0 auto;
+    // }
 }

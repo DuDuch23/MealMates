@@ -13,8 +13,9 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='search-offer' onSubmit={handleSubmit}>
       <input
+        className='search-offer__input'
         type="text"
         value={query}
         onChange={handleChange}

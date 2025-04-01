@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Header from '../components/Header';
-import SearchBar from '../components/SearchBar';
 
 const NavLayout = () => {
   const handleSearch = (query) => {
@@ -9,7 +8,6 @@ const NavLayout = () => {
   return (
     <>
       <Header />
-      <SearchBar onSearch={handleSearch} />
       <div className="container">
         <Outlet />
       </div>
