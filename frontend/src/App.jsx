@@ -1,36 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import Login from "./components/login";
-import Logout from "./components/logout";
+import { lazy, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-const clientId = "947326609144-oed76j74qvdqh2ie1e4cdfobrtmpiq66.apps.googleusercontent.com";
+// Chargement différé des composants
+const Home = lazy(() => import('./pages/Home/Home'));
+const Connexion = lazy(() => import('./pages/Connexion/Connexion'));
+const Inscription = lazy(() => import('./pages/Inscription/Inscription'));
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
   return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <div className="App">
-        <h1>Authentification Google SSO</h1>
-
-        {user ? (
-          <div>
-            <h3>Bienvenue, {user.name} !</h3>
-            <img src={user.picture} alt="Avatar" style={{ borderRadius: "50%", width: "80px" }} />
-            <Logout setUser={setUser} />
-          </div>
-        ) : (
-          <Login setUser={setUser} />
-        )}
-      </div>
-    </GoogleOAuthProvider>
+    <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
+      <Routes>
+        <Route element={<NavLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/profileUser/:id" element={<UserProfile />} />
+        </Route>
+        <Route path="/connexion" element={<Connexion />} />
+        <Route path="/inscription" element={<Inscription /> } />
+        <Route path="/deconnexion" element={<Inscription /> } />
+      </Routes>
+    </Suspense>
   );
 }
 
