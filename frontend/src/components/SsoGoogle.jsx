@@ -1,16 +1,18 @@
-import { GoogleLogin } from "@react-oauth/google";
-import jwtDecode from "jwt-decode";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
-import { GoogleOAuthProvider } from '@react-oauth/google'
-
-const CLIENT_ID = "947326609144-oed76j74qvdqh2ie1e4cdfobrtmpiq66.apps.googleusercontent.com"
-
+const CLIENT_ID = "947326609144-oed76j74qvdqh2ie1e4cdfobrtmpiq66.apps.googleusercontent.com";
 
 const GoogleLoginButton = ({ setUser }) => {
   const handleSuccess = (response) => {
-    const userObject = jwtDecode(response.credential);
-    setUser(userObject);
-    localStorage.setItem("user", JSON.stringify(userObject));
+    try {
+      const userObject = jwtDecode(response.credential);
+      setUser(userObject);
+      localStorage.setItem("user", JSON.stringify(userObject));
+      console.log("Connexion réussie :", userObject);
+    } catch (error) {
+      console.error("Erreur lors du décodage du token :", error);
+    }
   };
 
   const handleFailure = () => {
@@ -18,7 +20,9 @@ const GoogleLoginButton = ({ setUser }) => {
   };
 
   return (
-    <GoogleLogin onSuccess={handleSuccess} onError={handleFailure} />
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
+      <GoogleLogin onSuccess={handleSuccess} onError={handleFailure} />
+    </GoogleOAuthProvider>
   );
 };
 

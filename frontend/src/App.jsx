@@ -1,9 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import NavLayout from './NavLayout';
+// import NavLayout from './NavLayout';
 
-import NavLayout from './Layout/NavLayout';
+// import NavLayout from './Layout/NavLayout';
 
 // Chargement différé des composants
 const Home = lazy(() => import('./pages/Home/Home'));
