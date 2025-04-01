@@ -34,15 +34,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Groups(["public", "private"])]
-    private ?string $name = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(["public", "private"])]
-    private ?string $surname = null;
+    private ?string $lastName = null;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: PreferenceEnum::class)]
+    #[ORM\ManyToMany(targetEntity: Category::class)]
     #[Groups(["private"])]
-    private ?array $preferences = null;
+    private Collection $preferences;
 
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rater', orphanRemoval: true)]
     private Collection $ratingsGiven;
@@ -51,10 +51,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["private"])]
     private Collection $ratingsReceived;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $location = null;
+
+    /**
+     * @var Collection<int, Offer>
+     */
+    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'user')]
+    private Collection $offers;
+
     public function __construct()
     {
         $this->ratingsGiven = new ArrayCollection();
         $this->ratingsReceived = new ArrayCollection();
+        $this->offers = new ArrayCollection();
+        $this->preferences = new ArrayCollection(); // Initialiser la collection de catégories
     }
 
     public function getId(): ?int
@@ -132,41 +143,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(string $name): static
+    public function setFirstName(string $firstName): static
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getSurname(): ?string
+    public function getLastName(): ?string
     {
-        return $this->surname;
+        return $this->lastName;
     }
 
-    public function setSurname(string $surname): static
+    public function setLastName(string $lastName): static
     {
-        $this->surname = $surname;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     /**
-     * @return PreferenceEnum[]|null
+     * @return Collection<int, Category>
      */
-    public function getPreferences(): ?array
+    public function getPreferences(): Collection
     {
         return $this->preferences;
     }
 
-    public function setPreferences(?array $preferences): static
+    public function addPreferences(Category $preferences): static
     {
-        $this->preferences = $preferences;
+        if (!$this->preferences->contains($preferences)) {
+            $this->preferences[] = $preferences;
+        }
+
+        return $this;
+    }
+
+    public function removePreferences(Category $preferences): static
+    {
+        $this->preferences->removeElement($preferences);
 
         return $this;
     }
@@ -191,7 +211,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRatingGiven(Rating $ratingGiven): static
     {
-        if ($this->ratingsGiven->removeElement($rating)) {
+        if ($this->ratingsGiven->removeElement($ratingGiven)) {
             // set the owning side to null (unless already changed)
             if ($ratingGiven->getRater() === $this) {
                 $ratingGiven->setRater(null);
@@ -225,6 +245,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($ratingsReceived->getRated() === $this) {
                 $ratingsReceived->setRated(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?string $location): static
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Offer>
+     */
+    public function getOffers(): Collection
+    {
+        return $this->offers;
+    }
+
+    public function addOffer(Offer $offer): static
+    {
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
+            $offer->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffer(Offer $offer): static
+    {
+        if ($this->offers->removeElement($offer)) {
+            // set the owning side to null (unless already changed)
+            if ($offer->getUser() === $this) {
+                $offer->setUser(null);
             }
         }
 
