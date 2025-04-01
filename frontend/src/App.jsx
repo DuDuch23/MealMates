@@ -9,7 +9,7 @@ import { Route, Routes } from 'react-router-dom';
 const Home = lazy(() => import('./pages/Home/Home'));
 const Connexion = lazy(() => import('./pages/Connexion/Connexion'));
 const Inscription = lazy(() => import('./pages/Inscription/Inscription'));
-const UserProfile = lazy(() => import('./pages/UserProfile/UserProfil'));
+const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
 
 function App() {
   return (
