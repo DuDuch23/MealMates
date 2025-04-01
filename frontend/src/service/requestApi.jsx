@@ -2,7 +2,7 @@
 // login user
 export async function logIn({ email, password }) {
     try {
-        const response = await fetch("https://127.0.0.1:8000/api/login", {
+        const response = await fetch("http://127.0.0.1:8000/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export async function logIn({ email, password }) {
 // recuperer un user
 export async function getUser({id}) {
     try{
-        const request = await fetch (`https://127.0.0.1:8000/api/user/get`,{
+        const request = await fetch (`http://127.0.0.1:8000/api/user/get`,{
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -55,7 +55,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
             throw new Error("Passwords do not match.");
         }
 
-        const request = await fetch("https://localhost:8000/api/user/new", {
+        const request = await fetch("http://localhost:8000/api/user/new", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
 // modifier un user
 export async function editUser({data}) {
     try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/edit/",{
+        const request = await fetch ("http://127.0.0.1:8000/api/user/edit/",{
             method: "GET",
             headers: {Authorization: `Bearer ${token}`},
             body : JSON.stringify({
@@ -111,7 +111,7 @@ export async function editUser({data}) {
 // supprimer un user
 export async function deleteUser(id) {
     try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/delete/",{
+        const request = await fetch ("http://127.0.0.1:8000/api/user/delete/",{
             method: "GET",
             headers: {Authorization: `Bearer ${token}`},
             body : JSON.stringify({ 
@@ -136,7 +136,7 @@ export async function getOffers() {
         }
     };
   
-    return fetch('https://127.0.0.1:8000/api/offers', options)
+    return fetch('http://127.0.0.1:8000/api/offers', options)
         .then((response) => response.json())
         .catch((err) => {
             console.error(err);

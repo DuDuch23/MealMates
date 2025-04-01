@@ -6,7 +6,7 @@ import NavLayout from './Layout/NavLayout';
 const Home = lazy(() => import('./pages/Home/Home'));
 const Connexion = lazy(() => import('./pages/Connexion/Connexion'));
 const Inscription = lazy(() => import('./pages/Inscription/Inscription'));
-const UserProfile = lazy(() => import('./pages/userProfile/UserProfile'));
+const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
 
 function App() {
   return (
