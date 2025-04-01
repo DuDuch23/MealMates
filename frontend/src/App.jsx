@@ -1,3 +1,5 @@
+import React, { Suspense, lazy } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import NavLayout from './Layout/NavLayout';
 
 // Chargement différé des composants

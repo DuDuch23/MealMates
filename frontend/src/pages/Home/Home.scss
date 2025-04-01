@@ -6,6 +6,23 @@
     overflow-x: hidden;
 }
 
-img{
-    width: 400px;
+
+.home{
+    width: 100%;
+    &__title{
+        font-size: 48px;
+        font-family: 'Inter';
+        text-align: center;
+    }
+    &__swiper{
+        .card{
+            border: 1px solid;
+            border-radius: 8px;
+            padding: 12px;
+            background-color: azure;
+            img{
+                width: 400px;
+            }
+        }
+    }
 }

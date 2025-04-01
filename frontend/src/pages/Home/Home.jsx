@@ -19,10 +19,10 @@ function App(){
 
     return (
         <>
-            <section className="home">
-                <h1>Et si ce que l’on consommait sauverai le monde et nos économies ?</h1>
+            <div className="home">
+                <h1 className='home__title'>Et si ce que l’on consommait sauverai le monde et nos économies ?</h1>
     
-                <Swiper
+                <Swiper className='home__swiper'
                     spaceBetween={50}
                     slidesPerView={1.2}
                     // onSlideChange={() => 
@@ -36,21 +36,24 @@ function App(){
                             slidesPerView: 2,  
                         },
                         769: {
-                            slidesPerView: 4,
+                            slidesPerView: 3.5,
                         },
                     }}
                 >
                     {offers.map((offer) => (  // Fixed here
-                        <SwiperSlide key={offer.id} className='card__container'>
+                        <SwiperSlide key={offer.id} className='card'>
                             <div className='card__images-container'>
                                 <Swiper
                                     spaceBetween={50}
                                     slidesPerView={1}
+                                    pagination={{ clickable: true }}
+                                    navigation={true}
+                                    
                                     // onSlideChange={() => console.log('slide change')}
                                     // onSwiper={(swiper) => console.log(swiper)}
                                 >
                                     {offer.photosNameOffer?.map((photo, index) => (
-                                        <SwiperSlide key={index} className='card'>  {/* Added key prop */}
+                                        <SwiperSlide key={index} className=''>  {/* Added key prop */}
                                             <img 
                                                 src={`${BASE_URL}${UPLOADS_URL}${photo}`} 
                                                 alt={`Photo ${index + 1}`} 
@@ -67,7 +70,7 @@ function App(){
                         </SwiperSlide>
                     ))}
                 </Swiper>
-            </section>
+            </div>
         </>
     )    
 }
