@@ -2,15 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../service/requestApi";
 import backgroundImage from "../../image/background/background-form.webp";
-// import GoogleLoginButton from "../../components/SsoGoogle.jsx";
+import GoogleLoginButton from "../../components/SsoGoogle.jsx";
 
 // css
 import "./Connexion.scss";
 
-function Connexion(){
+function Connexion() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [data, setData] = useState(null); 
+    const [user, setUser] = useState(null);  // Ajout de l'état pour stocker l'utilisateur Google
+
     const handleEmail = (event) => setEmail(event.target.value);
     const handlePassword = (event) => setPassword(event.target.value);
 
@@ -34,35 +36,33 @@ function Connexion(){
         }
     };
 
-    return(
+    return (
         <>
             <h1>MealMates</h1>
             <div className="action">
-                <form action="#" onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <div className="content-element-form">
                         <label htmlFor="email">Email</label>
-                        <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
+                        <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail} />
                     </div>
                     <div className="content-element-form">
                         <label htmlFor="password">Mot de Passe:</label>
-                        <input type="password" name="password" placeholder="password" onChange={handlePassword}/>
+                        <input type="password" name="password" placeholder="password" onChange={handlePassword} />
                     </div>
                     <div className="content-element-form two-input">
-                        <div className="two-input" id='password'>
+                        <div className="two-input" id="password">
                             <label htmlFor="#">Se souvenir de moi</label>
-                            <input type="checkbox" name=""/>
+                            <input type="checkbox" name="" />
                         </div>
-                        <a href="">
-                            Mot de passe oublié ?
-                        </a>
+                        <a href="#">Mot de passe oublié ?</a>
                     </div>
                     <button type="submit">Connexion</button>
                 </form>
+                
                 <div className="otherAction">
+                    <p>Ou connexion avec</p>
+                    <GoogleLoginButton setUser={setUser} />
                     <div className="fill">
-                    <p> Ou connexion avec </p>
-
-                    {/* <GoogleLoginButton setUser={setUser} /> */}
                     <ul>
                         <li>
                             <svg width="212" height="101" viewBox="0 0 212 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -162,9 +162,16 @@ function Connexion(){
                     </ul>
                     </div>
                 </div>
+
+                {user && (
+                    <div className="user-info">
+                        <p>Connecté en tant que : {user.name}</p>
+                        <img src={user.picture} alt="Avatar" />
+                    </div>
+                )}
             </div>
         </>
-    )
+    );
 }
 
 export default Connexion;
