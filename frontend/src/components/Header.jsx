@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
-import {Link} from 'react-dom'
+import { Link } from 'react-router';
 
-export default function Header() {
+function Header() {
     const [menuMobile, setMenuMobile] = useState(false);
     const [menuDesktop, setMenuDesktop] = useState(false);
     const [closeMenuMobile, setCloseMenuMobile] = useState(false);
@@ -105,3 +105,4 @@ export default function Header() {
         </header>
     );
 }
+export default Header;
