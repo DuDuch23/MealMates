@@ -1,91 +1,109 @@
-h1,h2,p{
-    color: #F1F1F1;
+// Variables de couleurs
+$primary-color: #F1F1F1;
+$background-color: azure;
+$border-radius: 15px;
+
+h1, h2, p {
+    color: $primary-color;
 }
 
-.swiper-wrapper{
+.swiper-wrapper {
     display: flex;
 }
 
-.swiper{
+.swiper {
     overflow-x: hidden;
 }
 
-.home{
+.home {
     width: 100%;
-    &__title{
+
+    &__title {
         font-size: 48px;
-        font-family: 'Inter';
+        font-family: 'Inter', sans-serif;
         text-align: center;
     }
-    &__swiper{
-        .card{
+
+    &__swiper {
+        .card {
             border: 1px solid;
             border-radius: 8px;
             padding: 12px;
-            background-color: azure;
-            p{
+            background-color: $background-color;
+
+            p {
                 color: black;
             }
-            img{
+
+            img {
                 width: 400px;
             }
         }
     }
 }
 
-.first-impression{
+.first-impression {
     height: 50vh;
     display: flex;
     align-items: center;
     margin: 5% auto;
     justify-content: space-around;
-    p{
+
+    p {
         width: 45%;
         font-size: 1.6rem;
     }
-    img{
+
+    img {
         width: 50%;
         height: 100%;
-        border-radius: 15px;
+        border-radius: $border-radius;
     }
 }
 
-#second-impression{
+#second-impression {
     margin-bottom: 2%;
 }
 
-#third-impression{
+#third-impression {
     height: 50vh;
     margin: 5% 0;
-    ul{
+
+    ul {
         list-style: none;
         margin: 1% 0;
         height: 80%;
         display: flex;
         justify-content: space-around;
-        li{
+
+        li {
             display: flex;
             align-items: center;
             max-width: 50%;
         }
-        #fake-form{
+
+        #fake-form {
             width: 40%;
-            label{
+
+            label {
                 margin: 0 5%;
             }
-            input{
+
+            input {
                 background: none;
                 border: none;
                 outline: none;
-                color: F1F1F1;
-                &::placeholder{
-                   color: #F1F1F1; 
+                color: $primary-color;
+
+                &::placeholder {
+                    color: $primary-color;
                 }
             }
         }
-        #map{
-            img{
-                border-radius: 15px;
+
+        #map {
+            img {
+                border-radius: $border-radius;
                 height: 100%;
                 width: 100%;
             }

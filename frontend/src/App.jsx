@@ -7,6 +7,7 @@ const Home = lazy(() => import('./pages/Home/Home'));
 const Connexion = lazy(() => import('./pages/Connexion/Connexion'));
 const Inscription = lazy(() => import('./pages/Inscription/Inscription'));
 const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
+const Deconnexion = lazy(() => import('./pages/Deconnexion/Deconnexion'));
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         </Route>
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription /> } />
-        <Route path="/deconnexion" element={<Inscription /> } />
+        <Route path="/deconnexion" element={<Deconnexion /> } />
       </Routes>
     </Suspense>
   );
