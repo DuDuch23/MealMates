@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { logIn } from "../../service/requestApi";
-import backgroundImage from "../../image/background/background-form.webp";
 import GoogleLoginButton from "../../components/SsoGoogle.jsx";
 
 // css

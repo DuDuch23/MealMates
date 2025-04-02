@@ -5,15 +5,14 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './Home.css';
-import mainImg from '../../../public/img/main-img-homePage.jpg';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const UPLOADS_URL = import.meta.env.VITE_UPLOADS_URL;
+const mainImg = "img/main-img-homePage.jpg"; // Uniformisation de l'image principale
 
 function App() {
     const [offers, setOffers] = useState([]);
-    console.log(offers);
-
+    
     useEffect(() => {
         const fetchOffers = async () => {
             try {
@@ -33,14 +32,14 @@ function App() {
                 Et si ce que l’on consommait sauverait le monde et nos économies ?
             </h1>
 
-            <div className='first-impression'>
+            <div className="first-impression">
                 <p>
-                Chaque choix de consommation a un impact. Aujourd’hui, nous avons le pouvoir d’adopter une approche plus responsable, bénéfique à la fois pour notre budget et pour l’environnement. En privilégiant des produits issus de circuits courts, du recyclage ou encore de l’économie circulaire, nous réduisons le gaspillage et favorisons une production plus durable. 
+                    Chaque choix de consommation a un impact. Aujourd’hui, nous avons le pouvoir d’adopter une approche plus responsable, bénéfique à la fois pour notre budget et pour l’environnement. En privilégiant des produits issus de circuits courts, du recyclage ou encore de l’économie circulaire, nous réduisons le gaspillage et favorisons une production plus durable. 
                 </p>
                 <img src={mainImg} alt="Main banner" />
             </div>
 
-            <h2 id='second-impression'>Un appercu des offres de notre communiqué :</h2>
+            <h2 id="second-impression">Un aperçu des offres de notre communauté :</h2>
             <Swiper
                 className="home__swiper"
                 spaceBetween={50}
@@ -72,6 +71,19 @@ function App() {
                     </SwiperSlide>
                 ))}
             </Swiper>
+
+            <div id="third-impression">
+                <h2>Une petite faim ?</h2>
+                <ul>
+                    <li id="map">
+                        <img src="img/carte-homepage.jpg" alt="Carte des offres" />
+                    </li>
+                    <li id="fake-form">
+                        <label htmlFor="search-food">J'ai envie d'un </label>
+                        <input id="search-food" type="text" placeholder="Sushi..." />
+                    </li>
+                </ul>
+            </div>
         </div>
     );
 }
