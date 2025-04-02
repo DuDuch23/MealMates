@@ -11,7 +11,7 @@ function Connexion() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [data, setData] = useState(null); 
-    const [user, setUser] = useState(null);  // Ajout de l'état pour stocker l'utilisateur Google
+    const [user, setUser] = useState(null);  
 
     const handleEmail = (event) => setEmail(event.target.value);
     const handlePassword = (event) => setPassword(event.target.value);
@@ -26,8 +26,8 @@ function Connexion() {
             console.log("Réponse API :", response);
             localStorage.setItem("token", response.token);
             const token = localStorage.getItem("token");
-            if (response.token) { // Vérifie si la connexion est réussie
-                navigate("/"); // Redirige vers la page d'accueil
+            if (response.token) { 
+                navigate("/"); 
             } else {
                 console.error("Connexion échouée :", response.message);
             }

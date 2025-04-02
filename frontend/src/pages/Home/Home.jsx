@@ -19,10 +19,10 @@ function App(){
 
     return (
         <>
-            <div className="home">
-                <h1 className='home__title'>Et si ce que l’on consommait sauverai le monde et nos économies ?</h1>
+            <section className="home">
+                <h1>Et si ce que l’on consommait sauverai le monde et nos économies ?</h1>
     
-                <Swiper className='home__swiper'
+                <Swiper
                     spaceBetween={50}
                     slidesPerView={1.2}
                     // onSlideChange={() => 
@@ -36,41 +36,13 @@ function App(){
                             slidesPerView: 2,  
                         },
                         769: {
-                            slidesPerView: 3.5,
+                            slidesPerView: 4,
                         },
                     }}
                 >
-                    {offers.map((offer) => (  // Fixed here
-                        <SwiperSlide key={offer.id} className='card'>
-                            <div className='card__images-container'>
-                                <Swiper
-                                    spaceBetween={50}
-                                    slidesPerView={1}
-                                    pagination={{ clickable: true }}
-                                    navigation={true}
-                                    
-                                    // onSlideChange={() => console.log('slide change')}
-                                    // onSwiper={(swiper) => console.log(swiper)}
-                                >
-                                    {offer.photosNameOffer?.map((photo, index) => (
-                                        <SwiperSlide key={index} className=''>  {/* Added key prop */}
-                                            <img 
-                                                src={`${BASE_URL}${UPLOADS_URL}${photo}`} 
-                                                alt={`Photo ${index + 1}`} 
-                                                className='card-image'
-                                            />
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            </div>
-                            <h2>{offer.title}</h2>
-                            <p>{offer.description}</p>
-                            <p className='price'>{offer.price} €</p>
-                            <button className='btn'>Acheter</button>
-                        </SwiperSlide>
-                    ))}
+                    
                 </Swiper>
-            </div>
+            </section>
         </>
     )    
 }
