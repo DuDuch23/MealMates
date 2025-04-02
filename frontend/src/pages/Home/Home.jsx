@@ -5,7 +5,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './Home.css';
-import mainImg from '../../../public/img/main-img-homePage.jpg';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const UPLOADS_URL = import.meta.env.VITE_UPLOADS_URL;
@@ -37,7 +36,7 @@ function App() {
                 <p>
                 Chaque choix de consommation a un impact. Aujourd’hui, nous avons le pouvoir d’adopter une approche plus responsable, bénéfique à la fois pour notre budget et pour l’environnement. En privilégiant des produits issus de circuits courts, du recyclage ou encore de l’économie circulaire, nous réduisons le gaspillage et favorisons une production plus durable. 
                 </p>
-                <img src={mainImg} alt="Main banner" />
+                <img src="img/main-img-homePage.jpg" alt="Main banner" />
             </div>
 
             <h2 id='second-impression'>Un appercu des offres de notre communiqué :</h2>
@@ -72,6 +71,20 @@ function App() {
                     </SwiperSlide>
                 ))}
             </Swiper>
+
+            <div id='third-impression'>
+                <h2>Une petite fin ?</h2>
+                <ul>
+                    <li id='map'>
+                        <img src="img/carte-homepage.jpg" alt="" />
+                    </li>
+                    <li id='fake-form'>
+                        <label htmlFor="#">J'ai envie d'un </label>
+                        <input type="text" placeholder="Sushi..." />
+                    </li>
+                </ul>
+            </div>
+
         </div>
     );
 }
