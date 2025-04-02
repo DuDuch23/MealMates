@@ -1,5 +1,5 @@
-import { Outlet } from "react-router";
-import Header from '../components/Header';
+import { Outlet } from "react-router-dom";
+import Header from '../components/Header/Header';
 
 const NavLayout = () => {
   const handleSearch = (query) => {

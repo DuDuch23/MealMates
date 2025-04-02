@@ -4,12 +4,19 @@
 @import "../pages/Connexion/Connexion.scss";
 @import "../pages/Inscription/Inscription.scss";
 @import "../pages/Home/Home.scss";
+@import "../components/Header/Header.scss";
+@import "../components/SearchBar/SearchBar.scss";
+@import "../components/AllCategory/AllCategory.scss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 
 
 *,::before,::after{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+
 }
 
 
@@ -26,205 +33,6 @@ body{
     padding: 0 24px;
 }
 
-@keyframes slideToLeftHeader {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(-120%);
-    }
-}
-
-@keyframes slideToRightHeader {
-    from {
-        transform: translateX(-120%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-
-.slide-left-header {
-    animation: slideToLeftHeader 0.5s ease-in-out forwards;
-}
-.slide-right-header {
-    animation: slideToRightHeader 0.5s ease-in-out forwards;
-}
-
-.header-primary{
-    right: 0px;
-    position: relative;
-    img{
-        width: 32px;
-    }
-    .disable{
-        display: none !important;
-    }
-
-    .enable{
-        display: block;
-    }
-    h1{
-        margin: 0;
-        font-size: 28px;
-        font-family: "Delius";
-        font-weight: 700;
-        letter-spacing: 1px;
-        color: $colorPowerBlue;
-    }
-    &__btn-menu-desktop{
-        width: 300px;
-        text-align: center;
-        background-color: azure;
-        border: none;
-        border-radius: 2px;
-        margin-right: 200px;
-    }
-    &__btn-menu-mobile{
-        background: none;
-        border: none;
-        cursor: pointer;
-        background-color: #D9D9D9;
-        border-radius: 6px;
-        padding: 4px 8px;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        svg{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    }
-
-    display: flex;
-    justify-content: space-between;
-    padding: 24px;
-    border-bottom: solid 1px $colorPowerBlue;
-
-    @keyframes slideToRight {
-        from {
-            left: 0;
-        }
-        to {
-            left: 440px;
-        }
-    }
-
-    @keyframes slideToLeft {
-        from {
-            left: 400px;
-        }
-        to {
-            left: 0;
-        }
-    }
-    
-    .slide-left {
-        animation: slideToLeft 0.5s ease-in-out forwards;
-    }
-    .slide-right {
-        animation: slideToRight 0.5s ease-in-out forwards;
-    }
-    .container-menu-mobile{
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 100%;
-        display: flex;
-        justify-content: end;
-        z-index: 19000;
-        .menu-mobile{
-            background-color: #444444;
-            width: 400px;
-            max-width: 100%;
-            border-left: 1px solid;
-            box-sizing: content-box;
-            border-bottom: 1px solid;
-            border-bottom-left-radius: 16px;
-            .nav-top{
-                padding: 24px;
-                display: flex;
-                justify-content: space-between;
-                border-bottom: 1px solid $colorPowerBlue;
-
-                .close-btn{
-                    padding-inline: 0;
-                    background: none;
-                    border: none;
-                    padding: 0;
-                    padding-block: 0;
-                    position: relative;
-                    z-index: 100;
-                    cursor: pointer;
-                    left: 0;
-                    content: "";
-                    display: block;
-                    clear: both;
-                    width: 40px;
-                    height: 38px;
-                    background-color: $colorPowerBlue;
-                    border-radius: 50px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            }
-            ul{
-                margin: 0;
-                padding: 50px 0 0 0;
-                list-style-type: none;
-                display: grid;
-                gap: 34px;
-                li{
-                    text-align: center;
-                    transition: all ease-in-out 200ms;
-                    a{
-                        font-size: 24px;
-                        color: $colorPowerBlueDark;
-                        text-decoration: none;
-                        display: flex;
-                        width: 100%;
-                        padding: 20px 0;
-                        justify-content: center;
-                        align-items: center;
-                        transition: all ease-in-out 200ms;
-                    }
-                    &:hover{
-                        background-color: $colorBlack;
-                        transition: all ease-in-out 200ms;
-                        a{
-                            color: $colorPowerBlue;
-                            transition: all ease-in-out 200ms;
-                        }
-                    }
-                }
-                .btn{
-                    background-color: $colorBlack;
-                    border-radius: 15px;
-                    a{
-                        padding: 20px 0;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.search-offer{
-    width: 100%;
-    margin: 0 50px 0 200px;
-    display: flex;
-    justify-content: center;
-    &__input{
-        width: 100%;
-        padding: 6px;
-        border-radius: 4px;
-        border: none;
-        background-color: darkgrey;
-    }
-}
-
 @media screen and (max-width: 1440px){
     // #root{
     //     width: 768px;
@@ -235,14 +43,6 @@ body{
 }
 
 @media screen and (max-width: 768px){
-    .header-primary{
-        &__btn-menu-desktop{
-            display: none;
-        }
-        &__btn-menu-mobile{
-            display: flex;
-        }
-    }
     // #root{
     //     width: 768px;
     //     max-width: 100%;
