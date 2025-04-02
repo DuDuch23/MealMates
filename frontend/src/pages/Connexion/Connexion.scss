@@ -1,13 +1,13 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background: url('../../image/background/frame-spaghetti-with-olives-vegetables.jpg') no-repeat center center;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
+.connexion {
+
+  font-family: 'Arial', sans-serif;
+  background: url('../../image/background/frame-spaghetti-with-olives-vegetables.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
   
   h1 {
     text-align: center;
@@ -101,4 +101,4 @@ body {
       padding: 1.5rem;
     }
   }
-  
+}
