@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route element={<NavLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/profileUser/:id" element={<UserProfile />} />
+          <Route path="/userProfile/:id" element={<UserProfile />} />
         </Route>
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription /> } />

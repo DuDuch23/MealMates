@@ -5,7 +5,7 @@ import backgroundImage from "../../image/background/background-form.webp";
 import GoogleLoginButton from "../../components/SsoGoogle.jsx";
 
 // css
-import "./Connexion.scss";
+import "./Connexion.css";
 
 function Connexion() {
     const [email, setEmail] = useState("");
@@ -36,11 +36,12 @@ function Connexion() {
         }
     };
 
+                        {/* <GoogleLoginButton setUser={setUser} /> */}
     return (
         <>
-            <h1>MealMates</h1>
             <div className="action">
-                <form onSubmit={handleSubmit}>
+                <h1>MealMates</h1>
+                {/* <form onSubmit={handleSubmit}>
                     <div className="content-element-form">
                         <label htmlFor="email">Email</label>
                         <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail} />
@@ -57,11 +58,23 @@ function Connexion() {
                         <a href="#">Mot de passe oublié ?</a>
                     </div>
                     <button type="submit">Connexion</button>
-                </form>
-                
-                <div className="otherAction">
+                </form> */}
+
+                {user && (
+                    <div className="user-info">
+                        <p>Connecté en tant que : {user.name}</p>
+                        <img src={user.picture} alt="Avatar" />
+                    </div>
+                )}
+            </div>
+        </>
+    );
+}
+
+export default Connexion;
+
+                {/* <div className="otherAction">
                     <p>Ou connexion avec</p>
-                    <GoogleLoginButton setUser={setUser} />
                     <div className="fill">
                     <ul>
                         <li>
@@ -161,17 +174,4 @@ function Connexion() {
                         </li>
                     </ul>
                     </div>
-                </div>
-
-                {user && (
-                    <div className="user-info">
-                        <p>Connecté en tant que : {user.name}</p>
-                        <img src={user.picture} alt="Avatar" />
-                    </div>
-                )}
-            </div>
-        </>
-    );
-}
-
-export default Connexion;
+                </div> */}

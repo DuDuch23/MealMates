@@ -1,3 +1,7 @@
+h1,h2,p{
+    color: #F1F1F1;
+}
+
 .swiper-wrapper{
     display: flex;
 }
@@ -5,7 +9,6 @@
 .swiper{
     overflow-x: hidden;
 }
-
 
 .home{
     width: 100%;
@@ -20,9 +23,33 @@
             border-radius: 8px;
             padding: 12px;
             background-color: azure;
+            p{
+                color: black;
+            }
             img{
                 width: 400px;
             }
         }
     }
+}
+
+.first-impression{
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    margin: 5% auto;
+    justify-content: space-around;
+    p{
+        width: 45%;
+        font-size: 1.6rem;
+    }
+    img{
+        width: 50%;
+        height: 100%;
+        border-radius: 15px;
+    }
+}
+
+#second-impression{
+    margin-bottom: 2%;
 }

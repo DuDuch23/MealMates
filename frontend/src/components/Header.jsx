@@ -63,7 +63,7 @@ export default function Header() {
                 </svg>
             </button>
             <button className="header-primary__btn-menu-desktop" onClick={handleMenuDesktop} aria-expanded={menuDesktop}>
-                Inscrivez-vous
+                <Link to="/inscription">Inscrivez-vous</Link>
             </button>
 
             {/* Menu Desktop */}
