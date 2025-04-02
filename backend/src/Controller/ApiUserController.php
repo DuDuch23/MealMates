@@ -24,7 +24,7 @@ class ApiUserController extends AbstractController
         $this->hasher = $hasher;
     }
     
-    #[Route('/get', methods: ['POST'])]
+    #[Route('/api/login', methods: ['POST'])]
     public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
