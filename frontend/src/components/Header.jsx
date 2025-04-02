@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
+import {Link} from 'react-dom'
 
 export default function Header() {
     const [menuMobile, setMenuMobile] = useState(false);
