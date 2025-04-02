@@ -136,7 +136,7 @@ export async function getOffers() {
         }
     };
   
-    return fetch('https://127.0.0.1:8000/api/offers', options)
+    return fetch('http://127.0.0.1:8000/api/offers', options)
         .then((response) => response.json())
         .catch((err) => {
             console.error(err);
