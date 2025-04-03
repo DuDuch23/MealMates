@@ -13,10 +13,8 @@ function App() {
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
       <Routes>
-        <Route element={<NavLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/userProfile/:id" element={<UserProfile />} />
-        </Route>
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription /> } />
         <Route path="/deconnexion" element={<Deconnexion /> } />
