@@ -1,19 +1,104 @@
-@import "../../styles/globals";
-@import '../../styles/mixins';
-@import "../../styles/variables";
+.connexion {
 
-// body{
-//     background: linear-gradient(#444444 , #96C461, #444444); 
-// }
-
-h1{
+  font-family: 'Arial', sans-serif;
+  background: url('../../image/background/frame-spaghetti-with-olives-vegetables.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  
+  h1 {
     text-align: center;
-    font-size: 5em;
-    color: $colorWhite;
-}
-
-.action{
-    max-width: 768px;
-    height: 100vh;
-    margin: 0 auto;   
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .action {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .content-element-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  input {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  button {
+    padding: 0.8rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  button:hover {
+    background: #0056b3;
+  }
+  
+  .otherAction {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .otherAction p {
+    font-weight: bold;
+  }
+  
+  .otherAction ul {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .otherAction li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: #484848;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 480px) {
+    .action {
+      width: 90%;
+      padding: 1.5rem;
+    }
+  }
 }
