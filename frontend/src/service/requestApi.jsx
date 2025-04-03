@@ -1,4 +1,5 @@
 
+
 /* User*/
 // login user
 export async function logIn({ email, password }) {
@@ -42,9 +43,11 @@ export async function getUser({id}) {
     }
 }
 
-// Create a New User
+// creer un utilisateur
 export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
     try {
+        console.log({ email, password, confirmPassword, firstName, lastName });
+
         if (!email || !password || !confirmPassword || !firstName || !lastName) {
             throw new Error("All fields are required.");
         }
@@ -113,26 +116,28 @@ export async function deleteUser(id) {
                 "id":id 
             }),
         });
+        
+        return await request.json();
 
-        return response.data;
-    } catch (error) {
-        console.error("Erreur API :", error);
+    }catch(error){
+        console.error("erreur api :", error);
         throw error;
     }
 }
 
-// Get Offers
+// Offres
 export async function getOffers() {
-    try {
-        const response = await axios.get(`${API_URL}/offers`, {
-            headers: {
-                accept: "application/json"
-            }
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+        }
+    };
+  
+    return fetch('https://127.0.0.1:8000/api/offers', options)
+        .then((response) => response.json())
+        .catch((err) => {
+            console.error(err);
+            return  {result : []};
         });
-
-        return response.data;
-    } catch (error) {
-        console.error("Erreur API :", error);
-        return { result: [] };
-    }
 }

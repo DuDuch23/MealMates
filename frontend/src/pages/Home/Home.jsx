@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import logo from '../../assets/logo-mealmates.png';
 import map from '../../assets/landing-map.png';
+import { Link } from 'react-router-dom';
 
 function App() {
     return (
@@ -12,8 +13,8 @@ function App() {
                     <h1>MealMates</h1>
                 </div>
                 <div className="header-right">
-                    <button className="button-sign-in">Inscription</button>
-                    <button className="button-log-in">Connexion</button>
+                    <li className='button-sign-in' key="inscription"><Link to="/inscription">Inscription</Link></li>,
+                    <li className='button-log-in' key="connexion"><Link to="/connexion">Se connecter</Link></li>
                 </div>
             </section>
             <section className="top">
