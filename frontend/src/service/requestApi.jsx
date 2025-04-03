@@ -3,7 +3,7 @@
 // login user
 export async function logIn({ email, password }) {
     try {
-        const response = await fetch("https://127.0.0.1:8000/api/login", {
+        await fetch("https://127.0.0.1:8000/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

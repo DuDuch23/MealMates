@@ -17,21 +17,20 @@ function Connexion() {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user || isAuthenticated) {
+    if (user) {
       navigate("/");
     }
-  }, [user, isAuthenticated, navigate]);
+  }, [user, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        const response = await logIn({ email, password });
-        console.log("Données de connexion :", response);
-        // console.log("Réponse API :", response);
+      await logIn({ email, password });
+      navigate("/");
+
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
     }
