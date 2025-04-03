@@ -11,10 +11,49 @@
         background-color: black;
 
         border-bottom: 2px solid $colorDarkGreen;
-        .header-right{
-
+        .menu-mobile{
+            display: none;
         }
-        
+        .header-right{
+            .button-sign-in {
+                a{
+                    background-color: $colorDarkGreen;
+                    color: white;
+                    transition: all .3s ease-in-out;
+                    &:hover{
+                        background-color: white;
+                        color: $colorDarkGreen;
+                    }
+                }
+            }
+
+            .button-log-in {
+                a{
+                    background-color: white;
+                    color: $colorDarkGreen;
+                    transition: all .3s ease-in-out;
+                    &:hover{
+                        background-color: $colorDarkGreen;
+                        color: white;
+                    }
+                }
+            }
+
+            a{
+                text-decoration: none;
+                border-radius: 15px;
+            };
+        }
+        li{
+            font-size: 1.5rem;
+            list-style-type: none;
+            font-weight: bold;
+
+            transition: .3s;
+            a{
+                padding: 15px 25px;
+            }
+        }
         div {
             display: flex;
             align-items: center;
@@ -28,30 +67,10 @@
                 font-size: 3rem;
                 margin-left: 1%;
             }
-            li {
-                font-size: 1.5rem;
-                padding: 2% 4%;
-                border-radius: 15px;
-                border: 2px solid $colorDarkGreen;
-                margin-right: 2%;
-                font-weight: bold;
-
-                transition: .3s;
-            }
-            button:hover {
-                border: 2px solid white;
-            }
-            .button-sign-in {
-                background-color: $colorDarkGreen;
-                color: white;
-            }
-            .button-log-in {
-                background-color: white;
-                color: $colorDarkGreen;
-            }
         }
         .header-right {
             justify-content: flex-end;
+            gap: 24px;
         }
     }
     .top  {
@@ -135,4 +154,49 @@
             }
         }
     }
+}
+
+@media screen and (max-width: 1280px) {
+    .landing{
+        .header{
+            div{
+                h1{
+                    font-size: 2.25rem;
+                }
+            }
+            li{
+                font-size: 1.25rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .landing{
+        .header{
+            div{
+                width: unset;
+                h1{
+                    font-size: 1.75rem;
+                }
+            }
+            .menu-mobile{
+                display: block;
+            }
+            .header-left{
+                img{
+                    width: 30%;
+                }
+            }
+            .header-right{
+                .button-log-in {
+                    display: none;
+                }
+                .button-sign-in {
+                    display: none;
+                }
+            }
+        }
+    }
+    
 }

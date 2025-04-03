@@ -28,8 +28,9 @@ function Connexion() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+        console.log("Handle submit called with email:", email, "and password:", password);
         await logIn({ email, password });
-        navigate("/");
+        // navigate("/");
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
     }

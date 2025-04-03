@@ -15,6 +15,8 @@ export async function logIn({ email, password }) {
             }),
             credentials: "include",
         });
+        console.log(email, password);
+        console.log(response);
 
     } catch (error) {
         console.error("Erreur API :", error);
