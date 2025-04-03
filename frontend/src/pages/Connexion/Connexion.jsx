@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../service/requestApi";
-import backgroundImage from "../../image/background/background-form.webp";
 // import GoogleLoginButton from "../../components/SsoGoogle.jsx";
 
 // css
@@ -22,13 +21,13 @@ function Connexion(){
             setData(response);
             console.log("Données de connexion :", response);
             console.log("Réponse API :", response);
-            localStorage.setItem("token", response.token);
-            const token = localStorage.getItem("token");
-            if (response.token) { // Vérifie si la connexion est réussie
-                navigate("/"); // Redirige vers la page d'accueil
-            } else {
-                console.error("Connexion échouée :", response.message);
-            }
+            // localStorage.setItem("token", response.token);
+            // const token = localStorage.getItem("token");
+            // if (response.token) { // Vérifie si la connexion est réussie
+            //     navigate("/"); // Redirige vers la page d'accueil
+            // } else {
+            //     console.error("Connexion échouée :", response.message);
+            // }
         } catch (error) {
             console.error("Erreur lors de la connexion :", error);
         }

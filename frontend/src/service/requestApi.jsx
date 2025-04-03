@@ -11,9 +11,8 @@ export async function logIn({ email, password }) {
                 email: email,
                 password: password
             }),
+            credentials: "include",
         });
-
-        return await response.json();
 
     } catch (error) {
         console.error("Erreur API :", error);
@@ -69,21 +68,18 @@ export async function newUser({ email, password, confirmPassword, firstName, las
             }),
         });
 
-        // Check if the response is successful (status 200-299)
-        if (!request.ok) {
-            const textResponse = await request.text(); // Get the raw response as text
-            console.error("Server error response: ", textResponse); // Log the raw response for debugging
-            throw new Error(textResponse); // Throw error with raw response text
-        }
+        logIn(
+            {
+                email,
+                password
+            }
+        );
 
-        // Parse the JSON response
-        return await request.json();
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
-
 
 // modifier un user
 export async function editUser({data}) {

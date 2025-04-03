@@ -18,7 +18,7 @@ function App() {
         </Route>
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription /> } />
-        <Route path="/deconnexion" element={<Deconnexion /> } />
+        {/* <Route path="/deconnexion" element={<Deconnexion /> } /> */}
       </Routes>
     </Suspense>
   );

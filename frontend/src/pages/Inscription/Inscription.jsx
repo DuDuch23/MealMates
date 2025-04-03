@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { newUser } from "../../service/requestApi";
-import backgroundImage from "../../image/background/background-form.webp";
 
 // css
 import "./Inscription.scss";
