@@ -10,7 +10,8 @@ use App\Entity\Category;
 
 class UserFixtures extends Fixture
 {
-    public $hasher;
+    private UserPasswordHasherInterface $hasher;
+
     public function __construct(UserPasswordHasherInterface $hasher) 
     {
         $this->hasher = $hasher;
@@ -18,51 +19,50 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // Récupérer les catégories (assurez-vous que les catégories sont déjà persistées)
-        $category1 = $this->getReference(CategoryFixtures::VEGAN, Category::class);
-        $category2 = $this->getReference(CategoryFixtures::GLUTEN_FREE, Category::class);
-        $category3 = $this->getReference(CategoryFixtures::HIGH_PROTEIN, Category::class);
+        $categories = [
+            'category1' => $this->getReference(CategoryFixtures::VEGAN, Category::class),
+            'category2' => $this->getReference(CategoryFixtures::GLUTEN_FREE, Category::class),
+            'category3' => $this->getReference(CategoryFixtures::HIGH_PROTEIN, Category::class)
+        ];
 
-        // Création de l'utilisateur 1
-        $user1 = new User();
-        $user1->setEmail("user@example.com");
-        $user1->setPassword($this->hasher->hashPassword($user1, "password123"));
-        $user1->setFirstName("Alice");
-        $user1->setLastName("Doe");
-        $user1->setRoles(["ROLE_USER"]);
-        $user1->setLocation("Paris, France");
+        $users = [
+            [
+                'email' => 'user@example.com',
+                'password' => 'password123',
+                'firstName' => 'Alice',
+                'lastName' => 'Doe',
+                'roles' => ['ROLE_USER'],
+                'location' => 'Paris, France',
+                'preferences' => ['category1', 'category2']
+            ],
+            [
+                'email' => 'admin@example.com',
+                'password' => 'adminpass',
+                'firstName' => 'Bob',
+                'lastName' => 'Smith',
+                'roles' => ['ROLE_ADMIN'],
+                'location' => 'Lyon, France',
+                'preferences' => ['category1', 'category2', 'category3']
+            ]
+        ];
 
-        // Ajouter les catégories comme préférences pour l'utilisateur 1
-        $user1->addPreferences($category1);
-        $user1->addPreferences($category2);
+        foreach ($users as $userData) {
+            $user = new User();
+            $user->setEmail($userData['email']);
+            $user->setPassword($this->hasher->hashPassword($user, $userData['password']));
+            $user->setFirstName($userData['firstName']);
+            $user->setLastName($userData['lastName']);
+            $user->setRoles($userData['roles']);
+            $user->setLocation($userData['location']);
 
-        // Persist l'utilisateur
-        $manager->persist($user1);
+            foreach ($userData['preferences'] as $categoryKey) {
+                $user->addPreferences($categories[$categoryKey]);
+            }
 
-        // Ajouter des références pour utiliser l'utilisateur dans d'autres fixtures
-        $this->addReference("user@example.com", $user1);
+            $manager->persist($user);
+            $this->addReference($userData['email'], $user);
+        }
 
-        // Création de l'utilisateur 2
-        $user2 = new User();
-        $user2->setEmail("admin@example.com");
-        $user2->setPassword($this->hasher->hashPassword($user2, "adminpass"));
-        $user2->setFirstName("Bob");
-        $user2->setLastName("Smith");
-        $user2->setRoles(["ROLE_ADMIN"]);
-        $user2->setLocation("Lyon, France");
-
-        // Ajouter les catégories comme préférences pour l'utilisateur 2
-        $user2->addPreferences($category1);
-        $user2->addPreferences($category2);
-        $user2->addPreferences($category3);
-
-        // Persist l'utilisateur
-        $manager->persist($user2);
-
-        // Ajouter des références pour utiliser l'utilisateur dans d'autres fixtures
-        $this->addReference("admin@example.com", $user2);
-
-        // Enregistrer les utilisateurs dans la base de données
         $manager->flush();
     }
 }

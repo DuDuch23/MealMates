@@ -1,75 +1,27 @@
-import React, { use } from 'react';
-// import './Home.css';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { getOffers } from '../../service/requestApi';
-import { Swiper, SwiperSlide } from 'swiper/react';
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const UPLOADS_URL = import.meta.env.VITE_UPLOADS_URL;
+import React, { useState, useEffect } from 'react';
 
-function App(){
-    const [offers, setOffers] = useState([]);
+function Home() {
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        getOffers().then((dataOffers) => {
-            console.log("Données récupérées :", dataOffers);
-            setOffers(dataOffers.data)}
-        );
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
     }, []);
 
     return (
-        <>
-            <section className="home">
-                <h1>Et si ce que l’on consommait sauverai le monde et nos économies ?</h1>
-    
-                <Swiper
-                    spaceBetween={50}
-                    slidesPerView={1.2}
-                    // onSlideChange={() => 
-                    //     console.log('slide change')
-                    // }
-                    // onSwiper={(swiper) =>
-                    //      console.log(swiper)
-                    //     }
-                    breakpoints={{
-                        768: {
-                            slidesPerView: 2,  
-                        },
-                        769: {
-                            slidesPerView: 4,
-                        },
-                    }}
-                >
-                    {offers.map((offer) => (  // Fixed here
-                        <SwiperSlide key={offer.id} className='card__container'>
-                            <div className='card__images-container'>
-                                <Swiper
-                                    spaceBetween={50}
-                                    slidesPerView={1}
-                                    // onSlideChange={() => console.log('slide change')}
-                                    // onSwiper={(swiper) => console.log(swiper)}
-                                >
-                                    {offer.photosNameOffer?.map((photo, index) => (
-                                        <SwiperSlide key={index} className='card'>  {/* Added key prop */}
-                                            <img 
-                                                src={`${BASE_URL}${UPLOADS_URL}${photo}`} 
-                                                alt={`Photo ${index + 1}`} 
-                                                className='card-image'
-                                            />
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            </div>
-                            <h2>{offer.title}</h2>
-                            <p>{offer.description}</p>
-                            <p className='price'>{offer.price} €</p>
-                            <button className='btn'>Acheter</button>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-            </section>
-        </>
-    )    
+        <div>
+            {user ? (
+                <div className="user-info">
+                    <img src={user.picture} alt={user.name} className="user-avatar" />
+                    <p>Bienvenue, {user.name} !</p>
+                </div>
+            ) : (
+                <p>Vous n'êtes pas connecté</p>
+            )}
+        </div>
+    );
 }
 
-export default App;
+export default Home;

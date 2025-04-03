@@ -1,12 +1,12 @@
-import { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import NavLayout from './Layout/NavLayout';
 
 // Chargement différé des composants
 const Home = lazy(() => import('./pages/Home/Home'));
 const Connexion = lazy(() => import('./pages/Connexion/Connexion'));
 const Inscription = lazy(() => import('./pages/Inscription/Inscription'));
-const UserProfile = lazy(() => import('./pages/userProfile/UserProfile'));
+const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
 
 function App() {
   return (

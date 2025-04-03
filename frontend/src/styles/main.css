@@ -1,91 +1,108 @@
 @import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
+body {
+  font-family: "Arial", sans-serif;
+  background: url("../../image/background/frame-spaghetti-with-olives-vegetables.jpg") no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
 h1 {
   text-align: center;
-  height: 30%;
-  color: #F1F1F1;
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 .action {
-  height: 70%;
-}
-.action form {
-  height: 60%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  flex-direction: column;
 }
-.action form .content-element-form {
-  width: 80%;
+
+form {
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
-.action form label {
-  color: white;
+
+.content-element-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
 }
-.action form input {
-  outline: none;
-  height: 4vh;
-  border: 1px solid #F1F1F1;
+
+label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  background: linear-gradient(0.25turn, #11BC2E, #0B8620);
+  font-size: 1rem;
 }
-.action form input::-moz-placeholder {
-  color: #F1F1F1;
-}
-.action form input::placeholder {
-  color: #F1F1F1;
-}
-.action form button {
-  height: 10%;
-  width: 80%;
-  background: #11BC2E;
-  outline: none;
+
+button {
+  padding: 0.8rem;
+  background: #007bff;
+  color: white;
   border: none;
   border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
 }
-.action form .two-input {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  flex-direction: row;
+
+button:hover {
+  background: #0056b3;
 }
-.action form #password {
-  width: 50%;
-}
-.action .otherAction {
-  height: 40%;
-  position: relative;
-}
-.action .otherAction .fill {
-  height: 100%;
-  background: linear-gradient(0%, #2D2E32, 100%, #111110);
-}
-.action .otherAction p {
+
+.otherAction {
   text-align: center;
+  margin-top: 1rem;
 }
-.action .otherAction ul {
-  list-style: none;
-  width: 70%;
-  height: 40%;
-  margin: 2% auto;
+
+.otherAction p {
+  font-weight: bold;
+}
+
+.otherAction ul {
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
 }
-.action .otherAction ul li {
-  width: 33%;
+
+.otherAction li {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.action .otherAction ul li svg {
-  width: 100%;
-  height: 100%;
+  width: 50px;
+  height: 50px;
+  background: #484848;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
+@media (max-width: 480px) {
+  .action {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}
 h1 {
   text-align: center;
   height: 30%;
@@ -188,7 +205,21 @@ h1 {
   overflow-x: hidden;
 }
 
-img {
+.home {
+  width: 100%;
+}
+.home__title {
+  font-size: 48px;
+  font-family: "Inter";
+  text-align: center;
+}
+.home__swiper .card {
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: azure;
+}
+.home__swiper .card img {
   width: 400px;
 }
 
@@ -207,7 +238,7 @@ body {
 .container {
   max-width: 100%;
   width: 1440px;
-  margin: 0 auto;
+  margin: 50px auto;
   padding: 0 24px;
 }
 
@@ -235,22 +266,6 @@ body {
   animation: slideToRightHeader 0.5s ease-in-out forwards;
 }
 
-form {
-  padding: 24px;
-  display: flex;
-  justify-content: center;
-}
-form input {
-  width: 100%;
-  padding: 6px;
-  border-radius: 4px;
-  border: none;
-  background-color: darkgrey;
-}
-form button {
-  display: none;
-}
-
 .header-primary {
   right: 0px;
   position: relative;
@@ -258,6 +273,9 @@ form button {
   justify-content: space-between;
   padding: 24px;
   border-bottom: solid 1px #B8E3E9;
+}
+.header-primary img {
+  width: 32px;
 }
 .header-primary .disable {
   display: none !important;
@@ -273,18 +291,26 @@ form button {
   letter-spacing: 1px;
   color: #B8E3E9;
 }
-.header-primary .btn-menu-mobile {
+.header-primary__btn-menu-desktop {
+  width: 300px;
+  text-align: center;
+  background-color: azure;
+  border: none;
+  border-radius: 2px;
+  margin-right: 200px;
+}
+.header-primary__btn-menu-mobile {
   background: none;
   border: none;
   cursor: pointer;
   background-color: #D9D9D9;
   border-radius: 6px;
   padding: 4px 8px;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
 }
-.header-primary .btn-menu-mobile svg {
+.header-primary__btn-menu-mobile svg {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -394,19 +420,25 @@ form button {
   padding: 20px 0;
 }
 
-@media screen and (max-width: 1440px) {
-  #root {
-    width: 768px;
-    max-width: 100%;
-    height: 100vh;
-    margin: 0 auto;
-  }
+.search-offer {
+  width: 100%;
+  margin: 0 50px 0 200px;
+  display: flex;
+  justify-content: center;
 }
+.search-offer__input {
+  width: 100%;
+  padding: 6px;
+  border-radius: 4px;
+  border: none;
+  background-color: darkgrey;
+}
+
 @media screen and (max-width: 768px) {
-  #root {
-    width: 768px;
-    max-width: 100%;
-    height: 100vh;
-    margin: 0 auto;
+  .header-primary__btn-menu-desktop {
+    display: none;
+  }
+  .header-primary__btn-menu-mobile {
+    display: flex;
   }
 }/*# sourceMappingURL=main.css.map */

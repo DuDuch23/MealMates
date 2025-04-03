@@ -6,7 +6,6 @@ const GoogleSSO = () => {
   const handleSuccess = (response) => {
     const user = jwtDecode(response.credential);
     console.log("User Info:", user);
-    // Ici, tu peux envoyer les infos à ton backend pour gérer l'inscription
   };
 
   const handleError = () => {
