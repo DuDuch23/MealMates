@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { logIn } from "../../service/requestApi";
 import GoogleLoginButton from "../../components/ssoGoogle";
 import "./Connexion.css";
@@ -28,9 +28,8 @@ function Connexion() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await logIn({ email, password });
-      navigate("/");
-
+        await logIn({ email, password });
+        navigate("/");
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
     }

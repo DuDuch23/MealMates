@@ -1,0 +1,21 @@
+.search-offer{
+    width: 100%;
+    margin: 0 50px 0 200px;
+    display: flex;
+    justify-content: center;
+    &__input{
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background-color: white;
+    }
+    button{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1440px){
+    .search-offer{
+        margin: 0 50px 0 100px;
+    }
+}

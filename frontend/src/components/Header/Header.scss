@@ -1,0 +1,283 @@
+@import '../../styles/variables.scss';
+@keyframes slideToLeftHeader {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-120%);
+    }
+}
+
+@keyframes slideToRightHeader {
+    from {
+        transform: translateX(-120%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.slide-left-header {
+    animation: slideToLeftHeader 0.5s ease-in-out forwards;
+}
+.slide-right-header {
+    animation: slideToRightHeader 0.5s ease-in-out forwards;
+}
+
+.header-primary{
+    right: 0px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    align-items: center;
+    background-color: black;
+    &__logo{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__nav-desktop{
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    &__inscription{
+        list-style-type: none;
+        a{
+            text-decoration: none;
+            padding: 24px 36px;
+            border-radius: 15px;
+            color: white;
+            background-color: #1D8915;
+            font-size: 24px;
+            font-weight: 700;
+            transition: all ease-in-out 200ms;
+            &:hover{
+                background-color: white;
+                color: #1D8915;
+                transition: all ease-in-out 200ms;
+            }
+        }
+    }
+
+    &__connexion{
+        list-style-type: none;
+        a{
+            text-decoration: none;
+            padding: 24px 36px;
+            border-radius: 15px;
+            color: #1D8915;
+            background-color: white;
+            font-size: 24px;
+            font-weight: 700;
+            transition: all ease-in-out 200ms;
+            &:hover{
+                background-color: #1D8915;
+                color: white;
+                transition: all ease-in-out 200ms;
+            }
+        }
+    }
+    &__desktop{
+        margin-right: 200px;
+    }
+    &__menu-desktop{
+        position: absolute;
+        right: 280px;
+        top: 76px;
+        background-color: azure;
+        padding: 10px 40px;
+        ul{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            li{
+                a{
+                    text-decoration: none;
+                    color: $colorPowerBlueDark;
+                    font-size: 24px;
+                    transition: all ease-in-out 200ms;
+                }
+                &:hover{
+                    a{
+                        color: $colorPowerBlue;
+                        transition: all ease-in-out 200ms;
+                    }
+                }
+            }
+        }
+    }
+    .disable{
+        display: none !important;
+    }
+
+    .enable{
+        display: block;
+    }
+    h1{
+        margin: 0;
+        font-size: 28px;
+        font-family: "Delius";
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: $colorPowerBlue;
+    }
+    &__btn-menu-desktop{
+        padding: 18px;
+        width: 250px;
+        text-align: center;
+        background-color: azure;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+    &__btn-menu-mobile{
+        background: none;
+        border: none;
+        cursor: pointer;
+        background-color: #D9D9D9;
+        border-radius: 6px;
+        padding: 4px 8px;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        svg{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    @keyframes slideToRight {
+        from {
+            left: 0;
+        }
+        to {
+            left: 440px;
+        }
+    }
+
+    @keyframes slideToLeft {
+        from {
+            left: 400px;
+        }
+        to {
+            left: 0;
+        }
+    }
+    
+    .slide-left {
+        animation: slideToLeft 0.5s ease-in-out forwards;
+    }
+    .slide-right {
+        animation: slideToRight 0.5s ease-in-out forwards;
+    }
+    .container-menu-mobile{
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        display: flex;
+        justify-content: end;
+        z-index: 19000;
+        .menu-mobile{
+            background-color: #444444;
+            width: 400px;
+            max-width: 100%;
+            border-left: 1px solid;
+            box-sizing: content-box;
+            border-bottom: 1px solid;
+            border-bottom-left-radius: 16px;
+            .nav-top{
+                padding: 24px;
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px solid $colorPowerBlue;
+
+                .close-btn{
+                    padding-inline: 0;
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    padding-block: 0;
+                    position: relative;
+                    z-index: 100;
+                    cursor: pointer;
+                    left: 0;
+                    content: "";
+                    display: block;
+                    clear: both;
+                    width: 40px;
+                    height: 38px;
+                    background-color: $colorPowerBlue;
+                    border-radius: 50px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+            ul{
+                margin: 0;
+                padding: 50px 0 0 0;
+                list-style-type: none;
+                display: grid;
+                gap: 34px;
+                li{
+                    text-align: center;
+                    transition: all ease-in-out 200ms;
+                    a{
+                        font-size: 24px;
+                        color: $colorPowerBlueDark;
+                        text-decoration: none;
+                        display: flex;
+                        width: 100%;
+                        padding: 20px 0;
+                        justify-content: center;
+                        align-items: center;
+                        transition: all ease-in-out 200ms;
+                    }
+                    &:hover{
+                        background-color: $colorBlack;
+                        transition: all ease-in-out 200ms;
+                        a{
+                            color: $colorPowerBlue;
+                            transition: all ease-in-out 200ms;
+                        }
+                    }
+                }
+                .btn{
+                    background-color: $colorBlack;
+                    border-radius: 15px;
+                    a{
+                        padding: 20px 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1440px){
+    .header-primary{
+        &__desktop{
+            margin-right: 100px;
+        }
+    }
+}
+
+@media screen and (max-width: 768px){
+    .header-primary{
+        &__nav-desktop{
+            display: none;
+        }
+        &__btn-menu-mobile{
+            display: flex;
+        }
+    }
+}

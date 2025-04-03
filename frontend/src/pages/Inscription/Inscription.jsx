@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { newUser } from "../../service/requestApi";
 
 // css
-import "./Inscription.scss";
+import "./Inscription.css";
 
 function Inscription(){
     const [firstName, setFirstName] = useState("");

@@ -3,11 +3,13 @@ namespace App\Controller;
 
 use App\Entity\Offer;
 use DateTimeImmutable;
+use App\Repository\OfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/api/offers', name: 'api_offer')]
@@ -190,5 +192,42 @@ class ApiOfferController extends AbstractController
             'status' => "OK",
             'code' => 200,
         ], 200);
+    }
+
+    #[Route('/search', methods: ['POST'])]
+    public function search(Request $request, OfferRepository $offerRepository): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $keyword = $data['keyword'] ?? null;
+
+        if (!$keyword || empty(trim($keyword))) {
+            return $this->json([
+                'status' => "Bad Request",
+                'code' => 400,
+                'value' => $keyword,
+                'message' => "Missing or empty 'keyword' parameter."
+            ], 400);
+        }
+
+        $offers = $offerRepository->searchByName($keyword);
+
+        if (empty($offers)) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "No offers found."
+            ], 404);
+        }
+
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+            'data' => $offers,
+        ], 200, [], [
+            'groups' => 'public',
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
+                return $object->getId();
+            }
+        ]);
     }
 }
