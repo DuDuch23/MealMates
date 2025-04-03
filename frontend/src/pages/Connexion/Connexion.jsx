@@ -2,15 +2,21 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logIn } from "../../service/requestApi";
 import GoogleLoginButton from "../../components/ssoGoogle";
-import "./Connexion.scss";
+import "./Connexion.css";
 
 function Connexion() {
+  // const
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [data, setData] = useState(null); 
+  const handleEmail = (event) => setEmail(event.target.value);
+  const handlePassword = (event) => setPassword(event.target.value);
+
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const navigate = useNavigate();
 
@@ -23,13 +29,9 @@ function Connexion() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await logIn({ email, password });
-      if (response.token) {
-        localStorage.setItem("token", response.token);
-        setIsAuthenticated(true);
-      } else {
-        console.error("Erreur :", response.message);
-      }
+        const response = await logIn({ email, password });
+        console.log("Données de connexion :", response);
+        // console.log("Réponse API :", response);
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
     }
@@ -49,11 +51,11 @@ function Connexion() {
         <form onSubmit={handleSubmit}>
           <div className="content-element-form">
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" placeholder="Test@email.com" onChange={(e) => setEmail(e.target.value)} />
+            <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
           </div>
           <div className="content-element-form">
             <label htmlFor="password">Mot de Passe</label>
-            <input type="password" name="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" name="password" placeholder="password" onChange={handlePassword} />
           </div>
           <button type="submit">Connexion</button>
         </form>
