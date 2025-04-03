@@ -1,6 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 h1 {
   text-align: center;
@@ -424,17 +422,14 @@ h1, h2, p {
   padding: 0;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
+  color: white;
 }
 
 body {
-  background-color: #444444;
-  margin: 0;
+  background-color: #333333;
   overflow-x: hidden;
 }
 
-.container {
-  max-width: 100%;
-  width: 1440px;
-  margin: 50px auto;
-  padding: 0 24px;
+.mobile {
+  width: 480px;
 }/*# sourceMappingURL=main.css.map */

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logIn } from "../../service/requestApi";
+import Header from "../../components/Header/Header";
 import GoogleLoginButton from "../../components/SsoGoogle.jsx";
 
 // css
@@ -37,7 +38,8 @@ function Connexion() {
 
                         {/* <GoogleLoginButton setUser={setUser} /> */}
     return (
-        <>
+        <div className="mobile">
+            <Header />
             <div className="action">
                 <h1>MealMates</h1>
                 {/* <form onSubmit={handleSubmit}>
@@ -66,7 +68,7 @@ function Connexion() {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     );
 }
 
