@@ -37,7 +37,7 @@ h1, h2, p {
 }
 .home__title {
   font-size: 48px;
-  font-family: "Inter";
+  font-family: "Inter", sans-serif;
   text-align: center;
 }
 .home__swiper .card {
@@ -72,6 +72,46 @@ h1, h2, p {
 
 #second-impression {
   margin-bottom: 2%;
+}
+
+#third-impression {
+  height: 50vh;
+  margin: 5% 0;
+}
+#third-impression ul {
+  list-style: none;
+  margin: 1% 0;
+  height: 80%;
+  display: flex;
+  justify-content: space-around;
+}
+#third-impression ul li {
+  display: flex;
+  align-items: center;
+  max-width: 50%;
+}
+#third-impression ul #fake-form {
+  width: 40%;
+}
+#third-impression ul #fake-form label {
+  margin: 0 5%;
+}
+#third-impression ul #fake-form input {
+  background: none;
+  border: none;
+  outline: none;
+  color: #F1F1F1;
+}
+#third-impression ul #fake-form input::-moz-placeholder {
+  color: #F1F1F1;
+}
+#third-impression ul #fake-form input::placeholder {
+  color: #F1F1F1;
+}
+#third-impression ul #map img {
+  border-radius: 15px;
+  height: 100%;
+  width: 100%;
 }
 
 @keyframes slideToLeftHeader {

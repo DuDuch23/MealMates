@@ -15,6 +15,15 @@ class OfferRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Offer::class);
     }
+    public function searchByName($keyword): array
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.product LIKE :product')
+            ->setParameter('product', '%' . $keyword . '%')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return Offer[] Returns an array of Offer objects

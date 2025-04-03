@@ -25,6 +25,7 @@ security:
             security: false
 
     access_control:
+        - { path: ^/api/offers/search, roles: PUBLIC_ACCESS }
         - { path: ^/api/offers, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/user/new, roles: PUBLIC_ACCESS } 

@@ -23,7 +23,7 @@ class Category
     /**
      * @var Collection<int, Offer>
      */
-    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'category')]
+    #[ORM\ManyToMany(targetEntity: Offer::class)]
     private Collection $offers;
 
     public function __construct()
