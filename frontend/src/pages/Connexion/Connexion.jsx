@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logIn } from "../../service/requestApi";
-import GoogleLoginButton from "../../components/ssoGoogle";
+import GoogleLoginButton from "../../components/SsoGoogle";
 import "./Connexion.css";
 
 function Connexion() {
