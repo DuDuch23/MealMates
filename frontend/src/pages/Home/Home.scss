@@ -12,19 +12,19 @@
         height: 12.5vh;
         background-color: black;
 
-        border-bottom: 2px solid $colorDarkGreen;
+        border-bottom: 2px solid variables.$colorDarkGreen;
         .menu-mobile{
             display: none;
         }
         .header-right{
             .button-sign-in {
                 a{
-                    background-color: $colorDarkGreen;
+                    background-color: variables.$colorDarkGreen;
                     color: white;
                     transition: all .3s ease-in-out;
                     &:hover{
                         background-color: white;
-                        color: $colorDarkGreen;
+                        color: variables.$colorDarkGreen;
                     }
                 }
             }
@@ -32,10 +32,10 @@
             .button-log-in {
                 a{
                     background-color: white;
-                    color: $colorDarkGreen;
+                    color: variables.$colorDarkGreen;
                     transition: all .3s ease-in-out;
                     &:hover{
-                        background-color: $colorDarkGreen;
+                        background-color: variables.$colorDarkGreen;
                         color: white;
                     }
                 }
@@ -119,7 +119,7 @@
                 top: 30vh;
                 width: 180vh;
                 height: 180vh;
-                background-color: $colorDarkGreen;
+                background-color: variables.$colorDarkGreen;
                 border-radius: 100%;
             }
             img {
@@ -139,8 +139,8 @@
                 font-size: 1.5rem;
                 padding: 2% 4%;
                 border-radius: 15px;
-                border: 2px solid $colorDarkGreen;
-                background-color: $colorDarkGreen;
+                border: 2px solid variables.$colorDarkGreen;
+                background-color: variables.$colorDarkGreen;
                 margin-right: 2%;
                 font-weight: bold;
 

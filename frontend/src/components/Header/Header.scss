@@ -100,13 +100,13 @@
             li{
                 a{
                     text-decoration: none;
-                    color: $colorPowerBlueDark;
+                    color: variables.$colorPowerBlueDark;
                     font-size: 24px;
                     transition: all ease-in-out 200ms;
                 }
                 &:hover{
                     a{
-                        color: $colorPowerBlue;
+                        color: variables.$colorPowerBlue;
                         transition: all ease-in-out 200ms;
                     }
                 }
@@ -126,7 +126,7 @@
         font-family: "Delius";
         font-weight: 700;
         letter-spacing: 1px;
-        color: $colorPowerBlue;
+        color: variables.$colorPowerBlue;
     }
     &__btn-menu-desktop{
         padding: 18px;
@@ -198,7 +198,7 @@
                 padding: 24px;
                 display: flex;
                 justify-content: space-between;
-                border-bottom: 1px solid $colorPowerBlue;
+                border-bottom: 1px solid variables.$colorPowerBlue;
 
                 .close-btn{
                     padding-inline: 0;
@@ -215,7 +215,7 @@
                     clear: both;
                     width: 40px;
                     height: 38px;
-                    background-color: $colorPowerBlue;
+                    background-color: variables.$colorPowerBlue;
                     border-radius: 50px;
                     display: flex;
                     justify-content: center;
@@ -233,7 +233,7 @@
                     transition: all ease-in-out 200ms;
                     a{
                         font-size: 24px;
-                        color: $colorPowerBlueDark;
+                        color: variables.$colorPowerBlueDark;
                         text-decoration: none;
                         display: flex;
                         width: 100%;
@@ -243,16 +243,16 @@
                         transition: all ease-in-out 200ms;
                     }
                     &:hover{
-                        background-color: $colorBlack;
+                        background-color: variables.$colorBlack;
                         transition: all ease-in-out 200ms;
                         a{
-                            color: $colorPowerBlue;
+                            color: variables.$colorPowerBlue;
                             transition: all ease-in-out 200ms;
                         }
                     }
                 }
                 .btn{
-                    background-color: $colorBlack;
+                    background-color: variables.$colorBlack;
                     border-radius: 15px;
                     a{
                         padding: 20px 0;
