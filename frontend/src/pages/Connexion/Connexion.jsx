@@ -28,12 +28,22 @@ function Connexion() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        await logIn({ email, password });
+      // console.log("Handle submit called with email:", email, "and password:", password);
+      const response = await logIn({ email, password });
+      console.log(response);
+      if(response.token){
+        localStorage.setItem("token",response.token);
+        localStorage.setItem("user",JSON.stringify(response.user));
+        setUser(response.user);
         navigate("/");
+      }else{
+        setError("Email ou mot de passe incorrect.");
+      }
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
     }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem("user");

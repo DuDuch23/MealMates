@@ -1,10 +1,22 @@
+import { jwtDecode } from 'jwt-decode';
+import { useState } from 'react';
+import { useNavigate } from "react-router";
 
+// Mettre à jour le token depuis localStorage
+export async function refreshToken({token}) {
+    try {
+        if(token.code = 401){
+            useNavigate("/connexion");
+        }
+    } catch (error) {
+        return "vous avez été déconnecté";
+    }
+}
 
-/* User*/
 // login user
 export async function logIn({ email, password }) {
     try {
-        await fetch("https://127.0.0.1:8000/api/login", {
+        const response = await fetch("https://127.0.0.1:8000/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -13,27 +25,6 @@ export async function logIn({ email, password }) {
                 email: email,
                 password: password
             }),
-            credentials: "include",
-        });
-
-    } catch (error) {
-        console.error("Erreur API :", error);
-        throw error;
-    }
-}
-
-// recuperer un user
-export async function getUser({id}) {
-    try{
-        const request = await fetch (`https://127.0.0.1:8000/api/user/get`,{
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body:JSON.stringify({
-                "id": id,
-            })
         });
 
         return await response.json();
@@ -43,11 +34,30 @@ export async function getUser({id}) {
     }
 }
 
-// creer un utilisateur
+// récupérer un user
+export async function getUser({ id,token }) {
+    try {
+        const request = await fetch("https://127.0.0.1:8000/api/user/get", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "id": id,
+            })
+        });
+
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        throw error;
+    }
+}
+
+// créer un utilisateur
 export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
     try {
-        console.log({ email, password, confirmPassword, firstName, lastName });
-
         if (!email || !password || !confirmPassword || !firstName || !lastName) {
             throw new Error("All fields are required.");
         }
@@ -70,12 +80,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
             }),
         });
 
-        logIn(
-            {
-                email,
-                password
-            }
-        );
+        await logIn({ email, password });
 
     } catch (error) {
         console.error("Erreur API :", error);
@@ -83,44 +88,66 @@ export async function newUser({ email, password, confirmPassword, firstName, las
     }
 }
 
-// modifier un user
-export async function editUser({data}) {
-    try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/edit/",{
-            method: "GET",
-            headers: {Authorization: `Bearer ${token}`},
-            body : JSON.stringify({
-                "email" : data[email],
-                "password" : data[password],
-                "password_confirm" : data[password],
-                "firstName" : data[firstName],
-                "lastName" : data[lastName],   
+// modifier un utilisateur
+export async function editUser({ data }) {
+    try {
+        const request = await fetch("https://127.0.0.1:8000/api/user/edit/", {
+            method: "POST",  // Remplace GET par POST
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "email": data.email,
+                "password": data.password,
+                "password_confirm": data.password_confirm,
+                "firstName": data.firstName,
+                "lastName": data.lastName,
             }),
         });
-        
-        return await request.json();
 
-    }catch(error){
-        console.error("erreur api :", error);
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }
 
-// supprimer un user
+// supprimer un utilisateur
 export async function deleteUser(id) {
-    try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/delete/",{
-            method: "GET",
-            headers: {Authorization: `Bearer ${token}`},
-            body : JSON.stringify({ 
-                "id":id 
+    try {
+        const request = await fetch("https://127.0.0.1:8000/api/user/delete/", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+                "id": id
             }),
         });
-        
-        return await request.json();
 
-    }catch(error){
-        console.error("erreur api :", error);
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        throw error;
+    }
+}
+
+// profil utilisateur
+export async function getProfile({ email,token }) {
+    try {
+        const request = await fetch("https://localhost:8000/api/user/profile", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "email": email,
+            }),
+        });
+
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }
@@ -133,11 +160,11 @@ export async function getOffers() {
             accept: 'application/json',
         }
     };
-  
+
     return fetch('https://127.0.0.1:8000/api/offers', options)
         .then((response) => response.json())
         .catch((err) => {
             console.error(err);
-            return  {result : []};
+            return { result: [] };
         });
 }

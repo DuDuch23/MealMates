@@ -1,45 +1,73 @@
 import { useState, useEffect } from "react";
-import { useParams } from 'react-router'
+import { useParams } from 'react-router';
 import { getUser } from "../../service/requestApi";
 import Avis from "../../components/Avis/Avis";
 
 import './UserProfile.css';
 
-function UserProfile(){
-    // const {id} = useParams();
-    // const [dataUser,setDataUser] = useState([]);
+function UserProfile() {
+    // état pour stocker les infos de l'utilisateur
+    const [user, setUser] = useState(null);
 
-    // useEffect(()=>{
-    //     getUser({id});
-    // },
-    // [{id}]);
+    // récupère l'id depuis l'URL
+    const params = useParams();
+    const userId = params.id;
 
-    return(
-        <>
-            <div id="page-user">
-                <div id="identy-user">
-                    <img id="image-user"  alt="user image" />
-                    <ul>
-                        <li>Nom de l'utilisateur</li>
-                        <li>Adresse de l'utilisateur</li>
-                    </ul>
-                </div>
+    // récupère le token dans le localStorage
+    const token = localStorage.getItem("token");
 
-                <ul id="params-user">
-                    <li>
-                        Préférence de l'utilisateur:<br/>
-                    </li>
-                    <li>
-                        Disponibilité de l'utilisateur:<br/>
-                    </li>
+    useEffect(() => {
+        // fonction pour appeler l'API
+        async function fetchUserData() {
+            if (userId && token) {
+                try {
+                    const response = await getUser({ id: userId, token: token });
+                    setUser(response);
+                } catch (err) {
+                    console.error("Erreur lors de la récupération des données :", err);
+                }
+            }
+        }
+
+        fetchUserData();
+    }, [userId, token]);
+
+    return (
+        <div id="page-user">
+            <div id="identy-user">
+                <img id="image-user" alt="Image de l'utilisateur" />
+                <ul>
+                    {user && user.data ? (
+                        <>
+                            <li>{user.data.firstName} {user.data.lastName}</li>
+                            <li>{user.data.location}</li>
+                        </>
+                    ) : (
+                        <li>Chargement...</li>
+                    )}
                 </ul>
-
-                {/* creer un composant pour le slider avis afin de pouvoir gerer le fait que certain utilisateur n'ont pas d'avis */}
-                <div id="slider-avis">
-
-                </div>
             </div>
-        </>
+
+            <ul id="params-user">
+              <li>
+                Préférences de l'utilisateur :
+                {user ? (
+                  <ul>
+                    {user.data.map((pref, index) => (
+                        <li key={index}>{pref.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Aucune préférence renseignée</p>
+                )}
+              </li>
+            </ul>
+
+            <div id="slider-avis">
+                {/* Composant pour les avis à insérer plus tard */}
+                {/* <Avis avisList={user.data.avis} /> */}
+            </div>
+        </div>
     );
 }
 

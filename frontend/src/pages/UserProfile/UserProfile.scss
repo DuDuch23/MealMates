@@ -2,11 +2,10 @@
 @import '../../styles/mixins.scss';
 @import "../../styles/variables";
 
-h2{
-    border: 1px solid red;
+
+p,li{
+    color: black;
 }
-
-
 
 // id
 #image-user{
@@ -41,9 +40,10 @@ ul{
 }
 
 #page-user{
-    margin-top: 28%;
+    margin: 20% auto 0;
     height: 62vh;
-    background-color: $colorPink;
+    max-width: 768px;
+    background-color: #1D8915;
     position: relative;
 }
 
