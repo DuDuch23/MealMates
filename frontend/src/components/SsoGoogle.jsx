@@ -7,9 +7,9 @@ const GoogleLoginButton = ({ setUser }) => {
   const handleSuccess = (response) => {
     try {
       const userObject = jwtDecode(response.credential);
-      setUser(userObject);
       localStorage.setItem("user", JSON.stringify(userObject));
       console.log("Connexion réussie :", userObject);
+      setUser(userObject);
     } catch (error) {
       console.error("Erreur lors du décodage du token :", error);
     }

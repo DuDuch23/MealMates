@@ -19,6 +19,9 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
+            logout: 
+                path: /api/logout
+                invalidate_session: true
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

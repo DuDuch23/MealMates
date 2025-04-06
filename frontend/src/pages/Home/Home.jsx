@@ -2,8 +2,28 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import logo from '../../assets/logo-mealmates.png';
 import map from '../../assets/landing-map.png';
+import { Link } from 'react-router';
+import Header from '../../components/Header/Header';
+
 
 function App() {
+    const [stateUser, setStateUser] = useState([]);
+
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        if (!token) {
+            setStateUser([
+                <li className='button-sign-in' key="inscription"><Link to="/inscription">Inscription</Link></li>,
+                <li className='button-log-in' key="connexion"><Link to="/connexion">Se connecter</Link></li>
+            ]);
+        } else {
+            setStateUser([
+                <li className='button-deconnexion' key="deconnexion"><Link to="/deconnexion">Déconnexion</Link></li>,
+            ]);
+        }
+    }, [token]);
+
     return (
         <section className="landing">
             <section className="header">
@@ -12,8 +32,10 @@ function App() {
                     <h1>MealMates</h1>
                 </div>
                 <div className="header-right">
-                    <button className="button-sign-in">Inscription</button>
-                    <button className="button-log-in">Connexion</button>
+                    {stateUser}
+                </div>
+                <div className='menu-mobile'>
+                    <Header />
                 </div>
             </section>
             <section className="top">

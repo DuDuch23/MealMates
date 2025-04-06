@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Logo from '../../assets/logo-mealmates.png';
 import './Header.css';
 
@@ -37,16 +37,6 @@ export default function Header() {
 
     return (
         <header className="header-primary">
-            <div className='header-primary__logo'>
-                <img src={Logo} alt="Panier" className="header-primary__panier" />
-                <h1 className={`${menuMobile ? "slide-left-header" : ""} ${closeMenuMobile ? "slide-right-header" : ""}`}>
-                    MealMates
-                </h1>
-            </div>
-            <ul className='header-primary__nav-desktop'>
-                {stateUser}
-            </ul>
-
             <button className="header-primary__btn-menu-mobile" onClick={() => setMenuMobile(true)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 30 30">
                     <path d="M 3 7 A 1 1 0 1 0 3 9 L 27 9 A 1 1 0 1 0 27 7 L 3 7 z M 3 14 A 1 1 0 1 0 3 16 L 27 16 A 1 1 0 1 0 27 14 L 3 14 z M 3 21 A 1 1 0 1 0 3 23 L 27 23 A 1 1 0 1 0 27 21 L 3 21 z"></path>
