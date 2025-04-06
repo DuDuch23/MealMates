@@ -1,4 +1,4 @@
-@import '../../styles/variables.scss';
+@use '../../styles/variables.scss';
 @keyframes slideToLeftHeader {
     from {
         transform: translateX(0);
@@ -25,8 +25,6 @@
 }
 
 .header-primary{
-    right: 0px;
-    position: relative;
     display: flex;
     justify-content: space-between;
     padding: 12px;
@@ -100,13 +98,13 @@
             li{
                 a{
                     text-decoration: none;
-                    color: $colorPowerBlueDark;
+                    color: variables.$colorPowerBlueDark;
                     font-size: 24px;
                     transition: all ease-in-out 200ms;
                 }
                 &:hover{
                     a{
-                        color: $colorPowerBlue;
+                        color: variables.$colorPowerBlue;
                         transition: all ease-in-out 200ms;
                     }
                 }
@@ -123,10 +121,9 @@
     h1{
         margin: 0;
         font-size: 28px;
-        font-family: "Delius";
         font-weight: 700;
         letter-spacing: 1px;
-        color: $colorPowerBlue;
+        color: variables.$colorPowerBlue;
     }
     &__btn-menu-desktop{
         padding: 18px;
@@ -187,18 +184,18 @@
         justify-content: end;
         z-index: 19000;
         .menu-mobile{
-            background-color: #444444;
+            background-color: black;
             width: 400px;
             max-width: 100%;
-            border-left: 1px solid;
             box-sizing: content-box;
-            border-bottom: 1px solid;
             border-bottom-left-radius: 16px;
             .nav-top{
                 padding: 24px;
                 display: flex;
+                height: 12.5vh;
+                align-items: center;
                 justify-content: space-between;
-                border-bottom: 1px solid $colorPowerBlue;
+                border-bottom: 1px solid variables.$colorPowerBlue;
 
                 .close-btn{
                     padding-inline: 0;
@@ -215,7 +212,7 @@
                     clear: both;
                     width: 40px;
                     height: 38px;
-                    background-color: $colorPowerBlue;
+                    background-color: variables.$colorPowerBlue;
                     border-radius: 50px;
                     display: flex;
                     justify-content: center;
@@ -233,7 +230,7 @@
                     transition: all ease-in-out 200ms;
                     a{
                         font-size: 24px;
-                        color: $colorPowerBlueDark;
+                        color: variables.$colorPowerBlueDark;
                         text-decoration: none;
                         display: flex;
                         width: 100%;
@@ -243,16 +240,16 @@
                         transition: all ease-in-out 200ms;
                     }
                     &:hover{
-                        background-color: $colorBlack;
+                        background-color: variables.$colorBlack;
                         transition: all ease-in-out 200ms;
                         a{
-                            color: $colorPowerBlue;
+                            color: variables.$colorPowerBlue;
                             transition: all ease-in-out 200ms;
                         }
                     }
                 }
                 .btn{
-                    background-color: $colorBlack;
+                    background-color: variables.$colorBlack;
                     border-radius: 15px;
                     a{
                         padding: 20px 0;

@@ -1,29 +1,31 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logIn } from "../../service/requestApi";
-import GoogleLoginButton from "../../components/ssoGoogle";
+import logo from '../../assets/logo-mealmates.png';
+
+import GoogleLoginButton from "../../components/SsoGoogle";
 import "./Connexion.css";
 
 function Connexion() {
-  // const
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [data, setData] = useState(null); 
-  const handleEmail = (event) => setEmail(event.target.value);
-  const handlePassword = (event) => setPassword(event.target.value);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [data, setData] = useState(null); 
+    const [error, setError] = useState(null);
+    const handleEmail = (event) => setEmail(event.target.value);
+    const handlePassword = (event) => setPassword(event.target.value);
 
-  const [user, setUser] = useState(() => {
+    const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
-  });
+    });
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -43,44 +45,40 @@ function Connexion() {
       console.error("Erreur lors de la connexion :", error);
     }
   };
-  
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    setUser(null);
-    setIsAuthenticated(false);
-  };
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        setUser(null);
+        setIsAuthenticated(false);
+    };
 
-  return (
-    <section className="connexion">
-      <h1>MealMates</h1>
-      <div className="action">
-        <form onSubmit={handleSubmit}>
-          <div className="content-element-form">
-            <label htmlFor="email">Email</label>
-            <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
-          </div>
-          <div className="content-element-form">
-            <label htmlFor="password">Mot de Passe</label>
-            <input type="password" name="password" placeholder="password" onChange={handlePassword} />
-          </div>
-          <button type="submit">Connexion</button>
-        </form>
-        <div className="otherAction">
-          <p>Ou connexion avec</p>
-          <GoogleLoginButton setUser={setUser} />
+    return (
+        <div className="container">
+            <div className="title-logo">
+                <img src={logo} alt="logo" className="logo"/>
+                <h1>MealMates</h1>
+            </div>
+            <div className="action">
+            {error && <p className="error">{error}</p>}
+                <form onSubmit={handleSubmit}>
+                    <div className="content-element-form">
+                        <label htmlFor="email">Email</label>
+                        <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
+                    </div>
+                    <div className="content-element-form">
+                        <label htmlFor="password">Mot de Passe</label>
+                        <input type="password" name="password" placeholder="password" onChange={handlePassword} />
+                    </div>
+                    <button type="submit">Connexion</button>
+                    <div className="otherAction">
+                        <p>Ou connexion avec</p>
+                        <GoogleLoginButton setUser={setUser} />
+                    </div>
+                </form>
+            </div>
         </div>
-        {user && (
-          <div className="user-info">
-            <p>Connecté en tant que : {user.name}</p>
-            <img src={user.picture} alt="Avatar" />
-            <button onClick={handleLogout}>Déconnexion</button>
-          </div>
-        )}
-      </div>
-    </section>
-  );
+    );
 }
 
 export default Connexion;

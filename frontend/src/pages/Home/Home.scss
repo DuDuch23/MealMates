@@ -1,14 +1,27 @@
-@import '../../styles/main.scss';
+@use '../../styles/main';
+@use '../../styles/variables';
+@use '../../styles/mixins';
 
 
 .landing {
+    .header-container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
     .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         height: 12.5vh;
         background-color: black;
+
         border-bottom: 2px solid $colorDarkGreen;
+        .header-right{
+
+        }
+        
         div {
             display: flex;
             align-items: center;
@@ -22,30 +35,10 @@
                 font-size: 3rem;
                 margin-left: 1%;
             }
-            li {
-                font-size: 1.5rem;
-                padding: 2% 4%;
-                border-radius: 15px;
-                border: 2px solid $colorDarkGreen;
-                margin-right: 2%;
-                font-weight: bold;
-
-                transition: .3s;
-            }
-            button:hover {
-                border: 2px solid white;
-            }
-            .button-sign-in {
-                background-color: $colorDarkGreen;
-                color: white;
-            }
-            .button-log-in {
-                background-color: white;
-                color: $colorDarkGreen;
-            }
         }
         .header-right {
             justify-content: flex-end;
+            gap: 24px;
         }
     }
     .top  {
@@ -92,7 +85,7 @@
                 top: 30vh;
                 width: 180vh;
                 height: 180vh;
-                background-color: $colorDarkGreen;
+                background-color: variables.$colorDarkGreen;
                 border-radius: 100%;
             }
             img {
@@ -112,8 +105,8 @@
                 font-size: 1.5rem;
                 padding: 2% 4%;
                 border-radius: 15px;
-                border: 2px solid $colorDarkGreen;
-                background-color: $colorDarkGreen;
+                border: 2px solid variables.$colorDarkGreen;
+                background-color: variables.$colorDarkGreen;
                 margin-right: 2%;
                 font-weight: bold;
 
@@ -129,4 +122,50 @@
             }
         }
     }
+}
+
+@media screen and (max-width: 1280px) {
+    .landing{
+        .header{
+            div{
+                h1{
+                    font-size: 2.25rem;
+                }
+            }
+            li{
+                font-size: 1.25rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .landing{
+        .header{
+            div{
+                width: unset;
+                h1{
+                    font-size: 1.75rem;
+                }
+            }
+            .menu-mobile{
+                display: block;
+            }
+            .header-left{
+                img{
+                    width: 30%;
+                }
+            }
+            .header-right{
+                display: none;
+                .button-log-in {
+                    display: none;
+                }
+                .button-sign-in {
+                    display: none;
+                }
+            }
+        }
+    }
+    
 }

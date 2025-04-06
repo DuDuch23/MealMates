@@ -25,9 +25,9 @@ export async function logIn({ email, password }) {
                 email: email,
                 password: password
             }),
+            credentials: "include",
         });
 
-        return await response.json();
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
@@ -58,6 +58,8 @@ export async function getUser({ id,token }) {
 // créer un utilisateur
 export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
     try {
+        console.log({ email, password, confirmPassword, firstName, lastName });
+
         if (!email || !password || !confirmPassword || !firstName || !lastName) {
             throw new Error("All fields are required.");
         }
@@ -167,4 +169,22 @@ export async function getOffers() {
             console.error(err);
             return { result: [] };
         });
+}
+
+export async function logOut() {
+    try {
+        const response = await fetch("https://127.0.0.1:8000/api/logout", {
+            method: "GET",
+            credentials: "include", 
+        });
+
+        if (response.ok) {
+            console.log("Déconnexion réussie");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la déconnexion :", error);
+    }
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 }

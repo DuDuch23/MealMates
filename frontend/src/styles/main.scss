@@ -1,9 +1,11 @@
-@import "./globals";
-@import './mixins';
-@import "./variables";
+@use "./globals";
+@use './mixins';
+@use './variables';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-
+#root{
+    background-color: #000000;
+}
 
 *,::before,::after{
     margin: 0;
