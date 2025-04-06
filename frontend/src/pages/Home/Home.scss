@@ -4,15 +4,19 @@
 
 
 .landing {
+    .header-container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
     .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        width: 100%;
         height: 12.5vh;
         background-color: black;
 
-        border-bottom: 2px solid variables.$colorDarkGreen;
         .menu-mobile{
             display: none;
         }
@@ -191,6 +195,7 @@
                 }
             }
             .header-right{
+                display: none;
                 .button-log-in {
                     display: none;
                 }

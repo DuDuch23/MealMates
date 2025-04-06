@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logIn } from "../../service/requestApi";
+import logo from '../../assets/logo-mealmates.png';
+
 import GoogleLoginButton from "../../components/SsoGoogle";
 import "./Connexion.css";
 
@@ -53,34 +55,30 @@ function Connexion() {
     };
 
     return (
-        <section className="connexion">
-            <h1>MealMates</h1>
+        <div className="container">
+            <div className="title-logo">
+                <img src={logo} alt="logo" className="logo"/>
+                <h1>MealMates</h1>
+            </div>
             <div className="action">
-            <form onSubmit={handleSubmit}>
-                <div className="content-element-form">
-                <label htmlFor="email">Email</label>
-                <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
-                </div>
-                <div className="content-element-form">
-                <label htmlFor="password">Mot de Passe</label>
-                <input type="password" name="password" placeholder="password" onChange={handlePassword} />
-                </div>
-                <button type="submit">Connexion</button>
-                {error && <p className="error">{error}</p>}
-            </form>
-            <div className="otherAction">
-                <p>Ou connexion avec</p>
-                <GoogleLoginButton setUser={setUser} />
+            {error && <p className="error">{error}</p>}
+                <form onSubmit={handleSubmit}>
+                    <div className="content-element-form">
+                        <label htmlFor="email">Email</label>
+                        <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
+                    </div>
+                    <div className="content-element-form">
+                        <label htmlFor="password">Mot de Passe</label>
+                        <input type="password" name="password" placeholder="password" onChange={handlePassword} />
+                    </div>
+                    <button type="submit">Connexion</button>
+                    <div className="otherAction">
+                        <p>Ou connexion avec</p>
+                        <GoogleLoginButton setUser={setUser} />
+                    </div>
+                </form>
             </div>
-            {user && (
-                <div className="user-info">
-                <p>Connecté en tant que : {user.name}</p>
-                <img src={user.picture} alt="Avatar" />
-                <button onClick={handleLogout}>Déconnexion</button>
-                </div>
-            )}
-            </div>
-        </section>
+        </div>
     );
 }
 

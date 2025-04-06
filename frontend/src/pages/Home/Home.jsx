@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import './Home.css';
 import logo from '../../assets/logo-mealmates.png';
 import map from '../../assets/landing-map.png';
@@ -8,6 +9,25 @@ import Header from '../../components/Header/Header';
 
 function App() {
     const [stateUser, setStateUser] = useState([]);
+    const [user, setUser] = useState(() => {
+        const storedUser = localStorage.getItem("user");
+        try {
+            if (storedUser && storedUser !== "undefined") {
+                return JSON.parse(storedUser);
+            }
+        } catch (error) {
+            console.error("Erreur lors du parsing de l'utilisateur :", error);
+        }
+        return null;
+    });
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
 
     const token = localStorage.getItem("token");
 
@@ -26,18 +46,21 @@ function App() {
 
     return (
         <section className="landing">
-            <section className="header">
-                <div className="header-left">
-                    <img src={logo}></img>
-                    <h1>MealMates</h1>
-                </div>
-                <div className="header-right">
-                    {stateUser}
-                </div>
+            <div className='header-container'>
+                <section className="header">
+                    <div className="header-left">
+                        <img src={logo}></img>
+                        <h1>MealMates</h1>
+                    </div>
+                    <div className="header-right">
+                        {stateUser}
+                    </div>
+                </section>
                 <div className='menu-mobile'>
                     <Header />
                 </div>
-            </section>
+            </div>
+
             <section className="top">
                 <h1>Et si on mangait moins cher, plus respectueux de la planète?</h1>
             </section>
