@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "watch": "vite --watch",
-    "scss": "sass --watch src/styles/main.scss:src/styles/main.css"
+    "scss": "sass --no-source-map src/pages:src/pages --update"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
