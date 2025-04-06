@@ -28,18 +28,6 @@ class ApiUserController extends AbstractController
     {
         $this->hasher = $hasher;
     }
-
-    #[Route('/me', name: 'api_me', methods: ['GET'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function me(User $user): JsonResponse
-    {
-        return new JsonResponse([
-            'id' => $user->getId(),
-            'email' => $user->getEmail(),
-            'lastName' => $user->getLastName(),
-            'firstName' => $user->getFirstName(),            
-        ]);
-    }
     
     #[Route('/get', methods: ['POST'])]
     public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
