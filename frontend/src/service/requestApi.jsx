@@ -3,25 +3,18 @@
 /* User*/
 // login user
 export async function logIn({ email, password }) {
-    try {
-        const response = await fetch("https://127.0.0.1:8000/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            }),
-            credentials: "include",
-        });
-        console.log(email, password);
-        console.log(response);
-
-    } catch (error) {
-        console.error("Erreur API :", error);
-        throw error;
-    }
+    const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+    };
+    const response = await fetch("https://127.0.0.1:8000/api/login", options);
+    const data = await response.json();
+    console.log("login response", data);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    return data;
 }
 
 // recuperer un user
@@ -48,7 +41,6 @@ export async function getUser({id}) {
 // creer un utilisateur
 export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
     try {
-        console.log({ email, password, confirmPassword, firstName, lastName });
 
         if (!email || !password || !confirmPassword || !firstName || !lastName) {
             throw new Error("All fields are required.");
@@ -142,4 +134,22 @@ export async function getOffers() {
             console.error(err);
             return  {result : []};
         });
+}
+
+export async function logOut() {
+    try {
+        const response = await fetch("https://127.0.0.1:8000/api/logout", {
+            method: "GET",
+            credentials: "include", 
+        });
+
+        if (response.ok) {
+            console.log("Déconnexion réussie");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la déconnexion :", error);
+    }
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 }

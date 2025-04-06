@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import logo from '../../assets/logo-mealmates.png';
 import map from '../../assets/landing-map.png';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Header from '../../components/Header/Header';
 
 

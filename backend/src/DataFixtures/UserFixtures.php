@@ -54,6 +54,7 @@ class UserFixtures extends Fixture
             $user->setLastName($userData['lastName']);
             $user->setRoles($userData['roles']);
             $user->setLocation($userData['location']);
+            $user->setIsVerified(true);
 
             foreach ($userData['preferences'] as $categoryKey) {
                 $user->addPreferences($categories[$categoryKey]);

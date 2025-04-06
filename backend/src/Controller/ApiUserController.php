@@ -2,15 +2,20 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Enum\PreferenceEnum;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/api/user', name: 'api_user')]
@@ -65,7 +70,6 @@ class ApiUserController extends AbstractController
         {
             return new JsonResponse([
                 'status' => "Bad Request",
-                'data' => $data,
                 'code' => 400,
                 'data' => $data,
                 'message' => "Missing parameters."
@@ -111,6 +115,7 @@ class ApiUserController extends AbstractController
         $user->setFirstName($data['firstName']);
         $user->setLastName($data['lastName']);
         $user->setRoles($data['role'] ?? ["ROLE_USER"]);
+        $user->setIsVerified(false);
 
         $entityManager->persist($user);
         $entityManager->flush();
