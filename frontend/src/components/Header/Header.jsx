@@ -1,28 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import Logo from '../../assets/logo-mealmates.png';
 import './Header.css';
 
 export default function Header() {
     const [menuMobile, setMenuMobile] = useState(false);
-    const [menuVisible, setMenuVisible] = useState(false); // Nouvel état pour cacher complètement
+    const [menuVisible, setMenuVisible] = useState(false);
     const [closeMenuMobile, setCloseMenuMobile] = useState(false);
-    const [stateUser, setStateUser] = useState([]);
+    // const [user, setUser] = useState(() => {
+    //     const storedUser = localStorage.getItem("user");
+    //     return storedUser ? JSON.parse(storedUser) : null;
+    // });
 
     const token = localStorage.getItem("token");
-
-    useEffect(() => {
-        if (!token) {
-            setStateUser([
-                <li className='header-primary__inscription' key="inscription"><Link to="/inscription">Inscription</Link></li>,
-                <li className='header-primary__connexion' key="connexion"><Link to="/connexion">Se connecter</Link></li>
-            ]);
-        } else {
-            setStateUser([
-                <li key="deconnexion"><Link to="/deconnexion">Déconnexion</Link></li>,
-            ]);
-        }
-    }, [token]);
 
     useEffect(() => {
         if (menuMobile) {
@@ -31,7 +20,7 @@ export default function Header() {
         } else if (closeMenuMobile) {
             setTimeout(() => {
                 setMenuVisible(false);
-            }, 500); // Cache après la durée de l'animation
+            }, 500);
         }
     }, [menuMobile, closeMenuMobile]);
 
@@ -46,6 +35,12 @@ export default function Header() {
             {menuVisible && (
                 <div className={`container-menu-mobile ${closeMenuMobile ? "slide-right" : "slide-left"}`}>
                     <nav className="menu-mobile">
+                        {/* {user && (
+                            <div className="user-info">
+                                <p>Connecté en tant que : {user.name}</p>
+                                <img src={user.picture} alt="Avatar" />
+                            </div>
+                        )} */}
                         <div className="nav-top">
                             <h1>MealMates</h1>
                             <button className="close-btn" onClick={() => {
@@ -61,7 +56,15 @@ export default function Header() {
                             <li><Link to="/">Accueil</Link></li>
                             <li><Link to="/">Suggestions</Link></li>
                             <li><Link to="/">Mon panier</Link></li>
-                            {stateUser}
+
+                            {!token ? (
+                                <>
+                                    <li className="header-primary__inscription"><Link to="/inscription">Inscription</Link></li>
+                                    <li className="header-primary__connexion"><Link to="/connexion">Se connecter</Link></li>
+                                </>
+                            ) : (
+                                <li><Link to="/deconnexion">Déconnexion</Link></li>
+                            )}
                         </ul>
                     </nav>
                 </div>

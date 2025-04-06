@@ -2,16 +2,17 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logOut } from "../../service/requestApi";
 
-function App() {
+function Deconnexion() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    logOut().finally(() => {
+    const handleLogout = async () => {
+      await logOut();
       navigate("/connexion");
-    });
-  }, [navigate]);
+    };
 
-  return null;
+    handleLogout();
+  }, [navigate]);
 }
 
-export default App;
+export default Deconnexion;
