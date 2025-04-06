@@ -5,7 +5,7 @@
 h1{
     text-align: center;
     height: 30%;
-    color: $colorWhite;
+    color: variables.$colorWhite;
 }
 
 #root{
@@ -67,7 +67,7 @@ h1{
                 padding: 12px;
                 font-size: 20px;
                 width: 100%;
-                border: 1px solid $colorWhite;
+                border: 1px solid variables.$colorWhite;
                 border-radius: 5px;
                 color: rgba(255, 255, 255, 0.7);
                 background-color: transparent;
@@ -87,8 +87,8 @@ h1{
                 cursor: pointer;
                 transition: all 0.3s ease-in-out;
                 &:hover{
-                    background-color: $colorWhite;
-                    color: $colorBlack;
+                    background-color: variables.$colorWhite;
+                    color: variables.$colorBlack;
                     transition: all 0.3s ease-in-out;
                 }
             }
