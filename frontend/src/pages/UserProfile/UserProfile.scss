@@ -10,6 +10,13 @@ p,li{
     background-color: #242424;
 }
 
+nav{
+    height: 10vh;
+    img{
+        height: 100%;
+    }
+}
+
 .card-user{
     margin: 0 auto;
     width: 768px;
@@ -17,5 +24,46 @@ p,li{
     nav{
         display: flex;
         align-items: center;
+    }
+    .icon-user{
+        margin: 0 auto;
+    }
+}
+
+.content-user{
+    height: 61%;
+    .container-link{
+        height: 10%;
+        border: 1px solid red;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        a{
+            text-decoration: none;
+        }
+    }
+    .container-info-user{
+        height: 90%;
+        border: 1px solid blue;
+    }
+}
+
+.basics-elements{
+    height: 40%;
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    div{
+        width: 45%;
+        height: 30%;
+        border-radius: 5px;
+        padding: 2px;
+        margin: 0 auto;
+        background-color: #FFF;
+        p{
+            color: #242424;
+        }
     }
 }
