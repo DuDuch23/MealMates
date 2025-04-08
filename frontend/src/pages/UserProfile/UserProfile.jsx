@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router';
 import { getUser } from "../../service/requestApi";
-import Avis from "../../components/Avis/Avis";
 
 import './UserProfile.css';
 
@@ -33,42 +32,14 @@ function UserProfile() {
     }, [userId, token]);
 
     return (
-        <div id="page-user">
-            <div id="identy-user">
-                <img id="image-user" alt="Image de l'utilisateur" />
-                <ul>
-                    {user && user.data ? (
-                        <>
-                            <li>{user.data.firstName} {user.data.lastName}</li>
-                            <li>{user.data.location}</li>
-                        </>
-                    ) : (
-                        <li>Chargement...</li>
-                    )}
-                </ul>
-            </div>
-
-            <ul id="params-user">
-              <li>
-                Préférences de l'utilisateur :
-                {user ? (
-                  <ul>
-                    {user.data.map((pref, index) => (
-                        <li key={index}>{pref.name}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>Aucune préférence renseignée</p>
-                )}
-              </li>
-            </ul>
-
-            <div id="slider-avis">
-                {/* Composant pour les avis à insérer plus tard */}
-                {/* <Avis avisList={user.data.avis} /> */}
-            </div>
+    <>
+        <div className="card-user">
+            <nav>
+                <img src="/img/logo-mealmates.png" alt="logo mealmates" />
+                <h2>MealMates</h2>
+            </nav>
         </div>
-    );
+    </>);
 }
 
 export default UserProfile;
