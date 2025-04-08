@@ -11,8 +11,6 @@ function App() {
     
     const [userData, setUserData] = useState(null);
     
-    refreshToken({userData});
-    
     if(userData != null){
         localStorage.setItem("user",userData.user.id);
     }
@@ -20,6 +18,8 @@ function App() {
     useEffect(() => {
         if (token) {
             try {
+                refreshToken({token});
+
                 const user = jwtDecode(token);
                 
                 const fetchUserProfile = async () => {

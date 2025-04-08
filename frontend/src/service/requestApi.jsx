@@ -4,12 +4,13 @@ import { useNavigate } from "react-router";
 
 // Mettre à jour le token depuis localStorage
 export async function refreshToken({token}) {
-    try {
-        if(token.code = 401){
-            useNavigate("/connexion");
-        }
-    } catch (error) {
-        return "vous avez été déconnecté";
+    const infoToken = jwtDecode(token);
+    const now = Date.now() / 1000;
+
+    if (infoToken.exp < now) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/connexion");
     }
 }
 
@@ -27,6 +28,8 @@ export async function logIn({ email, password }) {
             }),
             credentials: "include",
         });
+
+        return await response.json();
 
     } catch (error) {
         console.error("Erreur API :", error);
