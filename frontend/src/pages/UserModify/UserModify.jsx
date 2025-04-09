@@ -4,9 +4,9 @@ import { getUser } from "../../service/requestApi";
 import IconUser from "../../components/IconUser.jsx/iconUser";
 import randomId from "../../service/randomKey";
 import Header from "../../components/Header/Header";
-import './UserProfile.css';
+import './UserModify.css';
 
-function UserProfile() {
+function UserModify() {
     // état pour stocker les infos de l'utilisateur
     const [user, setUser] = useState(null);
 
@@ -63,6 +63,9 @@ function UserProfile() {
         }
     };
 
+    
+    console.log(user);
+
     return (
     <>
         <div className="card-user">
@@ -80,14 +83,33 @@ function UserProfile() {
                     <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                 </div>
                 <div className="container-info-user">
-                    <div className="basics-elements">
-                        {infoUser()}
-                    </div>
-                    {userPreference()}
+                    <form action="#">
+                        {/* nom et prénom */}
+                        <div>
+                            <input type="text" name="lastName"/>
+                            <input type="text" name="firstName"/>
+                        </div>
+                        {/* email */}
+                        <div>
+                            <label htmlFor="email">Mon email</label>
+                            <input type="text" name="" />
+                        </div>
+                        {/* ville */}
+                        <div>
+                            <label htmlFor="Ville/Pays">Ma ville</label>
+                            <input type="text" name="" />
+                        </div>
+                        {/* adresse rue */}
+                        <div>
+                            <label htmlFor="Adresse">Mon adresse</label>
+                            <input type="text" name="" />
+                        </div>
+                        {/* préference */}
+                    </form>
                 </div>
             </div>
         </div>
     </>);
 }
 
-export default UserProfile;
+export default UserModify;

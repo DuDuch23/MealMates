@@ -4,9 +4,9 @@ import { getUser } from "../../service/requestApi";
 import IconUser from "../../components/IconUser.jsx/iconUser";
 import randomId from "../../service/randomKey";
 import Header from "../../components/Header/Header";
-import './UserProfile.css';
+import './UserMealCard.css';
 
-function UserProfile() {
+function UserMealCard() {
     // état pour stocker les infos de l'utilisateur
     const [user, setUser] = useState(null);
 
@@ -34,11 +34,21 @@ function UserProfile() {
 
     const infoUser = () => {
         if (user && user.data) {
+            const moyenne = user.data.ratingsReceived.map((cur) => 
+                cur.score
+            );
             return (
                 <>
-                    <div><p>{user.data.firstName}</p></div>
-                    <div><p>{user.data.lastName}</p></div>
-                    <div><p>{user.data.email}</p></div>
+                    <ul className="list-user">
+                        <li><p>{user.data.firstName}</p></li>
+                        <li><p>{moyenne}</p></li>
+                    </ul>
+                    <div>
+                        <p>
+                            Ou me trouver : <br/>
+                            {user.data.location}
+                        </p>
+                    </div>
                 </>
             );
         } else {
@@ -50,7 +60,7 @@ function UserProfile() {
         if (user && user.data.preferences) {
             return (
                 <div className="preferences">
-                    <h3>Mes préférences</h3>
+                    <h3>Mes offres :</h3>
                     <ul>
                         {user.data.preferences.map((preference) => (
                             <li key={randomId()}>{preference}</li>
@@ -90,4 +100,4 @@ function UserProfile() {
     </>);
 }
 
-export default UserProfile;
+export default UserMealCard;

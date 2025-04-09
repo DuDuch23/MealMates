@@ -1,5 +1,10 @@
 #icon-user{
     margin: 0 auto;
-    width: fit-content;
-    height: fit-content;
+    width: 20%;
+    border: 1px solid red;
+    svg{
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+    }
 }
