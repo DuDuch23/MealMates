@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams,Link } from 'react-router';
 import { getUser } from "../../service/requestApi";
-import IconUser from "../../components/IconUser.jsx/iconUser";
+import { IconUser, ChooseYourIcon } from "../../components/IconUser/iconUser";
 import randomId from "../../service/randomKey";
 import Header from "../../components/Header/Header";
 import './UserModify.css';
@@ -63,53 +63,60 @@ function UserModify() {
         }
     };
 
-    
-    console.log(user);
-
     return (
-    <>
-        <div className="card-user">
+        <>
+          <div className="card-user">
             <nav>
-                <img src="/img/logo-mealmates.png" alt="logo mealmates" />
-                <h2>MealMates</h2>
+              <img src="/img/logo-mealmates.png" alt="logo mealmates" />
+              <h2>MealMates</h2>
             </nav>
-            <IconUser id={1}/>
-            <div className="content-user">
-                <div className="container-link">
-                    <Link to={`/userProfile/${userId}`}>Mes informations</Link>
-                    <span></span>
-                    <Link to={`/userMealCard/${userId}`}>MealCard</Link>
-                    <span></span>
-                    <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
-                </div>
-                <div className="container-info-user">
-                    <form action="#">
-                        {/* nom et prénom */}
-                        <div>
-                            <input type="text" name="lastName"/>
-                            <input type="text" name="firstName"/>
-                        </div>
-                        {/* email */}
-                        <div>
-                            <label htmlFor="email">Mon email</label>
-                            <input type="text" name="" />
-                        </div>
-                        {/* ville */}
-                        <div>
-                            <label htmlFor="Ville/Pays">Ma ville</label>
-                            <input type="text" name="" />
-                        </div>
-                        {/* adresse rue */}
-                        <div>
-                            <label htmlFor="Adresse">Mon adresse</label>
-                            <input type="text" name="" />
-                        </div>
-                        {/* préference */}
-                    </form>
-                </div>
+      
+            <div className="user-face">
+              <IconUser id={1} />
+              <ChooseYourIcon />
             </div>
-        </div>
-    </>);
+      
+            <div className="content-user">
+              <div className="container-link">
+                <Link to={`/userProfile/${userId}`}>Mes informations</Link>
+                <span></span>
+                <Link to={`/userMealCard/${userId}`}>MealCard</Link>
+                <span></span>
+                <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+              </div>
+      
+              <div className="container-info-user">
+                <form action="#">
+                  {/* nom et prénom */}
+                  <div>
+                    <input type="text" name="lastName" placeholder="Nom" />
+                    <input type="text" name="firstName" placeholder="Prénom" />
+                  </div>
+      
+                  {/* email */}
+                  <div>
+                    <label htmlFor="email">Mon email</label>
+                    <input type="text" id="email" name="email" />
+                  </div>
+      
+                  {/* ville */}
+                  <div>
+                    <label htmlFor="city">Ma ville</label>
+                    <input type="text" id="city" name="city" />
+                  </div>
+      
+                  {/* adresse rue */}
+                  <div>
+                    <label htmlFor="address">Mon adresse</label>
+                    <input type="text" id="address" name="address" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+      
 }
 
 export default UserModify;
