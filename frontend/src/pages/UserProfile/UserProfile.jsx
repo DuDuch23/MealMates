@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams,Link } from 'react-router';
 import { getUser } from "../../service/requestApi";
-import IconUser from "../../components/IconUser.jsx/iconUser";
+import { IconUser } from "../../components/IconUser/iconUser";
 import randomId from "../../service/randomKey";
 import Header from "../../components/Header/Header";
 import './UserProfile.css';
