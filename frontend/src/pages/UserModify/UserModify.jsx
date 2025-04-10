@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams,Link } from 'react-router';
-import { getUser } from "../../service/requestApi";
+import { getUser,editUser } from "../../service/requestApi";
 import { IconUser, ChooseYourIcon } from "../../components/IconUser/iconUser";
-import randomId from "../../service/randomKey";
 import Header from "../../components/Header/Header";
 import './UserModify.css';
 
@@ -13,6 +12,12 @@ function UserModify() {
     // récupère l'id depuis l'URL
     const params = useParams();
     const userId = params.id;
+    const [idIcon, setIdIcon] = useState(1);
+    const [email, setEmail] = useState([]);
+    const [password,setPassword] = useState([]);
+    const [confirmPassword, setConfirmPassword] = useState([]);
+    const [firstName,setFirstName] = useState([]);
+    const [lastName, setLastName] = useState([]);
 
     // récupère le token dans le localStorage
     const token = localStorage.getItem("token");
@@ -32,36 +37,16 @@ function UserModify() {
         fetchUserData();
     }, [userId]);
 
-    const infoUser = () => {
-        if (user && user.data) {
-            return (
-                <>
-                    <div><p>{user.data.firstName}</p></div>
-                    <div><p>{user.data.lastName}</p></div>
-                    <div><p>{user.data.email}</p></div>
-                </>
-            );
-        } else {
-            return <p>Chargement des informations...</p>;
-        }
+    const handleIconChange = (id) => {
+      setIdIcon(id);
     };
+
+    // useEffect(async ()=>{
+    //   await editUser({userId,idIcon,email,password, confirmPassword, firstName, lastName});
+    // },[userId,idIcon,email,password, confirmPassword, firstName, lastName]);
+
+
     
-    const userPreference = () => {
-        if (user && user.data.preferences) {
-            return (
-                <div className="preferences">
-                    <h3>Mes préférences</h3>
-                    <ul>
-                        {user.data.preferences.map((preference) => (
-                            <li key={randomId()}>{preference}</li>
-                        ))}
-                    </ul>
-                </div>
-            );
-        } else {
-            return <p>Aucune préférence disponible.</p>;
-        }
-    };
 
     return (
         <>
@@ -72,50 +57,63 @@ function UserModify() {
             </nav>
       
             <div className="user-face">
-              <IconUser id={1} />
-              <ChooseYourIcon />
+              <IconUser id={idIcon} />
+              <ChooseYourIcon onValueChange={handleIconChange}/>
             </div>
       
             <div className="content-user">
               <div className="container-link">
                 <Link to={`/userProfile/${userId}`}>Mes informations</Link>
-                <span></span>
+                <span>
+                  <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
+                  </svg>
+                </span>
                 <Link to={`/userMealCard/${userId}`}>MealCard</Link>
-                <span></span>
+                <span>
+                  <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
+                  </svg>
+                </span>
                 <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
               </div>
       
               <div className="container-info-user">
                 <form action="#">
                   {/* nom et prénom */}
-                  <div>
+                  <div className="name-select">
                     <input type="text" name="lastName" placeholder="Nom" />
                     <input type="text" name="firstName" placeholder="Prénom" />
                   </div>
       
                   {/* email */}
                   <div>
-                    <label htmlFor="email">Mon email</label>
-                    <input type="text" id="email" name="email" />
+                    <input type="text" id="email" name="email" placeholder="Mon email" />
                   </div>
       
                   {/* ville */}
                   <div>
-                    <label htmlFor="city">Ma ville</label>
-                    <input type="text" id="city" name="city" />
+                    <input type="text" id="city" name="city" placeholder="Ma ville" />
                   </div>
       
                   {/* adresse rue */}
                   <div>
-                    <label htmlFor="address">Mon adresse</label>
-                    <input type="text" id="address" name="address" />
+                    <input type="text" id="address" name="address" placeholder="Mon adresse" />
+                  </div>
+
+                  <div>
+                    <label htmlFor="preferences">Mes preferences :</label>
+                    <select name="preference" id="preference-select">
+                      <option value="">--choisir un preference--</option>
+                      {/* <option value=""><p>hey</p></option> */}
+                    </select>
                   </div>
                 </form>
               </div>
             </div>
           </div>
-        </>
-      );
+      </>
+    );
       
 }
 

@@ -7,14 +7,11 @@ import Header from "../../components/Header/Header";
 import './UserMealCard.css';
 
 function UserMealCard() {
-    // état pour stocker les infos de l'utilisateur
     const [user, setUser] = useState(null);
 
-    // récupère l'id depuis l'URL
     const params = useParams();
     const userId = params.id;
 
-    // récupère le token dans le localStorage
     const token = localStorage.getItem("token");
 
     useEffect(() => {
@@ -84,9 +81,17 @@ function UserMealCard() {
             <div className="content-user">
                 <div className="container-link">
                     <Link to={`/userProfile/${userId}`}>Mes informations</Link>
-                    <span></span>
+                    <span>
+                      <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
+                      </svg>
+                    </span>
                     <Link to={`/userMealCard/${userId}`}>MealCard</Link>
-                    <span></span>
+                    <span>
+                      <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
+                      </svg>
+                    </span>
                     <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                 </div>
                 <div className="container-info-user">
