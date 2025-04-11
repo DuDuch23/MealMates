@@ -3,7 +3,6 @@ import { useParams,Link } from 'react-router';
 import { getUser } from "../../service/requestApi";
 import { IconUser } from "../../components/IconUser/iconUser";
 import randomId from "../../service/randomKey";
-import Header from "../../components/Header/Header";
 import './UserProfile.css';
 
 function UserProfile() {
@@ -67,8 +66,10 @@ function UserProfile() {
     <>
         <div className="card-user">
             <nav>
-                <img src="/img/logo-mealmates.png" alt="logo mealmates" />
-                <h2>MealMates</h2>
+                <Link to={"/"}>
+                    <img src="/img/logo-mealmates.png" alt="logo mealmates" />
+                    <h2>MealMates</h2>
+                </Link>
             </nav>
             <IconUser id={1}/>
             <div className="content-user">

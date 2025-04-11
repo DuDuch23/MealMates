@@ -15,10 +15,13 @@ function App() {
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/userProfile/:id" element={<UserProfile />} />
-        <Route path='/userMealCard/:id' element={<UserMealCard/>}/>
-        <Route path='/userModify/:id' element={<UserModify />}/>
+      <Route path="/" element={<NavLayout />}>
+          {/* Définissez ici toutes les routes qui doivent être rendues à l'intérieur de NavLayout */}
+          <Route index element={<Home />} />
+        </Route>
+        <Route path="userProfile/:id" element={<UserProfile />} />
+        <Route path="userMealCard/:id" element={<UserMealCard />} />
+        <Route path="userModify/:id" element={<UserModify />} />
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription /> } />
         <Route path="/deconnexion" element={<Deconnexion /> } />

@@ -10,13 +10,6 @@ p,li{
     background-color: #242424;
 }
 
-nav{
-    height: 10vh;
-    img{
-        height: 100%;
-    }
-}
-
 .card-user{
     margin: 0 auto;
     width: 768px;
@@ -24,6 +17,11 @@ nav{
     nav{
         display: flex;
         align-items: center;
+        a{
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
     }
     .icon-user{
         margin: 0 auto;

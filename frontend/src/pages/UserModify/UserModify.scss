@@ -9,14 +9,15 @@ p,li{
 #root{
     background-color: #242424;
 }
-
 nav{
-    height: 10vh;
-    img{
-        height: 100%;
+    display: flex;
+    align-items: center;
+    a{
+        display: flex;
+        align-items: center;
+        text-decoration: none;
     }
 }
-
 form{
     height: 100%;
     display: flex;

@@ -52,8 +52,10 @@ function UserModify() {
         <>
           <div className="card-user">
             <nav>
-              <img src="/img/logo-mealmates.png" alt="logo mealmates" />
-              <h2>MealMates</h2>
+                <Link to={"/"}>
+                    <img src="/img/logo-mealmates.png" alt="logo mealmates" />
+                    <h2>MealMates</h2>
+                </Link>
             </nav>
       
             <div className="user-face">
