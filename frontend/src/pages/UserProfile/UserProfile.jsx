@@ -6,6 +6,7 @@ import randomId from "../../service/randomKey";
 import './UserProfile.css';
 
 function UserProfile() {
+
     // état pour stocker les infos de l'utilisateur
     const [user, setUser] = useState(null);
 

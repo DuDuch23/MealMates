@@ -4,12 +4,11 @@ import { logIn } from "../../service/requestApi";
 import logo from '../../assets/logo-mealmates.png';
 
 import GoogleLoginButton from "../../components/SsoGoogle";
-import "./Connexion.css";
+import styles from "./Connexion.module.css";
 
 function Connexion() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [data, setData] = useState(null); 
     const [error, setError] = useState(null);
     const handleEmail = (event) => setEmail(event.target.value);
     const handlePassword = (event) => setPassword(event.target.value);
@@ -30,9 +29,7 @@ function Connexion() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // console.log("Handle submit called with email:", email, "and password:", password);
       const response = await logIn({ email, password });
-      console.log(response);
       if(response.token){
         localStorage.setItem("token",response.token);
         localStorage.setItem("user",JSON.stringify(response.user));
@@ -54,29 +51,29 @@ function Connexion() {
     };
 
     return (
-        <div className="container">
-            <div className="title-logo">
-                <img src={logo} alt="logo" className="logo"/>
-                <h1>MealMates</h1>
-            </div>
-            <div className="action">
-            {error && <p className="error">{error}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="content-element-form">
-                        <label htmlFor="email">Email</label>
-                        <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
-                    </div>
-                    <div className="content-element-form">
-                        <label htmlFor="password">Mot de Passe</label>
-                        <input type="password" name="password" placeholder="password" onChange={handlePassword} />
-                    </div>
-                    <button type="submit">Connexion</button>
-                    <div className="otherAction">
-                        <p>Ou connexion avec</p>
-                        <GoogleLoginButton setUser={setUser} />
-                    </div>
-                </form>
-            </div>
+        <div className={styles.container}>
+          <div className={styles["title-logo"]}>
+            <img src={logo} alt="logo" className={styles.logo} />
+            <h1>MealMates</h1>
+          </div>
+          <div className={styles.action}>
+            {error && <p className={styles.error}>{error}</p>}
+            <form onSubmit={handleSubmit}>
+              <div className={styles["content-element-form"]}>
+                <label htmlFor="email">Email</label>
+                <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
+              </div>
+              <div className={styles["content-element-form"]}>
+                <label htmlFor="password">Mot de Passe</label>
+                <input type="password" name="password" placeholder="password" onChange={handlePassword} />
+              </div>
+              <button type="submit">Connexion</button>
+              <div className={styles.otherAction}>
+                <p>Ou connexion avec</p>
+                <GoogleLoginButton setUser={setUser} />
+              </div>
+            </form>
+          </div>
         </div>
     );
 }

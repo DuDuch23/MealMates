@@ -3,13 +3,13 @@ import { Routes, Route } from 'react-router';
 import NavLayout from './Layout/NavLayout';
 
 // Chargement différé des composants
-const Home = lazy(() => import('./pages/Home/Home'));
-const Connexion = lazy(() => import('./pages/Connexion/Connexion'));
-const Inscription = lazy(() => import('./pages/Inscription/Inscription'));
-const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
-const UserMealCard = lazy(() => import('./pages/UserMealCard/UserMealCard'));
-const UserModify = lazy(() => import('./pages/UserModify/UserModify'));
-const Deconnexion = lazy(() => import('./pages/Deconnexion/Deconnexion'));
+const Home = React.lazy(() => import('./pages/Home/Home'));
+const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
+const Inscription = React.lazy(() => import('./pages/Inscription/Inscription'));
+const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
+const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'));
+const UserModify = React.lazy(() => import('./pages/UserModify/UserModify'));
+const Deconnexion = React.lazy(() => import('./pages/Deconnexion/Deconnexion'));
 
 function App() {
   return (
