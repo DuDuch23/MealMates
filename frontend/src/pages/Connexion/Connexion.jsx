@@ -43,13 +43,6 @@ function Connexion() {
     }
   };
 
-    const handleLogout = () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        setUser(null);
-        setIsAuthenticated(false);
-    };
-
     return (
         <div className={styles.container}>
           <div className={styles["title-logo"]}>

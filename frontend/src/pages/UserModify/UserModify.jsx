@@ -1,49 +1,57 @@
 import { useState, useEffect } from "react";
-import { useParams,Link } from 'react-router';
-import { getUser,editUser } from "../../service/requestApi";
+import { useParams, Link } from "react-router";
+import { getUser, editUser } from "../../service/requestApi";
 import { IconUser, ChooseYourIcon } from "../../components/IconUser/iconUser";
 import Header from "../../components/Header/Header";
 import './UserModify.css';
 
 function UserModify() {
-    // état pour stocker les infos de l'utilisateur
     const [user, setUser] = useState(null);
-
-    // récupère l'id depuis l'URL
     const params = useParams();
     const userId = params.id;
+
     const [idIcon, setIdIcon] = useState(1);
-    const [email, setEmail] = useState([]);
-    const [password,setPassword] = useState([]);
-    const [confirmPassword, setConfirmPassword] = useState([]);
-    const [firstName,setFirstName] = useState([]);
-    const [lastName, setLastName] = useState([]);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [city, setCity] = useState("");
+    const [address, setAdress] = useState("");
+    const [option, setOption] = useState("");
 
     // récupère le token dans le localStorage
     const token = localStorage.getItem("token");
 
     useEffect(() => {
-        async function fetchUserData() {
-            if (userId && token) {
-                try {
-                    const response = await getUser({ id: userId, token: token });
-                    setUser(response);
-                } catch (err) {
-                    console.error("Erreur lors de la récupération des données :", err);
-                }
-            }
-        }
-
-        fetchUserData();
-    }, [userId]);
+      async function fetchUserData() {
+          if (userId && token) {
+              try {
+                  const response = await getUser({ id: userId, token: token });
+                  setUser(response);
+              } catch (err) {
+                  console.error("Erreur lors de la récupération des données :", err);
+              }
+          }
+      }
+      fetchUserData();
+    },[userId,token]);
+          
 
     const handleIconChange = (id) => {
       setIdIcon(id);
     };
 
-    // useEffect(async ()=>{
-    //   await editUser({userId,idIcon,email,password, confirmPassword, firstName, lastName});
-    // },[userId,idIcon,email,password, confirmPassword, firstName, lastName]);
+    const handleEdit = async(event)=>{
+      event.preventDefault();
+      const userData = {userId,idIcon,email,firstName,lastName,city,address,option,};
+      try{
+        await editUser(userData)
+      }catch (error) {
+        console.error("Erreur lors de la modification de l'utilisateur :", error);
+        alert("Erreur lors de la modification !");
+      }
+    };
 
 
     
@@ -80,36 +88,38 @@ function UserModify() {
                 <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
               </div>
       
-              <div className="container-info-user">
+              <div className="container-info-user" onSubmit={handleEdit}>
                 <form action="#">
                   {/* nom et prénom */}
                   <div className="name-select">
-                    <input type="text" name="lastName" placeholder="Nom" />
-                    <input type="text" name="firstName" placeholder="Prénom" />
+                    <input type="text" name="lastName" placeholder="Nom"  value={lastName} onChange={(event) => setLastName(event.target.value)}/>
+                    <input type="text" name="firstName" placeholder="Prénom" value={firstName} onChange={(event) => setFirstName(event.target.value)}/>
                   </div>
       
                   {/* email */}
                   <div>
-                    <input type="text" id="email" name="email" placeholder="Mon email" />
+                    <input type="text" id="email" name="email" placeholder="Mon email" value={email} onChange={(event) => setEmail(event.target.value)}/>
                   </div>
       
                   {/* ville */}
                   <div>
-                    <input type="text" id="city" name="city" placeholder="Ma ville" />
+                    <input type="text" id="city" name="city" placeholder="Ma ville" value={city} onChange={(event) => setCity(event.target.value)}/>
                   </div>
       
                   {/* adresse rue */}
                   <div>
-                    <input type="text" id="address" name="address" placeholder="Mon adresse" />
+                    <input type="text" id="address" name="address" placeholder="Mon adresse" value={address} onChange={(event) => setAdress(event.target.value)}/>
                   </div>
 
                   <div>
                     <label htmlFor="preferences">Mes preferences :</label>
-                    <select name="preference" id="preference-select">
+                    <select name="preference" id="preference-select"value={option} onChange={(event) => setOption(event.target.value)}>
                       <option value="">--choisir un preference--</option>
                       {/* <option value=""><p>hey</p></option> */}
                     </select>
                   </div>
+
+                  <button>Envoyer</button>
                 </form>
               </div>
             </div>

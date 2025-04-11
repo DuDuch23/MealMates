@@ -97,7 +97,7 @@ function UserMealCard() {
                     <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                 </div>
                 <div className="container-info-user">
-                    <div className="basics-elements">
+                    <div className="basics-elements card">
                         {infoUser()}
                     </div>
                     {userPreference()}
