@@ -1,0 +1,87 @@
+@use '../../styles/variables.scss';
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 12.5vh;
+    background-color: black;
+
+    border-bottom: 2px solid variables.$colorDarkGreen;
+    
+    div {
+        display: flex;
+        align-items: center;
+        width: 50%;
+
+        img {
+            height: 80%;
+            margin-left: 1%;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-left: 1%;
+        }
+    }
+    .header-right {
+        justify-content: flex-end;
+        margin-right: 5%;
+        gap: 24px;
+        height: 50%;
+    }
+    #icon-user{
+        margin: 0;
+    }
+    .button-user{
+        width: 30%;
+        display: flex;
+        justify-content: space-around;
+    }
+}
+
+ul{
+    width: 20%;
+    display: flex;
+    list-style: none;
+    li{
+        border-radius: 5px;
+        width: 50%;
+        background: variables.$colorDarkGreen;
+        border: 1px solid green;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    a{
+        text-decoration: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .header{
+        div{
+            width: unset;
+            h1{
+                font-size: 1.75rem;
+            }
+        }
+        .menu-mobile{
+            display: block;
+        }
+        .header-left{
+            img{
+                width: 30%;
+            }
+        }
+        .header-right{
+            display: none;
+            .button-log-in {
+                display: none;
+            }
+            .button-sign-in {
+                display: none;
+            }
+        }
+    } 
+}

@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -22,11 +23,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Groups(["public", "private"])]
     private ?int $id = null;
+    
     #[ORM\Column(length: 180)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(["public", "private"])]
     private array $roles = [];
 
     #[ORM\Column]
@@ -41,24 +44,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private Collection $preferences;
 
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rater', orphanRemoval: true)]
     private Collection $ratingsGiven;
 
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rated', orphanRemoval: true)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private Collection $ratingsReceived;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["public", "private"])]
     private ?string $location = null;
+
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private ?int $iconUser = null;
 
     /**
      * @var Collection<int, Offer>
      */
-    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'seller')]
     private Collection $offers;
+
+    #[ORM\Column(options: ['default' => false])]
+    private ?bool $isVerified = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $verificationToken = null;
 
     public function __construct()
     {
@@ -289,6 +303,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $offer->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIconUser(): int
+    {
+        return $this->iconUser;
+    }
+
+    public function setIconUser(int $icon): void
+    {
+        $this->iconUser = $icon;
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getVerificationToken(): ?string
+    {
+        return $this->verificationToken;
+    }
+
+    public function setVerificationToken(?string $verificationToken): static
+    {
+        $this->verificationToken = $verificationToken;
 
         return $this;
     }

@@ -1,0 +1,73 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss';
+@use "../../styles/variables";
+
+p,li{
+    color: black;
+}
+
+#root{
+    background-color: #242424;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    a{
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+}
+
+.card-user{
+    margin: 0 auto;
+    width: 768px;
+    height: 100vh;
+    .icon-user{
+        margin: 0 auto;
+    }
+}
+
+.content-user{
+    height: 61%;
+    .container-link{
+        height: 10%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        a{
+            text-decoration: none;
+        }
+    }
+    .container-info-user{
+        height: 90%;
+    }
+}
+
+.basics-elements.card{
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    .list-user{
+        height: 50%;
+        width: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        list-style: none;
+    }
+    div{
+        width: 45%;
+        height: 30%;
+        border-radius: 5px;
+        padding: 2px;
+        margin: 0 auto;
+        background-color: #FFF;
+        p{
+            color: #242424;
+        }
+    }
+}

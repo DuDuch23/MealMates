@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\OfferRepository;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -23,7 +24,7 @@ class Offer
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "offers")]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["private"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["public"])] // Exposé uniquement dans le groupe "private"
     private ?User $seller = null;
 
     #[ORM\Column(type: "string", length: 255)]
@@ -51,7 +52,7 @@ class Offer
     private ?float $price = null;
 
     #[ORM\Column(type: "boolean")]
-    #[Groups(["private"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["public"])] // Exposé uniquement dans le groupe "private"
     private bool $isDonation = false;
 
     #[Vich\UploadableField(mapping: 'photos_offer', fileNameProperty: 'photosNameOffer')]
@@ -150,7 +151,7 @@ class Offer
       */
      public function getPhotosFileOffers(): Collection
      {
-         return $this->photosFileOffers;
+         return $this->photosFileOffers ?? new ArrayCollection();
      }
 
     // Getter et setter pour photosNameOffer (les noms des fichiers)
