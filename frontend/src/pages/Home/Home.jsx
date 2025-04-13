@@ -57,16 +57,6 @@ function App() {
 
   return (
     <section className="landing">
-      <section className="header">
-        <div className="header-left">
-          <img src={logo} alt="Logo MealMates" />
-          <h1>MealMates</h1>
-        </div>
-        <div className="header-right">
-          {infoUser()}
-        </div>
-      </section>
-
       <section className="top">
         <h1>Et si on mangeait moins cher, plus respectueux de la planète ?</h1>
       </section>
