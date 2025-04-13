@@ -4,7 +4,7 @@ import { logIn } from "../../service/requestApi";
 import logo from '../../assets/logo-mealmates.png';
 
 import GoogleLoginButton from "../../components/SsoGoogle";
-import styles from "./Connexion.css";
+import styles from "./Connexion.module.css";
 
 function Connexion() {
     const [email, setEmail] = useState("");
@@ -44,24 +44,24 @@ function Connexion() {
   };
 
     return (
-        <div>
-          <div>
-            <img src={logo} alt="logo" />
+        <div className={styles.container}>
+          <div className={styles["title-logo"]}>
+            <img src={logo} alt="logo" className={styles.logo} />
             <h1>MealMates</h1>
           </div>
-          <div>
-            {error && <p>{error}</p>}
+          <div className={styles.action}>
+            {error && <p className={styles.error}>{error}</p>}
             <form onSubmit={handleSubmit}>
-              <div>
+              <div className={styles["content-element-form"]}>
                 <label htmlFor="email">Email</label>
                 <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
               </div>
-              <div>
+              <div className={styles["content-element-form"]}>
                 <label htmlFor="password">Mot de Passe</label>
                 <input type="password" name="password" placeholder="password" onChange={handlePassword} />
               </div>
               <button type="submit">Connexion</button>
-              <div>
+              <div className={styles.otherAction}>
                 <p>Ou connexion avec</p>
                 <GoogleLoginButton setUser={setUser} />
               </div>
