@@ -2,17 +2,23 @@ import './Home.css';
 import { useState, useEffect } from 'react';
 import map from '../../assets/landing-map.png';
 import { Link } from 'react-router';
+import Header from '../../components/Header/Header';
+import Searchbar from '../../components/Searchbar/Searchbar';
+import { searchOfferByTitle } from '../../service/requestApi';
 import { getProfile, refreshToken } from '../../service/requestApi';
 import logo from '../../assets/logo-mealmates.png';
 import UserLocationMap from '../../components/mapGoogle';
+import { jwtDecode } from 'jwt-decode';
 
 function App() {
   const token = localStorage.getItem("token");
   const [userData, setUserData] = useState(null);
 
-  if (userData != null) {
-    localStorage.setItem("user", userData.user.id);
-  }
+  useEffect(() => {
+    if (userData) {
+      localStorage.setItem("user", userData.user.id);
+    }
+  }, [userData]);
 
   useEffect(() => {
     if (token) {
@@ -26,13 +32,22 @@ function App() {
           const profile = await getProfile({ email, token });
           setUserData(profile);
         };
-
+        
         fetchUserProfile();
       } catch (error) {
         console.error("Le token est invalide ou ne peut pas être décodé", error);
       }
     }
   }, [token]);
+
+  const handleSearch = async (query) => {
+    try {
+      const results = await searchOfferByTitle(query);
+      console.log("Résultats de recherche :", results);
+    } catch (error) {
+      console.error("Erreur de recherche :", error);
+    }
+  };
 
   const infoUser = () => {
     if (userData) {
@@ -57,6 +72,23 @@ function App() {
 
   return (
     <section className="landing">
+      {/* <div className='header-container'>
+        <section className="header">
+          <div className="header-left">
+            <img src={logo} alt="Logo" />
+            <h1>MealMates</h1>
+          </div>
+          <div className="header-right">
+            {infoUser()}
+          </div>
+        </section>
+        <div className='menu-mobile'>
+            <Header />
+        </div>
+      </div> */}
+      
+      {token && <Searchbar onSearch={handleSearch} />}
+      
       <section className="top">
         <h1>Et si on mangeait moins cher, plus respectueux de la planète ?</h1>
       </section>
@@ -82,30 +114,5 @@ function App() {
     </section>
   );
 }
-// function App() {
-//     return (
-//         <section className="landing">
-//             <section className="top">
-//                 <h1>Et si on mangait moins cher, plus respectueux de la planète?</h1>
-//             </section>
-//             <section className="inbetween">
-//                 <p>Luttez contre le gaspillage en achetant à d'autres particuliers, et proposez vos propres surplus alimentaires.</p>
-//             </section>
-//             <section className="bottom">
-//                 <div className="left">
-//                     <div className="circle"></div>
-//                     <img src={map} alt="Map" />
-//                 </div>
-//                 <div className="right">
-//                     <h1>Obtenez des offres locales, qui suivent vos offres alimentaires</h1>
-//                     <button>M'inscrire maintenant</button>
-//                     <div className="footer">
-//                         <p>© Mealmates 2025</p>
-//                     </div>
-//                 </div>
-//             </section>
-//         </section>
-//     );
-// }
 
 export default App;
