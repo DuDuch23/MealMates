@@ -44,24 +44,24 @@ function Connexion() {
   };
 
     return (
-        <div className={styles.container}>
-          <div className={styles["title-logo"]}>
-            <img src={logo} alt="logo" className={styles.logo} />
+        <div>
+          <div>
+            <img src={logo} alt="logo" />
             <h1>MealMates</h1>
           </div>
-          <div className={styles.action}>
-            {error && <p className={styles.error}>{error}</p>}
+          <div>
+            {error && <p>{error}</p>}
             <form onSubmit={handleSubmit}>
-              <div className={styles["content-element-form"]}>
+              <div>
                 <label htmlFor="email">Email</label>
                 <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail}/>
               </div>
-              <div className={styles["content-element-form"]}>
+              <div>
                 <label htmlFor="password">Mot de Passe</label>
                 <input type="password" name="password" placeholder="password" onChange={handlePassword} />
               </div>
               <button type="submit">Connexion</button>
-              <div className={styles.otherAction}>
+              <div>
                 <p>Ou connexion avec</p>
                 <GoogleLoginButton setUser={setUser} />
               </div>
