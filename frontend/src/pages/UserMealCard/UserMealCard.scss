@@ -10,19 +10,20 @@ p,li{
     background-color: #242424;
 }
 
+nav{
+    display: flex;
+    align-items: center;
+    a{
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+}
+
 .card-user{
     margin: 0 auto;
     width: 768px;
     height: 100vh;
-    nav{
-        display: flex;
-        align-items: center;
-        a{
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-    }
     .icon-user{
         margin: 0 auto;
     }
@@ -44,12 +45,20 @@ p,li{
     }
 }
 
-.basics-elements{
+.basics-elements.card{
     height: 40%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: space-around;
+    flex-direction: column;
+    .list-user{
+        height: 50%;
+        width: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        list-style: none;
+    }
     div{
         width: 45%;
         height: 30%;

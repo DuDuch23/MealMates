@@ -23,11 +23,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Groups(["public", "private"])]
     private ?int $id = null;
+    
     #[ORM\Column(length: 180)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(["public", "private"])]
     private array $roles = [];
 
     #[ORM\Column]
@@ -42,18 +44,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private Collection $preferences;
 
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rater', orphanRemoval: true)]
     private Collection $ratingsGiven;
 
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rated', orphanRemoval: true)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private Collection $ratingsReceived;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["public", "private"])]
     private ?string $location = null;
+
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private ?int $iconUser = null;
 
     /**
      * @var Collection<int, Offer>
@@ -298,6 +305,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getIconUser(): int
+    {
+        return $this->iconUser;
+    }
+
+    public function setIconUser(int $icon): void
+    {
+        $this->iconUser = $icon;
     }
 
     public function isVerified(): ?bool

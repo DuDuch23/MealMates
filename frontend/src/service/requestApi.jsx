@@ -1,47 +1,66 @@
+import { jwtDecode } from 'jwt-decode';
+import { useState } from 'react';
+import { useNavigate } from "react-router";
 
+// Mettre à jour le token depuis localStorage
+export async function refreshToken({token}) {
+    const infoToken = jwtDecode(token);
+    const now = Date.now() / 1000;
 
-/* User*/
-// login user
-export async function logIn({ email, password }) {
-    const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
-    };
-    const response = await fetch("https://127.0.0.1:8000/api/login", options);
-    const data = await response.json();
-    console.log("login response", data);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    return data;
+    if (infoToken.exp < now) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/connexion");
+    }
 }
 
-// recuperer un user
-export async function getUser({id}) {
-    try{
-        const request = await fetch (`https://127.0.0.1:8000/api/user/get`,{
+// login user
+export async function logIn({ email, password }) {
+    try {
+        const response = await fetch("https://127.0.0.1:8000/api/login", {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body:JSON.stringify({
-                "id": id,
-            })
+            body: JSON.stringify({
+                email: email,
+                password: password
+            }),
+            credentials: "include",
         });
 
         return await response.json();
+
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
 
-// creer un utilisateur
+// récupérer un user
+export async function getUser({ id,token }) {
+    try {
+        const request = await fetch("https://127.0.0.1:8000/api/user/get", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "id": id,
+            })
+        });
+
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        throw error;
+    }
+}
+
+// créer un utilisateur
 export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
     try {
-
         if (!email || !password || !confirmPassword || !firstName || !lastName) {
             throw new Error("All fields are required.");
         }
@@ -64,12 +83,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
             }),
         });
 
-        logIn(
-            {
-                email,
-                password
-            }
-        );
+        await logIn({ email, password });
 
     } catch (error) {
         console.error("Erreur API :", error);
@@ -77,44 +91,68 @@ export async function newUser({ email, password, confirmPassword, firstName, las
     }
 }
 
-// modifier un user
-export async function editUser({data}) {
-    try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/edit/",{
-            method: "GET",
-            headers: {Authorization: `Bearer ${token}`},
-            body : JSON.stringify({
-                "email" : data[email],
-                "password" : data[password],
-                "password_confirm" : data[password],
-                "firstName" : data[firstName],
-                "lastName" : data[lastName],   
+// modifier un utilisateur
+export async function editUser({userId, idIcon, email, password, confirmPassword, firstName, lastName}){
+    try {
+        const request = await fetch("https://127.0.0.1:8000/api/user/edit/", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "id" : id,
+                "idIcon" : idIcon,
+                "email": email,
+                "password": password,
+                "password_confirm":confirmPassword,
+                "firstName":firstName,
+                "lastName": lastName,
             }),
         });
-        
-        return await request.json();
 
-    }catch(error){
-        console.error("erreur api :", error);
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }
 
-// supprimer un user
+// supprimer un utilisateur
 export async function deleteUser(id) {
-    try{
-        const request = await fetch ("https://127.0.0.1:8000/api/user/delete/",{
-            method: "GET",
-            headers: {Authorization: `Bearer ${token}`},
-            body : JSON.stringify({ 
-                "id":id 
+    try {
+        const request = await fetch("https://127.0.0.1:8000/api/user/delete/", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+                "id": id
             }),
         });
-        
-        return await request.json();
 
-    }catch(error){
-        console.error("erreur api :", error);
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        throw error;
+    }
+}
+
+// profil utilisateur
+export async function getProfile({ email,token }) {
+    try {
+        const request = await fetch("https://localhost:8000/api/user/profile", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "email": email,
+            }),
+        });
+
+        return await request.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         throw error;
     }
 }
@@ -127,12 +165,12 @@ export async function getOffers() {
             accept: 'application/json',
         }
     };
-  
+
     return fetch('https://127.0.0.1:8000/api/offers', options)
         .then((response) => response.json())
         .catch((err) => {
             console.error(err);
-            return  {result : []};
+            return { result: [] };
         });
 }
 

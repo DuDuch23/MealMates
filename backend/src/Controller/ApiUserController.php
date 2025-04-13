@@ -3,14 +3,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Enum\PreferenceEnum;
+use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
@@ -51,7 +53,6 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist "
             ], 404);
         }
-        $currentUser = $this->getUser();
         $scope = ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
         $data = json_decode($serializer->serialize($user, 'json', ['groups' =>[ $scope]]), true);
         return new JsonResponse([
@@ -61,6 +62,38 @@ class ApiUserController extends AbstractController
         ], 200);
     }
 
+    #[Route('/profile', methods: ['POST'])]
+    public function profile(Request $request, EntityManagerInterface $entityManager, NormalizerInterface $normalizer): JsonResponse
+    {
+        // Récupérer les données JSON envoyées avec la requête POST
+        $data = json_decode($request->getContent(), true);
+    
+        // Déterminer le scope en fonction de l'email
+        $scope = isset($data["email"]) ? "public" : "private";
+    
+        // Chercher un utilisateur par email
+        $user = $entityManager->getRepository(User::class)->findOneBy(["email" => $data["email"]]);
+    
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            return new JsonResponse([
+                'status' => "Unauthorized",
+                'code' => 401,
+                'message' => "User not authenticated",
+            ], 401);
+        }
+    
+        // Normaliser l'objet User pour le convertir en tableau
+        $userData = $normalizer->normalize($user, null, ['attributes' => ['id', 'email', 'firstName', 'lastName', 'location','iconUser']]); // Spécifie les attributs à inclure dans la réponse
+    
+        // Retourner une réponse avec les données utilisateur
+        return new JsonResponse([
+            'status' => "OK",
+            'code' => 200,
+            'user' => $userData,
+            'scope' => $scope,
+        ], 200);
+    }
 
     #[Route('/new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
