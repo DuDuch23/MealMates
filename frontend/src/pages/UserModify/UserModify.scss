@@ -9,6 +9,53 @@ p,li{
 #root{
     background-color: #242424;
 }
+nav{
+    display: flex;
+    align-items: center;
+    a{
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+}
+form{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    input{
+        border: none;
+        outline: none;
+        border-radius: 5px;
+        height: 5vh;
+        color: black;
+    }
+    div{
+        width: 70%;
+        input{
+            width: 90%;
+        }
+    }
+    .name-select{
+        width: 90%;
+        display: flex;
+        justify-content: space-around;
+        input{
+            width: 45%;
+        }
+    }
+}
+
+.user-face{
+    width: fit-content;
+    height: 29%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
 
 .card-user{
     margin: 0 auto;
@@ -17,13 +64,10 @@ p,li{
     nav{
         display: flex;
         align-items: center;
-        a{
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
     }
-    .icon-user{
+    #icon-user{
+        width: 95%;
+        height: 100%;
         margin: 0 auto;
     }
 }

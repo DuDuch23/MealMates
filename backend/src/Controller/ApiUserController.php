@@ -84,7 +84,7 @@ class ApiUserController extends AbstractController
         }
     
         // Normaliser l'objet User pour le convertir en tableau
-        $userData = $normalizer->normalize($user, null, ['attributes' => ['id', 'email', 'firstName', 'lastName', 'location']]); // Spécifie les attributs à inclure dans la réponse
+        $userData = $normalizer->normalize($user, null, ['attributes' => ['id', 'email', 'firstName', 'lastName', 'location','iconUser']]); // Spécifie les attributs à inclure dans la réponse
     
         // Retourner une réponse avec les données utilisateur
         return new JsonResponse([

@@ -58,6 +58,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["public", "private"])]
     private ?string $location = null;
 
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private ?int $iconUser = null;
+
     /**
      * @var Collection<int, Offer>
      */
@@ -301,6 +305,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getIconUser(): int
+    {
+        return $this->iconUser;
+    }
+
+    public function setIconUser(int $icon): void
+    {
+        $this->iconUser = $icon;
     }
 
     public function isVerified(): ?bool
