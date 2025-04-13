@@ -5,6 +5,8 @@ import logo from '../../assets/logo-mealmates.png';
 import map from '../../assets/landing-map.png';
 import { Link } from 'react-router';
 import Header from '../../components/Header/Header';
+import Searchbar from '../../components/Searchbar/Searchbar';
+import { searchOfferByTitle } from '../../service/requestApi';
 
 
 function App() {
@@ -44,6 +46,39 @@ function App() {
         }
     }, [token]);
 
+    const handleSearch = async (query) => {
+        try {
+            const results = await searchOfferByTitle(query);
+            console.log("Résultats de recherche :", results);
+        } catch (error) {
+            console.error("Erreur de recherche :", error);
+        }
+    };
+
+    const [userLocation, setUserLocation] = useState(null);
+    const getUserLocation = () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setUserLocation({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+            });
+            const { latitude, longitude } = position.coords;
+            setUserLocation({
+                latitude: latitude,
+                longitude: longitude,
+            });
+            getUserLocation();
+            console.log("User location:", userLocation);
+            console.log("Latitude:", latitude);
+            console.log("Longitude:", longitude);
+            console.log("Token:", token);
+            console.log("User:", user);
+            console.log("State user:", stateUser);
+        });
+    }
+
+
     return (
         <section className="landing">
             <div className='header-container'>
@@ -60,6 +95,8 @@ function App() {
                     <Header />
                 </div>
             </div>
+            {token && <Searchbar  onSearch={handleSearch} />}
+            <button onClick={getUserLocation}>Get User Location</button>
 
             <section className="top">
                 <h1>Et si on mangait moins cher, plus respectueux de la planète?</h1>
