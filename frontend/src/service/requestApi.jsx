@@ -61,8 +61,6 @@ export async function getUser({ id,token }) {
 // créer un utilisateur
 export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
     try {
-        console.log({ email, password, confirmPassword, firstName, lastName });
-
         if (!email || !password || !confirmPassword || !firstName || !lastName) {
             throw new Error("All fields are required.");
         }
@@ -94,20 +92,22 @@ export async function newUser({ email, password, confirmPassword, firstName, las
 }
 
 // modifier un utilisateur
-export async function editUser({ data }) {
+export async function editUser({userId, idIcon, email, password, confirmPassword, firstName, lastName}){
     try {
         const request = await fetch("https://127.0.0.1:8000/api/user/edit/", {
-            method: "POST",  // Remplace GET par POST
+            method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                "email": data.email,
-                "password": data.password,
-                "password_confirm": data.password_confirm,
-                "firstName": data.firstName,
-                "lastName": data.lastName,
+                "id" : id,
+                "idIcon" : idIcon,
+                "email": email,
+                "password": password,
+                "password_confirm":confirmPassword,
+                "firstName":firstName,
+                "lastName": lastName,
             }),
         });
 
