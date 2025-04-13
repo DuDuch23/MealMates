@@ -90,7 +90,7 @@ function App() {
       </section>
     </section>
   );
-
+}
 // function App() {
 //     return (
 //         <section className="landing">
