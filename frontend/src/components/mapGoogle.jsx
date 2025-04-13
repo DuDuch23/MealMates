@@ -32,7 +32,7 @@ const UserLocationMap = ({ zoom = 13 }) => {
   return (
     <div style={{ height: '100%', width: '100%', position: 'relative', zIndex: 1000 }}>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP }}
+        bootstrapURLKeys={{ key: import.meta.env.VITE_GOOGLE_MAP }}
         defaultCenter={location}
         defaultZoom={zoom}
       >
