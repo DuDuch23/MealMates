@@ -26,7 +26,6 @@ export async function logIn({ email, password }) {
                 email: email,
                 password: password
             }),
-            credentials: "include",
         });
 
         return await response.json();
@@ -92,23 +91,28 @@ export async function newUser({ email, password, confirmPassword, firstName, las
 }
 
 // modifier un utilisateur
-export async function editUser({userId, idIcon, email, password, confirmPassword, firstName, lastName}){
+export async function editUser({ userData, token }) {
     try {
-        const request = await fetch("https://127.0.0.1:8000/api/user/edit/", {
-            method: "POST",
+        const body = {
+            id: userData.userId,
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            iconUser: userData.idIcon,
+        };
+
+        if (userData.password) {
+            body.password = userData.password;
+            body.password_confirm = userData.confirmPassword;
+        }
+
+        const request = await fetch("https://127.0.0.1:8000/api/user/edit", {
+            method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                "id" : id,
-                "idIcon" : idIcon,
-                "email": email,
-                "password": password,
-                "password_confirm":confirmPassword,
-                "firstName":firstName,
-                "lastName": lastName,
-            }),
+            body: JSON.stringify(body),
         });
 
         return await request.json();

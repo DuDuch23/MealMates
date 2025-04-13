@@ -3,20 +3,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Enum\PreferenceEnum;
-use Doctrine\ORM\EntityManager;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -31,7 +23,7 @@ class ApiUserController extends AbstractController
         $this->hasher = $hasher;
     }
     
-    #[Route('/api/login', methods: ['POST'])]
+    #[Route('/get', methods: ['POST'])]
     public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -230,6 +222,8 @@ class ApiUserController extends AbstractController
         if (isset($data['firstName'])) $user->setFirstName($data['firstName']);
         if (isset($data['lastName'])) $user->setLastName($data['lastName']);
         if (isset($data['role'])) $user->setRoles([$data['role']]);
+        if (isset($data['adress'])) $user->setAdress($data['adress']);
+        if (isset($data['iconUser'])) $user->setIconUser($data['iconUser']);
         if (isset($data['preferences'])) $user->setPreferences(array_filter(array_map(fn($p) => PreferenceEnum::tryFrom($p), $data['preferences'] ?? [])));
 
         $entityManager->persist($user);

@@ -58,6 +58,13 @@ ul{
     }
 }
 
+.button-log-in{
+    background-color: variables.$colorWhite;
+    a{
+        color: variables.$colorDarkGreen;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .header{
         div{
