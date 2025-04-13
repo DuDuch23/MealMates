@@ -1,0 +1,13 @@
+// Centrage Flex
+@mixin flex-center($justify: center, $align: center) {
+    display: flex;
+    align-items: $align;
+    justify-content: $justify;
+}
+
+// Responsive container
+@mixin responsive-container($max-width: 768px) {
+  width: 100%;
+  max-width: $max-width;
+  margin: 0 auto;
+}
