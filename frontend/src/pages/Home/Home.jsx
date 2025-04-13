@@ -1,7 +1,7 @@
 import './Home.css';
 import { useState, useEffect } from 'react';
 import map from '../../assets/landing-map.png';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { getProfile, refreshToken } from '../../service/requestApi';
 import logo from '../../assets/logo-mealmates.png';
 import UserLocationMap from '../../components/mapGoogle';
