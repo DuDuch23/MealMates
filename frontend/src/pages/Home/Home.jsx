@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import map from '../../assets/landing-map.png';
 import { Link } from 'react-router';
 import Header from '../../components/Header/Header';
-import Searchbar from '../../components/Searchbar/Searchbar';
+import Searchbar from '../../components/SearchBar/SearchBar';
 import { searchOfferByTitle, getProfile, refreshToken, getVeganOffers } from '../../service/requestApi';
 import logo from '../../assets/logo-mealmates.png';
 import UserLocationMap from '../../components/mapGoogle';
