@@ -15,8 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/api/offers', name: 'api_offer')]
 class ApiOfferController extends AbstractController
 {
-    #[Route('', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request): JsonResponse
+    #[Route('/', methods: ['GET'])]
+    public function getAllOffer(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request): JsonResponse
     {
         $offers = $entityManager->getRepository(Offer::class)->findAll();
 
