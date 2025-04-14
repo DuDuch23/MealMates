@@ -42,17 +42,24 @@ function UserModify() {
       setIdIcon(id);
     };
 
-    const handleEdit = async(event)=>{
+    const handleEdit = async (event) => {
       event.preventDefault();
-      const userData = {userId,idIcon,email,firstName,lastName,city,address,option,};
-      try{
-        await editUser(userData)
-      }catch (error) {
-        console.error("Erreur lors de la modification de l'utilisateur :", error);
-        alert("Erreur lors de la modification !");
-      }
-    };
+      const token = localStorage.getItem("token");
 
+      const userData = {
+        userId,
+        idIcon,
+        email,
+        firstName,
+        lastName,
+        city,
+        address,
+        option,
+      };
+
+      await editUser({userData,token});
+    };
+    
 
     
 
