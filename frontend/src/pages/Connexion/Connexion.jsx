@@ -4,7 +4,7 @@ import { logIn } from "../../service/requestApi";
 import logo from '../../assets/logo-mealmates.png';
 
 import GoogleLoginButton from "../../components/SsoGoogle";
-import "./Connexion.css";
+import styles from "./Connexion.module.scss";
 
 function Connexion() {
     const [email, setEmail] = useState("");
