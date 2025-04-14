@@ -148,6 +148,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $offer->setIsDonation($faker->boolean(20)); // 20% de dons
             $offer->setPickupLocation($faker->randomElement($locations));
             $offer->setIsRecurring($faker->boolean(30)); // 30% de chances
+            $offer->setIsVegan($faker->boolean(30));
 
             // Création de 1 à 3 créneaux horaires
             $slots = [];

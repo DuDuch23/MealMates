@@ -170,7 +170,27 @@ export async function getOffers() {
         .then((response) => response.json())
         .catch((err) => {
             console.error(err);
-            return { result: [] };
+            return {
+                result: []
+            };
+        });
+}
+
+export async function getVeganOffers() {
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+        }
+    };
+
+    return fetch('https://127.0.0.1:8000/api/offers/vegan?limit=10&offset=0', options)
+        .then((response) => response.json())
+        .catch((err) => {
+            console.error(err);
+            return {
+                result: []
+            };
         });
 }
 

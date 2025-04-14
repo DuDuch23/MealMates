@@ -75,6 +75,10 @@ class Offer
     #[Groups(["private", "public"])] // Exposé uniquement dans le groupe "private"
     private bool $isRecurring = false;
 
+    #[ORM\Column(type: "boolean")]
+    #[Groups(["private", "public"])]
+    private bool $isVegan = false;
+
     #[ORM\Column(type: "datetime")]
     #[Groups(["private", "public"])] // Exposé uniquement dans le groupe "private"
     private \DateTimeInterface $createdAt;
@@ -173,6 +177,15 @@ class Offer
 
     public function getIsRecurring(): bool { return $this->isRecurring; }
     public function setIsRecurring(bool $isRecurring): static { $this->isRecurring = $isRecurring; return $this; }
+    public function getIsVegan(): bool {
+        return $this->isVegan;
+    }
+
+    public function setIsVegan(bool $isVegan): static
+    {
+        $this->isVegan = $isVegan;
+        return $this;
+    }
 
     public function getCreatedAt(): \DateTimeInterface { return $this->createdAt; }
 
