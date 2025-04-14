@@ -174,7 +174,27 @@ export async function getOffers() {
         .then((response) => response.json())
         .catch((err) => {
             console.error(err);
-            return { result: [] };
+            return {
+                result: []
+            };
+        });
+}
+
+export async function getVeganOffers() {
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+        }
+    };
+
+    return fetch('https://127.0.0.1:8000/api/offers/vegan?limit=10&offset=0', options)
+        .then((response) => response.json())
+        .catch((err) => {
+            console.error(err);
+            return {
+                result: []
+            };
         });
 }
 
@@ -194,4 +214,17 @@ export async function logOut() {
 
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+}
+
+export async function searchOfferByTitle(title) {
+    const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keyword: title }),
+        credentials: "include",
+    };
+    const response = await fetch("https://127.0.0.1:8000/api/offers/search", options);
+    const data = await response.json();
+    console.log("search response", data);
+    return data;
 }

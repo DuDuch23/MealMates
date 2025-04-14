@@ -1,0 +1,50 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss' as mixins;
+@use "../../styles/variables.scss" as variables;
+
+
+body {
+  
+  .container {
+    @include mixins.responsive-container(768px);
+    min-height: 87.5vh;
+    border: 1px solid variables.$colorError;
+  
+    ul {
+      list-style: none;
+    }
+  }
+  
+  .container-pre-offer {
+    @include mixins.flex-center(space-around);
+    margin-bottom: 1rem;
+  
+    li {
+      height: 12vh;
+      @include mixins.flex-center(space-around);
+      flex-direction: column;
+  
+      img {
+        height: 50%;
+      }
+    }
+  }
+  
+  .container-offer {
+    @include mixins.flex-center(space-around);
+    height: fit-content;
+  
+    li {
+      border: 1px solid variables.$colorPowerBlue;
+      color: variables.$colorPowerBlue;
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+  }
+  
+  .container-section {
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+}

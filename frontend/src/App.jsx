@@ -10,14 +10,17 @@ const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
 const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'));
 const UserModify = React.lazy(() => import('./pages/UserModify/UserModify'));
 const Deconnexion = React.lazy(() => import('./pages/Deconnexion/Deconnexion'));
+const Offer = React.lazy(()=> import('./pages/Offer/Offer'));
 
 function App() {
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
       <Routes>
-      <Route path="/" element={<NavLayout />}>
-          {/* Définissez ici toutes les routes qui doivent être rendues à l'intérieur de NavLayout */}
+        <Route path="/" element={<NavLayout />}>
           <Route index element={<Home />} />
+        </Route>
+        <Route path='/offer' element={<NavLayout/>}>
+          <Route index element={<Offer />} />
         </Route>
         <Route path="userProfile/:id" element={<UserProfile />} />
         <Route path="userMealCard/:id" element={<UserMealCard />} />
