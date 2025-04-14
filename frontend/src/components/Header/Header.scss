@@ -9,6 +9,31 @@
     background-color: black;
 
     border-bottom: 2px solid variables.$colorDarkGreen;
+
+    ul{
+        width: 20%;
+        display: flex;
+        list-style: none;
+        li{
+            border-radius: 5px;
+            width: 50%;
+            background: variables.$colorDarkGreen;
+            border: 1px solid green;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        a{
+            text-decoration: none;
+        }
+    }
+    
+    .button-log-in{
+        background-color: variables.$colorWhite;
+        a{
+            color: variables.$colorDarkGreen;
+        }
+    }
     
     div {
         display: flex;
@@ -37,24 +62,6 @@
         width: 30%;
         display: flex;
         justify-content: space-around;
-    }
-}
-
-ul{
-    width: 20%;
-    display: flex;
-    list-style: none;
-    li{
-        border-radius: 5px;
-        width: 50%;
-        background: variables.$colorDarkGreen;
-        border: 1px solid green;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    a{
-        text-decoration: none;
     }
 }
 

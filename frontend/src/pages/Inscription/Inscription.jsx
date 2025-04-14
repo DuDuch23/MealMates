@@ -91,7 +91,7 @@ function Inscription(){
                         <button type="submit">Inscription</button>
                     </form>
                     <li className='button-log-in' key="connexion"><Link to="/connexion">Déjà un compte ? Connectez vous</Link></li>
-                    {/* <div className="otherAction">
+                    <div className="otherAction">
                         <div className="fill">
                         <p> Ou connexion avec </p>
                         <ul>
@@ -192,7 +192,7 @@ function Inscription(){
                             </li>
                         </ul>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </>

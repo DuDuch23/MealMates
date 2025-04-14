@@ -62,6 +62,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["public","private"])]
     private ?int $iconUser = null;
 
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private ?string $adress = null;
+
     /**
      * @var Collection<int, Offer>
      */
@@ -121,6 +125,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
+    }
+
+    public function getAdress(): string
+    {
+        return $this->adress;
+    }
+
+    public function setAdress(string $adress): void
+    {
+        $this->adress = $adress;
     }
 
     /**
