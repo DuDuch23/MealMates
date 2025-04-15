@@ -70,7 +70,7 @@ function UserMealCard() {
         }
     };
 
-    const userIcon = () => user.data.iconUser;
+    const userIcon = () => user.data.iconUser; 
 
     return (
     <>

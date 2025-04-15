@@ -61,9 +61,6 @@ function UserModify() {
     };
 
     const userIcon = () => user.data.iconUser;
-    
-
-    
 
     return (
         <>
