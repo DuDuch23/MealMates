@@ -12,7 +12,7 @@ function UserProfile() {
 
     // récupère l'id depuis l'URL
     const params = useParams();
-    const userId = params.id;
+    const userId = parseInt(params.id);
 
     // récupère le token dans le localStorage
     const token = localStorage.getItem("token");
@@ -72,7 +72,7 @@ function UserProfile() {
                     <h2>MealMates</h2>
                 </Link>
             </nav>
-            <IconUser id={1}/>
+            <IconUser id={user.data.iconUser}/>
             <div className="content-user">
                 <div className="container-link">
                     <Link to={`/userProfile/${userId}`}>Mes informations</Link>

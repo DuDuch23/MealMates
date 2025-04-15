@@ -148,7 +148,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             'expirationDate' => '2024-04-18',
             'price' => 2.50,
             'isDonation' => false,
-            'photos_offer' => ['jus.jpg', 'jus2.jpg', 'jus3.jpg','jus4.png'],
+            'photos_offer' => ['jus.jpg', 'jus2.jpg', 'jus3.jpg','jus4.jpg'],
             'pickupLocation' => '5 Rue de la Fontaine, Juicecity',
             'availableSlots' => ['2024-04-16 16:00:00', '2024-04-17 10:00:00'],
             'isRecurring' => false,
