@@ -1,6 +1,4 @@
 import { jwtDecode } from 'jwt-decode';
-import { useState } from 'react';
-import { useNavigate } from "react-router";
 
 // Mettre à jour le token depuis localStorage
 export async function refreshToken({token}) {
@@ -17,7 +15,7 @@ export async function refreshToken({token}) {
 // login user
 export async function logIn({ email, password }) {
     try {
-        const response = await fetch("https://127.0.0.1:8000/api/login", {
+        const response = await fetch(`https://groupe-5.lycee-stvincent.net/api/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,6 +26,7 @@ export async function logIn({ email, password }) {
             }),
         });
 
+        console.log(response.json);
         return await response.json();
 
     } catch (error) {
@@ -39,7 +38,7 @@ export async function logIn({ email, password }) {
 // récupérer un user
 export async function getUser({ id,token }) {
     try {
-        const request = await fetch("https://127.0.0.1:8000/api/user/get", {
+        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/get", {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -68,7 +67,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
             throw new Error("Passwords do not match.");
         }
 
-        const request = await fetch("https://localhost:8000/api/user/new", {
+        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/new", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -106,7 +105,7 @@ export async function editUser({ userData, token }) {
             body.password_confirm = userData.confirmPassword;
         }
 
-        const request = await fetch("https://127.0.0.1:8000/api/user/edit", {
+        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/edit", {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -125,7 +124,7 @@ export async function editUser({ userData, token }) {
 // supprimer un utilisateur
 export async function deleteUser(id) {
     try {
-        const request = await fetch("https://127.0.0.1:8000/api/user/delete/", {
+        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/delete/", {
             method: "POST",
             headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -143,7 +142,7 @@ export async function deleteUser(id) {
 // profil utilisateur
 export async function getProfile({ email,token }) {
     try {
-        const request = await fetch("https://localhost:8000/api/user/profile", {
+        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/profile", {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -170,7 +169,7 @@ export async function getOffers() {
         }
     };
 
-    return fetch('https://127.0.0.1:8000/api/offers', options)
+    return fetch('https://groupe-5.lycee-stvincent.net/api/offers', options)
         .then((response) => response.json())
         .catch((err) => {
             console.error(err);
@@ -188,7 +187,7 @@ export async function getVeganOffers() {
         }
     };
 
-    return fetch('https://127.0.0.1:8000/api/offers/vegan?limit=10&offset=0', options)
+    return fetch('https://groupe-5.lycee-stvincent.net/api/offers/vegan?limit=10&offset=0', options)
         .then((response) => response.json())
         .catch((err) => {
             console.error(err);
@@ -200,7 +199,7 @@ export async function getVeganOffers() {
 
 export async function logOut() {
     try {
-        const response = await fetch("https://127.0.0.1:8000/api/logout", {
+        const response = await fetch("https://groupe-5.lycee-stvincent.net/api/logout", {
             method: "GET",
             credentials: "include", 
         });
@@ -223,7 +222,7 @@ export async function searchOfferByTitle(title) {
         body: JSON.stringify({ keyword: title }),
         credentials: "include",
     };
-    const response = await fetch("https://127.0.0.1:8000/api/offers/search", options);
+    const response = await fetch("https://groupe-5.lycee-stvincent.net/api/offers/search", options);
     const data = await response.json();
     console.log("search response", data);
     return data;
