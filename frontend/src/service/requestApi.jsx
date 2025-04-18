@@ -1,4 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from "react-router";
+import API_BASE_URL from "/src/service/api";
+
 
 // Mettre à jour le token depuis localStorage
 export async function refreshToken({token}) {
@@ -12,10 +15,9 @@ export async function refreshToken({token}) {
     }
 }
 
-// login user
 export async function logIn({ email, password }) {
     try {
-        const response = await fetch(`https://groupe-5.lycee-stvincent.net/api/login`, {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,17 +30,15 @@ export async function logIn({ email, password }) {
 
         console.log(response.json);
         return await response.json();
-
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
 
-// récupérer un user
-export async function getUser({ id,token }) {
+export async function getUser({ id, token }) {
     try {
-        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/get", {
+        const response = await fetch(`${API_BASE_URL}/api/user/get`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -49,14 +49,13 @@ export async function getUser({ id,token }) {
             })
         });
 
-        return await request.json();
+        return await response.json();
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
 
-// créer un utilisateur
 export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
     try {
         if (!email || !password || !confirmPassword || !firstName || !lastName) {
@@ -67,7 +66,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
             throw new Error("Passwords do not match.");
         }
 
-        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/new", {
+        await fetch(`${API_BASE_URL}/api/user/new`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -89,7 +88,6 @@ export async function newUser({ email, password, confirmPassword, firstName, las
     }
 }
 
-// modifier un utilisateur
 export async function editUser({ userData, token }) {
     try {
         const body = {
@@ -105,7 +103,7 @@ export async function editUser({ userData, token }) {
             body.password_confirm = userData.confirmPassword;
         }
 
-        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/edit", {
+        const response = await fetch(`${API_BASE_URL}/api/user/edit`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -114,35 +112,36 @@ export async function editUser({ userData, token }) {
             body: JSON.stringify(body),
         });
 
-        return await request.json();
+        return await response.json();
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
 
-// supprimer un utilisateur
-export async function deleteUser(id) {
+export async function deleteUser(id, token) {
     try {
-        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/delete/", {
+        const response = await fetch(`${API_BASE_URL}/api/user/delete/`, {
             method: "POST",
-            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
                 "id": id
             }),
         });
 
-        return await request.json();
+        return await response.json();
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
 
-// profil utilisateur
-export async function getProfile({ email,token }) {
+export async function getProfile({ email, token }) {
     try {
-        const request = await fetch("https://groupe-5.lycee-stvincent.net/api/user/profile", {
+        const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -153,55 +152,46 @@ export async function getProfile({ email,token }) {
             }),
         });
 
-        return await request.json();
+        return await response.json();
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
 
-// Offres
 export async function getOffers() {
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-        }
-    };
-
-    return fetch('https://groupe-5.lycee-stvincent.net/api/offers', options)
-        .then((response) => response.json())
-        .catch((err) => {
-            console.error(err);
-            return {
-                result: []
-            };
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
         });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
 }
 
 export async function getVeganOffers() {
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-        }
-    };
-
-    return fetch('https://groupe-5.lycee-stvincent.net/api/offers/vegan?limit=10&offset=0', options)
-        .then((response) => response.json())
-        .catch((err) => {
-            console.error(err);
-            return {
-                result: []
-            };
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/vegan?limit=10&offset=0`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
         });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
 }
 
 export async function logOut() {
     try {
-        const response = await fetch("https://groupe-5.lycee-stvincent.net/api/logout", {
+        const response = await fetch(`${API_BASE_URL}/api/logout`, {
             method: "GET",
-            credentials: "include", 
+            credentials: "include",
         });
 
         if (response.ok) {
@@ -216,14 +206,17 @@ export async function logOut() {
 }
 
 export async function searchOfferByTitle(title) {
-    const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword: title }),
-        credentials: "include",
-    };
-    const response = await fetch("https://groupe-5.lycee-stvincent.net/api/offers/search", options);
-    const data = await response.json();
-    console.log("search response", data);
-    return data;
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/search`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ keyword: title }),
+            credentials: "include",
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
+    }
 }
