@@ -1,16 +1,33 @@
+# nelmio_cors:
+#     defaults:
+#         allow_origin: ['^https?://localhost(:[0-9]+)?$', '^https://groupe-5\.lycee-stvincent\.net$']
+#         allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+#         allow_headers: ['Content-Type', 'Authorization', 'X-Requested-With']
+#         expose_headers: ['Link']
+#         max_age: 3600
+#         allow_credentials: true
+#     paths:
+#         '^/api/':
+#             allow_origin: ['^https?://localhost(:[0-9]+)?$', '^https://groupe-5\.lycee-stvincent\.net$']
+#             allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+#             allow_headers: ['Content-Type', 'Authorization', 'X-Requested-With']
+#             expose_headers: ['Link']
+#             max_age: 3600
+#             allow_credentials: true
+
 nelmio_cors:
     defaults:
-        allow_credentials: true
-        allow_origin: ['https://groupe-5.lycee-stvincent.net']
+        allow_origin: ['*']
         allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-        allow_headers: ['Content-Type', 'Authorization']
+        allow_headers: ['*']
         expose_headers: ['Link']
         max_age: 3600
+        allow_credentials: true
     paths:
         '^/api/':
-            allow_origin: ['https://groupe-5.lycee-stvincent.net']
-            allow_credentials: true
+            allow_origin: ['*']
             allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-            allow_headers: ['Content-Type', 'Authorization']
+            allow_headers: ['*']
             expose_headers: ['Link']
             max_age: 3600
+            allow_credentials: true
