@@ -28,6 +28,7 @@ export async function logIn({ email, password }) {
             }),
         });
 
+        console.log(response.json);
         return await response.json();
     } catch (error) {
         console.error("Erreur API :", error);
