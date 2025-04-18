@@ -203,7 +203,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->preferences;
     }
 
-    public function addPreferences(Category $preferences): static
+    public function addPreferences(Category $preferences): self
     {
         if (!$this->preferences->contains($preferences)) {
             $this->preferences[] = $preferences;

@@ -12,7 +12,7 @@ function UserProfile() {
 
     // récupère l'id depuis l'URL
     const params = useParams();
-    const userId = params.id;
+    const userId = parseInt(params.id);
 
     // récupère le token dans le localStorage
     const token = localStorage.getItem("token");
@@ -32,6 +32,8 @@ function UserProfile() {
         fetchUserData();
     }, [userId]);
 
+    const userIcon = () => user.data.iconUser;
+
     const infoUser = () => {
         if (user && user.data) {
             return (
@@ -45,6 +47,7 @@ function UserProfile() {
             return <p>Chargement des informations...</p>;
         }
     };
+
     
     const userPreference = () => {
         if (user && user.data.preferences) {
@@ -72,7 +75,7 @@ function UserProfile() {
                     <h2>MealMates</h2>
                 </Link>
             </nav>
-            <IconUser id={1}/>
+            <IconUser id={userIcon()}/>
             <div className="content-user">
                 <div className="container-link">
                     <Link to={`/userProfile/${userId}`}>Mes informations</Link>

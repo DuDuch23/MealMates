@@ -59,9 +59,8 @@ function UserModify() {
 
       await editUser({userData,token});
     };
-    
 
-    
+    const userIcon = () => user.data.iconUser;
 
     return (
         <>
@@ -74,7 +73,7 @@ function UserModify() {
             </nav>
       
             <div className="user-face">
-              <IconUser id={idIcon} />
+            <IconUser id={userIcon()}/>
               <ChooseYourIcon onValueChange={handleIconChange}/>
             </div>
       

@@ -70,6 +70,8 @@ function UserMealCard() {
         }
     };
 
+    const userIcon = () => user.data.iconUser; 
+
     return (
     <>
         <div className="card-user">
@@ -79,7 +81,7 @@ function UserMealCard() {
                     <h2>MealMates</h2>
                 </Link>
             </nav>
-            <IconUser id={1}/>
+            <IconUser id={userIcon()}/>
             <div className="content-user">
                 <div className="container-link">
                     <Link to={`/userProfile/${userId}`}>Mes informations</Link>
