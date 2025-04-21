@@ -17,7 +17,6 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
     public $publicPath;
-
     public function __construct(KernelInterface $kernel)
     {
         $this->publicPath = $kernel->getProjectDir();
