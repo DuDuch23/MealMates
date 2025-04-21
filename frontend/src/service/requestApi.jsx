@@ -162,7 +162,7 @@ export async function getProfile({ email, token }) {
 
 export async function getOffers() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/offers`, {
+        const response = await fetch(`${API_BASE_URL}/api/offers/get`, {
             method: 'GET',
             headers: { accept: 'application/json' },
         });
