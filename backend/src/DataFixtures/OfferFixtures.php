@@ -17,97 +17,11 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
     public $publicPath;
-    public const OFFERS = [
-        [
-            'product' => 'Laptop',
-            'description' => 'A powerful laptop for gaming and work.',
-            'quantity' => 5,
-            'expirationDate' => '2024-12-31',
-            'price' => 5.99,
-            'isDonation' => false,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '123 Main St, Cityville',
-            'availableSlots' => ['2024-01-01 10:00:00', '2024-01-02 14:00:00'],
-            'isRecurring' => true,
-            'user' => 'user@example.com'
-        ],
-        [
-            'product' => 'Smartphone',
-            'description' => 'Latest model smartphone with all features.',
-            'quantity' => 10,
-            'expirationDate' => '2024-11-30',
-            'price' => 799.99,
-            'isDonation' => false,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '456 Elm St, Townsville',
-            'availableSlots' => ['2024-01-03 11:00:00', '2024-01-04 15:00:00'],
-            'isRecurring' => false,
-            'user' => 'user@example.com'
-        ],
-        [
-            'product' => 'Headphones',
-            'description' => 'Noise-cancelling headphones for immersive sound.',
-            'quantity' => 20,
-            'expirationDate' => '2024-10-31',
-            'price' => 199.99,
-            'isDonation' => true,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '789 Oak St, Villageville',
-            'availableSlots' => ['2024-01-05 12:00:00', '2024-01-06 16:00:00'],
-            'isRecurring' => false,
-             'user' => 'user@example.com'
-        ],
-        [
-            'product' => 'Camera',
-            'description' => 'High-resolution camera for photography enthusiasts.',
-            'quantity' => 3,
-            'expirationDate' => '2024-09-30',
-            'price' => 499.99,
-            'isDonation' => false,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '321 Pine St, Hamletville',
-            'availableSlots' => ['2024-01-07 13:00:00', '2024-01-08 17:00:00'],
-            'isRecurring' => true,
-             'user' => 'user@example.com'
-        ],
-        [
-            'product' => 'Smartwatch',
-            'description' => 'Smartwatch with fitness tracking features.',
-            'quantity' => 15,
-            'expirationDate' => '2024-08-31',
-            'price' => 299.99,
-            'isDonation' => false,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '654 Maple St, Boroughville',
-            'availableSlots' => ['2024-01-09 14:00:00', '2024-01-10 18:00:00'],
-            'isRecurring' => false,
-             'user' => 'user@example.com'
-        ],
-    ];
     public function __construct(KernelInterface $kernel)
     {
         $this->publicPath = $kernel->getProjectDir();
     }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
@@ -157,13 +71,26 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             }
             $offer->setAvailableSlots($slots);
 
-            // Simuler des fichiers existants (même images réutilisées pour l'instant)
-            $photos = new ArrayCollection();
-            foreach (['repas.jpg', 'repas2.jpg', 'repas3.jpg'] as $img) {
-                $photoPath = $this->publicPath.'/public/uploads/offers-photos/' . $img;
-                $photos[] = new File($photoPath);
+            $photosDirectory = $this->publicPath . '/public/uploads/offers-photos';
+
+            // Récupère tous les fichiers d'images (jpg, png, etc.)
+            $availablePhotos = glob($photosDirectory . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE);
+
+            // Si on trouve des images valides
+            if (!empty($availablePhotos)) {
+                $photos = new ArrayCollection();
+
+                // Sélection aléatoire de 1 à 3 images
+                $selectedPhotos = $faker->randomElements($availablePhotos, rand(1, 3));
+
+                foreach ($selectedPhotos as $photoPath) {
+                    if (file_exists($photoPath)) {
+                        $photos[] = new File($photoPath);
+                    }
+                }
+
+                $offer->setPhotosFileOffers($photos->toArray());
             }
-            $offer->setPhotosFileOffers($photos->toArray());
 
             $offer->setUser($user);
 

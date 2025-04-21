@@ -35,10 +35,12 @@ function Offer(){
             <li>Halal</li>
             <li>Low Carb</li>
         </ul>
-        <a href="#" id="new-offer">Ajouter Une Offre</a>
     </nav>
+    <a href="#" id="new-offer">Ajouter Une Offre</a>
     <div className="container-section">
-        
+        <section className="section-item"></section>
+        <section className="section-item"></section>
+        <section className="section-item"></section>
     </div>
 
     </>

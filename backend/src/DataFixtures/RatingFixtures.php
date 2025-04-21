@@ -12,13 +12,13 @@ class RatingFixtures extends Fixture implements DependentFixtureInterface
 {
     public const RATINGS = [
         [
-            "rater" => "user@example.com", // Utiliser une clé de référence valide
+            "rater" => "user@example.com",
             "rated" => "admin@example.com",
             "score" => 5,
             "comment" => "Great user!"
         ],
         [
-            "rater" => "admin@example.com", // Utiliser une clé de référence valide
+            "rater" => "admin@example.com",
             "rated" => "user@example.com",
             "score" => 4,
             "comment" => "Good communication"
