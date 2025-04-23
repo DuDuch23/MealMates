@@ -6,30 +6,19 @@ const containerStyle = {
     height: '100%'
 };
 
-// const OfferMarker = ({ offer }) => (
-//     <div style={{ cursor: 'pointer' }} title={offer.product}>
-//       📦
-//     </div>
-// );
-
 const UserLocationMap = ({ offers = [], zoom = 13 }) => {
-    const [location, setLocation] = useState(null);
+    const [userPos, setUserPos] = useState(null);
     const [map, setMap] = useState(null);
 
     useEffect(() => {
         const watchId = navigator.geolocation.watchPosition(
-            (position) => {
-                const loc = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                };
-                setLocation(loc);
-            },
+            (position) => 
+                setUserPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
             (error) => {
                 console.warn("Erreur de géolocalisation :", error);
                 const fallback = { lat: 48.8566, lng: 2.3522 };
                 console.log("Fallback position utilisée :", fallback);
-                setLocation(fallback);
+                setUserPos(fallback);
             },
             {
                 enableHighAccuracy: true,
@@ -41,7 +30,7 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
         return () => navigator.geolocation.clearWatch(watchId);
     }, []);
 
-    if (!location) {
+    if (!userPos) {
         return <p>Chargement de la carte...</p>;
     }
 
@@ -54,25 +43,26 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
             <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
                 <GoogleMap
                     mapContainerStyle={containerStyle}
-                    center={location}
+                    center={userPos}
                     zoom={zoom}
                     onLoad={onLoad}
-                >
+                    >
                     {map && (
                         <Marker
-                        position={location}
+                        position={userPos}
                         map={map}
                         title="Votre position"
                         />
                     )}
                     {offers.map((offer) => (
-                    <Marker
-                        key={offer.id}
-                        position={{ lat: offer.latitude, lng: offer.longitude }}
-                        map={map}
-                        title={offer.name}
-                        label="📦"
-                    />
+                        console.log(offer.latitude, offer.longitude),
+                        <Marker
+                            key={offer.id}
+                            position={{ lat: Number(offer.latitude), lng: Number(offer.longitude) }}
+                            map={map}
+                            title="titre"
+                            label="📦"
+                        />
                     ))}
                 </GoogleMap>
             </LoadScript>
