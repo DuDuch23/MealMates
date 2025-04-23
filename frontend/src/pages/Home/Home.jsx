@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import Header from '../../components/Header/Header';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import { searchOfferByTitle, getProfile, refreshToken, getVeganOffers } from '../../service/requestApi';
+import { searchOfferByTitle, getProfile, refreshToken, getVeganOffers, getOffers } from '../../service/requestApi';
 import UserLocationMap from '../../components/GoogleMaps/Googlemaps';
 import { jwtDecode } from 'jwt-decode';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -76,7 +76,7 @@ function App() {
         if (data && data.data) {
           setVeganOffers(data.data); 
         } else {
-          console.log(data);
+          console.log("Erreur ou offres vides");
         }
       } catch (err) {
         console.error('Erreur lors de la récupération des offres vegan:', err);
@@ -89,13 +89,14 @@ function App() {
 
   const [offers, setOffers] = useState([]);
   useEffect(() => {
-    const getOffers = async () => {
+    const fetchOffers = async () => {
       try {
         const data = await getOffers();
         if (data && data.data) {
+          console.log(data);
           setOffers(data.data);
         } else {
-          console.log(data);
+          console.log("Erreur ou offres vides");
         }
       } catch (err) {
         console.error('Erreur lors de la récupération des offres:', err);
@@ -103,7 +104,7 @@ function App() {
       }
     };
 
-    getOffers();
+    fetchOffers();
   }, []);
   
 
@@ -124,7 +125,7 @@ function App() {
               <section className={styles.bottom}>
                   <div className={styles.bottom__left}>
                       <div className={styles.bottom__circle}></div>
-                      <UserLocationMap />
+                      <UserLocationMap offers={offers} />
                   </div>
           
                   <div className={styles.bottom__right}>

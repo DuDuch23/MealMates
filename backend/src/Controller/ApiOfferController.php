@@ -33,7 +33,7 @@ class ApiOfferController extends AbstractController
         return $this->json([
             'status' => "OK",
             'code' => 200,
-            'data' => json_decode($offersSerialized, true),
+            'data' => json_decode($serializer->serialize($offers, 'json', ['groups' => 'public']), true),
         ], 200);
     }
 
