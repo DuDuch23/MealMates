@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import Header from '../../components/Header/Header';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { searchOfferByTitle, getProfile, refreshToken, getVeganOffers, getOffers } from '../../service/requestApi';
-import UserLocationMap from '../../components/GoogleMaps/Googlemaps';
+import UserLocationMap from '../../components/GoogleMaps/GoogleMaps';
 import { jwtDecode } from 'jwt-decode';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
