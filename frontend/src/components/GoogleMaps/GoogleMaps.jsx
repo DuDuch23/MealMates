@@ -39,34 +39,31 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
     };
 
     return (
-        <div style={{ height: '100%', width: '100%', position: 'relative', zIndex: 1000 }}>
-            <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
-                <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={userPos}
-                    zoom={zoom}
-                    onLoad={onLoad}
-                    >
-                    {map && (
-                        <Marker
-                        position={userPos}
+        <LoadScript clasName="map" googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
+            <GoogleMap clasName="map"
+                mapContainerStyle={containerStyle}
+                center={userPos}
+                zoom={zoom}
+                onLoad={onLoad}
+                >
+                {map && (
+                    <Marker
+                    position={userPos}
+                    map={map}
+                    title="Votre position"
+                    />
+                )}
+                {offers.map((offer) => (
+                    <Marker
+                        key={offer.id}
+                        position={{ lat: Number(offer.latitude), lng: Number(offer.longitude) }}
                         map={map}
-                        title="Votre position"
-                        />
-                    )}
-                    {offers.map((offer) => (
-                        console.log(offer.latitude, offer.longitude),
-                        <Marker
-                            key={offer.id}
-                            position={{ lat: Number(offer.latitude), lng: Number(offer.longitude) }}
-                            map={map}
-                            title="titre"
-                            label="📦"
-                        />
-                    ))}
-                </GoogleMap>
-            </LoadScript>
-        </div>
+                        title="titre"
+                        label="📦"
+                    />
+                ))}
+            </GoogleMap>
+        </LoadScript>
     );
 };
 

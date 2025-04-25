@@ -43,8 +43,9 @@
         display: flex;
         overflow-y: hidden;
         justify-content: space-between;
-        &__left{
+        &__maps{
             width: 50%;
+            height: 100%;
             img{
                 border-radius: 10px;
                 position: relative;
@@ -81,7 +82,7 @@
         }
 
         &__circle{
-            z-index:1;
+            // z-index: -1;
             position: absolute;
             left: -50vh;
             top: 30vh;
@@ -113,7 +114,7 @@
             flex-direction: column-reverse;
             padding: 64px 5%;
             gap: 24px;
-            &__left{
+            &__maps{
                 width: 100%;
                 height: 100%;
             }
