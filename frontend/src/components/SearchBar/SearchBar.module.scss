@@ -1,13 +1,16 @@
 .search-offer{
     width: 100%;
-    margin: 0 50px 0 200px;
     display: flex;
     justify-content: center;
+    padding: 0 20px;
+    margin: 100px 0 25px;
     &__input{
         width: 100%;
-        padding: 10px;
+        padding: 18px;
         border: none;
-        background-color: white;
+        background-color: transparent;
+        border: 1px solid;
+        border-radius: 8px;
     }
     button{
         display: none;
@@ -16,6 +19,6 @@
 
 @media screen and (max-width: 1440px){
     .search-offer{
-        margin: 0 50px 0 100px;
+        // margin: 0 50px 0 100px;
     }
 }

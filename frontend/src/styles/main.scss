@@ -23,3 +23,11 @@ body{
 .mobile {
     width: 480px;
 }
+
+.swiper-wrapper{
+    display: flex;
+
+    .swiper-slide{
+        width: 500px;
+    }
+}

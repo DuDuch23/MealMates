@@ -95,12 +95,26 @@ class Offer
     #[Groups(["public", "private"])]
     private ?float $longitude = null;
 
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'offer')]
+    private Collection $orders;
+
+    /**
+     * @var Collection<int, Category>
+     */
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'offers')]
+    private Collection $categories;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->photosNameOffer = [];
         $this->availableSlots = [];
         $this->photosFileOffers = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -204,5 +218,59 @@ class Offer
 
     public function getLongitude(): ?float { return $this->longitude; }
     public function setLongitude(?float $longitude): static { $this->longitude = $longitude; return $this; }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getOffer() === $this) {
+                $order->setOffer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
 
 }

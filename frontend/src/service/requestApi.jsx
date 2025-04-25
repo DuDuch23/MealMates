@@ -188,6 +188,51 @@ export async function getVeganOffers() {
     }
 }
 
+export async function getLocalOffers(lat, lng, radius = 5) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/local?lat=${lat}&lng=${lng}&radius=${radius}`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
+        });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
+}
+
+export async function getLastChanceOffers() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/last-chance`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
+        });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
+}
+
+export async function getAgainOffers(token) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/again`, {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                authorization:`Bearer ${token}`
+            },
+        });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
+}
+
 export async function logOut() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/logout`, {

@@ -19,4 +19,11 @@ body {
 
 .mobile {
   width: 480px;
+}
+
+.swiper-wrapper {
+  display: flex;
+}
+.swiper-wrapper .swiper-slide {
+  width: 500px;
 }/*# sourceMappingURL=main.css.map */
