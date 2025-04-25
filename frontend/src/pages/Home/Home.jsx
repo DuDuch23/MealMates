@@ -45,10 +45,17 @@ function App() {
         }
     }, [token]);
 
+    const [searchResults, setSearchResults] = useState([]);
+
     const handleSearch = async (query) => {
         try {
             const results = await searchOfferByTitle(query);
             console.log("Résultats de recherche :", results);
+            if (results && results.data) {
+                setSearchResults(results.data);
+            } else {
+                setSearchResults([]); 
+            }
         } catch (error) {
             console.error("Erreur de recherche :", error);
         }
@@ -57,8 +64,8 @@ function App() {
     const [userPos, setUserPos] = useState(null);
   
 
-  useEffect(() => {
-    const watchId = navigator.geolocation.watchPosition(
+    useEffect(() => {
+        const watchId = navigator.geolocation.watchPosition(
         (position) => 
             setUserPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
         (error) => {
@@ -70,7 +77,6 @@ function App() {
         {
             enableHighAccuracy: true,
             maximumAge: 0,
-            timeout: 5000
         }
     );
 
@@ -207,10 +213,16 @@ function App() {
                         <UserLocationMap offers={offers} onPosition={setPos} />
                     </section>
                     <section className={styles['offers']}>
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} />
-                        <SliderSection title="Tendances locales" offers={localOffers} />
+                    {searchResults.length > 0 ? (
+                            <SliderSection title="Résultats de recherche" offers={searchResults} />
+                        ) : (
+                            <>
+                            <SliderSection title="Recommander à nouveau" offers={againOffers} />
+                            <SliderSection title="Dernière chance" offers={lastChanceOffers} />
+                            <SliderSection title="Ce soir je mange vegan" offers={veganOffers} />
+                            <SliderSection title="Tendances locales" offers={localOffers} />
+                            </>
+                        )}
                     </section>
                 </section>
             </section>
