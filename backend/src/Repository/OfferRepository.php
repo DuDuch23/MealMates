@@ -25,6 +25,17 @@ class OfferRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getVeganOffers(int $limit = 10, int $offset = 0): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.isVegan = :isVegan')
+            ->setParameter('isVegan', 1)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */

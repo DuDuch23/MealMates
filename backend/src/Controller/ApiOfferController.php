@@ -66,6 +66,29 @@ class ApiOfferController extends AbstractController
         ], 200);
     }
 
+    #[Route('/vegan', methods: ['GET'])]
+    public function getVeganOffers(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $limit = $request->query->getInt('limit', 10);
+        $offset = $request->query->getInt('offset', 0);
+
+        $offers = $entityManager->getRepository(Offer::class)->getVeganOffers($limit, $offset);
+
+        if (empty($offers)) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "No vegan offers found."
+            ], 404);
+        }
+
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+            'data' => json_decode($serializer->serialize($offers, 'json', ['groups' => 'public']), true),
+        ], 200);
+    }
+
     #[Route('/new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {

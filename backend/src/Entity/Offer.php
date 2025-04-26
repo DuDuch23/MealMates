@@ -19,69 +19,81 @@ class Offer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    #[Groups(["public", "private"])] // Ajout des groupes pour sérialisation
+    #[Groups(["public", "private"])] 
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "offers")]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["public"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["public"])]
     private ?User $seller = null;
 
     #[ORM\Column(type: "string", length: 255)]
     #[Assert\NotBlank]
-    #[Groups(["public", "private"])] // Exposé dans les deux groupes
+    #[Groups(["public", "private"])] 
     private string $product;
 
     #[ORM\Column(type: "text", nullable: true)]
-    #[Groups(["public", "private"])] // Exposé dans les deux groupes
+    #[Groups(["public", "private"])] 
     private ?string $description = null;
 
     #[ORM\Column(type: "integer")]
     #[Assert\Positive]
-    #[Groups(["public", "private"])] // Exposé dans les deux groupes
+    #[Groups(["public", "private"])] 
     private int $quantity;
 
     #[ORM\Column(type: "datetime")]
     #[Assert\NotBlank]
-    #[Groups(["public", "private"])] // Exposé dans les deux groupes
+    #[Groups(["public", "private"])]
     private \DateTimeInterface $expirationDate;
 
     #[ORM\Column(type: "float", nullable: true)]
     #[Assert\GreaterThanOrEqual(0)]
-    #[Groups(["public", "private"])] // Exposé dans les deux groupes
+    #[Groups(["public", "private"])]
     private ?float $price = null;
 
     #[ORM\Column(type: "boolean")]
-    #[Groups(["public"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["public"])] 
     private bool $isDonation = false;
 
     #[Vich\UploadableField(mapping: 'photos_offer', fileNameProperty: 'photosNameOffer')]
-    #[Groups(["private"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["private"])]
     private ?Collection $photosFileOffers = null;
 
     #[ORM\Column(type: "json", nullable: true)]
-    #[Groups(["private", "public"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["private", "public"])]
     private ?array $photosNameOffer = [];
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    #[Groups(["public", "private"])] // Exposé dans les deux groupes
+    #[Groups(["public", "private"])]
     private ?string $pickupLocation = null;
 
     #[ORM\Column(type: "json", nullable: true)]
-    #[Groups(["private", "public"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["private", "public"])] 
     private ?array $availableSlots = [];
 
     #[ORM\Column(type: "boolean")]
-    #[Groups(["private", "public"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["private", "public"])] 
     private bool $isRecurring = false;
 
+    #[ORM\Column(type: "boolean")]
+    #[Groups(["private", "public"])]
+    private bool $isVegan = false;
+
     #[ORM\Column(type: "datetime")]
-    #[Groups(["private", "public"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["private", "public"])]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: "datetime", nullable: true)]
-    #[Groups(["private", "public"])] // Exposé uniquement dans le groupe "private"
+    #[Groups(["private", "public"])]
     private ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\Column(type: "float", nullable: true)]
+    #[Groups(["public", "private"])]
+    private ?float $latitude = null;
+
+    #[ORM\Column(type: "float", nullable: true)]
+    #[Groups(["public", "private"])]
+    private ?float $longitude = null;
 
     public function __construct()
     {
@@ -173,8 +185,24 @@ class Offer
 
     public function getIsRecurring(): bool { return $this->isRecurring; }
     public function setIsRecurring(bool $isRecurring): static { $this->isRecurring = $isRecurring; return $this; }
+    public function getIsVegan(): bool {
+        return $this->isVegan;
+    }
+
+    public function setIsVegan(bool $isVegan): static
+    {
+        $this->isVegan = $isVegan;
+        return $this;
+    }
 
     public function getCreatedAt(): \DateTimeInterface { return $this->createdAt; }
 
     public function getUpdatedAt(): ?\DateTimeInterface { return $this->updatedAt; }
+
+    public function getLatitude(): ?float { return $this->latitude; }
+    public function setLatitude(?float $latitude): static { $this->latitude = $latitude; return $this; }
+
+    public function getLongitude(): ?float { return $this->longitude; }
+    public function setLongitude(?float $longitude): static { $this->longitude = $longitude; return $this; }
+
 }

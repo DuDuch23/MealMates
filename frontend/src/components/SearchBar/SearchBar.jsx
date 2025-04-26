@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AllCategory from '../AllCategory/AllCategory';
+import styles from './SearchBar.module.css';
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
@@ -14,13 +15,13 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <form className='search-offer' onSubmit={handleSubmit}>
+    <form className={styles['search-offer']} onSubmit={handleSubmit}>
       <AllCategory
         categories={["Entrée", "Plat principal", "Dessert"]}
         onChange={(event) => console.log(event.target.value)}
       />
       <input
-        className='search-offer__input'
+        className={styles['search-offer__input']}
         type="text"
         value={query}
         onChange={handleChange}

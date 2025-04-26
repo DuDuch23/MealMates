@@ -1,4 +1,4 @@
-import './Header.css';
+import styles from './Header.module.css';
 import { Link } from 'react-router';
 import { jwtDecode } from 'jwt-decode';
 import { IconUser } from '../IconUser/iconUser';
@@ -8,26 +8,24 @@ import { getProfile, refreshToken } from '../../service/requestApi';
 
 export default function Header({ onProfileClick }) {
     const token = localStorage.getItem("token");
-    
     const [userData, setUserData] = useState(null);
-    
-    if(userData != null){
-        localStorage.setItem("user",userData.user.id);
-    }
+
+    useEffect(() => {
+        if (userData) {
+        localStorage.setItem("user", userData.user.id);
+        }
+    }, [userData]);
 
     useEffect(() => {
         if (token) {
             try {
-                refreshToken({token});
-
+                refreshToken({ token });
                 const user = jwtDecode(token);
-                
                 const fetchUserProfile = async () => {
                     const email = user.username;
-                    const profile = await getProfile({email,token});
+                    const profile = await getProfile({ email, token });
                     setUserData(profile);
                 };
-
                 fetchUserProfile();
             } catch (error) {
                 console.error("Le token est invalide ou ne peut pas être décodé", error);
@@ -46,10 +44,10 @@ export default function Header({ onProfileClick }) {
         } else {
             return (
                 <>
-                    <li className='button-sign-in' key="inscription">
+                    <li className={styles['button-sign-in']} key="inscription">
                         <Link to="/inscription">Inscription</Link>
                     </li>
-                    <li className='button-log-in' key="connexion">
+                    <li className={styles['button-log-in']} key="connexion">
                         <Link to="/connexion">Se connecter</Link>
                     </li>
                 </>
@@ -58,14 +56,16 @@ export default function Header({ onProfileClick }) {
     };
 
     return (
-        <section className="header">
-            <div className="header-left">
+        <section className={styles.header}>
+            <div className={styles.header__left}>
                 <img src={logo} alt="Logo MealMates" />
                 <h1>MealMates</h1>
             </div>
-            <ul className="header-right">
-                {infoUser()}
-            </ul>
+            <div className={styles['header-right']}>
+                <ul>
+                    {infoUser()}
+                </ul>
+            </div>
         </section>
     );
 }

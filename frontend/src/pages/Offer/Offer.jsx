@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 
 import {Link} from "react-router";
-import "./offer.Css";
+import "./Offer.module.css";
 
 function Offer(){
     return(<>
