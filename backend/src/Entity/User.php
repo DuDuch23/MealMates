@@ -3,13 +3,13 @@
 namespace App\Entity;
 
 use App\Enum\PreferenceEnum;
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
@@ -47,6 +47,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["public", "private"])]
     private Collection $preferences;
 
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[Groups(["public", "private"])]
+    private Collection $searchHistory;
+
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rater', orphanRemoval: true)]
     private Collection $ratingsGiven;
 
@@ -72,6 +76,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'seller')]
     private Collection $offers;
 
+
+
     #[ORM\Column(options: ['default' => false])]
     private ?bool $isVerified = null;
 
@@ -80,9 +86,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->offers = new ArrayCollection();
         $this->ratingsGiven = new ArrayCollection();
         $this->ratingsReceived = new ArrayCollection();
-        $this->offers = new ArrayCollection();
+        $this->searchHistory = new ArrayCollection();
         $this->preferences = new ArrayCollection(); // Initialiser la collection de catégories
     }
 
@@ -94,6 +101,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    public function getsearchHistory(): Collection
+    {
+        return $this->searchHistory;
+    }
+
+    public function addSearch(SearchHistory $search): void
+    {
+        $this->searchHistory->add($search);
+    }
+
+    public function deleteSearch(SearchHistory $search): void
+    {
+        $this->searchHistory->removeElement($search);
     }
 
     public function setEmail(string $email): static
