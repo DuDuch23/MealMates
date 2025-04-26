@@ -1,4 +1,4 @@
-import styles from './Header.module.css';
+import styles from './Header.module.scss';
 import { Link } from 'react-router';
 import { jwtDecode } from 'jwt-decode';
 import { IconUser } from '../IconUser/iconUser';

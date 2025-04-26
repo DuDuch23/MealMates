@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AllCategory from '../AllCategory/AllCategory';
-import styles from './SearchBar.module.css';
+import styles from './SearchBar.module.scss';
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
