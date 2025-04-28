@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Offer;
 use DateTimeImmutable;
 use App\Repository\OfferRepository;
@@ -167,22 +168,22 @@ class ApiOfferController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['name'])) {
-            return $this->json([
-                'status' => "Bad Request",
-                'code' => 400,
-                'message' => "Missing 'name' parameter."
-            ], 400);
-        }
+        // if (!isset($data['name'])) {
+        //     return $this->json([
+        //         'status' => "Bad Request",
+        //         'code' => 400,
+        //         'message' => "Missing 'name' parameter."
+        //     ], 400);
+        // }
 
-        $existingOffer = $entityManager->getRepository(Offer::class)->findOneBy(['name' => $data['name']]);
-        if ($existingOffer) {
-            return $this->json([
-                'status' => "Forbidden",
-                'code' => 403,
-                'message' => "Offer already exists."
-            ], 403);
-        }
+        // $existingOffer = $entityManager->getRepository(Offer::class)->findOneBy(['name' => $data['name']]);
+        // if ($existingOffer) {
+        //     return $this->json([
+        //         'status' => "Forbidden",
+        //         'code' => 403,
+        //         'message' => "Offer already exists."
+        //     ], 403);
+        // }
 
         $offer = new Offer();
         $offer->setProduct($data['product']);
@@ -194,7 +195,13 @@ class ApiOfferController extends AbstractController
         $offer->setPickupLocation($data['pickupLocation']);
         $offer->setAvailableSlots($data['availableSlots']);
         $offer->setIsRecurring($data['isRecurring']);
-        $offer->setPhotosFileOffers($data['photos_offer']);
+        if (!empty($data['photos_offer'])) {
+            foreach ($data['photos_offer'] as $filename) {
+                $image = new Image();
+                $image->setFilename($filename);
+                $offer->addImage($image); // ajoute automatiquement l'image à l'offre
+            }
+        }
         // $offer->setCreatedAt(new \DateTimeImmutable());
         $offer->setUpdatedAt(new DateTimeImmutable());
         $offer->setUser($this->getUser()); // Assurez-vous que l'utilisateur est connecté

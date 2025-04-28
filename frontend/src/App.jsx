@@ -11,6 +11,7 @@ const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'
 const UserModify = React.lazy(() => import('./pages/UserModify/UserModify'));
 const Deconnexion = React.lazy(() => import('./pages/Deconnexion/Deconnexion'));
 const Offer = React.lazy(()=> import('./pages/Offer/Offer'));
+const CreateOffer = React.lazy(() => import('./pages/CreateOffer/CreateOffer'));
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription /> } />
         <Route path="/deconnexion" element={<Deconnexion /> } />
+        <Route path="/create-offer" element={<CreateOffer /> } />
       </Routes>
     </Suspense>
   );
