@@ -7,7 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Image>
+ * @extends ServiceEntityRepository<Offer>
  */
 class ImageRepository extends ServiceEntityRepository
 {
@@ -16,28 +16,28 @@ class ImageRepository extends ServiceEntityRepository
         parent::__construct($registry, Image::class);
     }
 
-    //    /**
-    //     * @return Image[] Returns an array of Image objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('i.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+//    /**
+//     * @return Offer[] Returns an array of Offer objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('o')
+//            ->andWhere('o.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('o.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
 
-    //    public function findOneBySomeField($value): ?Image
-    //    {
-    //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+//    public function findOneBySomeField($value): ?Offer
+//    {
+//        return $this->createQueryBuilder('o')
+//            ->andWhere('o.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }
