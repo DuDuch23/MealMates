@@ -8,7 +8,8 @@ import NavLayout from './Layout/NavLayout';
 const Home = React.lazy(() => import('./pages/Home/Home'));
 
 // Offre
-const Offer = React.lazy(()=> import('./pages/Offer/Offer'));
+const Offer = React.lazy(() => import('./pages/Offer/Offer'));
+const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
 
 // User
 const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
@@ -29,6 +30,7 @@ function App() {
         <Route element={<NavLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/offer" element={<Offer />} />
+          <Route path='/addOffer' element={<AddOffer />}/>
           <Route path='/ChooseChat' element={<ChooseChat/>}/>
           <Route path="/chat" element={<Chat />} />
         </Route>
