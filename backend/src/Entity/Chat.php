@@ -96,18 +96,27 @@ class Chat
         return $this;
     }
 
+    /**
+     * @return Collection|Image[]
+     */
     public function getImages(): Collection
     {
-        return $this->messages;
+        return $this->images;
     }
 
-    public function addImage(Image $image): void
+    public function addImage(Image $image): self
     {
-        $this->images->add($image);
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+        }
+
+        return $this;
     }
 
-    public function removeImage(Image $image): void
+    public function removeImage(Image $image): self
     {
         $this->images->removeElement($image);
+
+        return $this;
     }
 }

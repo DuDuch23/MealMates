@@ -1,5 +1,4 @@
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from "react-router";
 import API_BASE_URL from "/src/service/api";
 
 
@@ -37,22 +36,21 @@ export async function logIn({ email, password }) {
 }
 
 
-export async function getUser({ id, token }) {
+export async function getUser({ user, token }) {
     try {
         const response = await fetch(`https://127.0.0.1:8000/api/user/get`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                "id": id,
-            })
+            body: JSON.stringify({ id: user }),
         });
 
         return await response.json();
+
     } catch (error) {
-        console.error("Erreur API :", error);
+        console.error("Erreur API:", error);
         throw error;
     }
 }

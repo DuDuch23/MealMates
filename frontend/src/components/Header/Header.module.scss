@@ -6,16 +6,14 @@
     align-items: center;
     height: 12.5vh;
     background-color: black;
-    &__left{
-        
-    }
     ul{
-        width: 20%;
         display: flex;
         list-style: none;
         li{
+            height: 100%;
             border-radius: 5px;
             width: 50%;
+            min-width: fit-content;
             background: variables.$colorDarkGreen;
             border: 1px solid green;
             display: flex;
@@ -28,6 +26,7 @@
     }
     
     .button-log-in{
+        width: fit-content;
         background-color: variables.$colorWhite;
         a{
             color: variables.$colorDarkGreen;
@@ -51,8 +50,15 @@
     .header-right {
         justify-content: flex-end;
         margin-right: 5%;
-        gap: 24px;
         height: 50%;
+        ul{
+            gap: 24px;
+        }
+        ul li a{
+            height: 5vh;
+            display: flex;
+            align-items: center;
+        }
     }
     #icon-user{
         margin: 0;

@@ -22,7 +22,7 @@ nelmio_cors:
         allow_headers: ['*']
         expose_headers: ['Link']
         max_age: 7200
-        # allow_credentials: false
+        allow_credentials: true
     paths:
         '^/api/':
             allow_origin: ['*']
@@ -30,4 +30,4 @@ nelmio_cors:
             allow_headers: ['*']
             expose_headers: ['Link']
             max_age: 7200
-            # allow_credentials: false
+            allow_credentials: true

@@ -47,27 +47,6 @@ function App() {
     }
   };
 
-//   const infoUser = () => {
-//     if (userData) {
-//       return (
-//         <li className={styles['button-sign-in']} key="inscription">
-//           <Link to={`/userProfile/${userData.user.id}`}>{userData.user.firstName}</Link>
-//         </li>
-//       );
-//     } else {
-//       return (
-//         <>
-//           <li className={styles['button-sign-in']} key="inscription">
-//             <Link to="/inscription">Inscription</Link>
-//           </li>
-//           <li className={styles['button-log-in']} key="connexion">
-//             <Link to="/connexion">Se connecter</Link>
-//           </li>
-//         </>
-//       );
-//     }
-//   };
-
   const [veganOffers, setVeganOffers] = useState([]);
   useEffect(() => {
     const fetchVeganOffers = async () => {
@@ -95,10 +74,10 @@ function App() {
         if (data && data.data) {
           setOffers(data.data);
         } else {
-          console.log(data);
+          // console.log(data);
         }
       } catch (err) {
-        console.error('Erreur lors de la récupération des offres:', err);
+        // console.error('Erreur lors de la récupération des offres:', err);
         setOffers([]);
       }
     };

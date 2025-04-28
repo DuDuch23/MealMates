@@ -21,8 +21,9 @@ function UserProfile() {
         async function fetchUserData() {
             if (userId && token) {
                 try {
-                    const response = await getUser({ id: userId, token: token });
+                    const response = await getUser({ user: userId, token: token });
                     setUser(response);
+                    console.log(response);
                 } catch (err) {
                     console.error("Erreur lors de la récupération des données :", err);
                 }
@@ -32,15 +33,15 @@ function UserProfile() {
         fetchUserData();
     }, [userId]);
 
-    const userIcon = () => user.data.iconUser;
+    console.log(user);
 
     const infoUser = () => {
         if (user && user.data) {
             return (
                 <>
-                    <div><p>{user.data.firstName}</p></div>
-                    <div><p>{user.data.lastName}</p></div>
-                    <div><p>{user.data.email}</p></div>
+                    <div><p>{user?.data.firstName}</p></div>
+                    <div><p>{user?.data.lastName}</p></div>
+                    <div><p>{user?.data.email}</p></div>
                 </>
             );
         } else {
@@ -50,7 +51,7 @@ function UserProfile() {
 
     
     const userPreference = () => {
-        if (user && user.data.preferences) {
+        if (user && user?.data.preferences) {
             return (
                 <div className="preferences">
                     <h3>Mes préférences</h3>
