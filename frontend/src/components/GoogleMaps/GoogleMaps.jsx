@@ -6,30 +6,19 @@ const containerStyle = {
     height: '100%'
 };
 
-// const OfferMarker = ({ offer }) => (
-//     <div style={{ cursor: 'pointer' }} title={offer.product}>
-//       📦
-//     </div>
-// );
-
 const UserLocationMap = ({ offers = [], zoom = 13 }) => {
-    const [location, setLocation] = useState(null);
+    const [userPos, setUserPos] = useState(null);
     const [map, setMap] = useState(null);
 
     useEffect(() => {
         const watchId = navigator.geolocation.watchPosition(
-            (position) => {
-                const loc = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                };
-                setLocation(loc);
-            },
+            (position) => 
+                setUserPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
             (error) => {
                 console.warn("Erreur de géolocalisation :", error);
                 const fallback = { lat: 48.8566, lng: 2.3522 };
                 console.log("Fallback position utilisée :", fallback);
-                setLocation(fallback);
+                setUserPos(fallback);
             },
             {
                 enableHighAccuracy: true,
@@ -41,7 +30,7 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
         return () => navigator.geolocation.clearWatch(watchId);
     }, []);
 
-    if (!location) {
+    if (!userPos) {
         return <p>Chargement de la carte...</p>;
     }
 
@@ -50,33 +39,31 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
     };
 
     return (
-        <div style={{ height: '100%', width: '100%', position: 'relative', zIndex: 1000 }}>
-            <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
-                <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={location}
-                    zoom={zoom}
-                    onLoad={onLoad}
+        <LoadScript clasName="map" googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
+            <GoogleMap clasName="map"
+                mapContainerStyle={containerStyle}
+                center={userPos}
+                zoom={zoom}
+                onLoad={onLoad}
                 >
-                    {map && (
-                        <Marker
-                        position={location}
-                        map={map}
-                        title="Votre position"
-                        />
-                    )}
-                    {offers.map((offer) => (
+                {map && (
+                    <Marker
+                    position={userPos}
+                    map={map}
+                    title="Votre position"
+                    />
+                )}
+                {offers.map((offer) => (
                     <Marker
                         key={offer.id}
-                        position={{ lat: offer.latitude, lng: offer.longitude }}
+                        position={{ lat: Number(offer.latitude), lng: Number(offer.longitude) }}
                         map={map}
-                        title={offer.name}
+                        title="titre"
                         label="📦"
                     />
-                    ))}
-                </GoogleMap>
-            </LoadScript>
-        </div>
+                ))}
+            </GoogleMap>
+        </LoadScript>
     );
 };
 
