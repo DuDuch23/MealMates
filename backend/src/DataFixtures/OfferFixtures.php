@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Category;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Offer;
@@ -16,6 +17,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const NB_OFFERS = 100;
+    public const OFFER_REF_PREFIX = 'offer_';
     public $publicPath;
     public function __construct(KernelInterface $kernel)
     {
@@ -27,6 +30,8 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $faker = Factory::create('fr_FR');
 
         $user = $this->getReference('user@example.com', User::class);
+        $seller = $this->getReference('user@example.com', User::class);
+        $allCatIds = array_keys(CategoryFixtures::CATEGORIES);
 
         $produits = [
             'Panier de légumes bio', 'Repas chaud', 'Baguette de pain', 'Plateau de fromages',
@@ -52,7 +57,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             '10 rue Alsace Lorraine, Toulouse',
         ];
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < self::NB_OFFERS; $i++) {
             $offer = new Offer();
             $offer->setProduct($faker->randomElement($produits));
             $offer->setDescription($faker->randomElement($descriptions));
@@ -92,9 +97,17 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
                 $offer->setPhotosFileOffers($photos->toArray());
             }
 
-            $offer->setUser($user);
+            $randomCatCodes = $faker->randomElements($allCatIds, rand(1, 3));
+            foreach ($randomCatCodes as $catCode) {
+                /** @var Category $cat */
+                $cat = $this->getReference($catCode, Category::class);
+                $offer->addCategory($cat);
+            }
 
+            $offer->setUser($seller);
             $manager->persist($offer);
+
+            $this->addReference(self::OFFER_REF_PREFIX.$i, $offer);
         }
 
         $manager->flush();
@@ -103,6 +116,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             UserFixtures::class,
+            CategoryFixtures::class,
         ];
     }
 }
