@@ -30,6 +30,7 @@ function Connexion() {
     event.preventDefault();
     try {
       const response = await logIn({ email, password });
+      console.log(response);
       if(response.token){
         localStorage.setItem("token",response.token);
         localStorage.setItem("user",JSON.stringify(response.user));

@@ -1,12 +1,12 @@
-import styles from './Header.module.css';
+import styles from './Header.module.scss';
 import { Link } from 'react-router';
 import { jwtDecode } from 'jwt-decode';
+import { IconUser } from '../IconUser/iconUser';
 import React, { useEffect, useState } from 'react';
 import logo from '../../assets/logo-mealmates.png';
 import { getProfile, refreshToken } from '../../service/requestApi';
-import { IconUser } from '../IconUser/iconUser';
 
-export default function Header() {
+export default function Header({ onProfileClick }) {
     const token = localStorage.getItem("token");
     const [userData, setUserData] = useState(null);
 
@@ -36,15 +36,10 @@ export default function Header() {
     const infoUser = () => {
         if (userData) {
             return (
-                <>
-                    <li className={`${styles['button-sign-in']} ${styles['button-user']}`} key="inscription">
-                        <IconUser id={userData.user.iconUser} />
-                        <Link to={`/userProfile/${userData.user.id}`}>{userData.user.firstName}</Link>
-                    </li>
-                    <li>
-                        <Link to="/deconnexion">Déconnexion</Link>
-                    </li>
-                </>
+                <li className='button-sign-in button-user' key="inscription" onClick={onProfileClick}>
+                    <IconUser id={userData.user.iconUser}/>
+                   <p>{userData.user.firstName}</p>
+                </li>
             );
         } else {
             return (

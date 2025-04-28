@@ -9,8 +9,8 @@ security:
                 property: email
 
     firewalls:
-        api:
-            pattern:   ^/api
+        login:
+            pattern: ^/api/login
             stateless: true
             json_login:
                 check_path: /api/login
@@ -18,17 +18,17 @@ security:
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern: ^/api
+            stateless: true
             jwt: ~
-            logout: 
-                path: /api/logout
-                invalidate_session: true
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
     access_control:
-        - { path: ^/api, roles: PUBLIC_ACCESS, methods: [OPTIONS] }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/user/new, roles: PUBLIC_ACCESS } 
         - { path: ^/api/offers/search, roles: PUBLIC_ACCESS }

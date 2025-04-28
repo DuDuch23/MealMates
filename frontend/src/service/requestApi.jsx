@@ -22,20 +22,20 @@ export async function logIn({ email, password }) {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include",
             body: JSON.stringify({
                 email: email,
                 password: password
             }),
         });
 
-        console.log(response.json);
         return await response.json();
+
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
+
 
 export async function getUser({ id, token }) {
     try {

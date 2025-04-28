@@ -1,4 +1,4 @@
-import styles from './Home.module.css';
+import styles from './Home.module.scss';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import Header from '../../components/Header/Header';
