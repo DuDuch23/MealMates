@@ -96,8 +96,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->ratingsGiven = new ArrayCollection();
         $this->ratingsReceived = new ArrayCollection();
         $this->searchHistory = new ArrayCollection();
-        $this->preferences = new ArrayCollection(); // Initialiser la collection de catégories
-        $this->offers = new ArrayCollection();
         $this->preferences = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
