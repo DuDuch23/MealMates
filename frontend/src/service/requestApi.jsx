@@ -179,6 +179,7 @@ export async function getVeganOffers() {
             headers: { accept: 'application/json' },
         });
 
+        console.log(response.json());
         return await response.json();
     } catch (err) {
         console.error(err);

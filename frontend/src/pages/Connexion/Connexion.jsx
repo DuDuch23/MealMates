@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { logIn,getUser } from "../../service/requestApi";
-import { addUser, getUser } from "../../service/indexDB";
+import { logIn, getProfile } from "../../service/requestApi";
+import { addUserIndexDB } from "../../service/indexDB";
 import logo from '../../assets/logo-mealmates.png';
 import styles from "./Connexion.module.css";
 import GoogleLoginButton from "../../components/SsoGoogle";
@@ -14,10 +14,7 @@ function Connexion() {
 
   const navigate = useNavigate();
 
-  // Gérer l'email et le mot de passe
-  const handleEmail = (event) => setEmail(event.target.value);
-  const handlePassword = (event) => setPassword(event.target.value);
-
+  // Gérer la récupération de l'utilisateur déjà connecté
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -26,29 +23,28 @@ function Connexion() {
     }
   }, [navigate]);
 
+  // Gestion des inputs de manière générique
+  const handleInputChange = (setter) => (event) => setter(event.target.value);
 
   // Gérer la soumission du formulaire de connexion
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!validateFields()) return;
-
     try {
       const response = await logIn({ email, password });
       if (response.token) {
-        // Stocker le token et l'utilisateur dans localStorage et IndexedDB
-        const user = response.user;
+        // Récupérer les données complètes de l'utilisateur
         const token = response.token;
-        
+        const fullUser = await getProfile({email,token});
+
+        // Stocker dans localStorage
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user", JSON.stringify(fullUser.user.id));
 
-        setUser(response.user);
-
-        const res = await getUser({user,token});
+        setUser(fullUser.id);
 
         // Ajouter l'utilisateur à IndexedDB
-        addUser(res);
-        
+        await addUserIndexDB(fullUser.user);
+
         navigate("/");
       } else {
         setError("Email ou mot de passe incorrect.");
@@ -65,30 +61,38 @@ function Connexion() {
         <img src={logo} alt="logo" className={styles.logo} />
         <h1>MealMates</h1>
       </div>
+
       <div className={styles.action}>
         {error && <p className={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className={styles["content-element-form"]}>
             <label htmlFor="email">Email</label>
             <input
+              id="email"
               type="email"
               name="email"
               placeholder="Test@email.com"
               value={email}
-              onChange={handleEmail}
+              onChange={handleInputChange(setEmail)}
+              required
             />
           </div>
+
           <div className={styles["content-element-form"]}>
             <label htmlFor="password">Mot de Passe</label>
             <input
+              id="password"
               type="password"
               name="password"
               placeholder="********"
               value={password}
-              onChange={handlePassword}
+              onChange={handleInputChange(setPassword)}
+              required
             />
           </div>
+
           <button type="submit">Connexion</button>
+
           <div className={styles.otherAction}>
             <p>Ou connexion avec</p>
             <GoogleLoginButton setUser={setUser} />
