@@ -13,7 +13,8 @@ class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: "integer")]
+    #[Groups(["public", "private"])] 
     private ?int $id = null;
 
     #[Groups("public")]

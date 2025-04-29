@@ -118,7 +118,7 @@ class ImageFixtures extends Fixture
             'link' => 'jus3.jpg',
         ],
         [
-            'name' => 'jus',
+            'name' => 'jus4',
             'link' => 'jus4.jpg',
         ],
         [
@@ -177,10 +177,11 @@ class ImageFixtures extends Fixture
             $image = new Image();
             $image->setName($attributes['name']);
             $image->setLink($attributes['link']);
+            $image->setUpdatedAt(new \DateTimeImmutable());
             
             $manager->persist($image);
 
-            $this->addReference($code, $image);
+            $this->addReference($attributes['name'], $image);
         }
 
         $manager->flush();

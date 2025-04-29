@@ -93,8 +93,6 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
                         $photos[] = new File($photoPath);
                     }
                 }
-
-                $offer->setPhotosFileOffers($photos->toArray());
             }
 
             $randomCatCodes = $faker->randomElements($allCatIds, rand(1, 3));

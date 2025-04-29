@@ -31,8 +31,10 @@ class Chat
     #[Groups(["private"])]
     private Collection $messages;
 
-    #[ORM\ManyToMany(targetEntity: Image::class)]
+    #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'offers')]
+    #[ORM\JoinTable(name: 'chat_image')]
     private Collection $images;
+
 
     public function __construct()
     {

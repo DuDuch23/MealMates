@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ImageRepository;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -14,8 +16,8 @@ class Image
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(["public", "private"])]
+    #[ORM\Column(type: "integer")]
+    #[Groups(["public", "private"])] 
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -31,6 +33,19 @@ class Image
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'images')]
+    private Collection $offers;
+
+
+    #[ORM\ManyToMany(targetEntity: Chat::class, mappedBy: 'images')]
+    private Collection $chats;
+
+    public function __construct()
+    {
+        $this->offers = new ArrayCollection();
+        $this->chats = new ArrayCollection();
+    }
 
     // Getters and Setters
 
@@ -82,5 +97,37 @@ class Image
     {
         $this->updatedAt = $updatedAt;
         return $this;
+    }
+
+    // offre
+    public function getOffres(): Collection
+    {
+        return $this->offers;
+    }
+
+    public function addOffre(Offer $offer): void
+    {
+        $this->offers->add($offer);
+    }
+
+    public function removeOffer(Offer $offer): void
+    {
+        $this->offers->removeElement($offer);
+    }
+
+    // chat
+    public function getChats(): Collection
+    {
+        return $this->chats;
+    }
+
+    public function addChat(Chat $chat): void
+    {
+        $this->chats->add($chat);
+    }
+
+    public function removeChat(Chat $chat): void
+    {
+        $this->chats->removeElement($chat);
     }
 }
