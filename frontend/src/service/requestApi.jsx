@@ -16,7 +16,7 @@ export async function refreshToken({token}) {
 
 export async function logIn({ email, password }) {
     try {
-        const response = await fetch("https://127.0.0.1:8000/api/login", {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export async function logIn({ email, password }) {
 
 export async function getUser({ user, token }) {
     try {
-        const response = await fetch(`https://127.0.0.1:8000/api/user/get`, {
+        const response = await fetch(`${API_BASE_URL}/api/user/get`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -102,7 +102,7 @@ export async function editUser({ userData, token }) {
             body.password_confirm = userData.confirmPassword;
         }
 
-        const response = await fetch(`https://127.0.0.1:8000/api/user/edit`, {
+        const response = await fetch(`${API_BASE_URL}/api/user/edit`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -120,7 +120,7 @@ export async function editUser({ userData, token }) {
 
 export async function deleteUser(id, token) {
     try {
-        const response = await fetch(`https://127.0.0.1:8000/api/user/delete/`, {
+        const response = await fetch(`${API_BASE_URL}/api/user/delete/`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ export async function deleteUser(id, token) {
 
 export async function getProfile({ email, token }) {
     try {
-        const response = await fetch(`https://127.0.0.1:8000/api/user/profile`, {
+        const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -174,7 +174,7 @@ export async function getOffers() {
 
 export async function getVeganOffers() {
     try {
-        const response = await fetch(`https://127.0.0.1:8000/api/offers/vegan?limit=10&offset=0`, {
+        const response = await fetch(`${API_BASE_URL}/api/offers/vegan?limit=10&offset=0`, {
             method: 'GET',
             headers: { accept: 'application/json' },
         });
@@ -233,7 +233,7 @@ export async function getAgainOffers(token) {
 
 export async function logOut() {
     try {
-        const response = await fetch(`https://127.0.0.1:8000/api/logout`, {
+        const response = await fetch(`${API_BASE_URL}/api/logout`, {
             method: "GET",
             credentials: "include",
         });
@@ -251,7 +251,7 @@ export async function logOut() {
 
 export async function searchOfferByTitle(title) {
     try {
-        const response = await fetch(`https://127.0.0.1:8000/api/offers/search`, {
+        const response = await fetch(`${API_BASE_URL}/api/offers/search`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ keyword: title }),
