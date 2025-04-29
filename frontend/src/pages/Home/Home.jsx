@@ -125,21 +125,23 @@ function App() {
             setLastChanceOffers([]);
         }
     };
-
-    const fetchAgainOffers = async () => {
-        try {
-            const data = await getAgainOffers();
-            if(data && data.data){
-                console.log("again", data);
-                setAgainOffers(data.data);
-            } else{
-                console.log("Erreur ou offres again vides");
+    if(token){
+        const fetchAgainOffers = async () => {
+            try {
+                const data = await getAgainOffers(token);
+                if(data && data.data){
+                    console.log("again", data);
+                    setAgainOffers(data.data);
+                } else{
+                    console.log("Erreur ou offres again vides");
+                }
+            } catch (err){
+                console.error('Erreur lors de la récupération des offres again :', err);
+                setAgainOffers([]);
             }
-        } catch (err){
-            console.error('Erreur lors de la récupération des offres again :', err);
-            setAgainOffers([]);
-        }
-    };
+        };
+        fetchAgainOffers();
+    }
 
     const fetchLocalOffers = async () => {
         try {
@@ -159,7 +161,6 @@ function App() {
     fetchOffers();
     fetchVeganOffers();
     fetchLastChanceOffers();
-    fetchAgainOffers();
     fetchLocalOffers();
     }, []);
 
@@ -207,7 +208,9 @@ function App() {
                             <SliderSection title="Résultats de recherche" offers={searchResults} />
                         ) : (
                             <>
-                            <SliderSection title="Recommander à nouveau" offers={againOffers} />
+                            {token ?? (
+                                <SliderSection title="Recommander à nouveau" offers={againOffers} />
+                            )}
                             <SliderSection title="Dernière chance" offers={lastChanceOffers} />
                             <SliderSection title="Ce soir je mange vegan" offers={veganOffers} />
                             <SliderSection title="Tendances locales" offers={localOffers} />

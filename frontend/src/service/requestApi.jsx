@@ -179,8 +179,8 @@ export async function getVeganOffers() {
             headers: { accept: 'application/json' },
         });
 
-        console.log(response.json());
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (err) {
         console.error(err);
         return { result: [] };
@@ -290,3 +290,37 @@ export async function newOffer(data, isFormData = false) {
         return { result: [] };
     }
 }
+
+export async function geocodeLocation(location) {
+    try{
+        const apiKey = import.meta.env.VITE_GOOGLE_MAP;
+        const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`
+        );
+        const data = await response.json();
+        if (data.results.length > 0) {
+            const { lat, lng } = data.results[0].geometry.location;
+            return { lat, lng };
+        }
+    } catch(error) {
+        console.error("Erreur API :", error);
+        // throw new Error("Aucune coordonnée trouvée.");
+        return { result: [] };
+    }
+}
+
+export async function fetchFilteredOffers(filters) {
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/offers/filter`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(filters),
+            credentials: "include",
+        });
+
+        return await response.json();
+    } catch(error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
+    }
+};

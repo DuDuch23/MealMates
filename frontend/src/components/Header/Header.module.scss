@@ -4,15 +4,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 12.5vh;
     background-color: black;
+    padding: 0 20px;
     ul{
         display: flex;
         list-style: none;
+        justify-content: end;
         li{
             height: 100%;
             border-radius: 5px;
-            width: 50%;
             min-width: fit-content;
             background: variables.$colorDarkGreen;
             border: 1px solid green;
@@ -33,24 +33,23 @@
         }
     }
     
-    div {
+    &__left{
         display: flex;
         align-items: center;
         width: 50%;
+        height: 100%;
 
-        img {
-            height: 80%;
-            margin-left: 1%;
-        }
         h1 {
             font-size: 3rem;
             margin-left: 1%;
         }
     }
-    .header-right {
-        justify-content: flex-end;
-        margin-right: 5%;
-        height: 50%;
+    &__right {
+        justify-content: right;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
         ul{
             gap: 24px;
         }
@@ -61,7 +60,6 @@
         }
     }
     #icon-user{
-        margin: 0;
     }
     .button-user{
         width: 30%;
@@ -77,6 +75,7 @@
 
 @media screen and (max-width: 768px) {
     .header{
+        padding: 0 10px;
         div{
             width: unset;
             h1{

@@ -36,7 +36,7 @@ export default function Header({ onProfileClick }) {
     const infoUser = () => {
         if (userData) {
             return (
-                <li className='button-sign-in button-user' key="inscription" onClick={onProfileClick}>
+                <li className={styles.header__user} key="inscription" onClick={onProfileClick}>
                     <IconUser id={userData.user.iconUser}/>
                    <p>{userData.user.firstName}</p>
                 </li>
@@ -45,10 +45,10 @@ export default function Header({ onProfileClick }) {
             return (
                 <>
                     <li className={styles['button-sign-in']} key="inscription">
-                        <Link to="/inscription">Inscription</Link>
+                        <Link className={styles['header__sign-in']} key="inscription" to="/inscription">Inscription</Link>
                     </li>
                     <li className={styles['button-log-in']} key="connexion">
-                        <Link to="/connexion">Se connecter</Link>
+                        <Link className={styles['header__connexion']} key="connexion" to="/connexion">Se connecter</Link>
                     </li>
                 </>
             );
@@ -61,8 +61,8 @@ export default function Header({ onProfileClick }) {
                 <img src={logo} alt="Logo MealMates" />
                 <h1>MealMates</h1>
             </div>
-            <div className={styles['header-right']}>
-                <ul>
+            <div className={styles.header__right}>
+                <ul className={styles.header__rightInfo}>
                     {infoUser()}
                 </ul>
             </div>
