@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logIn,getUser } from "../../service/requestApi";
-import { addUser, getUser } from "../../service/indexDB";
+import { getDatabase, addUser, getUser as getUserFromIndexedDB } from "../../service/indexDB";
 import logo from '../../assets/logo-mealmates.png';
 import styles from "./Connexion.module.css";
 import GoogleLoginButton from "../../components/SsoGoogle";
@@ -21,8 +21,14 @@ function Connexion() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      navigate("/");
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        navigate("/");
+      } catch (error) {
+        console.error("Erreur de parsing JSON :", error);
+        localStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
+      }
     }
   }, [navigate]);
 
@@ -30,25 +36,30 @@ function Connexion() {
   // Gérer la soumission du formulaire de connexion
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!validateFields()) return;
+    // if (!validateFields()) return;
 
     try {
       const response = await logIn({ email, password });
+      console.log("Réponse du serveur :", response);
       if (response.token) {
         // Stocker le token et l'utilisateur dans localStorage et IndexedDB
-        const user = response.user;
         const token = response.token;
+        const user = await getUser({ token });
         
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
+        if (user) {
+          localStorage.setItem("user", JSON.stringify(user));
+        }
 
-        setUser(response.user);
+        setUser(user);
 
-        const res = await getUser({user,token});
+          // 🔥 Récupérer la base
+          console.log("Utilisateur à ajouter dans IndexedDB :", user);
+        const db = await getDatabase();
 
-        // Ajouter l'utilisateur à IndexedDB
-        addUser(res);
-        
+        // 🔥 Ajouter l'utilisateur dans IndexedDB
+        await addUser(db, user);
+
         navigate("/");
       } else {
         setError("Email ou mot de passe incorrect.");
