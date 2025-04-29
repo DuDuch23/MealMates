@@ -3,15 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import Header from '../../components/Header/Header';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import { searchOfferByTitle,
-    getProfile,
-    refreshToken,
-    getVeganOffers,
-    getOffers,
-    getLastChanceOffers,
-    getAgainOffers,
-    getLocalOffers,
-    } from '../../service/requestApi';
+import { searchOfferByTitle,getProfile,refreshToken,getVeganOffers,getOffers,getLastChanceOffers,getAgainOffers,getLocalOffers,} from '../../service/requestApi';
 import UserLocationMap from '../../components/GoogleMaps/GoogleMaps';
 import { jwtDecode } from 'jwt-decode';
 import SliderSection from '../../components/SliderOffers/SliderOffers';
@@ -20,6 +12,12 @@ function App() {
     const token = localStorage.getItem("token");
     const [userData, setUserData] = useState(null);
     const [pos, setPos] = useState(null);
+    const [offers, setOffers] = useState([]);
+    const [veganOffers, setVeganOffers] = useState([]);
+    const [againOffers, setAgainOffers] = useState([]);
+    const [lastChanceOffers, setLastChanceOffers] = useState([]);
+    const [localOffers, setLocalOffers] = useState([]);
+    const [userPos, setUserPos] = useState(null);
 
     useEffect(() => {
         if (userData) {
@@ -60,8 +58,6 @@ function App() {
             console.error("Erreur de recherche :", error);
         }
     };
-
-    const [userPos, setUserPos] = useState(null);
   
 
     useEffect(() => {
@@ -82,12 +78,6 @@ function App() {
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
-
-  const [offers, setOffers] = useState([]);
-  const [veganOffers, setVeganOffers] = useState([]);
-  const [againOffers, setAgainOffers] = useState([]);
-  const [lastChanceOffers, setLastChanceOffers] = useState([]);
-  const [localOffers, setLocalOffers] = useState([]);
 
   useEffect(() => {
 

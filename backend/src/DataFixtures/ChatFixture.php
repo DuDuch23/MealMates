@@ -3,10 +3,13 @@
 namespace App\DataFixtures;
 
 use App\Entity\Chat;
+use App\Entity\Image;
+use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class ChatFixture extends Fixture
+class ChatFixture extends Fixture implements DependentFixtureInterface
 {
     public const CHATS = [
         [
@@ -17,12 +20,12 @@ class ChatFixture extends Fixture
         [
             'client' => 'jean.dupont@example.com',
             'seller' => 'sophie.martin@example.com',
-            'images' => ['crepe','crepe2'],
+            'images' => ['crepe', 'crepe2'],
         ],
         [
             'client' => 'emma.legrand@example.com',
             'seller' => 'paul.moreau@example.com',
-            'images' => ["crepe","crepe4"],
+            'images' => ['crepe', 'crepe3'],
         ],
         [
             'client' => 'julie.robert@example.com',
@@ -33,25 +36,33 @@ class ChatFixture extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        foreach (self::CHATS as $code => $attributes) {
+        foreach (self::CHATS as $index => $data) {
             $chat = new Chat();
 
-            $client = $this->getReference($attributes['client']);
-            $seller = $this->getReference($attributes['seller']);
+            $client = $this->getReference($data['client'],  User::class);
+            
+            $seller = $this->getReference($data['seller'],  User::class);
 
             $chat->setClient($client);
             $chat->setSeller($seller);
 
-            // Ajouter des images ou d'autres données si nécessaire
-            foreach ($attributes['images'] as $imageRef) {
-                $image = $this->getReference($imageRef);
+            foreach ($data['images'] as $imageRef) {
+                $image = $this->getReference($imageRef, Image::class);
                 $chat->addImage($image);
             }
 
             $manager->persist($chat);
-            $this->addReference($code, $chat);
+            $this->addReference('chat_' . $index, $chat);
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class,
+            ImageFixtures::class,
+        ];
     }
 }
