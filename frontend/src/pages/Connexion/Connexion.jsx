@@ -18,8 +18,14 @@ function Connexion() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      navigate("/");
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        navigate("/");
+      } catch (error) {
+        console.error("Erreur de parsing JSON :", error);
+        localStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
+      }
     }
   }, [navigate]);
 
@@ -31,6 +37,7 @@ function Connexion() {
     event.preventDefault();
     try {
       const response = await logIn({ email, password });
+      console.log("Réponse du serveur :", response);
       if (response.token) {
         // Récupérer les données complètes de l'utilisateur
         const token = response.token;
@@ -44,7 +51,6 @@ function Connexion() {
 
         // Ajouter l'utilisateur à IndexedDB
         await addUserIndexDB(fullUser.user);
-
         navigate("/");
       } else {
         setError("Email ou mot de passe incorrect.");

@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 
 import {Link} from "react-router";
-import styles from "./offer.module.scss";
+import styles from "./Offer.module.css";
 
 function Offer(){
     return(
