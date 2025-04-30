@@ -33,7 +33,7 @@ export const addUserIndexDB = async (utilisateur) => {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(['utilisateurs'], 'readwrite');
     const objectStore = transaction.objectStore('utilisateurs');
-    const request = objectStore.add(utilisateur);
+    const request = objectStore.put(utilisateur);
 
     request.onsuccess = () => resolve('Utilisateur ajouté avec succès');
     request.onerror = (event) => reject(`Erreur ajout utilisateur : ${event.target.error}`);

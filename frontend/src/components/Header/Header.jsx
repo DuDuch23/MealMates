@@ -36,7 +36,7 @@ export default function Header({ onProfileClick }) {
     const infoUser = () => {
         if (userData) {
             return (
-                <li className={styles.header__user} key="inscription" onClick={onProfileClick}>
+                <li className={styles['button-user-info']} key="inscription" onClick={onProfileClick}>
                     <IconUser id={userData.user.iconUser}/>
                    <p>{userData.user.firstName}</p>
                 </li>

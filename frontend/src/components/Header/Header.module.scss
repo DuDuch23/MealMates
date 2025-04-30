@@ -45,6 +45,15 @@
                 }
             }
         }
+        .button-user-info{
+            display: flex;
+            background-color: variables.$colorDarkGreen;
+            border-radius: 10px;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 26px;
+        }
     }
     &__sign-in{
         background-color: variables.$colorDarkGreen;
@@ -85,6 +94,26 @@
 @media screen and (max-width: 768px) {
     .header{
         padding: 0 10px;
+        gap: 10px;
+
+        &__rightInfo{
+            gap: 8px;
+            .button-login{
+                a{
+                    padding: 12px 22px;
+
+                }
+            }
+
+            .button-sign-in{
+                a{
+                    padding: 12px 22px;
+                }
+            }
+        }
+        img{
+            width: 30%;
+        }
         div{
             width: unset;
             h1{
