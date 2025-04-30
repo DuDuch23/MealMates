@@ -45,10 +45,10 @@ export default function Header({ onProfileClick }) {
             return (
                 <>
                     <li className={styles['button-sign-in']} key="inscription">
-                        <Link className={styles['header__sign-in']} key="inscription" to="/inscription">Inscription</Link>
+                        <Link className={styles['button-sign-in-link']} key="inscription" to="/inscription">Inscription</Link>
                     </li>
-                    <li className={styles['button-log-in']} key="connexion">
-                        <Link className={styles['header__connexion']} key="connexion" to="/connexion">Se connecter</Link>
+                    <li className={styles['button-login']} key="connexion">
+                        <Link className={styles['button-login-in-link']} key="connexion" to="/connexion">Connexion</Link>
                     </li>
                 </>
             );

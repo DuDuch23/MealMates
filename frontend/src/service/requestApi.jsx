@@ -1,6 +1,22 @@
 import { jwtDecode } from 'jwt-decode';
 import API_BASE_URL from "/src/service/api";
 
+export async function geoCoding(location) {
+    try {
+        const apiKey = import.meta.env.VITE_GOOGLE_MAP;
+        const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`
+        );
+        const data = await response.json();
+        if (data.results.length > 0) {
+            const { lat, lng } = data.results[0].geometry.location;
+            return { lat, lng };
+        }
+    } catch (error) {
+        console.error("Erreur API :", error);
+        throw new Error("Aucune coordonnée trouvée.");
+    }
+}
 
 // Mettre à jour le token depuis localStorage
 export async function refreshToken({token}) {
