@@ -3,13 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\OfferRepository;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints as Assert;
-use App\Repository\OfferRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -54,11 +54,12 @@ class Offer
     #[Groups(["public"])] 
     private bool $isDonation = false;
     
-    #[ORM\ManyToMany(targetEntity: Image::class, cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'offers')]
     #[ORM\JoinTable(name: 'offer_image')]
-    #[ORM\JoinColumn(name: 'offer_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'image_id', referencedColumnName: 'id')]
     private Collection $images;
+    
+
+
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     #[Groups(["public", "private"])]
@@ -102,6 +103,7 @@ class Offer
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'offers')]
+    #[ORM\JoinTable(name: 'offer_category')]
     private Collection $categories;
 
     public function __construct()
@@ -166,14 +168,36 @@ class Offer
         return $this;
     }
 
-    public function getPickupLocation(): ?string { return $this->pickupLocation; }
-    public function setPickupLocation(?string $pickupLocation): static { $this->pickupLocation = $pickupLocation; return $this; }
+    public function getPickupLocation(): ?string 
+    { 
+        return $this->pickupLocation; 
+    }
+    
+    public function setPickupLocation(?string $pickupLocation): static 
+    { 
+        $this->pickupLocation = $pickupLocation; return $this; 
+    }
 
-    public function getAvailableSlots(): array { return $this->availableSlots; }
-    public function setAvailableSlots(array $availableSlots): static { $this->availableSlots = $availableSlots; return $this; }
+    public function getAvailableSlots(): array 
+    { 
+        return $this->availableSlots; 
+    }
 
-    public function getIsRecurring(): bool { return $this->isRecurring; }
-    public function setIsRecurring(bool $isRecurring): static { $this->isRecurring = $isRecurring; return $this; }
+    public function setAvailableSlots(array $availableSlots): static 
+    { 
+        $this->availableSlots = $availableSlots; return $this; 
+    }
+
+    public function getIsRecurring(): bool 
+    { 
+        return $this->isRecurring; 
+    }
+
+    public function setIsRecurring(bool $isRecurring): static 
+    { 
+        $this->isRecurring = $isRecurring; return $this; 
+    }
+    
     public function getIsVegan(): bool {
         return $this->isVegan;
     }

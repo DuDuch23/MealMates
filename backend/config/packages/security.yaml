@@ -10,7 +10,7 @@ security:
 
     firewalls:
         login:
-            pattern: ^/api/login
+            pattern: /api/login
             stateless: true
             json_login:
                 check_path: /api/login
@@ -20,7 +20,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         api:
-            pattern: ^/api
+            pattern: /api
             stateless: true
             jwt: ~
 

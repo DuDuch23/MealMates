@@ -1,5 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
-import API_BASE_URL from "/src/service/api";
+import API_BASE_URL from "./api";
 
 
 // Mettre à jour le token depuis localStorage
@@ -179,6 +179,7 @@ export async function getVeganOffers() {
             headers: { accept: 'application/json' },
         });
 
+        console.log(response.json());
         return await response.json();
     } catch (err) {
         console.error(err);
