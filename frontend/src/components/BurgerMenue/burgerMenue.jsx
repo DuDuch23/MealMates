@@ -1,33 +1,38 @@
 import "./burgerMenue.css";
-import { getUser } from '../../service/requestApi';
-import { Link } from 'react-router-dom';  // Assure-toi d'utiliser 'react-router-dom' si tu utilises React Router v6
+import {getUserIndexDB} from "../../service/indexDB"
+import { Link } from 'react-router';
 import { useEffect, useState } from 'react';
 import { IconUser } from '../IconUser/iconUser';
 
 export default function BurgerMenue({ onProfileClick }) {
-  const [userData, setUserData] = useState(null);  // Initialisé à null au lieu de [] pour éviter les erreurs
-  const token = localStorage.getItem("token");
-  const user = localStorage.getItem("user");
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      try {
-        const data = await getUser({ user, token });
-        setUserData(data);  // Mise à jour de l'état userData
-      } catch (error) {
-        console.error("Erreur lors de la récupération des données du user :", error);
+      const userId = localStorage.getItem("user");
+      const id  = Number(userId);
+      console.log(id);
+      if (id) {
+        try {
+          const data = await getUserIndexDB(id);
+          setUserData(data);
+          console.log(data);
+        } catch (error) {
+          console.error("Erreur lors de la récupération de l'utilisateur :", error);
+        }
       }
     };
+
     fetchUserData();
-  }, [user, token]);
+  }, []);
 
   const profilUser = () => {
-    if (userData && userData.data) {
+    if (userData) {
       return (
         <li>
-          <IconUser id={userData.data.iconUser || 'default-icon-id'} />
+          <IconUser id={userData.iconUser || 'default-icon-id'} />
           <p>
-            <Link to={`/userProfile/${userData.data.id}`}>Mon Profil</Link>
+            <Link to={`/userProfile/${userData.id}`}>Mon Profil</Link>
           </p>
         </li>
       );

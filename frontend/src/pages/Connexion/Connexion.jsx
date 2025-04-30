@@ -39,9 +39,9 @@ function Connexion() {
       const response = await logIn({ email, password });
       console.log("Réponse du serveur :", response);
       if (response.token) {
-        // Récupérer les données complètes de l'utilisateur
         const token = response.token;
         const fullUser = await getProfile({email,token});
+        console.log()
 
         // Stocker dans localStorage
         localStorage.setItem("token", token);

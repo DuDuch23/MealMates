@@ -1,5 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
-import API_BASE_URL from "/src/service/api";
+import API_BASE_URL from "./api";
 
 export async function geoCoding(location) {
     try {
