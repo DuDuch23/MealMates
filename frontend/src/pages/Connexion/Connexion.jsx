@@ -51,7 +51,6 @@ function Connexion() {
 
         // Ajouter l'utilisateur à IndexedDB
         await addUserIndexDB(fullUser.user);
-
         navigate("/");
       } else {
         setError("Email ou mot de passe incorrect.");
