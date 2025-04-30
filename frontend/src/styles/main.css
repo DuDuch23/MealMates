@@ -4,6 +4,10 @@
   background-color: #000000;
 }
 
+a {
+  text-decoration: none;
+}
+
 *, ::before, ::after {
   margin: 0;
   padding: 0;
@@ -26,4 +30,9 @@ body {
 }
 .swiper-wrapper .swiper-slide {
   width: 500px;
+}
+
+#icon-user svg {
+  height: 50px;
+  width: 50px;
 }/*# sourceMappingURL=main.css.map */
