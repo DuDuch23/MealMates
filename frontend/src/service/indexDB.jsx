@@ -14,6 +14,7 @@ export const getDatabase = () => {
     };
 
     request.onupgradeneeded = (event) => {
+      console.log(event);
       const db = event.target.result;
       if (!db.objectStoreNames.contains('utilisateurs')) {
         const objectStore = db.createObjectStore('utilisateurs', { keyPath: 'id' });
