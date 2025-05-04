@@ -64,19 +64,25 @@ class ApiUserController extends AbstractController
         $scope = isset($data["email"]) ? "public" : "private";
     
         // Chercher un utilisateur par email
-        $user = $entityManager->getRepository(User::class)->findOneBy(["email" => $data["email"]]);
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data["email"]]);
     
         // Vérifier si l'utilisateur existe
         if (!$user) {
             return new JsonResponse([
+                'user'=>$user,
                 'status' => "Unauthorized",
                 'code' => 401,
                 'message' => "User not authenticated",
             ], 401);
         }
-    
+
         // Normaliser l'objet User pour le convertir en tableau
-        $userData = $normalizer->normalize($user, null, ['attributes' => ['id', 'email', 'firstName', 'lastName', 'location','iconUser']]); // Spécifie les attributs à inclure dans la réponse
+        $userData = $normalizer->normalize($user, null, [
+            'attributes' => [
+                'id', 'email', 'firstName', 'lastName', 'location', 'iconUser',
+                'preferences' => ['id', 'name']
+            ]
+        ]);
     
         // Retourner une réponse avec les données utilisateur
         return new JsonResponse([

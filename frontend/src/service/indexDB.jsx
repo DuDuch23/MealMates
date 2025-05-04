@@ -1,5 +1,3 @@
-// src/utils/indexedDB.js
-
 // Ouvre (ou crée) la base de données
 export const getDatabase = () => {
   return new Promise((resolve, reject) => {
@@ -10,18 +8,19 @@ export const getDatabase = () => {
     };
 
     request.onerror = () => {
-      reject('Erreur d\'ouverture de la base de données');
+      reject("Erreur d'ouverture de la base de données");
     };
 
     request.onupgradeneeded = (event) => {
-      console.log(event);
       const db = event.target.result;
+
       if (!db.objectStoreNames.contains('utilisateurs')) {
         const objectStore = db.createObjectStore('utilisateurs', { keyPath: 'id' });
         objectStore.createIndex('nom', 'nom', { unique: false });
         objectStore.createIndex('prenom', 'prenom', { unique: false });
         objectStore.createIndex('email', 'email', { unique: true });
         objectStore.createIndex('iconUser', 'iconUser', { unique: false });
+        // Aucune indexation nécessaire pour "preferences" (stocké tel quel)
       }
     };
   });
@@ -37,6 +36,33 @@ export const addUserIndexDB = async (utilisateur) => {
 
     request.onsuccess = () => resolve('Utilisateur ajouté avec succès');
     request.onerror = (event) => reject(`Erreur ajout utilisateur : ${event.target.error}`);
+  });
+};
+
+// Mettre à jour les préférences d'un utilisateur
+export const updateUserPreferencesIndexDB = async (userId, newPreferences) => {
+  const db = await getDatabase();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(['utilisateurs'], 'readwrite');
+    const objectStore = transaction.objectStore('utilisateurs');
+
+    const getRequest = objectStore.get(userId);
+
+    getRequest.onsuccess = () => {
+      const user = getRequest.result;
+      if (!user) {
+        return reject("Utilisateur non trouvé");
+      }
+
+      user.preferences = newPreferences;
+
+      const updateRequest = objectStore.put(user);
+
+      updateRequest.onsuccess = () => resolve('Préférences mises à jour');
+      updateRequest.onerror = (event) => reject(`Erreur mise à jour : ${event.target.error}`);
+    };
+
+    getRequest.onerror = (event) => reject(`Erreur récupération utilisateur : ${event.target.error}`);
   });
 };
 
