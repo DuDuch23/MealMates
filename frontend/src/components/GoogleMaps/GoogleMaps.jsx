@@ -1,6 +1,7 @@
 import React, { useState, useEffect , useRef} from 'react';
 import { GoogleMap, Marker, LoadScript, MarkerClusterer, InfoWindow  } from '@react-google-maps/api';
 import FilterMap from '../FilterMap/FilterMap';
+import styles from './GoogleMaps.module.css';
 
 const containerStyle = {
     width: '100%',
@@ -97,8 +98,15 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
                             position={{ lat: Number(selectedOffer.latitude), lng: Number(selectedOffer.longitude) }}
                             onCloseClick={() => setSelectedOffer(null)}
                         >
-                            <div>
-                                <h3>{selectedOffer.product}</h3>
+                            <div className={styles['info-window']}>
+                            <p>{new Date(selectedOffer.createdAt).toLocaleDateString('fr-FR', {
+                                    day: '2-digit',
+                                    month: 'long',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}</p>
+                                <h2>{selectedOffer.product}</h2>
                                 <p>{selectedOffer.description}</p>
                             </div>
                         </InfoWindow>
