@@ -3,14 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
+use App\Repository\OfferRepository;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\Validator\Constraints as Assert;
-use App\Repository\OfferRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -54,14 +53,13 @@ class Offer
     #[ORM\Column(type: "boolean")]
     #[Groups(["public"])] 
     private bool $isDonation = false;
+    
+    #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'offers')]
+    #[ORM\JoinTable(name: 'offer_image')]
+    private Collection $images;
+    
 
-    #[Vich\UploadableField(mapping: 'photos_offer', fileNameProperty: 'photosNameOffer')]
-    #[Groups(["private"])]
-    private ?Collection $photosFileOffers = null;
 
-    #[ORM\Column(type: "json", nullable: true)]
-    #[Groups(["private", "public"])]
-    private ?array $photosNameOffer = [];
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     #[Groups(["public", "private"])]
@@ -95,12 +93,26 @@ class Offer
     #[Groups(["public", "private"])]
     private ?float $longitude = null;
 
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'offer')]
+    private Collection $orders;
+
+    /**
+     * @var Collection<int, Category>
+     */
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'offers')]
+    #[ORM\JoinTable(name: 'offer_category')]
+    private Collection $categories;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->photosNameOffer = [];
         $this->availableSlots = [];
-        $this->photosFileOffers = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -134,57 +146,58 @@ class Offer
     public function getIsDonation(): bool { return $this->isDonation; }
     public function setIsDonation(bool $isDonation): static { $this->isDonation = $isDonation; return $this; }
 
-     /**
-     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
-     * of 'UploadedFile' is injected into this setter to trigger the update. If this
-     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
-     * must be able to accept an instance of 'File' as the bundle will inject one here
-     * during Doctrine hydration.
-     *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $photosFileOffers
-     */
-
-     public function setPhotosFileOffers(?array $photosFileOffers): void
-     {
-         $this->photosFileOffers = new ArrayCollection(); // Réinitialise la collection
-     
-         // Si le tableau n'est pas nul et qu'il contient des objets File
-         if ($photosFileOffers) {
-             foreach ($photosFileOffers as $photo) {
-                 if ($photo instanceof File) {
-                     $this->photosFileOffers->add($photo); // Ajoute à la collection
-                 }
-             }
-         }
-     }
-     
-     /**
-      * @return File[]|Collection
-      */
-     public function getPhotosFileOffers(): Collection
-     {
-         return $this->photosFileOffers ?? new ArrayCollection();
-     }
-
-    // Getter et setter pour photosNameOffer (les noms des fichiers)
-    public function getPhotosNameOffer(): ?array
+    // Getter
+    public function getImages(): Collection
     {
-        return $this->photosNameOffer;
+        return $this->images;
     }
 
-    public function setPhotosNameOffer(?array $photosNameOffer): void
+    // Ajouter une image
+    public function addImage(Image $image): self
     {
-        $this->photosNameOffer = $photosNameOffer;
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+        }
+        return $this;
     }
 
-    public function getPickupLocation(): ?string { return $this->pickupLocation; }
-    public function setPickupLocation(?string $pickupLocation): static { $this->pickupLocation = $pickupLocation; return $this; }
+    // Retirer une image
+    public function removeImage(Image $image): self
+    {
+        $this->images->removeElement($image);
+        return $this;
+    }
 
-    public function getAvailableSlots(): array { return $this->availableSlots; }
-    public function setAvailableSlots(array $availableSlots): static { $this->availableSlots = $availableSlots; return $this; }
+    public function getPickupLocation(): ?string 
+    { 
+        return $this->pickupLocation; 
+    }
+    
+    public function setPickupLocation(?string $pickupLocation): static 
+    { 
+        $this->pickupLocation = $pickupLocation; return $this; 
+    }
 
-    public function getIsRecurring(): bool { return $this->isRecurring; }
-    public function setIsRecurring(bool $isRecurring): static { $this->isRecurring = $isRecurring; return $this; }
+    public function getAvailableSlots(): array 
+    { 
+        return $this->availableSlots; 
+    }
+
+    public function setAvailableSlots(array $availableSlots): static 
+    { 
+        $this->availableSlots = $availableSlots; return $this; 
+    }
+
+    public function getIsRecurring(): bool 
+    { 
+        return $this->isRecurring; 
+    }
+
+    public function setIsRecurring(bool $isRecurring): static 
+    { 
+        $this->isRecurring = $isRecurring; return $this; 
+    }
+    
     public function getIsVegan(): bool {
         return $this->isVegan;
     }
@@ -204,5 +217,59 @@ class Offer
 
     public function getLongitude(): ?float { return $this->longitude; }
     public function setLongitude(?float $longitude): static { $this->longitude = $longitude; return $this; }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getOffer() === $this) {
+                $order->setOffer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
 
 }

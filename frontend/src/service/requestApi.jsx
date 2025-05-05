@@ -1,7 +1,22 @@
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from "react-router";
-import API_BASE_URL from "/src/service/api";
+import API_BASE_URL from "./api";
 
+export async function geoCoding(location) {
+    try {
+        const apiKey = import.meta.env.VITE_GOOGLE_MAP;
+        const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`
+        );
+        const data = await response.json();
+        if (data.results.length > 0) {
+            const { lat, lng } = data.results[0].geometry.location;
+            return { lat, lng };
+        }
+    } catch (error) {
+        console.error("Erreur API :", error);
+        throw new Error("Aucune coordonnée trouvée.");
+    }
+}
 
 // Mettre à jour le token depuis localStorage
 export async function refreshToken({token}) {
@@ -22,37 +37,36 @@ export async function logIn({ email, password }) {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include",
             body: JSON.stringify({
                 email: email,
                 password: password
             }),
         });
 
-        console.log(response.json);
         return await response.json();
+
     } catch (error) {
         console.error("Erreur API :", error);
         throw error;
     }
 }
 
-export async function getUser({ id, token }) {
+
+export async function getUser({ user, token }) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/user/get`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                "id": id,
-            })
+            body: JSON.stringify({ id: user }),
         });
 
         return await response.json();
+
     } catch (error) {
-        console.error("Erreur API :", error);
+        console.error("Erreur API:", error);
         throw error;
     }
 }
@@ -162,7 +176,7 @@ export async function getProfile({ email, token }) {
 
 export async function getOffers() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/offers/get`, {
+        const response = await fetch(`${API_BASE_URL}/api/offers`, {
             method: 'GET',
             headers: { accept: 'application/json' },
         });
@@ -179,6 +193,52 @@ export async function getVeganOffers() {
         const response = await fetch(`${API_BASE_URL}/api/offers/vegan?limit=10&offset=0`, {
             method: 'GET',
             headers: { accept: 'application/json' },
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
+}
+
+export async function getLocalOffers(lat, lng, radius = 5) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/local?lat=${lat}&lng=${lng}&radius=${radius}`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
+        });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
+}
+
+export async function getLastChanceOffers() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/last-chance`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
+        });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
+}
+
+export async function getAgainOffers(token) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/again`, {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                authorization:`Bearer ${token}`
+            },
         });
 
         return await response.json();
@@ -221,3 +281,62 @@ export async function searchOfferByTitle(title) {
         return { result: [] };
     }
 }
+
+export async function newOffer(data, isFormData = false) {
+    try {
+        // Envoi des données sous FormData sans utiliser JSON.stringify
+        const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
+            method: "POST",
+            body: data, // Ne pas utiliser JSON.stringify ici pour FormData
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                // Pas besoin de Content-Type avec FormData
+            },
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Erreur lors de la création de l'offre.");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
+    }
+}
+
+export async function geocodeLocation(location) {
+    try{
+        const apiKey = import.meta.env.VITE_GOOGLE_MAP;
+        const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`
+        );
+        const data = await response.json();
+        if (data.results.length > 0) {
+            const { lat, lng } = data.results[0].geometry.location;
+            return { lat, lng };
+        }
+    } catch(error) {
+        console.error("Erreur API :", error);
+        // throw new Error("Aucune coordonnée trouvée.");
+        return { result: [] };
+    }
+}
+
+export async function fetchFilteredOffers(filters) {
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/offers/filter`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(filters),
+            credentials: "include",
+        });
+
+        return await response.json();
+    } catch(error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
+    }
+};

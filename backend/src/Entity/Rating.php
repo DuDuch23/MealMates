@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     name: "unique_rater_rated",
     columns: ["rater_id", "rated_id"]
 )]
+
 class Rating
 {
     #[ORM\Id]

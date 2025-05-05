@@ -1,10 +1,12 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Offer;
 use DateTimeImmutable;
 use App\Repository\OfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,7 +35,7 @@ class ApiOfferController extends AbstractController
         return $this->json([
             'status' => "OK",
             'code' => 200,
-            'data' => json_decode($offersSerialized, true),
+            'data' => json_decode($serializer->serialize($offers, 'json', ['groups' => 'public']), true),
         ], 200);
     }
 
@@ -89,27 +91,99 @@ class ApiOfferController extends AbstractController
         ], 200);
     }
 
+    #[Route('/local', name: 'api_offers_local', methods: ['GET'])]
+    public function offersLocal(Request $req, OfferRepository $repo, SerializerInterface $serializer): JsonResponse
+    {
+        $lat = (float) $req->query->get('lat');
+        $lng = (float) $req->query->get('lng');
+        $radius = $req->query->getInt('radius', 5);
+
+        if ($lat === null || $lng === null) {
+            return $this->json(['error' => 'lat/lng required'], 400);
+        }
+
+        $offers = $repo->findOffersLocal($lat, $lng, $radius);
+
+        return $this->json([
+            'status' => 'OK',
+            'data'   => json_decode($serializer->serialize($offers, 'json', ['groups' => 'public']), true),
+        ]);
+    }
+
+    #[Route('/last-chance', name: 'api_offers_last_chance', methods: ['GET'])]
+    public function getLastChanceOffers(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $limit = $request->query->getInt('limit', 10);
+        $offset = $request->query->getInt('offset', 0);
+
+        $offers = $entityManager->getRepository(Offer::class)->findLastChance($limit, $offset);
+
+        if (empty($offers)) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "No vegan offers found."
+            ], 404);
+        }
+
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+            'data' => json_decode($serializer->serialize($offers, 'json', ['groups' => 'public']), true),
+        ], 200);
+    }
+
+    #[Route('/again', name: 'api_offers_again', methods: ['GET'])]
+    public function getAgainOffers(Request $request, SerializerInterface $serializer, 
+    Security $security, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $limit = $request->query->getInt('limit', 10);
+        $offset = $request->query->getInt('offset', 0);
+        /** @var User $user */
+        $user = $security->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $offers = $entityManager->getRepository(Offer::class)->findAgain($user->getId());
+
+        if (empty($offers)) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "No again offers found."
+            ], 404);
+        }
+
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+            'data' => json_decode($serializer->serialize($offers, 'json', ['groups' => 'public']), true),
+        ], 200);
+    }
+
     #[Route('/new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['name'])) {
-            return $this->json([
-                'status' => "Bad Request",
-                'code' => 400,
-                'message' => "Missing 'name' parameter."
-            ], 400);
-        }
+        // if (!isset($data['name'])) {
+        //     return $this->json([
+        //         'status' => "Bad Request",
+        //         'code' => 400,
+        //         'message' => "Missing 'name' parameter."
+        //     ], 400);
+        // }
 
-        $existingOffer = $entityManager->getRepository(Offer::class)->findOneBy(['name' => $data['name']]);
-        if ($existingOffer) {
-            return $this->json([
-                'status' => "Forbidden",
-                'code' => 403,
-                'message' => "Offer already exists."
-            ], 403);
-        }
+        // $existingOffer = $entityManager->getRepository(Offer::class)->findOneBy(['name' => $data['name']]);
+        // if ($existingOffer) {
+        //     return $this->json([
+        //         'status' => "Forbidden",
+        //         'code' => 403,
+        //         'message' => "Offer already exists."
+        //     ], 403);
+        // }
 
         $offer = new Offer();
         $offer->setProduct($data['product']);
@@ -121,7 +195,13 @@ class ApiOfferController extends AbstractController
         $offer->setPickupLocation($data['pickupLocation']);
         $offer->setAvailableSlots($data['availableSlots']);
         $offer->setIsRecurring($data['isRecurring']);
-        $offer->setPhotosFileOffers($data['photos_offer']);
+        if (!empty($data['photos_offer'])) {
+            foreach ($data['photos_offer'] as $filename) {
+                $image = new Image();
+                $image->setFilename($filename);
+                $offer->addImage($image); // ajoute automatiquement l'image à l'offre
+            }
+        }
         // $offer->setCreatedAt(new \DateTimeImmutable());
         $offer->setUpdatedAt(new DateTimeImmutable());
         $offer->setUser($this->getUser()); // Assurez-vous que l'utilisateur est connecté

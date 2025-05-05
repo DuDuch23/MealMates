@@ -3,13 +3,13 @@
 namespace App\Entity;
 
 use App\Enum\PreferenceEnum;
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
@@ -47,6 +47,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["public", "private"])]
     private Collection $preferences;
 
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[Groups(["public", "private"])]
+    private Collection $searchHistory;
+
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rater', orphanRemoval: true)]
     private Collection $ratingsGiven;
 
@@ -72,18 +76,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'seller')]
     private Collection $offers;
 
+
+
     #[ORM\Column(options: ['default' => false])]
     private ?bool $isVerified = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $verificationToken = null;
 
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'buyer')]
+    private Collection $orders;
+
     public function __construct()
     {
+        $this->offers = new ArrayCollection();
         $this->ratingsGiven = new ArrayCollection();
         $this->ratingsReceived = new ArrayCollection();
-        $this->offers = new ArrayCollection();
-        $this->preferences = new ArrayCollection(); // Initialiser la collection de catégories
+        $this->searchHistory = new ArrayCollection();
+        $this->preferences = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +108,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    public function getsearchHistory(): Collection
+    {
+        return $this->searchHistory;
+    }
+
+    public function addSearch(SearchHistory $search): void
+    {
+        $this->searchHistory->add($search);
+    }
+
+    public function deleteSearch(SearchHistory $search): void
+    {
+        $this->searchHistory->removeElement($search);
     }
 
     public function setEmail(string $email): static
@@ -351,6 +380,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVerificationToken(?string $verificationToken): static
     {
         $this->verificationToken = $verificationToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setBuyer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getBuyer() === $this) {
+                $order->setBuyer(null);
+            }
+        }
 
         return $this;
     }

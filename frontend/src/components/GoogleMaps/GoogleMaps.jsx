@@ -1,47 +1,72 @@
 import React, { useState, useEffect , useRef} from 'react';
-import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, LoadScript, MarkerClusterer, InfoWindow  } from '@react-google-maps/api';
+import FilterMap from '../FilterMap/FilterMap';
+import styles from './GoogleMaps.module.css';
 
 const containerStyle = {
     width: '100%',
     height: '100%'
 };
 
-// const OfferMarker = ({ offer }) => (
-//     <div style={{ cursor: 'pointer' }} title={offer.product}>
-//       📦
-//     </div>
-// );
 
 const UserLocationMap = ({ offers = [], zoom = 13 }) => {
-    const [location, setLocation] = useState(null);
+    const [userPos, setUserPos] = useState(null);
     const [map, setMap] = useState(null);
 
     useEffect(() => {
         const watchId = navigator.geolocation.watchPosition(
-            (position) => {
-                const loc = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                };
-                setLocation(loc);
-            },
+            (position) => 
+                setUserPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
             (error) => {
                 console.warn("Erreur de géolocalisation :", error);
                 const fallback = { lat: 48.8566, lng: 2.3522 };
                 console.log("Fallback position utilisée :", fallback);
-                setLocation(fallback);
+                setUserPos(fallback);
             },
             {
                 enableHighAccuracy: true,
                 maximumAge: 0,
-                timeout: 5000
+                // timeout: 5000
             }
         );
     
         return () => navigator.geolocation.clearWatch(watchId);
     }, []);
 
-    if (!location) {
+    // clusterer pour les markers (regroupement de markers proches)
+
+    const renderMarkers = (clusterer) =>
+        offers.map((offer) => (
+            <Marker
+                key={offer.id}
+                position={{ lat: Number(offer.latitude), lng: Number(offer.longitude) }}
+                title={offer.title}
+                label="📦"
+                clusterer={clusterer}
+                onClick={() => handleMarkerClick(offer)}
+            />
+        )
+    );
+
+    const [selectedOffer, setSelectedOffer] = useState(null);
+
+    const handleMarkerClick = (offer) => {
+        setSelectedOffer(offer);
+    };
+
+    // useEffect(() => {
+    //     if (map && offers.length > 0) {
+    //         const markers = offers.map((offer) => new window.google.maps.Marker({
+    //             position: { lat: Number(offer.latitude), lng: Number(offer.longitude) },
+    //             title: offer.title,
+    //             label: "📦"
+    //         }));
+    
+    //         new MarkerClusterer({ markers, map });
+    //     }
+    // }, [map, offers]);
+
+    if (!userPos) {
         return <p>Chargement de la carte...</p>;
     }
 
@@ -50,33 +75,45 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
     };
 
     return (
-        <div style={{ height: '100%', width: '100%', position: 'relative', zIndex: 1000 }}>
-            <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
-                <GoogleMap
+        <>
+            <LoadScript className="map" googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
+                <GoogleMap className="map"
                     mapContainerStyle={containerStyle}
-                    center={location}
+                    center={userPos}
                     zoom={zoom}
                     onLoad={onLoad}
-                >
+                    >
                     {map && (
                         <Marker
-                        position={location}
+                        position={userPos}
                         map={map}
                         title="Votre position"
                         />
                     )}
-                    {offers.map((offer) => (
-                    <Marker
-                        key={offer.id}
-                        position={{ lat: offer.latitude, lng: offer.longitude }}
-                        map={map}
-                        title={offer.name}
-                        label="📦"
-                    />
-                    ))}
+                    <MarkerClusterer>
+                        {(clusterer) => renderMarkers(clusterer)}
+                    </MarkerClusterer>
+                    {selectedOffer && (
+                        <InfoWindow
+                            position={{ lat: Number(selectedOffer.latitude), lng: Number(selectedOffer.longitude) }}
+                            onCloseClick={() => setSelectedOffer(null)}
+                        >
+                            <div className={styles['info-window']}>
+                            <p>{new Date(selectedOffer.createdAt).toLocaleDateString('fr-FR', {
+                                    day: '2-digit',
+                                    month: 'long',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}</p>
+                                <h2>{selectedOffer.product}</h2>
+                                <p>{selectedOffer.description}</p>
+                            </div>
+                        </InfoWindow>
+                    )}
                 </GoogleMap>
             </LoadScript>
-        </div>
+        </>
     );
 };
 

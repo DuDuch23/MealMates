@@ -4,62 +4,85 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 12.5vh;
     background-color: black;
-    &__left{
-        
-    }
-    ul{
-        width: 20%;
+    padding: 0 20px;
+    &__rightInfo{
         display: flex;
         list-style: none;
+        justify-content: end;
+        gap: 24px;
         li{
-            border-radius: 5px;
-            width: 50%;
-            background: variables.$colorDarkGreen;
-            border: 1px solid green;
+            list-style-type: none;
+        }
+        .button-sign-in{
+            a{
+                background-color: variables.$colorDarkGreen;
+                color: white;
+                padding: 16px 28px;
+                border-radius: 10px;
+                font-weight: 600;
+                transition: all 0.3s ease-in-out;
+                &:hover{
+                    transition: all 0.3s ease-in-out;
+                    background-color: white;
+                    color: variables.$colorDarkGreen;
+                }
+            }
+        }
+        .button-login{
+            a{
+                background-color: white;
+                color: variables.$colorDarkGreen;
+                padding: 16px 28px;
+                border-radius: 10px;
+                font-weight: 600;
+                transition: all 0.3s ease-in-out;
+
+                &:hover{
+                    transition: all 0.3s ease-in-out;
+                    background-color: variables.$colorDarkGreen;
+                    color: white;
+                }
+            }
+        }
+        .button-user-info{
             display: flex;
-            align-items: center;
+            background-color: variables.$colorDarkGreen;
+            border-radius: 10px;
+            cursor: pointer;
             justify-content: center;
-        }
-        a{
-            text-decoration: none;
-        }
-    }
-    
-    .button-log-in{
-        background-color: variables.$colorWhite;
-        a{
-            color: variables.$colorDarkGreen;
+            align-items: center;
+            padding: 2px 26px;
         }
     }
+    &__sign-in{
+        background-color: variables.$colorDarkGreen;
+    }
     
-    div {
+    &__left{
         display: flex;
         align-items: center;
         width: 50%;
+        height: 100%;
 
-        img {
-            height: 80%;
-            margin-left: 1%;
-        }
         h1 {
             font-size: 3rem;
             margin-left: 1%;
         }
     }
-    .header-right {
-        justify-content: flex-end;
-        margin-right: 5%;
-        gap: 24px;
-        height: 50%;
+    &__right {
+        justify-content: right;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
     }
     #icon-user{
-        margin: 0;
     }
     .button-user{
         width: 30%;
         display: flex;
+        cursor: pointer;
         justify-content: space-around;
     }
 }
@@ -70,6 +93,27 @@
 
 @media screen and (max-width: 768px) {
     .header{
+        padding: 0 10px;
+        gap: 10px;
+
+        &__rightInfo{
+            gap: 8px;
+            .button-login{
+                a{
+                    padding: 12px 22px;
+
+                }
+            }
+
+            .button-sign-in{
+                a{
+                    padding: 12px 22px;
+                }
+            }
+        }
+        img{
+            width: 30%;
+        }
         div{
             width: unset;
             h1{
