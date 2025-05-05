@@ -33,15 +33,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function findByEmail(string $email): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.email = :email')
-            ->setParameter('email', $email)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
     public function sellersAlreadyBoughtFrom(User $buyer): array
     {
         return $this->createQueryBuilder('u')
@@ -53,6 +44,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('buyer', $buyer)
             ->getQuery()
             ->getResult();
+    }
+
+    public function getPreferences(int $id): array
+    {
+        $query = $this->createQuery(
+            'SELECT c.id, c.name
+             FROM App\Entity\UserCategory uc
+             JOIN uc.category c
+             WHERE uc.user = :userId'
+        );
+        $query->setParameter('userId', $id);
+        $results = $query->getResult();
+        return $results;
     }
 
     // public function findLastChance(): array

@@ -7,22 +7,34 @@ import Header from "../../components/Header/Header";
 import './UserMealCard.css';
 
 function UserMealCard() {
-    const [user, setUser] = useState(null);
-
     const params = useParams();
-    const userId = params.id;
+    const userId = params.id ? parseInt(params.id) : null;
 
-    const token = localStorage.getItem("token");
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         async function fetchUserData() {
-            if (userId && token) {
-                try {
-                    const response = await getUser({ id: userId, token: token });
-                    setUser(response);
-                } catch (err) {
-                    console.error("Erreur lors de la récupération des données :", err);
+            if (!userId) return;
+
+            try {
+                const localData = await getUserIndexDB(userId);
+
+                if (localData) {
+                    setUser(localData);
+                    console.log("Utilisateur depuis IndexedDB :", localData);
+                } else {
+                    const token = localStorage.getItem("token");
+                    const remoteData = await getUser({ user: userId, token });
+                    setUser(remoteData);
+                    console.log("Utilisateur depuis API :", remoteData.data);
                 }
+            } catch (err) {
+                console.error("Erreur lors de la récupération des données :", err);
+                setError("Une erreur est survenue.");
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -30,8 +42,8 @@ function UserMealCard() {
     }, [userId]);
 
     const infoUser = () => {
-        if (user && user.data) {
-            const moyenne = user.data.ratingsReceived.map((cur) => 
+        if (user) {
+            const moyenne = user.ratingsReceived.map((cur) => 
                 cur.score
             );
             return (
@@ -59,7 +71,7 @@ function UserMealCard() {
                 <div className="preferences">
                     <h3>Mes offres :</h3>
                     <ul>
-                        {user.data.preferences.map((preference) => (
+                        {user.preferences.map((preference) => (
                             <li key={randomId()}>{preference}</li>
                         ))}
                     </ul>
@@ -70,7 +82,7 @@ function UserMealCard() {
         }
     };
 
-    const userIcon = () => user.data.iconUser; 
+    const userIcon = () => user.iconUser; 
 
     return (
     <>
