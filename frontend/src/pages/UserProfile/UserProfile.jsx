@@ -1,65 +1,73 @@
-import { useState, useEffect } from "react";
-import { useParams,Link } from 'react-router';
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router";
 import { getUser } from "../../service/requestApi";
+import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
-import randomId from "../../service/randomKey";
-import './UserProfile.css';
+import './UserProfile.css'
 
-function UserProfile() {
-
-    // état pour stocker les infos de l'utilisateur
-    const [user, setUser] = useState(null);
-
-    // récupère l'id depuis l'URL
+const UserProfile = () => {
     const params = useParams();
-    const userId = parseInt(params.id);
+    const userId = params.id ? parseInt(params.id) : null;
 
-    // récupère le token dans le localStorage
-    const token = localStorage.getItem("token");
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         async function fetchUserData() {
-            if (userId && token) {
-                try {
-                    const response = await getUser({ user: userId, token: token });
-                    setUser(response);
-                    console.log(response);
-                } catch (err) {
-                    console.error("Erreur lors de la récupération des données :", err);
+            if (!userId) return;
+
+            try {
+                const localData = await getUserIndexDB(userId);
+
+                if (localData) {
+                    setUser(localData);
+                    console.log("Utilisateur depuis IndexedDB :", localData);
+                } else {
+                    const token = localStorage.getItem("token");
+                    const remoteData = await getUser({ user: userId, token });
+                    setUser(remoteData.data);
+                    console.log("Utilisateur depuis API :", remoteData);
                 }
+            } catch (err) {
+                console.error("Erreur lors de la récupération des données :", err);
+                setError("Une erreur est survenue.");
+            } finally {
+                setLoading(false);
             }
         }
 
         fetchUserData();
     }, [userId]);
 
-    console.log(user);
+    if (loading) return <p>Chargement...</p>;
+    if (error) return <p>{error}</p>;
+    if (!user) return <p>Aucun utilisateur trouvé.</p>;
 
-    const infoUser = () => {
-        if (user && user.data) {
-            return (
-                <>
-                    <div><p>{user?.data.firstName}</p></div>
-                    <div><p>{user?.data.lastName}</p></div>
-                    <div><p>{user?.data.email}</p></div>
-                </>
-            );
-        } else {
-            return <p>Chargement des informations...</p>;
-        }
-    };
+    function infoUser() {
+        return (
+            <>
+                <div><p>{user?.firstName}</p></div>
+                <div><p>{user?.lastName}</p></div>
+                <div><p>{user?.email}</p></div>
+            </>
+        );
+    }
 
-    
     const userPreference = () => {
-        if (user && user?.data.preferences) {
+        if (user) {
             return (
                 <div className="preferences">
                     <h3>Mes préférences</h3>
+                    {user.preferences?.length > 0 ? (
                     <ul>
-                        {user.data.preferences.map((preference) => (
-                            <li key={randomId()}>{preference}</li>
+                        {user.preferences.map((preference) => (
+                            <li key={preference.id}>{preference.name}</li>
                         ))}
                     </ul>
+                ) : (
+                    <p>Aucune préférence disponible.</p>
+                )}
                 </div>
             );
         } else {
@@ -68,40 +76,40 @@ function UserProfile() {
     };
 
     return (
-    <>
-        <div className="card-user">
-            <nav>
-                <Link to={"/"}>
-                    <img src="/img/logo-mealmates.png" alt="logo mealmates" />
-                    <h2>MealMates</h2>
-                </Link>
-            </nav>
-            <IconUser id={userIcon()}/>
-            <div className="content-user">
-                <div className="container-link">
-                    <Link to={`/userProfile/${userId}`}>Mes informations</Link>
-                    <span>
-                      <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
-                      </svg>
-                    </span>
-                    <Link to={`/userMealCard/${userId}`}>MealCard</Link>
-                    <span>
-                      <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
-                      </svg>
-                    </span>
-                    <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
-                </div>
-                <div className="container-info-user">
-                    <div className="basics-elements">
-                        {infoUser()}
+        <>
+            <div className="card-user">
+                <nav>
+                    <Link to={"/"}>
+                        <img src="/img/logo-mealmates.png" alt="logo mealmates" />
+                        <h2>MealMates</h2>
+                    </Link>
+                </nav>
+                <IconUser id={user.iconUser}/>
+                <div className="content-user">
+                    <div className="container-link">
+                        <Link to={`/userProfile/${userId}`}>Mes informations</Link>
+                        <span>
+                          <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
+                          </svg>
+                        </span>
+                        <Link to={`/userMealCard/${userId}`}>MealCard</Link>
+                        <span>
+                          <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
+                          </svg>
+                        </span>
+                        <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                     </div>
-                    {userPreference()}
+                    <div className="container-info-user">
+                        <div className="basics-elements">
+                            {infoUser()}
+                        </div>
+                        {userPreference()}
+                    </div>
                 </div>
             </div>
-        </div>
-    </>);
-}
+        </>);
+};
 
 export default UserProfile;
