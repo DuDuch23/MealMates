@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import './iconUser.css';
-import './../BurgerMenue/burgerMenue';
+import './iconUser.scss';
+
 // import randomId from "../../service/randomKey";
  
 const icons = [

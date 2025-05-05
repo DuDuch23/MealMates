@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
 import logo from '../../assets/logo-mealmates.png';
-import styles from "./Connexion.module.css";
 import GoogleLoginButton from "../../components/SsoGoogle";
 
 function Connexion() {

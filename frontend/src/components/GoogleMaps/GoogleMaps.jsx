@@ -1,7 +1,7 @@
 import React, { useState, useEffect , useRef} from 'react';
 import { GoogleMap, Marker, LoadScript, MarkerClusterer, InfoWindow  } from '@react-google-maps/api';
 import FilterMap from '../FilterMap/FilterMap';
-import styles from './GoogleMaps.module.css';
+
 
 const containerStyle = {
     width: '100%',
