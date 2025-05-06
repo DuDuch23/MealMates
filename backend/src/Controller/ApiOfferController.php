@@ -52,7 +52,7 @@ class ApiOfferController extends AbstractController
             ], 400);
         }
 
-        $offer = $entityManager->getRepository(Offer::class)->findOneBy(['seller' => $data['id']]);
+        $offer = $entityManager->getRepository(Offer::class)->findBy(['seller' => $data['id']]);
 
         if (!$offer) {
             return $this->json([

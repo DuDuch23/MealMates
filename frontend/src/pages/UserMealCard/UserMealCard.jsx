@@ -44,23 +44,26 @@ function UserMealCard() {
         }
 
         fetchUserData();
-    }, [userId]);
+    }, []);
+
+    const userIcon = () =>{
+        if (user){ 
+            console.log(user.iconUser);
+            return (user.iconUser)
+        }
+    }; 
 
     const infoUser = () => {
         if (user) {
-            const moyenne = user.ratingsReceived.map((cur) => 
-                cur.score
-            );
             return (
                 <>
                     <ul className="list-user">
-                        <li><p>{user.data.firstName}</p></li>
-                        <li><p>{moyenne}</p></li>
+                        <li><p>{user.firstName}</p></li>
                     </ul>
                     <div>
                         <p>
                             Ou me trouver : <br/>
-                            {user.data.location}
+                            {user.location}
                         </p>
                     </div>
                 </>
@@ -69,15 +72,15 @@ function UserMealCard() {
             return <p>Chargement des informations...</p>;
         }
     };
-    
-    const userPreference = () => {
-        if (user && user.data.preferences) {
+
+    const userPreference =  () => {
+        if (userOffer) {
             return (
                 <div className="preferences">
                     <h3>Mes offres :</h3>
                     <ul>
-                        {user.preferences.map((preference) => (
-                            <li key={randomId()}>{preference}</li>
+                        {userOffer.map((offer) => (
+                            <li key={randomId()}>{offer.product}</li>
                         ))}
                     </ul>
                 </div>
@@ -87,11 +90,9 @@ function UserMealCard() {
         }
     };
 
-    const userIcon = () => user.iconUser; 
-
     return (
     <>
-        {/* <div className="card-user">
+        <div className="card-user">
             <nav>
                 <Link to={"/"}>
                     <img src="/img/logo-mealmates.png" alt="logo mealmates" />
@@ -122,7 +123,7 @@ function UserMealCard() {
                     {userPreference()}
                 </div>
             </div>
-        </div> */}
+        </div>
     </>);
 }
 
