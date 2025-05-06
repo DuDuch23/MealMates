@@ -4,16 +4,15 @@ import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
 import logo from '../../assets/logo-mealmates.png';
 import GoogleLoginButton from "../../components/SsoGoogle";
+import styles from "./Connexion.module.css"; // ✅ CSS Module
 
 function Connexion() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
-
   const navigate = useNavigate();
 
-  // Gérer la récupération de l'utilisateur déjà connecté
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -23,32 +22,26 @@ function Connexion() {
         navigate("/");
       } catch (error) {
         console.error("Erreur de parsing JSON :", error);
-        localStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
+        localStorage.removeItem("user");
       }
     }
   }, [navigate]);
 
-  // Gestion des inputs de manière générique
   const handleInputChange = (setter) => (event) => setter(event.target.value);
 
-  // Gérer la soumission du formulaire de connexion
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await logIn({ email, password });
-      console.log("Réponse du serveur :", response);
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({email,token});
-        console.log()
+        const fullUser = await getProfile({ email, token });
 
-        // Stocker dans localStorage
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(fullUser.user.id));
 
         setUser(fullUser.id);
 
-        // Ajouter l'utilisateur à IndexedDB
         await addUserIndexDB(fullUser.user);
         navigate("/");
       } else {
@@ -62,7 +55,7 @@ function Connexion() {
 
   return (
     <div className={styles.container}>
-      <div className={styles["title-logo"]}>
+      <div className={styles.titleLogo}>
         <img src={logo} alt="logo" className={styles.logo} />
         <h1>MealMates</h1>
       </div>
@@ -70,7 +63,7 @@ function Connexion() {
       <div className={styles.action}>
         {error && <p className={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className={styles["content-element-form"]}>
+          <div className={styles.contentElementForm}>
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -83,7 +76,7 @@ function Connexion() {
             />
           </div>
 
-          <div className={styles["content-element-form"]}>
+          <div className={styles.contentElementForm}>
             <label htmlFor="password">Mot de Passe</label>
             <input
               id="password"
