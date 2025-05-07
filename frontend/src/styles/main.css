@@ -28,9 +28,6 @@ body {
 .swiper-wrapper {
   display: flex;
 }
-.swiper-wrapper .swiper-slide {
-  width: 500px;
-}
 
 #icon-user svg {
   height: 50px;
