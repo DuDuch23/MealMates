@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+
 #[Route('/api/user', name: 'api_user')]
 class ApiUserController extends AbstractController
 {
@@ -22,6 +23,7 @@ class ApiUserController extends AbstractController
     {
         $this->hasher = $hasher;
     }
+    
     
     #[Route('/get', methods: ['POST'])]
     public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse

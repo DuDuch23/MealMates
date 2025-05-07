@@ -4,7 +4,6 @@ import { getUser,getOfferBySeller } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
 import randomId from "../../service/randomKey";
-import Header from "../../components/Header/Header";
 import './UserMealCard.css';
 
 function UserMealCard() {

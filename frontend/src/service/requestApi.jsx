@@ -20,7 +20,6 @@ export async function geoCoding(location) {
     }
 }
 
-// Mettre à jour le token depuis localStorage
 export async function refreshToken() {
     const infoToken = jwtDecode(token);
     const now = Date.now() / 1000;
@@ -34,27 +33,32 @@ export async function refreshToken() {
 
 export async function logIn({ email, password }) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/login`, {
+        const url = `${API_BASE_URL}/api/login/`; // <- Slash ajouté
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            }),
+            body: JSON.stringify({ email, password }),
+            credentials: "include", // <- Ajouté pour les sessions/cookies
         });
 
-        return await response.json();
+        if (!response.ok) {
+            if (response.status === 0 || response.status == null) {
+                throw new Error("Erreur CORS : impossible d'accéder au serveur.");
+            }
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Erreur de connexion.");
+        }
 
+        return await response.json();
     } catch (error) {
-        console.error("Erreur API :", error);
+        console.error("Erreur API logIn :", error);
         throw error;
     }
 }
 
-// User
-export async function getUser({ user}) {
+export async function getUser({ user }) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/user/get`, {
             method: "POST",
@@ -66,7 +70,6 @@ export async function getUser({ user}) {
         });
 
         return await response.json();
-
     } catch (error) {
         console.error("Erreur API:", error);
         throw error;
@@ -89,11 +92,11 @@ export async function newUser({ email, password, confirmPassword, firstName, las
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                email: email,
-                password: password,
+                email,
+                password,
                 password_confirm: confirmPassword,
-                firstName: firstName,
-                lastName: lastName,
+                firstName,
+                lastName,
             }),
         });
 
@@ -105,7 +108,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
     }
 }
 
-export async function editUser({ userData}) {
+export async function editUser({ userData }) {
     try {
         const body = {
             id: userData.userId,
@@ -144,9 +147,7 @@ export async function deleteUser(id) {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                "id": id
-            }),
+            body: JSON.stringify({ id }),
         });
 
         return await response.json();
@@ -164,9 +165,7 @@ export async function getProfile({ email }) {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                "email": email,
-            }),
+            body: JSON.stringify({ email }),
         });
 
         return await response.json();
@@ -194,7 +193,20 @@ export async function logOut() {
     localStorage.removeItem("user");
 }
 
-// Offer
+// OFFER
+
+export async function getOfferId({ id }) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/${id}`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        return { result: [] };
+    }
+}
 
 export async function getOffers() {
     try {
@@ -217,8 +229,7 @@ export async function getVeganOffers() {
             headers: { accept: 'application/json' },
         });
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (err) {
         console.error(err);
         return { result: [] };
@@ -259,7 +270,7 @@ export async function getAgainOffers() {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                authorization:`Bearer ${token}`
+                authorization: `Bearer ${token}`
             },
         });
 
@@ -270,7 +281,7 @@ export async function getAgainOffers() {
     }
 }
 
-export async function getOfferBySeller(id){
+export async function getOfferBySeller(id) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/offers/get/seller`, {
             method: 'POST',
@@ -278,7 +289,7 @@ export async function getOfferBySeller(id){
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ "id": id }),
+            body: JSON.stringify({ id }),
         });
 
         return await response.json();
@@ -294,7 +305,7 @@ export async function searchOfferByTitle(title) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ keyword: title }),
-            credentials: "include",
+            credentials: "include", // <- Important
         });
 
         return await response.json();
@@ -306,13 +317,11 @@ export async function searchOfferByTitle(title) {
 
 export async function newOffer(data, isFormData = false) {
     try {
-        // Envoi des données sous FormData sans utiliser JSON.stringify
         const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
             method: "POST",
-            body: data, // Ne pas utiliser JSON.stringify ici pour FormData
+            body: data,
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('token')}`,
-                // Pas besoin de Content-Type avec FormData
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
             credentials: "include",
         });
@@ -330,7 +339,7 @@ export async function newOffer(data, isFormData = false) {
 }
 
 export async function geocodeLocation(location) {
-    try{
+    try {
         const apiKey = import.meta.env.VITE_GOOGLE_MAP;
         const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`
@@ -340,25 +349,24 @@ export async function geocodeLocation(location) {
             const { lat, lng } = data.results[0].geometry.location;
             return { lat, lng };
         }
-    } catch(error) {
+    } catch (error) {
         console.error("Erreur API :", error);
-        // throw new Error("Aucune coordonnée trouvée.");
         return { result: [] };
     }
 }
 
 export async function fetchFilteredOffers(filters) {
-    try{
+    try {
         const response = await fetch(`${API_BASE_URL}/api/offers/filter`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(filters),
-            credentials: "include",
+            credentials: "include", // <- Ajouté
         });
 
         return await response.json();
-    } catch(error) {
+    } catch (error) {
         console.error("Erreur API :", error);
         return { result: [] };
     }
-};
+}
