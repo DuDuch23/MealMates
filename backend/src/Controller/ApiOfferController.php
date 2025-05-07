@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Offer;
 use DateTimeImmutable;
@@ -158,7 +159,7 @@ class ApiOfferController extends AbstractController
 
     #[Route('/again', name: 'api_offers_again', methods: ['GET'])]
     public function getAgainOffers(Request $request, SerializerInterface $serializer, 
-    Security $security, EntityManagerInterface $entityManager): JsonResponse
+    Security $security, OfferRepository $offerRepository): JsonResponse
     {
         $limit = $request->query->getInt('limit', 10);
         $offset = $request->query->getInt('offset', 0);
@@ -169,7 +170,7 @@ class ApiOfferController extends AbstractController
             return $this->json(['error' => 'Unauthorized'], 401);
         }
 
-        $offers = $entityManager->getRepository(Offer::class)->findAgain($user->getId());
+        $offers = $offerRepository->findOffersBoughtByUser($user->getId());
 
         if (empty($offers)) {
             return $this->json([
