@@ -1,5 +1,6 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState,useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router';
+import { getUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 
 // Chargement différé des composants
@@ -10,6 +11,7 @@ const Home = React.lazy(() => import('./pages/Home/Home'));
 // Offre
 const Offer = React.lazy(() => import('./pages/Offer/Offer'));
 const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
+const OfferCard = React.lazy(() => import('./pages/OfferCard/OfferCard'));
 
 // User
 const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
@@ -31,20 +33,41 @@ function App() {
       navigate("/connexion");
     }
   }, [token, navigate]);
+  const [user, setUser] = useState(null);
+  const userId = localStorage.getItem("user");
+
+  useEffect(() => {
+    async function fetchUser() {
+      if (userId) {
+        const id = parseInt(userId);
+        const userData = await getUserIndexDB(id);
+        setUser(userData);
+      }
+    }
+    fetchUser();
+  }, [userId]);
+
+  console.log(user);
 
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
       <Routes>
+        {/* route avec la nav bar */}
         <Route element={<NavLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={user ? <Offer /> : <Home />} />
+          {/* discution user */}
+          <Route path="/chat" element={<Chat />} />
+          <Route path='/ChooseChat' element={<ChooseChat/>}/>
+          {/* offer */}
           <Route path="/offer" element={<Offer />} />
           <Route path='/addOffer' element={<AddOffer />}/>
-          <Route path='/ChooseChat' element={<ChooseChat/>}/>
-          <Route path="/chat" element={<Chat />} />
+          <Route path='/offerCard' element={<OfferCard/>}/>
         </Route>
+        {/* user profile */}
         <Route path="/userProfile/:id" element={<UserProfile />} />
         <Route path="/userMealCard/:id" element={<UserMealCard />} />
         <Route path="/userModify/:id" element={<UserModify />} />
+        {/* connexion */}
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription />} />
         <Route path="/deconnexion" element={<Deconnexion />} />

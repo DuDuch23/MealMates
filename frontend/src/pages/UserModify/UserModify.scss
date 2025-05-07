@@ -49,12 +49,16 @@ form{
 
 .user-face{
     width: fit-content;
-    height: 29%;
+    height: 25%;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     display: flex;
+    svg{
+        width: 100% !important;
+        height: 100% !important;
+    }
 }
 
 .card-user{

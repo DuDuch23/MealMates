@@ -29,6 +29,20 @@ nav{
     }
 }
 
+#icon-user{
+    width: fit-content;
+    height: 25%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    svg{
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
 .content-user{
     height: 61%;
     .container-link{

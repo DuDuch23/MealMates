@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams,Link } from 'react-router';
-import { getUser } from "../../service/requestApi";
+import { getUser,getOfferBySeller } from "../../service/requestApi";
+import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
 import randomId from "../../service/randomKey";
-import Header from "../../components/Header/Header";
 import './UserMealCard.css';
 
 function UserMealCard() {
@@ -11,6 +11,7 @@ function UserMealCard() {
     const userId = params.id ? parseInt(params.id) : null;
 
     const [user, setUser] = useState(null);
+    const [userOffer,setOfferUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -26,10 +27,13 @@ function UserMealCard() {
                     console.log("Utilisateur depuis IndexedDB :", localData);
                 } else {
                     const token = localStorage.getItem("token");
-                    const remoteData = await getUser({ user: userId, token });
-                    setUser(remoteData);
+                    const remoteData = await getUser({ user: userId });
+                    setUser(remoteData.data);
                     console.log("Utilisateur depuis API :", remoteData.data);
                 }
+                const data = await getOfferBySeller(userId);
+                console.log("Utilisateur depuis offer :", data);
+                setOfferUser(data.data);
             } catch (err) {
                 console.error("Erreur lors de la récupération des données :", err);
                 setError("Une erreur est survenue.");
@@ -39,23 +43,26 @@ function UserMealCard() {
         }
 
         fetchUserData();
-    }, [userId]);
+    }, []);
+
+    const userIcon = () =>{
+        if (user){ 
+            console.log(user.iconUser);
+            return (user.iconUser)
+        }
+    }; 
 
     const infoUser = () => {
         if (user) {
-            const moyenne = user.ratingsReceived.map((cur) => 
-                cur.score
-            );
             return (
                 <>
                     <ul className="list-user">
-                        <li><p>{user.data.firstName}</p></li>
-                        <li><p>{moyenne}</p></li>
+                        <li><p>{user.firstName}</p></li>
                     </ul>
                     <div>
                         <p>
                             Ou me trouver : <br/>
-                            {user.data.location}
+                            {user.location}
                         </p>
                     </div>
                 </>
@@ -64,15 +71,15 @@ function UserMealCard() {
             return <p>Chargement des informations...</p>;
         }
     };
-    
-    const userPreference = () => {
-        if (user && user.data.preferences) {
+
+    const userPreference =  () => {
+        if (userOffer) {
             return (
                 <div className="preferences">
                     <h3>Mes offres :</h3>
                     <ul>
-                        {user.preferences.map((preference) => (
-                            <li key={randomId()}>{preference}</li>
+                        {userOffer.map((offer) => (
+                            <li key={randomId()}>{offer.product}</li>
                         ))}
                     </ul>
                 </div>
@@ -81,8 +88,6 @@ function UserMealCard() {
             return <p>Aucune préférence disponible.</p>;
         }
     };
-
-    const userIcon = () => user.iconUser; 
 
     return (
     <>

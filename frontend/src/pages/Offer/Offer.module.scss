@@ -31,4 +31,13 @@ body {
         }
     }
 
+#new-offer{
+  color: #888;
+  width: fit-content;
+  margin-top: 2%;
+  margin-left: 1%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  background-color: variables.$colorDarkGreen;
 }
