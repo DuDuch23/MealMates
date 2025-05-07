@@ -55,6 +55,41 @@ export async function logIn({ email, password }) {
     }
 }
 
+export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
+    try {
+        if (!email || !password || !confirmPassword || !firstName || !lastName) {
+            throw new Error("All fields are required.");
+        }
+
+        if (password !== confirmPassword) {
+            throw new Error("Passwords do not match.");
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/user/new`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                password_confirm: confirmPassword,
+                firstName: firstName,
+                lastName: lastName,
+            }),
+        });
+
+        await response.json();
+        const token = await logIn({ email, password });
+        localStorage.setItem("token",token.token);
+        await getProfile({email});
+
+    } catch (error) {
+        console.error("Erreur API :", error);
+        throw error;
+    }
+}
+
 // User
 export async function getUser({ user}) {
     try {
@@ -71,38 +106,6 @@ export async function getUser({ user}) {
 
     } catch (error) {
         console.error("Erreur API:", error);
-        throw error;
-    }
-}
-
-export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
-    try {
-        if (!email || !password || !confirmPassword || !firstName || !lastName) {
-            throw new Error("All fields are required.");
-        }
-
-        if (password !== confirmPassword) {
-            throw new Error("Passwords do not match.");
-        }
-
-        await fetch(`${API_BASE_URL}/api/user/new`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                password_confirm: confirmPassword,
-                firstName: firstName,
-                lastName: lastName,
-            }),
-        });
-
-        await logIn({ email, password });
-
-    } catch (error) {
-        console.error("Erreur API :", error);
         throw error;
     }
 }
@@ -159,6 +162,7 @@ export async function deleteUser(id) {
 }
 
 export async function getProfile({ email }) {
+    console.log(token);
     try {
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",

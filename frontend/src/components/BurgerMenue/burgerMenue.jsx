@@ -1,4 +1,4 @@
-import "./burgerMenue.css";
+import styles from "./burgerMenue.module.css";
 import {getUserIndexDB} from "../../service/indexDB"
 import { Link } from 'react-router';
 import { useEffect, useState } from 'react';
@@ -37,13 +37,13 @@ export default function BurgerMenue({ onProfileClick }) {
         </li>
       );
     }
-    return null;  // Retourne null si userData n'est pas encore disponible
+    return null; 
   };
 
   return (
     <>
-      <ul className="ul-burger">
-        <svg onClick={onProfileClick} xmlns="http://www.w3.org/2000/svg" id="delete-burger-menue" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+      <ul className={styles["ul-burger"]}>
+        <svg onClick={onProfileClick} xmlns="http://www.w3.org/2000/svg" id={styles["delete-burger-menue"]} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
         {profilUser()}  {/* Appel de la fonction profilUser */}
@@ -63,7 +63,7 @@ export default function BurgerMenue({ onProfileClick }) {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-          <Link to="/createOffer">Créer une Offre</Link>
+          <Link to="/addOffer">Créer une Offre</Link>
         </li>
         <li>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

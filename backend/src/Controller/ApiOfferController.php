@@ -77,6 +77,7 @@ class ApiOfferController extends AbstractController
 
         $offer = $entityManager->getRepository(Offer::class)->findBy(['seller' => $data['id']]);
 
+
         if (!$offer) {
             return $this->json([
                 'status' => "Not Found",
