@@ -1,4 +1,4 @@
-import "./burgerMenue.scss";
+import "./burgerMenue.css";
 import {getUserIndexDB} from "../../service/indexDB"
 import { Link } from 'react-router';
 import { useEffect, useState } from 'react';

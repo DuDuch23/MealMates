@@ -1412,6 +1412,7 @@ const icons = [
 ];
 
 export function IconUser({id}){
+    
     const getIconById = (id) => {
       const icon = icons.find((icon) => icon.id === id);
       return icon ? icon.img : null;
