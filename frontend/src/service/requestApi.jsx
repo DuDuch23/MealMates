@@ -240,8 +240,8 @@ export async function getAgainOffers(token) {
                 authorization:`Bearer ${token}`
             },
         });
-
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (err) {
         console.error(err);
         return { result: [] };

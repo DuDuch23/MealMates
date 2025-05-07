@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route } from 'react-router';
+import { Routes, Route, useNavigate } from 'react-router';
 import NavLayout from './Layout/NavLayout';
 
 // Chargement différé des composants
@@ -22,8 +22,16 @@ const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'
 // Chat
 const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
 const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
-
 function App() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  
+  React.useEffect(() => {
+    if (!token) {
+      navigate("/connexion");
+    }
+  }, [token, navigate]);
+
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
       <Routes>
