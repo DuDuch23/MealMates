@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 import { useState,useEffect } from "react";
-import './offerCard.css';
+import './OfferCard.css';
 
 function OfferCard({id}){
     const [infOffer,setOffer] = useState([]);
