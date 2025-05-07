@@ -1,6 +1,8 @@
 import { jwtDecode } from 'jwt-decode';
 import API_BASE_URL from "./api";
 
+const token = localStorage.getItem("token");
+
 export async function geoCoding(location) {
     try {
         const apiKey = import.meta.env.VITE_GOOGLE_MAP;
@@ -19,7 +21,7 @@ export async function geoCoding(location) {
 }
 
 // Mettre à jour le token depuis localStorage
-export async function refreshToken({token}) {
+export async function refreshToken() {
     const infoToken = jwtDecode(token);
     const now = Date.now() / 1000;
 
@@ -51,8 +53,8 @@ export async function logIn({ email, password }) {
     }
 }
 
-
-export async function getUser({ user, token }) {
+// User
+export async function getUser({ user}) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/user/get`, {
             method: "POST",
@@ -103,7 +105,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
     }
 }
 
-export async function editUser({ userData, token }) {
+export async function editUser({ userData}) {
     try {
         const body = {
             id: userData.userId,
@@ -134,7 +136,7 @@ export async function editUser({ userData, token }) {
     }
 }
 
-export async function deleteUser(id, token) {
+export async function deleteUser(id) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/user/delete/`, {
             method: "POST",
@@ -154,7 +156,7 @@ export async function deleteUser(id, token) {
     }
 }
 
-export async function getProfile({ email, token }) {
+export async function getProfile({ email }) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
@@ -173,6 +175,26 @@ export async function getProfile({ email, token }) {
         throw error;
     }
 }
+
+export async function logOut() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/logout`, {
+            method: "GET",
+            credentials: "include",
+        });
+
+        if (response.ok) {
+            console.log("Déconnexion réussie");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la déconnexion :", error);
+    }
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+}
+
+// Offer
 
 export async function getOffers() {
     try {
@@ -231,7 +253,7 @@ export async function getLastChanceOffers() {
     }
 }
 
-export async function getAgainOffers(token) {
+export async function getAgainOffers() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/offers/again`, {
             method: 'GET',
@@ -248,22 +270,22 @@ export async function getAgainOffers(token) {
     }
 }
 
-export async function logOut() {
+export async function getOfferBySeller(id){
     try {
-        const response = await fetch(`${API_BASE_URL}/api/logout`, {
-            method: "GET",
-            credentials: "include",
+        const response = await fetch(`${API_BASE_URL}/api/offers/get/seller`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "id": id }),
         });
 
-        if (response.ok) {
-            console.log("Déconnexion réussie");
-        }
-    } catch (error) {
-        console.error("Erreur lors de la déconnexion :", error);
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
     }
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
 }
 
 export async function searchOfferByTitle(title) {

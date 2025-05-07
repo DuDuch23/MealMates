@@ -57,9 +57,6 @@ class Offer
     #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'offers')]
     #[ORM\JoinTable(name: 'offer_image')]
     private Collection $images;
-    
-
-
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     #[Groups(["public", "private"])]
@@ -123,10 +120,18 @@ class Offer
 
     // Getters et Setters
 
-    public function getId(): ?int { return $this->id; }
+    public function getId(): ?int 
+    { 
+        return $this->id; 
+    }
 
-    public function getUser(): ?User { return $this->seller; }
-    public function setUser(?User $seller): static { $this->seller = $seller; return $this; }
+    public function getSeller(): ?User { 
+        return $this->seller; 
+    }
+    public function setSeller(?User $seller): static { 
+        $this->seller = $seller; 
+        return $this; 
+    }
 
     public function getProduct(): string { return $this->product; }
     public function setProduct(string $product): static { $this->product = $product; return $this; }

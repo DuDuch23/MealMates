@@ -73,5 +73,11 @@ body {
 
 #new-offer{
   color: #888;
-  border: 1px solid white;
+  width: fit-content;
+  margin-top: 2%;
+  margin-left: 1%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  background-color: variables.$colorDarkGreen;
 }

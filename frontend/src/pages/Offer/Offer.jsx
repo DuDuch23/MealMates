@@ -37,7 +37,12 @@ function Offer(){
                 <li>Low Carb</li>
             </ul>
         </nav>
-        <a href="#" id={styles["new-offer"]}>Ajouter Une Offre</a>
+        <Link id={styles["new-offer"]} key="new-offer" to={'/addOffer'}>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 9V19M9 14H19M26.5 14C26.5 20.9036 20.9036 26.5 14 26.5C7.09644 26.5 1.5 20.9036 1.5 14C1.5 7.09644 7.09644 1.5 14 1.5C20.9036 1.5 26.5 7.09644 26.5 14Z" stroke="#F3F3F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>Ajouter une nouvelle offre</p>
+        </Link>
         <div className={styles["container-section"]}>
             <section className={styles["section-item"]}></section>
             <section className={styles["section-item"]}></section>

@@ -147,7 +147,7 @@ function App() {
         try {
             const data = await getLocalOffers();
             if(data && data.data){
-                console.log("local", data);
+                // console.log("local", data);
                 setLocalOffers(data.data);
             } else{
                 console.log("Erreur ou offres locales vides");
@@ -208,7 +208,7 @@ function App() {
                             <SliderSection title="Résultats de recherche" offers={searchResults} />
                         ) : (
                             <>
-                            {token ?? (
+                            {(
                                 <SliderSection title="Recommander à nouveau" offers={againOffers} />
                             )}
                             <SliderSection title="Dernière chance" offers={lastChanceOffers} />
