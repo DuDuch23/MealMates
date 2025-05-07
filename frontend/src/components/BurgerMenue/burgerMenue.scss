@@ -1,0 +1,65 @@
+.ul-burger {
+  width: 30%;
+  z-index: 5;
+  height: 100%;
+  position: fixed;
+  left: 70%;
+  top: 0%;
+  list-style: none;
+  background-color: #000;
+}
+.ul-burger #icon-user {
+  margin: 0;
+}
+.ul-burger li {
+  margin: 5% 0;
+  display: flex;
+  align-items: center;
+}
+.ul-burger li a {
+  text-decoration: none;
+}
+.ul-burger li svg {
+  margin: 0 5% 0 0;
+  width: 15%;
+}
+
+#delete-burger-menue {
+  cursor: pointer;
+  position: absolute;
+  left: 85%;
+  width: 15%;
+  border: 1px solid red;
+}
+
+@media screen and (max-width: 1280px) {
+  .ul-burger {
+    width: 50%;
+    left: 50%;
+    top: 0%;
+    z-index: 5;
+    background-color: #000;
+  }
+}
+@media screen and (max-width: 768px) {
+  .ul-burger {
+    width: 100%;
+    left: 0%;
+    top: 0%;
+    height: 100vh;
+    z-index: 5;
+    background-color: #000;
+  }
+  .ul-burger li {
+    margin: 5% 0;
+    display: flex;
+    align-items: center;
+  }
+  .ul-burger li a {
+    text-decoration: none;
+  }
+  .ul-burger li svg {
+    margin: 0 5% 0 0;
+    width: 15%;
+  }
+}

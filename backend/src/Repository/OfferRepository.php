@@ -37,28 +37,34 @@ class OfferRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @param float $lat latitude de l’utilisateur
-     * @param float $lng longitude de l’utilisateur
-     * @param int   $radiusKm rayon en kilomètres (ex. 5)
-     */
-    public function findOffersLocal(float $lat, float $lng, int $radiusKm = 5): array
-    {
-        //   6371 = rayon moyen de la Terre en km
-        $haversine = '(6371 * acos(cos(radians(:lat)) 
-                    * cos(radians(o.latitude)) 
-                    * cos(radians(o.longitude) - radians(:lng)) 
-                    + sin(radians(:lat)) 
-                    * sin(radians(o.latitude))))';
+    public function findOffersLocal(float $lat, float $lng, int $radiusInKm): array
+{
+    // Rayon de la Terre en kilomètres
+    $earthRadius = 6371;
 
-        return $this->createQueryBuilder('o')
-            ->andWhere("$haversine <= :radius")
-            ->setParameter('lat', $lat)
-            ->setParameter('lng', $lng)
-            ->setParameter('radius', $radiusKm)
-            ->getQuery()
-            ->getResult();
-    }
+    $qb = $this->createQueryBuilder('o');
+
+    $qb->where(
+        $qb->expr()->gt('o.latitude', ':minLat')
+    )->andWhere(
+        $qb->expr()->lt('o.latitude', ':maxLat')
+    )->andWhere(
+        $qb->expr()->gt('o.longitude', ':minLng')
+    )->andWhere(
+        $qb->expr()->lt('o.longitude', ':maxLng')
+    );
+
+    // Calcul d'une "bounding box" simple (pas super précis mais rapide)
+    $latDelta = $radiusInKm / $earthRadius * (180 / pi());
+    $lngDelta = $radiusInKm / ($earthRadius * cos(deg2rad($lat))) * (180 / pi());
+
+    $qb->setParameter('minLat', $lat - $latDelta)
+        ->setParameter('maxLat', $lat + $latDelta)
+        ->setParameter('minLng', $lng - $lngDelta)
+        ->setParameter('maxLng', $lng + $lngDelta);
+
+    return $qb->getQuery()->getResult();
+}
 
     public function findLastChance(): array
     {
@@ -70,17 +76,16 @@ class OfferRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAgain(int $buyerId): array
-    {
-        return $this->_em->createQuery(
-            'SELECT DISTINCT o
-            FROM App\Entity\Order ord
-            JOIN ord.offer o
-            WHERE ord.buyer = :uid'
-        )->setParameter('uid', $buyerId)
-        ->setMaxResults(10)
+    public function findOffersBoughtByUser(int $userId): array
+{
+    return $this->createQueryBuilder('o')
+        ->join('o.orders', 'ord')
+        ->join('ord.buyer', 'b')
+        ->where('b.id = :userId')
+        ->setParameter('userId', $userId)
+        ->getQuery()
         ->getResult();
-    }
+}
 
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
