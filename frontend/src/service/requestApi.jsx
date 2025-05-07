@@ -196,6 +196,20 @@ export async function logOut() {
 
 // Offer
 
+export async function getOfferId({id}){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/${id}`,{
+            method: 'GET',
+            headers:{
+                accept: 'application/json'
+            },
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    }
+}
+
 export async function getOffers() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/offers`, {

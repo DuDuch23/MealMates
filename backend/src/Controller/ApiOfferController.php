@@ -39,6 +39,28 @@ class ApiOfferController extends AbstractController
         ], 200);
     }
 
+    #[Route('/get/{id}', methods: ['GET'])]
+    public function getOfferByID(int $id, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    {
+        $offer = $entityManager->getRepository(Offer::class)->find($id);
+
+        if (!$offer) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "No offer found."
+            ], 404);
+        }
+
+        $data = json_decode($serializer->serialize($offer, 'json', ['groups' => 'public']), true);
+
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+            'data' => $data,
+        ], 200);
+    }
+
     #[Route('/get/seller', methods: ['POST'])]
     public function getBySeller(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
