@@ -1,4 +1,4 @@
-.ul-burger{
+.ul-burger {
   width: 30%;
   z-index: 5;
   height: 100%;
@@ -7,24 +7,24 @@
   top: 0%;
   list-style: none;
   background-color: #000;
-  #icon-user {
-    margin: 0;
-  }
-  li{
-    margin: 5% 0;
-    display: flex;
-    align-items: center;
-    a{
-      text-decoration: none;
-    }
-    svg{
-      margin: 0 5% 0 0; 
-      width: 15%;
-    }
-  }
+}
+.ul-burger #icon-user {
+  margin: 0;
+}
+.ul-burger li {
+  margin: 5% 0;
+  display: flex;
+  align-items: center;
+}
+.ul-burger li a {
+  text-decoration: none;
+}
+.ul-burger li svg {
+  margin: 0 5% 0 0;
+  width: 15%;
 }
 
-#delete-burger-menue{
+#delete-burger-menue {
   cursor: pointer;
   position: absolute;
   left: 85%;
@@ -33,36 +33,33 @@
 }
 
 @media screen and (max-width: 1280px) {
-  .ul-burger{
+  .ul-burger {
     width: 50%;
     left: 50%;
     top: 0%;
     z-index: 5;
     background-color: #000;
   }
-  
 }
-
 @media screen and (max-width: 768px) {
-  .ul-burger{
+  .ul-burger {
     width: 100%;
     left: 0%;
     top: 0%;
     height: 100vh;
     z-index: 5;
     background-color: #000;
-    li{
-      margin: 5% 0;
-      display: flex;
-      align-items: center;
-      a{
-        text-decoration: none;
-      }
-      svg{
-        margin: 0 5% 0 0; 
-        width: 15%;
-      }
-    }
   }
-  
+  .ul-burger li {
+    margin: 5% 0;
+    display: flex;
+    align-items: center;
+  }
+  .ul-burger li a {
+    text-decoration: none;
+  }
+  .ul-burger li svg {
+    margin: 0 5% 0 0;
+    width: 15%;
+  }
 }
