@@ -39,8 +39,30 @@ class ApiOfferController extends AbstractController
         ], 200);
     }
 
-    #[Route('/get', methods: ['POST'])]
-    public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/get/{id}', methods: ['GET'])]
+    public function getOfferByID(int $id, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    {
+        $offer = $entityManager->getRepository(Offer::class)->find($id);
+
+        if (!$offer) {
+            return $this->json([
+                'status' => "Not Found",
+                'code' => 404,
+                'message' => "No offer found."
+            ], 404);
+        }
+
+        $data = json_decode($serializer->serialize($offer, 'json', ['groups' => 'public']), true);
+
+        return $this->json([
+            'status' => "OK",
+            'code' => 200,
+            'data' => $data,
+        ], 200);
+    }
+
+    #[Route('/get/seller', methods: ['POST'])]
+    public function getBySeller(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -52,7 +74,8 @@ class ApiOfferController extends AbstractController
             ], 400);
         }
 
-        $offer = $entityManager->getRepository(Offer::class)->find($data['id']);
+        $offer = $entityManager->getRepository(Offer::class)->findBy(['seller' => $data['id']]);
+
         if (!$offer) {
             return $this->json([
                 'status' => "Not Found",
@@ -198,13 +221,13 @@ class ApiOfferController extends AbstractController
         if (!empty($data['photos_offer'])) {
             foreach ($data['photos_offer'] as $filename) {
                 $image = new Image();
-                $image->setFilename($filename);
+                $image->setImageFile($filename);
                 $offer->addImage($image); // ajoute automatiquement l'image à l'offre
             }
         }
         // $offer->setCreatedAt(new \DateTimeImmutable());
         $offer->setUpdatedAt(new DateTimeImmutable());
-        $offer->setUser($this->getUser()); // Assurez-vous que l'utilisateur est connecté
+        $offer->setSeller($this->getUser()); // Assurez-vous que l'utilisateur est connecté
 
 
         $entityManager->persist($offer);

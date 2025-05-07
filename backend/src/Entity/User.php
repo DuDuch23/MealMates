@@ -332,7 +332,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->offers->contains($offer)) {
             $this->offers->add($offer);
-            $offer->setUser($this);
+            $offer->setSeller($this);
         }
 
         return $this;
@@ -342,8 +342,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->offers->removeElement($offer)) {
             // set the owning side to null (unless already changed)
-            if ($offer->getUser() === $this) {
-                $offer->setUser(null);
+            if ($offer->getSeller() === $this) {
+                $offer->setSeller(null);
             }
         }
 
