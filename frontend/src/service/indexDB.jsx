@@ -39,8 +39,7 @@ export const addUserIndexDB = async (utilisateur) => {
   });
 };
 
-// Mettre à jour les préférences d'un utilisateur
-export const updateUserPreferencesIndexDB = async (userId, newPreferences) => {
+export const updateUserIndexDB = async (userId, updatedUserData) => {
   const db = await getDatabase();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(['utilisateurs'], 'readwrite');
@@ -49,16 +48,17 @@ export const updateUserPreferencesIndexDB = async (userId, newPreferences) => {
     const getRequest = objectStore.get(userId);
 
     getRequest.onsuccess = () => {
-      const user = getRequest.result;
-      if (!user) {
+      const existingUser = getRequest.result;
+      if (!existingUser) {
         return reject("Utilisateur non trouvé");
       }
 
-      user.preferences = newPreferences;
+      // Fusionne les anciennes données avec les nouvelles
+      const updatedUser = { ...existingUser, ...updatedUserData };
 
-      const updateRequest = objectStore.put(user);
+      const updateRequest = objectStore.put(updatedUser);
 
-      updateRequest.onsuccess = () => resolve('Préférences mises à jour');
+      updateRequest.onsuccess = () => resolve('Utilisateur mis à jour');
       updateRequest.onerror = (event) => reject(`Erreur mise à jour : ${event.target.error}`);
     };
 

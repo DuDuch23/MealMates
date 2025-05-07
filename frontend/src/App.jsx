@@ -1,5 +1,6 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState,useEffect } from 'react';
 import { Routes, Route } from 'react-router';
+import { getUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 
 // Chargement différé des composants
@@ -25,12 +26,28 @@ const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
 const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 
 function App() {
+  const [user, setUser] = useState(null);
+  const userId = localStorage.getItem("user");
+
+  useEffect(() => {
+    async function fetchUser() {
+      if (userId) {
+        const id = parseInt(userId);
+        const userData = await getUserIndexDB(id);
+        setUser(userData);
+      }
+    }
+    fetchUser();
+  }, [userId]);
+
+  console.log(user);
+
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
       <Routes>
         {/* route avec la nav bar */}
         <Route element={<NavLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={user ? <Offer /> : <Home />} />
           {/* discution user */}
           <Route path="/chat" element={<Chat />} />
           <Route path='/ChooseChat' element={<ChooseChat/>}/>
