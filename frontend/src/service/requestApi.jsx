@@ -39,17 +39,11 @@ export async function logIn({ email, password }) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email, password }),
-            credentials: "include", // <- Ajouté pour les sessions/cookies
+            body: JSON.stringify({
+                email: email,
+                password: password
+            }),
         });
-
-        if (!response.ok) {
-            if (response.status === 0 || response.status == null) {
-                throw new Error("Erreur CORS : impossible d'accéder au serveur.");
-            }
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Erreur de connexion.");
-        }
 
         return await response.json();
     } catch (error) {
@@ -193,11 +187,13 @@ export async function logOut() {
     localStorage.removeItem("user");
 }
 
-// OFFER
+// Offer
 
-export async function getOfferId({ id }) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/${id}`, {
+<<<<<<<<< Temporary merge branch 1
+=========
+export async function getOfferId({id}){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/${id}`,{
             method: 'GET',
             headers: { accept: 'application/json' },
         });
@@ -273,8 +269,8 @@ export async function getAgainOffers() {
                 authorization: `Bearer ${token}`
             },
         });
-
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (err) {
         console.error(err);
         return { result: [] };

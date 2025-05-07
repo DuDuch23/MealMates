@@ -226,6 +226,7 @@ class ApiUserController extends AbstractController
         }
 
         if (isset($data['email'])) $user->setEmail($data['email']);
+        if (isset ($data['idIcon'])) $user->setIconUser($data['idIcon']);
         if (isset($data['password'])) $user->setPassword($this->hasher->hashPassword($user,$data['password']));
         if (isset($data['firstName'])) $user->setFirstName($data['firstName']);
         if (isset($data['lastName'])) $user->setLastName($data['lastName']);
