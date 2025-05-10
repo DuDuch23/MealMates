@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/api/category', name: 'api_category')]
 class ApiCategoryController extends AbstractController
 {
-    #[Route('', methods: ['GET'])]
+    #[Route('/', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request): JsonResponse
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
@@ -30,7 +30,7 @@ class ApiCategoryController extends AbstractController
         return $this->json([
             'status' => "OK",
             'code' => 200,
-            'data' => json_decode($categoriesSerialized, true),
+            'data' => json_decode($serializer->serialize($categories, 'json', ['groups' => 'public']), true),
         ], 200);
     }
 
