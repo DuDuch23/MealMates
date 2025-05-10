@@ -35,6 +35,7 @@ class Image
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'images')]
+    #[Groups(["public", "private"])]
     private Collection $offers;
 
 

@@ -56,6 +56,7 @@ class Offer
     
     #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'offers')]
     #[ORM\JoinTable(name: 'offer_image')]
+    #[Groups(["public", "private"])]
     private Collection $images;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
