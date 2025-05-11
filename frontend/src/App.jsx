@@ -43,8 +43,6 @@ function App() {
     fetchUser();
   }, [userId]);
 
-  console.log(user);
-
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
       <Routes>

@@ -162,7 +162,6 @@ export async function deleteUser(id) {
 }
 
 export async function getProfile({ email }) {
-    console.log(token);
     try {
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
@@ -198,6 +197,27 @@ export async function logOut() {
 
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+}
+
+// Chat
+export async function getAllChat(id) {
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/get/all`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    "id": id 
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    } 
 }
 
 // Offer

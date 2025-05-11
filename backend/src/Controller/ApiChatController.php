@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Chat;
 use App\Entity\User;
+use App\Entity\Message;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,30 +19,27 @@ class ApiChatController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['id'])) 
-        {
+        if (!isset($data['id'])) {
             return new JsonResponse([
                 'status' => "Bad Request",
                 'code' => 400,
                 'message' => "Missing 'id' parameter."
             ], 400);
         }
-        $chat = $entityManager->getRepository(Chat::class)->findAll($data['id']);
-        return new JsonResponse(['data'=> $chat]);
-        // if (!$chat) 
-        // {
-        //     return new JsonResponse([
-        //         'status' => "Not Found",
-        //         'code' => 404,
-        //         'message' => "Chat doesn't exist "
-        //     ], 404);
-        // }
-        // $scope = ($data['id'] != $chat->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
-        // $data = json_decode($serializer->serialize($chat, 'json', ['groups' =>[ $scope]]), true);
-        return new JsonResponse([
-            'status' => "OK",
-            'code' => 200,
-            'data' => $data
-        ], 200);
+
+        $chats = $entityManager->getRepository(Chat::class)->findBySellerAndClient($data["id"]);
+        $res = [];
+        foreach($chats as $chat){
+            array_push($res,$chat["id"]);
+            if($chat["client"]->getId()!=$data["id"]){
+                array_push($res,$chat["client"]);
+            }
+            if($chat["seller"]["id"]!=$data["id"]){
+                array_push($res,$chat["seller"]);
+            }
+        }
+        // $messages = $entityManager->getRepository(Message::class)->getLasChat($chats["id"],);
+
+        return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
     }
 }

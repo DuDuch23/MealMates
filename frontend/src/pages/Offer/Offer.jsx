@@ -140,7 +140,7 @@ function Offer(){
         fetchVeganOffers();
         fetchLastChanceOffers();
         fetchLocalOffers();
-        }, []);
+    }, []);
     
     
     const handleSearch = async (query) => {
