@@ -10,7 +10,7 @@ export default function SliderSection({ title, offers = [], type }) {
       <div className={styles['slider-offer__header']}>
         <h2>{title}</h2>
         {type && (
-          <Link to={`/search/${type}`} className={styles["slider-section__link"]}>
+          <Link to={`/offers/${type}`} className={styles["slider-section__link"]}>
             Voir toutes les offres {type}
           </Link>
         )}

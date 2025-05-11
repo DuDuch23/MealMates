@@ -36,23 +36,23 @@ function Offer(){
     }, [userData]);
 
     useEffect(() => {
-            const watchId = navigator.geolocation.watchPosition(
-            (position) => 
-                setPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
-            (error) => {
-                console.warn("Erreur de géolocalisation :", error);
-                const fallback = { lat: 48.8566, lng: 2.3522 };
-                console.log("Fallback position utilisée :", fallback);
-                setPos(fallback);
-            },
-            {
-                enableHighAccuracy: true,
-                maximumAge: 0,
-            }
-        );
+        const watchId = navigator.geolocation.watchPosition(
+        (position) => 
+            setPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
+        (error) => {
+            console.warn("Erreur de géolocalisation :", error);
+            const fallback = { lat: 48.8566, lng: 2.3522 };
+            console.log("Fallback position utilisée :", fallback);
+            setPos(fallback);
+        },
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+        }
+    );
     
-        return () => navigator.geolocation.clearWatch(watchId);
-      }, []);
+    return () => navigator.geolocation.clearWatch(watchId);
+    }, []);
     
     useEffect(() => {
         if (!token) {
@@ -74,20 +74,20 @@ function Offer(){
 
     useEffect(() => {
 
-        // const fetchOffers = async () => {
-        //     try {
-        //         const data = await getOffers();
-        //         if (data && data.data) {
-        //             console.log("offers",data);
-        //             setOffers(data.data);
-        //         } else {
-        //             console.log("Erreur ou offres vides");
-        //         }
-        //     } catch (err) {
-        //         console.error('Erreur lors de la récupération des offres:', err);
-        //         setOffers([]);
-        //     }
-        // };
+        const fetchOffers = async () => {
+            try {
+                const data = await getOffers();
+                if (data && data.data) {
+                    console.log("offers",data);
+                    setOffers(data.data);
+                } else {
+                    console.log("Erreur ou offres vides");
+                }
+            } catch (err) {
+                console.error('Erreur lors de la récupération des offres:', err);
+                setOffers([]);
+            }
+        };
     
         const fetchVeganOffers = async () => {
             try {
@@ -160,7 +160,7 @@ function Offer(){
             }
         };
     
-        // fetchOffers();
+        fetchOffers();
         fetchVeganOffers();
         fetchLastChanceOffers();
         fetchLocalOffers();
@@ -229,7 +229,7 @@ function Offer(){
             </button>
             {showMap && (
                 <div className={styles["container-offer__map"]}>
-                    <UserLocationMap onPosition={setUserPos} offers={offers} userPos={userPos} />
+                    <UserLocationMap onPosition={setPos} offers={offers} userPos={userPos} />
                 </div>
             )}
         </div>

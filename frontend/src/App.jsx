@@ -29,11 +29,11 @@ function App() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   
-  React.useEffect(() => {
-    if (!token) {
-      navigate("/connexion");
-    }
-  }, [token, navigate]);
+  // React.useEffect(() => {
+  //   if (!token) {
+  //     navigate("/connexion");
+  //   }
+  // }, [token, navigate]);
 
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem("user");
