@@ -3,41 +3,69 @@
 @use "../../styles/variables.scss" as variables;
 
 
-body {
-    .container-offer {
-        @include mixins.responsive-container(768px);
-        border: 1px solid variables.$colorError;
-        img{
-            width: 100px;
-        }
-        .swiper-slide{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .type-offer-nav{
-            .type-offer{
-                .type-offer-swiper{
-                    img{
-                        width: 20%;
-                    }
-                }
-            }
-        }
-    
-        ul {
-            list-style: none;
-        }
+.container-offer {
+    @include mixins.responsive-container(768px);
+    padding: 12px;
+    background-color: #242424;
+    gap: 48px;
+    display: flex;
+    flex-direction: column;
+    &__type{
+        
     }
-}
-#new-offer{
-  color: #888;
-  width: fit-content;
-  margin-top: 2%;
-  margin-left: 1%;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  background-color: variables.$colorDarkGreen;
+
+    &__type-list{
+
+    }
+
+    &__filter{
+
+    }
+
+    &__filter-reference-list{
+
+    }
+
+    &__new-offer-show-map{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__new-offer{
+        color: #888;
+        width: fit-content;
+        border-radius: 5px;
+        padding: 10px 8px;
+        display: flex;
+        align-items: center;
+        background-color: variables.$colorDarkGreen;
+    }
+
+    &__show-map{
+        color: #888;
+        width: fit-content;
+        border-radius: 5px;
+        padding: 10px 8px;
+        display: flex;
+        align-items: center;
+        background-color: variables.$colorDarkGreen;
+    }
+
+    &__slider{
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+    }
+    img{
+        width: 100px;
+    }
+    .swiper-slide{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    ul {
+        list-style: none;
+    }
 }

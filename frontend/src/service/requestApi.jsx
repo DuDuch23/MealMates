@@ -45,6 +45,8 @@ export async function logIn({ email, password }) {
             }),
         });
 
+        console.log(`${API_BASE_URL}/api/login`);
+
         return await response.json();
     } catch (error) {
         console.error("Erreur API logIn :", error);
@@ -365,4 +367,4 @@ export async function fetchFilteredOffers(filters) {
         console.error("Erreur API :", error);
         return { result: [] };
     }
-}
+};
