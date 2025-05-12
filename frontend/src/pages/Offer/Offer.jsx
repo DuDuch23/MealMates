@@ -25,7 +25,6 @@ function Offer(){
     const [againOffers, setAgainOffers] = useState([]);
     const [lastChanceOffers, setLastChanceOffers] = useState([]);
     const [localOffers, setLocalOffers] = useState([]);
-    const [userPos, setUserPos] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [showMap, setShowMap] = useState(false);
@@ -227,12 +226,12 @@ function Offer(){
             <button className={styles["container-offer__show-map"]} onClick={() => setShowMap(!showMap)}>
                 <p>Afficher la carte des offres</p>
             </button>
-            {showMap && (
-                <div className={styles["container-offer__map"]}>
-                    <UserLocationMap onPosition={setPos} offers={offers} userPos={userPos} />
-                </div>
-            )}
         </div>
+        {showMap && (
+            <div className={styles["container-offer__map"]} style={{ height: "100vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
+                <UserLocationMap userPos={pos} offers={offers} />
+            </div>
+        )}
         <div className={styles["container-offer__slider"]}>
                 {searchResults.length > 0 ? (
                     <>

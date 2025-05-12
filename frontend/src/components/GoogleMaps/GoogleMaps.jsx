@@ -9,30 +9,8 @@ const containerStyle = {
 };
 
 
-const UserLocationMap = ({ offers = [], zoom = 13 }) => {
-    const [userPos, setUserPos] = useState(null);
+const UserLocationMap = ({ offers = [], zoom = 13, userPos }) => {
     const [map, setMap] = useState(null);
-
-    useEffect(() => {
-        const watchId = navigator.geolocation.watchPosition(
-            (position) => 
-                setUserPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
-            (error) => {
-                console.warn("Erreur de géolocalisation :", error);
-                const fallback = { lat: 48.8566, lng: 2.3522 };
-                console.log("Fallback position utilisée :", fallback);
-                setUserPos(fallback);
-            },
-            {
-                enableHighAccuracy: true,
-                maximumAge: 0,
-                // timeout: 5000
-            }
-        );
-    
-        return () => navigator.geolocation.clearWatch(watchId);
-    }, []);
-
     // clusterer pour les markers (regroupement de markers proches)
 
     const renderMarkers = (clusterer) =>
@@ -54,19 +32,8 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
         setSelectedOffer(offer);
     };
 
-    // useEffect(() => {
-    //     if (map && offers.length > 0) {
-    //         const markers = offers.map((offer) => new window.google.maps.Marker({
-    //             position: { lat: Number(offer.latitude), lng: Number(offer.longitude) },
-    //             title: offer.title,
-    //             label: "📦"
-    //         }));
-    
-    //         new MarkerClusterer({ markers, map });
-    //     }
-    // }, [map, offers]);
-
     if (!userPos) {
+        console.log("Position de l'utilisateur non disponible, affichage d'une position par défaut.");
         return <p>Chargement de la carte...</p>;
     }
 
@@ -86,7 +53,6 @@ const UserLocationMap = ({ offers = [], zoom = 13 }) => {
                     {map && (
                         <Marker
                         position={userPos}
-                        map={map}
                         title="Votre position"
                         />
                     )}
