@@ -1,0 +1,43 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss' as mixins;
+@use "../../styles/variables.scss" as variables;
+
+
+body {
+    .container-offer {
+        @include mixins.responsive-container(768px);
+        border: 1px solid variables.$colorError;
+        img{
+            width: 100px;
+        }
+        .swiper-slide{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .type-offer-nav{
+            .type-offer{
+                .type-offer-swiper{
+                    img{
+                        width: 20%;
+                    }
+                }
+            }
+        }
+    
+        ul {
+            list-style: none;
+        }
+    }
+}
+#new-offer{
+  color: #888;
+  width: fit-content;
+  margin-top: 2%;
+  margin-left: 1%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  background-color: variables.$colorDarkGreen;
+}

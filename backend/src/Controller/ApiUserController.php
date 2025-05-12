@@ -2,25 +2,27 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Enum\PreferenceEnum;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
-
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/api/user', name: 'api_user')]
 class ApiUserController extends AbstractController
 {
     private $hasher;
-    private $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+    private $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W_]{8,}$/";
+    
     public function __construct(UserPasswordHasherInterface $hasher) 
     {
         $this->hasher = $hasher;
     }
+    
     #[Route('/get', methods: ['POST'])]
     public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -43,27 +45,64 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist "
             ], 404);
         }
+        $scope = ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) ? "public" : "private";
+        $data = json_decode($serializer->serialize($user, 'json', ['groups' =>[ $scope]]), true);
         return new JsonResponse([
             'status' => "OK",
             'code' => 200,
-            'data' => [
-                'email' => $user->getEmail(),
-                'name' => $user->getName(),
-                'surname' => $user->getSurname()
-            ]
+            'data' => $data
         ], 200);
     }
 
+    #[Route('/profile', methods: ['POST'])]
+    public function profile(Request $request, EntityManagerInterface $entityManager, NormalizerInterface $normalizer): JsonResponse
+    {
+        // Récupérer les données JSON envoyées avec la requête POST
+        $data = json_decode($request->getContent(), true);
+    
+        // Déterminer le scope en fonction de l'email
+        $scope = isset($data["email"]) ? "public" : "private";
+    
+        // Chercher un utilisateur par email
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data["email"]]);
+    
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            return new JsonResponse([
+                'user'=>$user,
+                'status' => "Unauthorized",
+                'code' => 401,
+                'message' => "User not authenticated",
+            ], 401);
+        }
+
+        // Normaliser l'objet User pour le convertir en tableau
+        $userData = $normalizer->normalize($user, null, [
+            'attributes' => [
+                'id', 'email', 'firstName', 'lastName', 'location', 'iconUser',
+                'preferences' => ['id', 'name']
+            ]
+        ]);
+    
+        // Retourner une réponse avec les données utilisateur
+        return new JsonResponse([
+            'status' => "OK",
+            'code' => 200,
+            'user' => $userData,
+            'scope' => $scope,
+        ], 200);
+    }
 
     #[Route('/new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        if (!(isset($data['email']) && isset($data['name']) && isset($data['surname'])&& isset($data['password']) && isset($data['password_confirm'])))
+        if (!(isset($data['email']) && isset($data['firstName']) && isset($data['lastName'])&& isset($data['password']) && isset($data['password_confirm'])))
         {
             return new JsonResponse([
                 'status' => "Bad Request",
                 'code' => 400,
+                'data' => $data,
                 'message' => "Missing parameters."
             ], 400);
         }
@@ -104,9 +143,10 @@ class ApiUserController extends AbstractController
         $user = new User();
         $user->setEmail($data['email']);
         $user->setPassword($this->hasher->hashPassword($user,$data['password']));
-        $user->setName($data['name']);
-        $user->setSurname($data['surname']);
-        $user->setRoles(isset($data['role']) ? [$data['role']] : ["ROLE_USER"]);
+        $user->setFirstName($data['firstName']);
+        $user->setLastName($data['lastName']);
+        $user->setRoles($data['role'] ?? ["ROLE_USER"]);
+        $user->setIsVerified(false);
 
         $entityManager->persist($user);
         $entityManager->flush();
@@ -138,7 +178,8 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist "
             ], 404);
         }
-        if ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
+        $currentUser = $this->getUser();
+        if ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
         {
             return new JsonResponse([
                 'status' => "Unauthorized",
@@ -183,10 +224,14 @@ class ApiUserController extends AbstractController
         }
 
         if (isset($data['email'])) $user->setEmail($data['email']);
+        if (isset ($data['idIcon'])) $user->setIconUser($data['idIcon']);
         if (isset($data['password'])) $user->setPassword($this->hasher->hashPassword($user,$data['password']));
-        if (isset($data['name'])) $user->setName($data['name']);
-        if (isset($data['surname'])) $user->setSurname($data['surname']);
+        if (isset($data['firstName'])) $user->setFirstName($data['firstName']);
+        if (isset($data['lastName'])) $user->setLastName($data['lastName']);
         if (isset($data['role'])) $user->setRoles([$data['role']]);
+        if (isset($data['adress'])) $user->setAdress($data['adress']);
+        if (isset($data['iconUser'])) $user->setIconUser($data['iconUser']);
+        if (isset($data['preferences'])) $user->setPreferences(array_filter(array_map(fn($p) => PreferenceEnum::tryFrom($p), $data['preferences'] ?? [])));
 
         $entityManager->persist($user);
         $entityManager->flush();
@@ -217,7 +262,7 @@ class ApiUserController extends AbstractController
                 'message' => "User doesn't exist"
             ], 404);
         }
-        if ($data['id'] != $this->getUser()->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
+        if ($data['id'] != $user->getId() && !in_array("ROLE_ADMIN",$this->getUser()->getRoles())) 
         {
             return new JsonResponse([
                 'status' => "Unauthorized",

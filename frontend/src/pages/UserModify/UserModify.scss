@@ -1,0 +1,112 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss';
+@use "../../styles/variables";
+
+p,li{
+    color: black;
+}
+
+#root{
+    background-color: #242424;
+}
+nav{
+    display: flex;
+    align-items: center;
+    a{
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+}
+form{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    input{
+        border: none;
+        outline: none;
+        border-radius: 5px;
+        height: 5vh;
+        color: black;
+    }
+    div{
+        width: 70%;
+        input{
+            width: 90%;
+        }
+    }
+    .name-select{
+        width: 90%;
+        display: flex;
+        justify-content: space-around;
+        input{
+            width: 45%;
+        }
+    }
+}
+
+.user-face{
+    width: fit-content;
+    height: 25%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    svg{
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+.card-user{
+    margin: 0 auto;
+    width: 768px;
+    height: 100vh;
+    nav{
+        display: flex;
+        align-items: center;
+    }
+    #icon-user{
+        width: 95%;
+        height: 100%;
+        margin: 0 auto;
+    }
+}
+
+.content-user{
+    height: 61%;
+    .container-link{
+        height: 10%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        a{
+            text-decoration: none;
+        }
+    }
+    .container-info-user{
+        height: 90%;
+    }
+}
+
+.basics-elements{
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    div{
+        width: 45%;
+        height: 30%;
+        border-radius: 5px;
+        padding: 2px;
+        margin: 0 auto;
+        background-color: #FFF;
+        p{
+            color: #242424;
+        }
+    }
+}

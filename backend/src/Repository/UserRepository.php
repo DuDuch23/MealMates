@@ -33,6 +33,45 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function sellersAlreadyBoughtFrom(User $buyer): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('DISTINCT seller')
+            ->innerJoin('u.orders', 'o')
+            ->innerJoin('o.offer', 'of')
+            ->innerJoin('of.seller', 'seller')
+            ->where('u = :buyer')
+            ->setParameter('buyer', $buyer)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getPreferences(int $id): array
+    {
+        $query = $this->createQuery(
+            'SELECT c.id, c.name
+             FROM App\Entity\UserCategory uc
+             JOIN uc.category c
+             WHERE uc.user = :userId'
+        );
+        $query->setParameter('userId', $id);
+        $results = $query->getResult();
+        return $results;
+    }
+
+    // public function findLastChance(): array
+    // {
+    //     $today = (new \DateTime())->setTime(0,0);
+    //     $tomorrow = (clone $today)->modify('+1 day');
+
+    //     return $this->createQueryBuilder('o')
+    //         ->where('o.expirationDate >= :today')
+    //         ->andWhere('o.expirationDate < :tomorrow')
+    //         ->setParameters(compact('today', 'tomorrow'))
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

@@ -1,34 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { Suspense, lazy, useState,useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router';
+import { getUserIndexDB } from './service/indexDB';
+import NavLayout from './Layout/NavLayout';
 
+// Chargement différé des composants
+
+// Commun
+const Home = React.lazy(() => import('./pages/Home/Home'));
+
+// Offre
+const Offer = React.lazy(() => import('./pages/Offer/Offer'));
+const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
+const OfferCard = React.lazy(() => import('./pages/OfferCard/OfferCard'));
+
+// User
+const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
+const UserModify = React.lazy(() => import('./pages/UserModify/UserModify'));
+const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
+const Inscription = React.lazy(() => import('./pages/Inscription/Inscription'));
+const Deconnexion = React.lazy(() => import('./pages/Deconnexion/Deconnexion'));
+const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'));
+
+// Chat
+const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
+const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 function App() {
-  const [count, setCount] = useState(0)
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const [user, setUser] = useState(null);
+  const userId = localStorage.getItem("user");
+
+  useEffect(() => {
+    async function fetchUser() {
+      if (userId) {
+        const id = parseInt(userId);
+        const userData = await getUserIndexDB(id);
+        setUser(userData);
+      }
+    }
+    fetchUser();
+  }, [userId]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
+      <Routes>
+        {/* route avec la nav bar */}
+        <Route element={<NavLayout />}>
+          <Route path="/" element={user ? <Offer /> : <Home />} />
+          {/* discution user */}
+          <Route path="/chat" element={<Chat />} />
+          <Route path='/ChooseChat' element={<ChooseChat/>}/>
+          {/* offer */}
+          <Route path="/offer" element={<Offer />} />
+          <Route path='/addOffer' element={<AddOffer />}/>
+          <Route path='/offerCard' element={<OfferCard/>}/>
+        </Route>
+        {/* user profile */}
+        <Route path="/userProfile/:id" element={<UserProfile />} />
+        <Route path="/userMealCard/:id" element={<UserMealCard />} />
+        <Route path="/userModify/:id" element={<UserModify />} />
+        {/* connexion */}
+        <Route path="/connexion" element={<Connexion />} />
+        <Route path="/inscription" element={<Inscription />} />
+        <Route path="/deconnexion" element={<Deconnexion />} />
+      </Routes>
+    </Suspense>
+  );
 }
 
-export default App
+export default App;
