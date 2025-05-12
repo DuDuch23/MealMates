@@ -33,7 +33,7 @@ export async function refreshToken() {
 
 export async function logIn({ email, password }) {
     try {
-        const url = `${API_BASE_URL}/api/login/`; // <- Slash ajouté
+        const url = `${API_BASE_URL}/api/login`; // <- Slash ajouté
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -153,6 +153,7 @@ export async function deleteUser(id) {
 
 export async function getProfile({ email }) {
     try {
+        console.log(token);
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
             headers: {
@@ -189,8 +190,7 @@ export async function logOut() {
 
 // Offer
 
-<<<<<<<<< Temporary merge branch 1
-=========
+
 export async function getOfferId({id}){
     try{
         const response = await fetch(`${API_BASE_URL}/api/${id}`,{
