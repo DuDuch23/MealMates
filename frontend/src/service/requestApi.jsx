@@ -222,9 +222,9 @@ export async function getAllChat(id) {
     } 
 }
 
-export async function getChat({chat}){
+export async function getChat({user,chat}){
     try{
-        const response = await fetch(`${API_BASE_URL}/api/chat`,{
+        const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
             method: 'POST',
             headers:{
                 accept: 'application/json',
@@ -232,8 +232,8 @@ export async function getChat({chat}){
             },
             body: JSON.stringify(
                 { 
-                    'client': chat.client,
-                    'seller': chat.seller,
+                    'client': user.id,
+                    'seller': chat,
                 }
             ),
         });

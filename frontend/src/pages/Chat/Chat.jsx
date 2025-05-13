@@ -1,39 +1,44 @@
 // Chat.js
+import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
 import { getChat } from '../../service/requestApi';
 
 function Chat() {
-  const [chat,setChat] = useState([]);
+  const location = useLocation();
+  const [nowchat,setChat] = useState([]);
   const [messages, setMessages] = useState([]);
+  const { user, chat } = location.state || {};
 
-  const WebSocketChat = () => {
-    
-    useEffect(()=>{
-      const url = new URL('https://groupe-5.lycee-stvincent.net/mercure/message');
+  if (!user || !chat) {
+      console.log()
+      return <p>Données de chat manquantes.</p>;
+  }
 
-      url.searchParams.append('topic', 'https://groupe-5.lycee-stvincent.net/chat');
-
-      const eventSource = new EventSource(url);
-
-      eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log('📨 Nouveau message reçu :', data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getChat({user,chat});
+        setChat(res);
+      } catch (error) {
+        console.error("Erreur de polling :", error);
+      }
     };
+    fetchData();
+  }, [user,chat]);
 
-    eventSource.onerror = (err) => {
-      console.error('❌ Erreur Mercure :', err);
-    };
-
-    return () => {
-      eventSource.close();};
-    }, []);
-
-    return <div>💬 Chat en temps réel</div>;
-  };
-  WebSocketChat();
-
-
-  return(<></>);
+  useEffect(() => {
+    // const fetchData = async () => {
+    //   try {
+    //     const res = await getChat({user,chat});
+    //     setChat(res);
+    //   } catch (error) {
+    //     console.error("Erreur de polling :", error);
+    //   }
+    // };
+    // fetchData();
+    // const interval = setInterval(fetchData, 10000);
+    // return ({user,chat}) => clearInterval(interval);
+  }, []);
 
 }
 

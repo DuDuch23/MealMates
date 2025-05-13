@@ -45,9 +45,9 @@ function Inscription(){
                 const response = await newUser({ email, password, confirmPassword, firstName, lastName});
                 console.log(response);
             }
-            // à faire, il manque erreur si email existe déjà car si je renseigne un email qui existe déjà, le if !error passe, me connecte et me renvoie sur la page d'accueil
             setError(null);
             console.log(error);
+            navigate("/");
         } catch (error) {
             console.error("Erreur lors de la connexion :", error);
         }

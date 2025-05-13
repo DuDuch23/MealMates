@@ -1,5 +1,7 @@
 import styles from "./burgerMenue.module.css";
 import {getUserIndexDB} from "../../service/indexDB"
+import { logOut } from "../../service/requestApi";
+import { useNavigate } from "react-router";
 import { Link } from 'react-router';
 import { useEffect, useState } from 'react';
 import { IconUser } from '../IconUser/iconUser';
@@ -40,6 +42,18 @@ export default function BurgerMenue({ onProfileClick }) {
     return null; 
   };
 
+  const navigate = useNavigate();
+
+  const handleDeconnexion = () => {
+    const userId = localStorage.getItem("user");
+
+    logOut(userId); // Exécute ton logout
+    localStorage.removeItem("user"); // On nettoie localStorage
+    localStorage.removeItem("token");
+    
+    navigate("/"); // Redirige
+  };
+
   return (
     <>
       <ul className={styles["ul-burger"]}>
@@ -65,11 +79,11 @@ export default function BurgerMenue({ onProfileClick }) {
           </svg>
           <Link to="/addOffer">Créer une Offre</Link>
         </li>
-        <li>
+        <li id={styles["log-out"]} onClick={handleDeconnexion}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
           </svg>
-          <Link to="/deconnexion">Se déconnecter</Link>
+          <p >Se déconnecter</p>
         </li>
       </ul>
     </>

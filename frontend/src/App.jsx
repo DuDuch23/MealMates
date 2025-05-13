@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState,useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router';
+import { Routes, Route } from 'react-router';
 import { getUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 
@@ -47,7 +47,7 @@ function App() {
         <Route element={<NavLayout />}>
           <Route path="/" element={user ? <Offer /> : <Home />} />
           {/* discution user */}
-          <Route path="/chat/:id" element={<Chat />} />
+          <Route path="/chat" element={<Chat />} />
           <Route path='/ChooseChat' element={<ChooseChat/>}/>
           {/* offer */}
           <Route path="/offer" element={<Offer />} />

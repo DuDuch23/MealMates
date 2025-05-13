@@ -57,8 +57,8 @@ class ApiChatController extends AbstractController
 
     }
 
-    #[Route('/get/chat', methods: ['POST'])]
-    public function getToChat(Request $request, HubInterface $hub, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/get', methods: ['POST'])]
+    public function getToChat(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(),true);
 
@@ -77,21 +77,14 @@ class ApiChatController extends AbstractController
                 'message' => "Missing 'seller' parameter."
             ], 400);
         }
-
+        
         $chat = $entityManager->getRepository(Chat::class)->findBySellerAndClient($data['client'],$data['seller']);
 
-        $update = new Update(
-            'https://chat.example.com/messages',
-            json_encode(['chat' => $chat, 'message' => 'Bonjour !'])
-        );
-
-        $hub->publish($update);
-
-        return new JsonResponse(['status' => 'Chat connected']);
+       return $this->json(['chat' => $chat], 200, [], ['groups' => ['public']]);
     }
 
     #[Route('/sendChat', methods:['POST'])]
-    public function sendMessage(Request $request, HubInterface $hub, EntityManagerInterface $entityManager): JsonResponse
+    public function sendMessage(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -119,21 +112,6 @@ class ApiChatController extends AbstractController
 
         $entityManager->persist($message);
         $entityManager->flush();
-
-        $topic = 'https://groupe-5.lycee-stvincent.net/chat/' . $chat->getId();
-
-        $update = new Update(
-            $topic,
-            json_encode([
-                'message' => [
-                    'content' => $message->getContent(),
-                    'sender' => $user->getId(),
-                    'chat_id' => $chat->getId(),
-                ]
-            ])
-        );
-
-        $hub->publish($update);
 
         return new JsonResponse(['status' => 'Message envoyé'], 201);
     }
