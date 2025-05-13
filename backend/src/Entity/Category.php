@@ -17,7 +17,7 @@ class Category
     #[Groups(["public", "private"])] 
     private ?int $id = null;
 
-    #[Groups("public")]
+    #[Groups(["public", "private"])] 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

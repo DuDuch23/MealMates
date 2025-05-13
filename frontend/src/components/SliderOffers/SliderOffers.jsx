@@ -1,11 +1,20 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
+import {Link} from "react-router";
+import styles from "./SliderOffers.module.css";
 
-export default function SliderSection({ title, offers = [] }) {
+export default function SliderSection({ title, offers = [], type }) {
   if (!offers.length) return null;
 
   return (
-    <section style={{ marginBottom: '3rem' }}>
-      <h2>{title}</h2>
+    <section className={styles['slider-offer']}>
+      <div className={styles['slider-offer__header']}>
+        <h2>{title}</h2>
+        {type && (
+          <Link to={`/search/${type}`} className={styles["slider-section__link"]}>
+            Voir toutes les offres {type}
+          </Link>
+        )}
+      </div>
 
       <Swiper spaceBetween={20}
               slidesPerView={1}

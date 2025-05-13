@@ -425,3 +425,17 @@ export async function fetchFilteredOffers(filters) {
         return { result: [] };
     }
 };
+
+export async function getCategory() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/category`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
+        });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
+}

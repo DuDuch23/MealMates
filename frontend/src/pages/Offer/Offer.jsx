@@ -1,15 +1,18 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { searchOfferByTitle,
         getVeganOffers,
         getOffers,
         getLastChanceOffers,
         getAgainOffers,
         getLocalOffers } from "../../service/requestApi";
-import {Link} from "react-router";
+import { Link } from "react-router";
 import styles from "./Offer.module.css";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import AllCategory from "../../components/AllCategory/AllCategory";
 import SliderSection from '../../components/SliderOffers/SliderOffers';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import UserLocationMap from '../../components/GoogleMaps/GoogleMaps';
+
 import 'swiper/css';
 
 
@@ -24,11 +27,32 @@ function Offer(){
     const [localOffers, setLocalOffers] = useState([]);
     const [userPos, setUserPos] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [showMap, setShowMap] = useState(false);
     useEffect(() => {
         if (userData) {
             localStorage.setItem("user", userData.user.id);
         }
     }, [userData]);
+
+    useEffect(() => {
+            const watchId = navigator.geolocation.watchPosition(
+            (position) => 
+                setPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
+            (error) => {
+                console.warn("Erreur de géolocalisation :", error);
+                const fallback = { lat: 48.8566, lng: 2.3522 };
+                console.log("Fallback position utilisée :", fallback);
+                setPos(fallback);
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+            }
+        );
+    
+        return () => navigator.geolocation.clearWatch(watchId);
+      }, []);
     
     useEffect(() => {
         if (!token) {
@@ -145,6 +169,7 @@ function Offer(){
     
     const handleSearch = async (query) => {
         try {
+            setSearchQuery(query);
             const results = await searchOfferByTitle(query);
             console.log("Résultats de recherche :", results);
             if (results && results.data) {
@@ -158,7 +183,7 @@ function Offer(){
     };
 
     return(
-    <div className={styles["container-offer"]}>
+    <section className={styles["container-offer"]}>
         <nav className={styles["container-offer__type"]}>
             <div className={styles["container__type-list"]}>
                 <Swiper className={styles["type-offer-swiper"]} slidesPerView={4} spaceBetween={10}>
@@ -185,40 +210,48 @@ function Offer(){
                 </Swiper>
             </div>
         </nav>
-        <nav className={styles["container__filter"]}>
-            <ul className={styles["container__filter-reference-list"]}>
-                <li>Vegan</li>
-                <li>Hight Protein</li>
-                <li>Halal</li>
-                <li>Low Carb</li>
+        <SearchBar onSearch={handleSearch} />
+
+        <nav className={styles["container-offer__filter"]}>
+            <ul className={styles["container-offer__filter-reference-list"]}>
+                <AllCategory />
             </ul>
         </nav>
-        <Link id={styles["new-offer"]} key="new-offer" to={'/addOffer'}>
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 9V19M9 14H19M26.5 14C26.5 20.9036 20.9036 26.5 14 26.5C7.09644 26.5 1.5 20.9036 1.5 14C1.5 7.09644 7.09644 1.5 14 1.5C20.9036 1.5 26.5 7.09644 26.5 14Z" stroke="#F3F3F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <p>Ajouter une nouvelle offre</p>
-        </Link>
-        <SearchBar onSearch={handleSearch} />
-        <div className={styles["container-section"]}>
+        <div className={styles["container-offer__new-offer-show-map"]}>
+            <Link className={styles["container-offer__new-offer"]} key="new-offer" to={'/addOffer'}>
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 9V19M9 14H19M26.5 14C26.5 20.9036 20.9036 26.5 14 26.5C7.09644 26.5 1.5 20.9036 1.5 14C1.5 7.09644 7.09644 1.5 14 1.5C20.9036 1.5 26.5 7.09644 26.5 14Z" stroke="#F3F3F3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <p>Ajouter une nouvelle offre</p>
+            </Link>
+            <button className={styles["container-offer__show-map"]} onClick={() => setShowMap(!showMap)}>
+                <p>Afficher la carte des offres</p>
+            </button>
+            {showMap && (
+                <div className={styles["container-offer__map"]}>
+                    <UserLocationMap onPosition={setUserPos} offers={offers} userPos={userPos} />
+                </div>
+            )}
+        </div>
+        <div className={styles["container-offer__slider"]}>
                 {searchResults.length > 0 ? (
                     <>
-                        <SliderSection title="Résultats de recherche" offers={searchResults} />
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} />
-                        <SliderSection title="Tendances locales" offers={localOffers} />
+                        <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery}/>
+                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
+                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
+                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
+                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
                     </>
                 ) : (
                     <>
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} />
-                        <SliderSection title="Tendances locales" offers={localOffers} />
+                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
+                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
+                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
+                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
                     </>
                 )}
         </div>
-    </div>
+    </section>
     );
 }
 
