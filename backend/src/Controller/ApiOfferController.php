@@ -229,7 +229,7 @@ class ApiOfferController extends AbstractController
         }
         // $offer->setCreatedAt(new \DateTimeImmutable());
         $offer->setUpdatedAt(new DateTimeImmutable());
-        $offer->setSeller($this->getUser()); // Assurez-vous que l'utilisateur est connecté
+        $offer->setUser($this->getUser()); // Assurez-vous que l'utilisateur est connecté
 
 
         $entityManager->persist($offer);

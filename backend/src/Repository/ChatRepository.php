@@ -27,6 +27,17 @@ class ChatRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    public function findByChat(int $sellerId, int $clientId): ?Chat
+    {
+        return $this->createQueryBuilder('c')
+        -> where('c.client = :clientId')
+        -> andWhere('c.seller = :sellerId')
+        ->setParameter('clientId', $clientId)
+        ->setParameter('sellerId', $sellerId)
+        ->getQuery()
+        ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */

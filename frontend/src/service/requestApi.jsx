@@ -1,5 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 import API_BASE_URL from "./api";
+import { deleteUserIndexDB } from './indexDB';
 
 const token = localStorage.getItem("token");
 
@@ -181,7 +182,7 @@ export async function getProfile({ email }) {
     }
 }
 
-export async function logOut() {
+export async function logOut({id}) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/logout`, {
             method: "GET",
@@ -197,6 +198,7 @@ export async function logOut() {
 
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    deleteUserIndexDB(id);
 }
 
 // Chat
@@ -218,6 +220,27 @@ export async function getAllChat(id) {
     }catch(error){
         return console.error(error);
     } 
+}
+
+export async function getChat({chat}){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    'client': chat.client,
+                    'seller': chat.seller,
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    }
 }
 
 // Offer

@@ -24,11 +24,8 @@ const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'
 // Chat
 const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
 const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
+
 function App() {
-
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem("user");
 
@@ -50,7 +47,7 @@ function App() {
         <Route element={<NavLayout />}>
           <Route path="/" element={user ? <Offer /> : <Home />} />
           {/* discution user */}
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/:id" element={<Chat />} />
           <Route path='/ChooseChat' element={<ChooseChat/>}/>
           {/* offer */}
           <Route path="/offer" element={<Offer />} />

@@ -9,24 +9,25 @@ function ChooseChat() {
     const userId = localStorage.getItem("user");
 
     useEffect(() => {
+        if (!userId) return;
+        
         async function executeRequest() {
-            const data = await getAllChat(userId);
-            setChat(data.data);
-
-            const users = [];
-            data.data.forEach(element => {
-                if (element.seller.id !== userId) {
-                    users.push(element.seller);
-                } else if (element.client.id !== userId) {
-                    users.push(element.client);
-                }
-            });
-
-            setUserChat(users);
+            try {
+                const data = await getAllChat(userId);
+                setChat(data.data);
+                // Extract the `user` field from each chat and remove duplicates
+                const users = data.data.map(chat => chat.user);
+                const uniqueUsers = Array.from(new Map(users.map(user => [user.id, user])).values());
+                setUserChat(uniqueUsers);
+            } catch (error) {
+                console.error("Failed to fetch chat data:", error);
+            }
         }
-
+    
         executeRequest();
     }, [userId]);
+
+    console.log(userChat);
 
     return (
         <div className="choose-chat-container">

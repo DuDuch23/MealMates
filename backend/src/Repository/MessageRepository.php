@@ -17,20 +17,17 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
-    public function getLasChat(EntityManagerInterface $entityManager,int $chatId,int $userId)
+    public function getLastChat(int $chatId, int $userId): ?Message
     {
-        $messages = $entityManager->createQueryBuilder()
-            ->select('m.content')
-            ->from('App\Entity\Message', 'm')
+        return $this->createQueryBuilder('m')
             ->where('m.chat = :chatId')
-            ->andWhere('m.sender = :userId')
-            ->orderBy('m.sentAt', 'ASC')
             ->setParameter('chatId', $chatId)
-            ->setParameter('userId', $userId)
+            ->orderBy('m.sentAt', 'DESC')
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult();
-
+            ->getOneOrNullResult();
     }
+
 
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
