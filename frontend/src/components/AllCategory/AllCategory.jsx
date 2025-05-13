@@ -3,6 +3,7 @@ import { getCategory } from '../../service/requestApi';
 import { useState, useEffect } from 'react';
 import styles from './AllCategory.module.css';
 
+
 export default function AllCategory() {
     const [categories, setCategories] = useState([]);
 
