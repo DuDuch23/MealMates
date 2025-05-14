@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState,useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router';
+import { Routes, Route } from 'react-router';
 import { getUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 
@@ -26,16 +26,6 @@ const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'
 const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
 const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 function App() {
-
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  
-  // React.useEffect(() => {
-  //   if (!token) {
-  //     navigate("/connexion");
-  //   }
-  // }, [token, navigate]);
-
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem("user");
 
@@ -49,8 +39,6 @@ function App() {
     }
     fetchUser();
   }, [userId]);
-
-  console.log(user);
 
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>

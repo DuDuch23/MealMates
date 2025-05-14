@@ -77,6 +77,7 @@ class ApiOfferController extends AbstractController
 
         $offer = $entityManager->getRepository(Offer::class)->findBy(['seller' => $data['id']]);
 
+
         if (!$offer) {
             return $this->json([
                 'status' => "Not Found",
@@ -228,7 +229,7 @@ class ApiOfferController extends AbstractController
         }
         // $offer->setCreatedAt(new \DateTimeImmutable());
         $offer->setUpdatedAt(new DateTimeImmutable());
-        $offer->setSeller($this->getUser()); // Assurez-vous que l'utilisateur est connecté
+        $offer->setUser($this->getUser()); // Assurez-vous que l'utilisateur est connecté
 
 
         $entityManager->persist($offer);

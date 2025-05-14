@@ -22,12 +22,10 @@ const UserProfile = () => {
 
                 if (localData) {
                     setUser(localData);
-                    console.log("Utilisateur depuis IndexedDB :", localData);
                 } else {
                     const token = localStorage.getItem("token");
                     const remoteData = await getUser({ user: userId, token });
                     setUser(remoteData.data);
-                    console.log("Utilisateur depuis API :", remoteData);
                 }
             } catch (err) {
                 console.error("Erreur lors de la récupération des données :", err);
@@ -45,6 +43,7 @@ const UserProfile = () => {
     if (!user) return <p>Aucun utilisateur trouvé.</p>;
 
     function infoUser() {
+        console.log(user);
         return (
             <>
                 <div><p>{user?.firstName}</p></div>

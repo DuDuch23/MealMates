@@ -150,7 +150,7 @@ class Offer
     public function getSeller(): ?User { 
         return $this->seller; 
     }
-    public function setSeller(?User $seller): static { 
+    public function setUser(?User $seller): static { 
         $this->seller = $seller; 
         return $this; 
     }

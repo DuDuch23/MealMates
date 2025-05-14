@@ -40,7 +40,7 @@ function Connexion() {
       console.log("Réponse du serveur :", response);
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({email,token});
+        const fullUser = await getProfile({email});
         console.log()
 
         // Stocker dans localStorage

@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { useParams,Link } from 'react-router';
 import { getUser,getOfferBySeller } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
-import randomId from "../../service/randomKey";
 import './UserMealCard.css';
 
 function UserMealCard() {
@@ -43,7 +42,7 @@ function UserMealCard() {
         }
 
         fetchUserData();
-    }, []);
+    }, [userId]);
 
     const userIcon = () =>{
         if (user){ 
@@ -74,12 +73,13 @@ function UserMealCard() {
 
     const userPreference =  () => {
         if (userOffer) {
+            console.log(userOffer);
             return (
                 <div className="preferences">
                     <h3>Mes offres :</h3>
                     <ul>
                         {userOffer.map((offer) => (
-                            <li key={randomId()}>{offer.product}</li>
+                            <li key={offer.id}>{offer.product}</li>
                         ))}
                     </ul>
                 </div>
