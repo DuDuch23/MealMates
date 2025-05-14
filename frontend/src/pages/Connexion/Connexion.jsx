@@ -6,6 +6,8 @@ import logo from '../../assets/logo-mealmates.png';
 import GoogleLoginButton from "../../components/SsoGoogle";
 import styles from "./Connexion.module.css"; // ✅ CSS Module
 
+
+
 function Connexion() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +37,7 @@ function Connexion() {
       const response = await logIn({ email, password });
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({ email, token });
+        const fullUser = await getProfile({ email});
 
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(fullUser.user.id));
@@ -49,7 +51,10 @@ function Connexion() {
       }
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       setError("Une erreur s'est produite. Veuillez réessayer.");
+    
     }
   };
 
@@ -94,6 +99,12 @@ function Connexion() {
           <div className={styles.otherAction}>
             <p>Ou connexion avec</p>
             <GoogleLoginButton setUser={setUser} />
+          </div>
+
+          <div className={styles.contentElementForm}>
+            <p className={styles.linkText} onClick={() => navigate("/")}>
+              Retour au menu
+            </p>
           </div>
         </form>
       </div>

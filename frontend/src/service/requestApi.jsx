@@ -20,15 +20,19 @@ export async function geoCoding(location) {
     }
 }
 
-export async function refreshToken() {
+export function refreshToken() {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
     const infoToken = jwtDecode(token);
-    const now = Date.now() / 1000;
+    const now = Date.now() / 1000; 
 
     if (infoToken.exp < now) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/connexion");
+        return false;
     }
+    return true;
 }
 
 export async function logIn({ email, password }) {
@@ -155,7 +159,7 @@ export async function deleteUser(id) {
 
 export async function getProfile({ email }) {
     try {
-        console.log(token);
+        const token = localStorage.getItem("token"); // <-- ici, au moment de l'appel
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
             headers: {
@@ -165,9 +169,13 @@ export async function getProfile({ email }) {
             body: JSON.stringify({ email }),
         });
 
+        if (!response.ok) {
+            throw new Error(`Erreur ${response.status} : accès non autorisé`);
+        }
+
         return await response.json();
     } catch (error) {
-        console.error("Erreur API :", error);
+        console.error("Erreur API getProfile :", error);
         throw error;
     }
 }
