@@ -28,11 +28,12 @@ class Chat
     private User $seller;
 
     #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[Groups(["private"])]
+    #[Groups(["public","private"])]
     private Collection $messages;
 
     #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'chats')]
     #[ORM\JoinTable(name: 'chat_image')]
+    #[Groups(["public","private"])]
     private Collection $images;
 
 

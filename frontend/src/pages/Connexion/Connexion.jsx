@@ -37,7 +37,8 @@ function Connexion() {
       const response = await logIn({ email, password });
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({ email});
+        const fullUser = await getProfile({email});
+        console.log()
 
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(fullUser.user.id));

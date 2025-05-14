@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-import './iconUser.scss';
-
-// import randomId from "../../service/randomKey";
+import { useState } from 'react';
+import './iconUser.css';
+import './../BurgerMenue/burgerMenue';
  
 const icons = [
         {id:1,img:

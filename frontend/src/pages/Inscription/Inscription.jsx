@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { newUser } from "../../service/requestApi";
+import { addUserIndexDB } from "../../service/indexDB";
+import { newUser,logIn , getProfile } from "../../service/requestApi";
 import logo from '../../assets/logo-mealmates.png';
 import backgroundForm from '../../assets/background-form.png';
 import { Link } from "react-router";
@@ -16,6 +17,7 @@ function Inscription(){
     const [password, setPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
     const [data, setData] = useState(null);
+    const [user, setUser] = useState([]);
     const [error, setError] = useState(null);
 
     const handleEmail = (event) => setEmail(event.target.value);
@@ -40,14 +42,12 @@ function Inscription(){
             }
             if(!error){
                 setError(null);
-                navigate("/");
                 const response = await newUser({ email, password, confirmPassword, firstName, lastName});
-                setData(response);
+                console.log(response);
             }
-            // à faire, il manque erreur si email existe déjà car si je renseigne un email qui existe déjà, le if !error passe, me connecte et me renvoie sur la page d'accueil
             setError(null);
-            console.log("handleSubmit", email, password, confirmPassword, firstName, lastName);
             console.log(error);
+            navigate("/");
         } catch (error) {
             console.error("Erreur lors de la connexion :", error);
         }
