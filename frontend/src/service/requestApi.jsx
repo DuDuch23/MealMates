@@ -1,5 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 import API_BASE_URL from "./api";
+import { deleteUserIndexDB } from './indexDB';
 
 const token = localStorage.getItem("token");
 
@@ -55,6 +56,41 @@ export async function logIn({ email, password }) {
     }
 }
 
+export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
+    try {
+        if (!email || !password || !confirmPassword || !firstName || !lastName) {
+            throw new Error("All fields are required.");
+        }
+
+        if (password !== confirmPassword) {
+            throw new Error("Passwords do not match.");
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/user/new`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                password_confirm: confirmPassword,
+                firstName: firstName,
+                lastName: lastName,
+            }),
+        });
+
+        await response.json();
+        const token = await logIn({ email, password });
+        localStorage.setItem("token",token.token);
+        await getProfile({email});
+
+    } catch (error) {
+        console.error("Erreur API :", error);
+        throw error;
+    }
+}
+
 // User
 export async function getUser({ user}) {
     try {
@@ -71,38 +107,6 @@ export async function getUser({ user}) {
 
     } catch (error) {
         console.error("Erreur API:", error);
-        throw error;
-    }
-}
-
-export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
-    try {
-        if (!email || !password || !confirmPassword || !firstName || !lastName) {
-            throw new Error("All fields are required.");
-        }
-
-        if (password !== confirmPassword) {
-            throw new Error("Passwords do not match.");
-        }
-
-        await fetch(`${API_BASE_URL}/api/user/new`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                password_confirm: confirmPassword,
-                firstName: firstName,
-                lastName: lastName,
-            }),
-        });
-
-        await logIn({ email, password });
-
-    } catch (error) {
-        console.error("Erreur API :", error);
         throw error;
     }
 }
@@ -178,7 +182,7 @@ export async function getProfile({ email }) {
     }
 }
 
-export async function logOut() {
+export async function logOut({id}) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/logout`, {
             method: "GET",
@@ -194,6 +198,49 @@ export async function logOut() {
 
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    deleteUserIndexDB(id);
+}
+
+// Chat
+export async function getAllChat(id) {
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/get/all`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    "id": id 
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    } 
+}
+
+export async function getChat({user,chat}){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    'client': user.id,
+                    'seller': chat,
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    }
 }
 
 // Offer

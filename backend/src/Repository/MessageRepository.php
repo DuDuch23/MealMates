@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Message;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Offer>
@@ -15,6 +16,18 @@ class MessageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Message::class);
     }
+
+    public function getLastChat(int $chatId, int $userId): ?Message
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.chat = :chatId')
+            ->setParameter('chatId', $chatId)
+            ->orderBy('m.sentAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 
 //    /**
 //     * @return Offer[] Returns an array of Offer objects

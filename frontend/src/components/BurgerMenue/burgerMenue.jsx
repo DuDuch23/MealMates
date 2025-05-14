@@ -1,5 +1,7 @@
-import "./burgerMenue.css";
+import styles from "./burgerMenue.module.css";
 import {getUserIndexDB} from "../../service/indexDB"
+import { logOut } from "../../service/requestApi";
+import { useNavigate } from "react-router";
 import { Link } from 'react-router';
 import { useEffect, useState } from 'react';
 import { IconUser } from '../IconUser/iconUser';
@@ -37,13 +39,25 @@ export default function BurgerMenue({ onProfileClick }) {
         </li>
       );
     }
-    return null;  // Retourne null si userData n'est pas encore disponible
+    return null; 
+  };
+
+  const navigate = useNavigate();
+
+  const handleDeconnexion = () => {
+    const userId = localStorage.getItem("user");
+
+    logOut(userId); // Exécute ton logout
+    localStorage.removeItem("user"); // On nettoie localStorage
+    localStorage.removeItem("token");
+    
+    navigate("/"); // Redirige
   };
 
   return (
     <>
-      <ul className="ul-burger">
-        <svg onClick={onProfileClick} xmlns="http://www.w3.org/2000/svg" id="delete-burger-menue" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+      <ul className={styles["ul-burger"]}>
+        <svg onClick={onProfileClick} xmlns="http://www.w3.org/2000/svg" id={styles["delete-burger-menue"]} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
         {profilUser()}  {/* Appel de la fonction profilUser */}
@@ -63,13 +77,13 @@ export default function BurgerMenue({ onProfileClick }) {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-          <Link to="/createOffer">Créer une Offre</Link>
+          <Link to="/addOffer">Créer une Offre</Link>
         </li>
-        <li>
+        <li id={styles["log-out"]} onClick={handleDeconnexion}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
           </svg>
-          <Link to="/deconnexion">Se déconnecter</Link>
+          <p >Se déconnecter</p>
         </li>
       </ul>
     </>
