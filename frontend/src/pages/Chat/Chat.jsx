@@ -2,6 +2,7 @@
 import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
 import { getChat } from '../../service/requestApi';
+import ChatContainer from '../../components/ChatContainer/ChatContainer';
 
 function Chat() {
   const location = useLocation();
@@ -18,6 +19,7 @@ function Chat() {
     const fetchData = async () => {
       try {
         const res = await getChat({user,chat});
+        console.log(res);
         setChat(res);
       } catch (error) {
         console.error("Erreur de polling :", error);
@@ -26,19 +28,13 @@ function Chat() {
     fetchData();
   }, [user,chat]);
 
-  useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const res = await getChat({user,chat});
-    //     setChat(res);
-    //   } catch (error) {
-    //     console.error("Erreur de polling :", error);
-    //   }
-    // };
-    // fetchData();
-    // const interval = setInterval(fetchData, 10000);
-    // return ({user,chat}) => clearInterval(interval);
-  }, []);
+  console.log(res);
+
+  return(
+  <>
+    <ChatContainer chat={chat}/>
+  </>
+  );
 
 }
 

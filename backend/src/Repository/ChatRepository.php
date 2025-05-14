@@ -17,14 +17,20 @@ class ChatRepository extends ServiceEntityRepository
         parent::__construct($registry, Chat::class);
     }
 
+
     public function findBySellerAndClient(int $sellerId): ?array
     {
-        return $this->createQueryBuilder('c')
-        ->where('c.client = :id')
-        ->orWhere('c.seller = :id')
-        ->setParameter('id', $sellerId)
-        ->getQuery()
-        ->getResult();
+        $qb = $this->createQueryBuilder('c')
+        ->where('c.client != :excludedId')
+        ->andWhere('c.seller != :excludedId')
+        ->andWhere('c.id = (
+            SELECT m.chat
+            FROM App\Entity\Message m
+            ORDER BY m.sentAt DESC
+        )')
+        ->setParameter('excludedId', $sellerId);
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findByChat(int $sellerId, int $clientId): ?Chat
