@@ -4,6 +4,7 @@ import styles from "./SliderOffers.module.css";
 
 export default function SliderSection({ title, offers = [], type }) {
   if (!offers.length) return null;
+  const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL;
 
   return (
     <section className={styles['slider-offer']}>
@@ -26,12 +27,21 @@ export default function SliderSection({ title, offers = [], type }) {
 
         {offers.map(o => (
           <SwiperSlide key={o.id}>
-            <div>
-              <h3>{o.product}</h3>
-              <p>{o.description}</p>
-              <p>{o.price} €</p>
-              <p>{o.pickupLocation}</p>
-            </div>
+            <Link to={`/offer/${o.id}`} className={styles["slider-offer__link"]}>
+              <div className={styles["slider-offer__card"]}>
+                {o.images?.length > 0 && (
+                  <img
+                    className={styles["slider-offer__image"]}
+                    src={`${uploadsBaseUrl}/${o.images[0].link}`}
+                    alt={o.product}
+                  />
+                )}
+                <h3>{o.product}</h3>
+                <p>{o.description}</p>
+                <p>{o.price} €</p>
+                <p>{o.pickupLocation}</p>
+              </div>
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>

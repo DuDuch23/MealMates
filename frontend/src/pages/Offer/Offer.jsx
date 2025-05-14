@@ -20,6 +20,7 @@ function Offer(){
     const token = localStorage.getItem("token");
     const [userData, setUserData] = useState(null);
     const [pos, setPos] = useState(null);
+    const [userPos, setUserPos] = useState(null);
     const [offers, setOffers] = useState([]);
     const [veganOffers, setVeganOffers] = useState([]);
     const [againOffers, setAgainOffers] = useState([]);
@@ -183,7 +184,7 @@ function Offer(){
 
     return(
     <section className={styles["container-offer"]}>
-        <nav className={styles["container-offer__type"]}>
+        {/* <nav className={styles["container-offer__type"]}>
             <div className={styles["container__type-list"]}>
                 <Swiper className={styles["type-offer-swiper"]} slidesPerView={4} spaceBetween={10}>
                     <SwiperSlide>
@@ -208,7 +209,7 @@ function Offer(){
                     </SwiperSlide>
                 </Swiper>
             </div>
-        </nav>
+        </nav> */}
         <SearchBar onSearch={handleSearch} />
 
         <nav className={styles["container-offer__filter"]}>
@@ -229,26 +230,26 @@ function Offer(){
         </div>
         {showMap && (
             <div className={styles["container-offer__map"]} style={{ height: "100vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
-                <UserLocationMap userPos={pos} offers={offers} />
+                <UserLocationMap userPos={pos} offers={offers} setUserPos={setUserPos} />
             </div>
         )}
         <div className={styles["container-offer__slider"]}>
-                {searchResults.length > 0 ? (
-                    <>
-                        <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery}/>
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
-                    </>
-                ) : (
-                    <>
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
-                    </>
-                )}
+            {searchResults.length > 0 ? (
+                <>
+                    <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery}/>
+                    <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
+                    <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
+                    <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
+                    <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
+                </>
+            ) : (
+                <>
+                    <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
+                    <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
+                    <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
+                    <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
+                </>
+            )}
         </div>
     </section>
     );

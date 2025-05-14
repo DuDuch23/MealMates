@@ -198,9 +198,9 @@ export async function logOut() {
 
 // Offer
 
-export async function getOfferId({id}){
+export async function getOfferId(id){
     try{
-        const response = await fetch(`${API_BASE_URL}/api/${id}`,{
+        const response = await fetch(`${API_BASE_URL}/api/offers/get/${id}`,{
             method: 'GET',
             headers:{
                 accept: 'application/json'
@@ -208,7 +208,8 @@ export async function getOfferId({id}){
         });
         return await response.json();
     }catch(error){
-        return console.error(error);
+        console.error(err);
+        return { result: [] };
     }
 }
 
@@ -347,7 +348,7 @@ export async function newOffer(data, isFormData = false) {
 
 export async function geocodeLocation(location) {
     try{
-        const apiKey = import.meta.env.VITE_GOOGLE_MAP;
+        const apiKey = import.meta.env.VITE_GEOCODING_API;
         const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`
         );
@@ -382,6 +383,20 @@ export async function fetchFilteredOffers(filters) {
 export async function getCategory() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/category`, {
+            method: 'GET',
+            headers: { accept: 'application/json' },
+        });
+
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return { result: [] };
+    }
+}
+
+export async function getOfferById(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/${id}`, {
             method: 'GET',
             headers: { accept: 'application/json' },
         });

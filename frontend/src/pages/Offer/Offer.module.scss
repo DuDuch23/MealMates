@@ -11,7 +11,9 @@
     display: flex;
     flex-direction: column;
     &__type{
-        
+        img{
+            width: 100px;
+        }
     }
 
     &__type-list{
@@ -60,9 +62,6 @@
         display: flex;
         flex-direction: column;
         gap: 64px;
-    }
-    img{
-        width: 100px;
     }
     .swiper-slide{
         display: flex;
