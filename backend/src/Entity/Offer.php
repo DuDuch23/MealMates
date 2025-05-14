@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\OfferRepository;
 use Doctrine\Common\Collections\Collection;
@@ -34,6 +35,11 @@ class Offer
     #[ORM\Column(type: "text", nullable: true)]
     #[Groups(["public", "private"])] 
     private ?string $description = null;
+
+    #[ORM\Column(type: "string", length: 255, unique: true)]
+    #[Assert\NotBlank]
+    #[Groups(["public", "private"])]
+    private ?string $slug = null;
 
     #[ORM\Column(type: "integer")]
     #[Assert\Positive]
@@ -111,6 +117,21 @@ class Offer
         $this->images = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->categories = new ArrayCollection();
+    }
+    
+    #[ORM\PrePersist]
+    public function prePersist(){
+        if (empty($this->slug)) {
+            $this->slug = (new Slugify())->slugify($this->product);
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        if ($this->product) {
+            $this->slug = (new Slugify())->slugify($this->product);
+        }
     }
 
     #[ORM\PreUpdate]

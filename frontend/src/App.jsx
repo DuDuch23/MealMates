@@ -12,6 +12,7 @@ const Home = React.lazy(() => import('./pages/Home/Home'));
 const Offer = React.lazy(() => import('./pages/Offer/Offer'));
 const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
 const OfferCard = React.lazy(() => import('./pages/OfferCard/OfferCard'));
+const SingleOffer = React.lazy(() => import('./pages/SingleOffer/SingleOffer'));
 
 // User
 const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
@@ -24,7 +25,6 @@ const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'
 // Chat
 const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
 const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
-
 function App() {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem("user");
@@ -53,6 +53,7 @@ function App() {
           <Route path="/offer" element={<Offer />} />
           <Route path='/addOffer' element={<AddOffer />}/>
           <Route path='/offerCard' element={<OfferCard/>}/>
+          <Route path="/offer/:id" element={<SingleOffer />} />
         </Route>
         {/* user profile */}
         <Route path="/userProfile/:id" element={<UserProfile />} />
