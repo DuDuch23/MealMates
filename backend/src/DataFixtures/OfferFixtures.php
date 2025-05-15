@@ -2,10 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Category;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Offer;
+use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\HttpFoundation\File\File;
@@ -14,12 +14,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Cocur\Slugify\Slugify;
 
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const NB_OFFERS = 500;
+    public const NB_OFFERS = 100;
     public const OFFER_REF_PREFIX = 'offer_';
     public $publicPath;
+
     public function __construct(KernelInterface $kernel)
     {
         $this->publicPath = $kernel->getProjectDir();
@@ -28,6 +30,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+        $slugify = new Slugify();
 
         $user = $this->getReference('user@example.com', User::class);
         $seller = $this->getReference('user@example.com', User::class);
@@ -35,7 +38,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
 
         $produits = [
             'Panier de légumes bio', 'Repas chaud', 'Baguette de pain', 'Plateau de fromages',
-            'Pâtes maison', 'Soupe aux légumes', 'Tarte aux pommes', 'Yaourt nature', 
+            'Pâtes maison', 'Soupe aux légumes', 'Tarte aux pommes', 'Yaourt nature',
             'Viande marinée', 'Fruits de saison', 'Salade composée', 'Sandwich préparé',
             'Pâtisseries', 'Croissants du jour', 'Box surprise', 'Panier anti-gaspi'
         ];
@@ -59,14 +62,22 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < self::NB_OFFERS; $i++) {
             $offer = new Offer();
-            $offer->setProduct($faker->randomElement($produits));
+
+            // Choix du produit
+            $productName = $faker->randomElement($produits);
+            $offer->setProduct($productName);
+
+            // Génération d’un slug unique
+            $slug = $slugify->slugify($productName) . '-' . uniqid();
+            $offer->setProduct($slug);
+
             $offer->setDescription($faker->randomElement($descriptions));
             $offer->setQuantity($faker->numberBetween(1, 10));
             $offer->setExpirationDate($faker->dateTimeBetween('now', '+10 days'));
-            $offer->setPrice($faker->randomFloat(2, 0, 10)); // De 0 à 10€
-            $offer->setIsDonation($faker->boolean(20)); // 20% de dons
+            $offer->setPrice($faker->randomFloat(2, 0, 10));
+            $offer->setIsDonation($faker->boolean(20));
             $offer->setPickupLocation($faker->randomElement($locations));
-            $offer->setIsRecurring($faker->boolean(30)); // 30% de chances
+            $offer->setIsRecurring($faker->boolean(30));
             $offer->setIsVegan($faker->boolean(30));
 
             // Création de 1 à 3 créneaux horaires
@@ -77,15 +88,10 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $offer->setAvailableSlots($slots);
 
             $photosDirectory = $this->publicPath . '/public/uploads/offers-photos';
-
-            // Récupère tous les fichiers d'images (jpg, png, etc.)
             $availablePhotos = glob($photosDirectory . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE);
 
-            // Si on trouve des images valides
             if (!empty($availablePhotos)) {
                 $photos = new ArrayCollection();
-
-                // Sélection aléatoire de 1 à 3 images
                 $selectedPhotos = $faker->randomElements($availablePhotos, rand(1, 3));
 
                 foreach ($selectedPhotos as $photoPath) {
@@ -105,11 +111,12 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $offer->setUser($seller);
             $manager->persist($offer);
 
-            $this->addReference(self::OFFER_REF_PREFIX.$i, $offer);
+            $this->addReference(self::OFFER_REF_PREFIX . $i, $offer);
         }
 
         $manager->flush();
     }
+
     public function getDependencies(): array
     {
         return [
