@@ -18,9 +18,9 @@ export default function SliderSection({ title, offers = [], type }) {
       </div>
 
       <Swiper spaceBetween={20}
-              slidesPerView={1}
+              slidesPerView={1.25}
               breakpoints={{ 
-                640:{slidesPerView:1},
+                640:{slidesPerView:1.25},
                 768:{slidesPerView:2},
                 1024:{slidesPerView:3} 
                 }}>
@@ -39,7 +39,11 @@ export default function SliderSection({ title, offers = [], type }) {
                 <h3>{o.product}</h3>
                 <p>{o.description}</p>
                 <p>{o.price} €</p>
-                <p>{o.pickupLocation}</p>
+                <div className=''>
+                  {o.seller.firstName} {o.seller.lastName}
+                  <p>{o.seller.ratingsReceived}</p>
+                  <p>4.75/5</p>
+                </div>
               </div>
             </Link>
           </SwiperSlide>
