@@ -68,7 +68,8 @@
   
     &__image {
         width: 400px;
-        object-fit: contain;
+    height: 300px;
+    object-fit: cover;
     }
   
     &__link {

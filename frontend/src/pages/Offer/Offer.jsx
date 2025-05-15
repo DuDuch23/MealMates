@@ -271,7 +271,7 @@ function Offer(){
                             {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
                         </SliderSection>
                         ) : (
-                        <SliderSection title="Dernière chance" offers={localOffers} type="dernière chance" />
+                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
                     )}
                     {loadingVegan ? (
                         <SliderSection title="Ce soir je mange vegan">
@@ -302,7 +302,7 @@ function Offer(){
                             {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
                         </SliderSection>
                         ) : (
-                        <SliderSection title="Dernière chance" offers={localOffers} type="dernière chance" />
+                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
                     )}
                     {loadingVegan ? (
                         <SliderSection title="Ce soir je mange vegan">

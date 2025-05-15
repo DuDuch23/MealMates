@@ -19,7 +19,9 @@ const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
     // clusterer pour les markers (regroupement de markers proches)
 
     const renderMarkers = (clusterer) =>
-        (filteredOffers.length > 0 ? filteredOffers : offers).map((offer) => (
+        (filteredOffers.length > 0 ? filteredOffers : offers)
+            .filter((offer) => offer.latitude && offer.longitude)
+            .map((offer) => (
             <Marker
                 key={offer.id}
                 position={{ lat: Number(offer.latitude), lng: Number(offer.longitude) }}
