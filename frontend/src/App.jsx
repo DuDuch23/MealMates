@@ -28,7 +28,7 @@ const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
 const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 function App() {
   const [user, setUser] = useState(null);
-  const userId = localStorage.getItem("user");
+  const userId = sessionStorage.getItem("user");
 
   useEffect(() => {
     async function fetchUser() {
@@ -55,7 +55,7 @@ function App() {
       <Routes>
         {/* route avec la nav bar */}
         <Route element={<NavLayout />}>
-          <Route path="/" element={user ? <Offer /> : <Home />} />
+          <Route path="/" element={<Home />} />
           {/* discution user */}
           <Route path="/chat" element={<Chat />} />
           <Route path='/ChooseChat' element={<ChooseChat/>}/>

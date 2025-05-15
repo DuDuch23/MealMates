@@ -23,7 +23,7 @@ const UserProfile = () => {
                 if (localData) {
                     setUser(localData);
                 } else {
-                    const token = localStorage.getItem("token");
+                    const token = sessionStorage.getItem("token");
                     const remoteData = await getUser({ user: userId, token });
                     setUser(remoteData.data);
                 }

@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import API_BASE_URL from "./api";
 import { deleteUserIndexDB } from './indexDB';
 
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
 
 export async function geoCoding(location) {
     try {
@@ -21,15 +21,28 @@ export async function geoCoding(location) {
     }
 }
 
-// Mettre à jour le token depuis localStorage
-export async function refreshToken() {
-    const infoToken = jwtDecode(token);
-    const now = Date.now() / 1000;
-
-    if (infoToken.exp < now) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/connexion");
+// Mettre à jour le token depuis sessionStorage
+export async function refreshToken(navigate) {
+    const token = sessionStorage.getItem("token");
+    const expiration = sessionStorage.getItem("token_expiration");
+  
+    if (!token || !expiration || Date.now() >= parseInt(expiration, 10)) {
+      console.warn("Token expiré ou absent.");
+      sessionStorage.clear();
+      indexedDB.deleteDatabase("mealmates");
+      navigate("/connexion");
+      return;
+    }
+  
+    try {
+      const decoded = jwtDecode(token);
+      if (decoded.exp * 1000 < Date.now()) {
+        throw new Error("Token expiré");
+      }
+    } catch (e) {
+      sessionStorage.clear();
+      indexedDB.deleteDatabase("mealmates");
+      navigate("/connexion");
     }
 }
 
@@ -82,7 +95,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
 
         await response.json();
         const token = await logIn({ email, password });
-        localStorage.setItem("token",token.token);
+        sessionStorage.setItem("token",token.token);
         await getProfile({email});
 
     } catch (error) {
@@ -196,8 +209,8 @@ export async function logOut({id}) {
         console.error("Erreur lors de la déconnexion :", error);
     }
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     deleteUserIndexDB(id);
 }
 
@@ -317,7 +330,7 @@ export async function getLastChanceOffers() {
     }
 }
 
-export async function getAgainOffers() {
+export async function getAgainOffers(token) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/offers/again`, {
             method: 'GET',
@@ -375,7 +388,7 @@ export async function newOffer(data, isFormData = false) {
             method: "POST",
             body: data, // Ne pas utiliser JSON.stringify ici pour FormData
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
                 // Pas besoin de Content-Type avec FormData
             },
             credentials: "include",

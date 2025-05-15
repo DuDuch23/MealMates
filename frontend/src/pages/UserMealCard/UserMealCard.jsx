@@ -25,7 +25,7 @@ function UserMealCard() {
                     setUser(localData);
                     console.log("Utilisateur depuis IndexedDB :", localData);
                 } else {
-                    const token = localStorage.getItem("token");
+                    const token = sessionStorage.getItem("token");
                     const remoteData = await getUser({ user: userId });
                     setUser(remoteData.data);
                     console.log("Utilisateur depuis API :", remoteData.data);

@@ -6,8 +6,8 @@ import { jwtDecode } from 'jwt-decode';
 
 function App() {
     const [pos, setPos] = useState(null);
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    const token = sessionStorage.getItem("token");
+    const user = sessionStorage.getItem("user");
     const navigate = useNavigate();
     // if(token && user){
     //     navigate("/offer");
@@ -49,7 +49,6 @@ function App() {
             <section className={styles.bottom}>
                 <div className={styles.bottom__maps}>
                     <div className={styles.bottom__circle}></div>
-                    <UserLocationMap onPosition={setPos} />
                 </div>
 
                 <div className={styles.bottom__right}>

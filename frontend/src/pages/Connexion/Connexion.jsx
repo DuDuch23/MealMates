@@ -2,51 +2,47 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
+import CryptoJS from "crypto-js";
 import logo from '../../assets/logo-mealmates.png';
 import styles from "./Connexion.module.css";
 import GoogleLoginButton from "../../components/SsoGoogle";
+
+const SECRET_KEY = import.meta.env.VITE_CRYPTO_KEY || "default-key";
 
 function Connexion() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [user, setUser] = useState(null);
-
   const navigate = useNavigate();
 
-  // Gérer la récupération de l'utilisateur déjà connecté
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        navigate("/");
-      } catch (error) {
-        console.error("Erreur de parsing JSON :", error);
-        localStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
-      }
+    const token = sessionStorage.getItem("token");
+    const expiration = sessionStorage.getItem("token_expiration");
+
+    if (token && expiration && Date.now() < parseInt(expiration, 10)) {
+      navigate("/offer");
+    } else {
+      sessionStorage.clear(); // token périmé
     }
   }, [navigate]);
-
-  const handleInputChange = (setter) => (event) => setter(event.target.value);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await logIn({ email, password });
-      console.log("Réponse du serveur :", response);
+
       if (response.token) {
         const token = response.token;
-        localStorage.setItem("token", token);
-        const fullUser = await getProfile({email, token});
+        const expiration = Date.now() + 60 * 60 * 1000; // 1h
 
-        localStorage.setItem("user", JSON.stringify(fullUser.user.id));
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("token_expiration", expiration.toString());
 
-        setUser(fullUser.user);
+        const profile = await getProfile({ email, token });
+        const encryptedUser = CryptoJS.AES.encrypt(JSON.stringify(profile.user), SECRET_KEY).toString();
 
-        await addUserIndexDB(fullUser.user);
-        navigate("/");
+        await addUserIndexDB({ ...profile.user, encrypted: encryptedUser }); // Optionnel si tu veux conserver original
+        navigate("/offer");
       } else {
         setError("Email ou mot de passe incorrect.");
       }
@@ -71,10 +67,8 @@ function Connexion() {
             <input
               id="email"
               type="email"
-              name="email"
-              placeholder="Test@email.com"
               value={email}
-              onChange={handleInputChange(setEmail)}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -84,10 +78,8 @@ function Connexion() {
             <input
               id="password"
               type="password"
-              name="password"
-              placeholder="********"
               value={password}
-              onChange={handleInputChange(setPassword)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
@@ -96,7 +88,7 @@ function Connexion() {
 
           <div className={styles.otherAction}>
             <p>Ou connexion avec</p>
-            <GoogleLoginButton setUser={setUser} />
+            <GoogleLoginButton />
           </div>
         </form>
       </div>
