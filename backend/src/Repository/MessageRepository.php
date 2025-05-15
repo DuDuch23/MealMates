@@ -12,9 +12,12 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class MessageRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Message::class);
+        $this->entityManager = $entityManager;
     }
 
     public function getLastChat(int $chatId, int $userId): ?Message
@@ -26,6 +29,26 @@ class MessageRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findByChat(int $chatId)
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+    
+        $qb->select('m')
+            ->from(Message::class, 'm')
+            ->join('m.chat', 'c')
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->eq('m.sender', 'c.client'),
+                    $qb->expr()->eq('m.sender', 'c.seller')
+                )
+            )
+            ->andWhere('c.id = :chatId')
+            ->orderBy('m.sentAt', 'ASC')
+            ->setParameter('chatId', $chatId);
+                
+        return $qb->getQuery()->getResult();
     }
 
 
