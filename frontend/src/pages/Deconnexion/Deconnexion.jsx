@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import { deleteEntireDatabase } from "../../service/indexDB";
+import { deleteUserIndexDB } from "../../service/indexDB";
 
 function Deconnexion() {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ function Deconnexion() {
     const logout = async () => {
       try {
         // Attendre la suppression complète de la base
-        await deleteEntireDatabase();
+        await deleteUserIndexDB();
 
         // Efface sessionStorage (token + expiration)
         sessionStorage.clear();
