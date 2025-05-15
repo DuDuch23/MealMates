@@ -6,7 +6,6 @@ import BurgerMenue from '../components/BurgerMenue/burgerMenue';
 const NavLayout = () => {
   const storedUser = localStorage.getItem("user");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   
   const handleMenuToggle = () => {
     setIsMenuOpen(prev => !prev);

@@ -11,7 +11,9 @@
     display: flex;
     flex-direction: column;
     &__type{
-        
+        img{
+            width: 100px;
+        }
     }
 
     &__type-list{
@@ -39,6 +41,11 @@
         display: flex;
         align-items: center;
         background-color: variables.$colorDarkGreen;
+        box-shadow: inset 1px -1px 0 1px black;
+
+        &:hover{
+            box-shadow: inset 0 0 0 1px black;
+        }
     }
 
     &__show-map{
@@ -55,9 +62,6 @@
         display: flex;
         flex-direction: column;
         gap: 64px;
-    }
-    img{
-        width: 100px;
     }
     .swiper-slide{
         display: flex;

@@ -20,12 +20,12 @@ function Offer(){
     const token = localStorage.getItem("token");
     const [userData, setUserData] = useState(null);
     const [pos, setPos] = useState(null);
+    const [userPos, setUserPos] = useState(null);
     const [offers, setOffers] = useState([]);
     const [veganOffers, setVeganOffers] = useState([]);
     const [againOffers, setAgainOffers] = useState([]);
     const [lastChanceOffers, setLastChanceOffers] = useState([]);
     const [localOffers, setLocalOffers] = useState([]);
-    const [userPos, setUserPos] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [showMap, setShowMap] = useState(false);
@@ -36,23 +36,23 @@ function Offer(){
     }, [userData]);
 
     useEffect(() => {
-            const watchId = navigator.geolocation.watchPosition(
-            (position) => 
-                setPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
-            (error) => {
-                console.warn("Erreur de géolocalisation :", error);
-                const fallback = { lat: 48.8566, lng: 2.3522 };
-                console.log("Fallback position utilisée :", fallback);
-                setPos(fallback);
-            },
-            {
-                enableHighAccuracy: true,
-                maximumAge: 0,
-            }
-        );
+        const watchId = navigator.geolocation.watchPosition(
+        (position) => 
+            setPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
+        (error) => {
+            console.warn("Erreur de géolocalisation :", error);
+            const fallback = { lat: 48.8566, lng: 2.3522 };
+            console.log("Fallback position utilisée :", fallback);
+            setPos(fallback);
+        },
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+        }
+    );
     
-        return () => navigator.geolocation.clearWatch(watchId);
-      }, []);
+    return () => navigator.geolocation.clearWatch(watchId);
+    }, []);
     
     useEffect(() => {
         if (!token) {
@@ -74,20 +74,20 @@ function Offer(){
 
     useEffect(() => {
 
-        // const fetchOffers = async () => {
-        //     try {
-        //         const data = await getOffers();
-        //         if (data && data.data) {
-        //             console.log("offers",data);
-        //             setOffers(data.data);
-        //         } else {
-        //             console.log("Erreur ou offres vides");
-        //         }
-        //     } catch (err) {
-        //         console.error('Erreur lors de la récupération des offres:', err);
-        //         setOffers([]);
-        //     }
-        // };
+        const fetchOffers = async () => {
+            try {
+                const data = await getOffers();
+                if (data && data.data) {
+                    console.log("offers",data);
+                    setOffers(data.data);
+                } else {
+                    console.log("Erreur ou offres vides");
+                }
+            } catch (err) {
+                console.error('Erreur lors de la récupération des offres:', err);
+                setOffers([]);
+            }
+        };
     
         const fetchVeganOffers = async () => {
             try {
@@ -160,7 +160,7 @@ function Offer(){
             }
         };
     
-        // fetchOffers();
+        fetchOffers();
         fetchVeganOffers();
         fetchLastChanceOffers();
         fetchLocalOffers();
@@ -184,7 +184,7 @@ function Offer(){
 
     return(
     <section className={styles["container-offer"]}>
-        <nav className={styles["container-offer__type"]}>
+        {/* <nav className={styles["container-offer__type"]}>
             <div className={styles["container__type-list"]}>
                 <Swiper className={styles["type-offer-swiper"]} slidesPerView={4} spaceBetween={10}>
                     <SwiperSlide>
@@ -209,7 +209,7 @@ function Offer(){
                     </SwiperSlide>
                 </Swiper>
             </div>
-        </nav>
+        </nav> */}
         <SearchBar onSearch={handleSearch} />
 
         <nav className={styles["container-offer__filter"]}>
@@ -227,29 +227,29 @@ function Offer(){
             <button className={styles["container-offer__show-map"]} onClick={() => setShowMap(!showMap)}>
                 <p>Afficher la carte des offres</p>
             </button>
-            {showMap && (
-                <div className={styles["container-offer__map"]}>
-                    <UserLocationMap onPosition={setUserPos} offers={offers} userPos={userPos} />
-                </div>
-            )}
         </div>
+        {showMap && (
+            <div className={styles["container-offer__map"]} style={{ height: "100vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
+                <UserLocationMap userPos={pos} offers={offers} setUserPos={setUserPos} />
+            </div>
+        )}
         <div className={styles["container-offer__slider"]}>
-                {searchResults.length > 0 ? (
-                    <>
-                        <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery}/>
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
-                    </>
-                ) : (
-                    <>
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
-                    </>
-                )}
+            {searchResults.length > 0 ? (
+                <>
+                    <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery}/>
+                    <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
+                    <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
+                    <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
+                    <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
+                </>
+            ) : (
+                <>
+                    <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
+                    <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
+                    <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
+                    <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
+                </>
+            )}
         </div>
     </section>
     );
