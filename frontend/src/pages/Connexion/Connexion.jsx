@@ -29,10 +29,8 @@ function Connexion() {
     }
   }, [navigate]);
 
-  // Gestion des inputs de manière générique
   const handleInputChange = (setter) => (event) => setter(event.target.value);
 
-  // Gérer la soumission du formulaire de connexion
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -40,16 +38,13 @@ function Connexion() {
       console.log("Réponse du serveur :", response);
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({email});
-        console.log()
-
-        // Stocker dans localStorage
         localStorage.setItem("token", token);
+        const fullUser = await getProfile({email, token});
+
         localStorage.setItem("user", JSON.stringify(fullUser.user.id));
 
-        setUser(fullUser.id);
+        setUser(fullUser.user);
 
-        // Ajouter l'utilisateur à IndexedDB
         await addUserIndexDB(fullUser.user);
         navigate("/");
       } else {

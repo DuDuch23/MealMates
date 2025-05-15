@@ -162,7 +162,7 @@ export async function deleteUser(id) {
     }
 }
 
-export async function getProfile({ email }) {
+export async function getProfile({ email, token }) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
