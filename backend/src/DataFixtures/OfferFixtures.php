@@ -17,7 +17,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const NB_OFFERS = 500;
+    public const NB_OFFERS = 10;
     public const OFFER_REF_PREFIX = 'offer_';
     public $publicPath;
     public function __construct(KernelInterface $kernel)
@@ -59,7 +59,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < self::NB_OFFERS; $i++) {
             $offer = new Offer();
-            $offer->setProduct($faker->randomElement($produits));
+            $offer->setProduct($produits[$i]);
             $offer->setDescription($faker->randomElement($descriptions));
             $offer->setQuantity($faker->numberBetween(1, 10));
             $offer->setExpirationDate($faker->dateTimeBetween('now', '+10 days'));
@@ -68,6 +68,9 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $offer->setPickupLocation($faker->randomElement($locations));
             $offer->setIsRecurring($faker->boolean(30)); // 30% de chances
             $offer->setIsVegan($faker->boolean(30));
+            $offer->setLatitude(rand(-90000,90000)/1000);
+            $offer->setLongitude(rand(-90000,90000)/1000);
+            
 
             // Création de 1 à 3 créneaux horaires
             $slots = [];
