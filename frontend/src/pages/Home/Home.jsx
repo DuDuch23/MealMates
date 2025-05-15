@@ -1,4 +1,4 @@
-import styles from './Home.module.scss';
+import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import UserLocationMap from '../../components/GoogleMaps/GoogleMaps';

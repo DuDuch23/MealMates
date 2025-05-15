@@ -93,16 +93,16 @@ const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
 
     return (
         <>
-            <form className={styles.searchForm} onSubmit={handleSearch}>
-                <input
-                    type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Entrez une adresse"
-                />
-                <button type="submit">Rechercher</button>
-            </form>
             <LoadScript className="map" googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
+                <form className={styles.searchForm} onSubmit={handleSearch}>
+                    <input
+                        type="text"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="Entrez une adresse"
+                    />
+                    <button type="submit">Rechercher</button>
+                </form>
                 <GoogleMap className="map"
                     mapContainerStyle={containerStyle}
                     center={initialCenter}
@@ -120,11 +120,13 @@ const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                     </MarkerClusterer>
                     {selectedOffer && (
                         <InfoWindow
-                            position={{ lat: Number(selectedOffer.latitude), lng: Number(selectedOffer.longitude) }}
-                            onCloseClick={() => setSelectedOffer(null)}
-                        >
+                        position={{
+                            lat: Number(selectedOffer.latitude),
+                            lng: Number(selectedOffer.longitude)
+                        }}
+                        onCloseClick={() => setSelectedOffer(null)}>
                             <div className={styles['info-window']}>
-                            <p>{new Date(selectedOffer.createdAt).toLocaleDateString('fr-FR', {
+                                <p>{new Date(selectedOffer.createdAt).toLocaleDateString('fr-FR', {
                                     day: '2-digit',
                                     month: 'long',
                                     year: 'numeric',
