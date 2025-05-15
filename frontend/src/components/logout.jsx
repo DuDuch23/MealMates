@@ -4,7 +4,7 @@ import { googleLogout } from "@react-oauth/google";
 const Logout = ({ setUser }) => {
   const handleLogout = () => {
     googleLogout();
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
     setUser(null);
     console.log("Déconnexion réussie !");
   };

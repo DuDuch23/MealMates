@@ -7,24 +7,24 @@ import logo from '../../assets/logo-mealmates.png';
 import { getProfile, refreshToken } from '../../service/requestApi';
 
 export default function Header({ onProfileClick }) {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
         if (userData) {
-            localStorage.setItem("user", JSON.stringify(userData.user));
+            sessionStorage.setItem("user", JSON.stringify(userData.user));
         }
     }, [userData]);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
+        const storedUser = sessionStorage.getItem("user");
         if (storedUser) {
           try {
             const parsedUser = JSON.parse(storedUser);
             setUserData({ user: parsedUser });
           } catch (e) {
-            console.error("Erreur de parsing user depuis localStorage");
-            localStorage.removeItem("user");
+            console.error("Erreur de parsing user depuis sessionStorage");
+            sessionStorage.removeItem("user");
           }
         }
       }, []);

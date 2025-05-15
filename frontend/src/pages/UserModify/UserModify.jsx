@@ -43,7 +43,7 @@ function UserModify() {
 
     const handleEdit = async (event) => {
       event.preventDefault();
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const userData = {
         userId,

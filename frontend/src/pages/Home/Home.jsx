@@ -6,8 +6,8 @@ import { jwtDecode } from 'jwt-decode';
 
 function App() {
     const [pos, setPos] = useState(null);
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    const token = sessionStorage.getItem("token");
+    const user = sessionStorage.getItem("user");
     const navigate = useNavigate();
     // if(token && user){
     //     navigate("/offer");
