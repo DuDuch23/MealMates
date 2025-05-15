@@ -49,7 +49,6 @@ function App() {
             <section className={styles.bottom}>
                 <div className={styles.bottom__maps}>
                     <div className={styles.bottom__circle}></div>
-                    <UserLocationMap onPosition={setPos} />
                 </div>
 
                 <div className={styles.bottom__right}>

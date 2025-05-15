@@ -21,7 +21,7 @@ function Connexion() {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
-        navigate("/");
+        navigate("/offer");
       } catch (error) {
         console.error("Erreur de parsing JSON :", error);
         localStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
@@ -35,18 +35,17 @@ function Connexion() {
     event.preventDefault();
     try {
       const response = await logIn({ email, password });
-      console.log("Réponse du serveur :", response);
       if (response.token) {
         const token = response.token;
         localStorage.setItem("token", token);
         const fullUser = await getProfile({email, token});
 
-        localStorage.setItem("user", JSON.stringify(fullUser.user.id));
+        localStorage.setItem("user", JSON.stringify(fullUser.user));
 
         setUser(fullUser.user);
 
         await addUserIndexDB(fullUser.user);
-        navigate("/");
+        navigate("/offer");
       } else {
         setError("Email ou mot de passe incorrect.");
       }

@@ -22,14 +22,29 @@ export async function geoCoding(location) {
 }
 
 // Mettre à jour le token depuis localStorage
-export async function refreshToken() {
-    const infoToken = jwtDecode(token);
+export async function refreshToken(token) {
+    if (!token) {
+      console.warn("Aucun token fourni pour refreshToken");
+      return;
+    }
+  
+    let infoToken;
+    try {
+      infoToken = jwtDecode(token);
+    } catch (error) {
+      console.error("Token invalide :", error);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/connexion");
+      return;
+    }
+  
     const now = Date.now() / 1000;
-
+  
     if (infoToken.exp < now) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/connexion");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/connexion");
     }
 }
 

@@ -5,11 +5,6 @@
         text-decoration: none;
         color: inherit;
         display: block;
-    
-        &:hover .slider-offer__card {
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-            transform: translateY(-5px);
-        }
     }
   
     &__header {
@@ -27,26 +22,52 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        gap: 6px;
         
         h3 {
-            font-size: 1.1rem;
+            font-size: 26px;
             font-weight: bold;
-            margin: 0.75rem 1rem 0 1rem;
             color: white;
         }
     
         p {
-            font-size: 0.95rem;
+            font-size: 16px;
             color: #444;
-            margin: 0.5rem 1rem;
             color: white;
         }
     
     }
+
+    &__info-top{
+
+    }
+
+    &__info-middle{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        &__categories{
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            p{
+                background-color: red;
+                padding: 1px 20px;
+                border-radius: 14px;
+            }
+        }
+    }
+
+    &__info-seller{
+        display: flex;
+        justify-content: space-between;
+        &__seller{
+            
+        }
+    }
   
     &__image {
-        width: 100%;
-        height: 180px;
+        width: 400px;
         object-fit: contain;
     }
   
@@ -55,9 +76,5 @@
         color: #2a7ae4;
         text-decoration: none;
         font-weight: 500;
-    
-        &:hover {
-            text-decoration: underline;
-        }
     }
 }

@@ -55,7 +55,7 @@ function App() {
       <Routes>
         {/* route avec la nav bar */}
         <Route element={<NavLayout />}>
-          <Route path="/" element={user ? <Offer /> : <Home />} />
+          <Route path="/" element={<Home />} />
           {/* discution user */}
           <Route path="/chat" element={<Chat />} />
           <Route path='/ChooseChat' element={<ChooseChat/>}/>

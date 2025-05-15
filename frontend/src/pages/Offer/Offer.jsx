@@ -214,7 +214,7 @@ function Offer(){
 
         <nav className={styles["container-offer__filter"]}>
             <ul className={styles["container-offer__filter-reference-list"]}>
-                <AllCategory />
+                {/* <AllCategory /> */}
             </ul>
         </nav>
         <div className={styles["container-offer__new-offer-show-map"]}>

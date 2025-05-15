@@ -12,14 +12,27 @@ export default function Header({ onProfileClick }) {
 
     useEffect(() => {
         if (userData) {
-        localStorage.setItem("user", userData.user.id);
+            localStorage.setItem("user", JSON.stringify(userData.user));
         }
     }, [userData]);
 
     useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          try {
+            const parsedUser = JSON.parse(storedUser);
+            setUserData({ user: parsedUser });
+          } catch (e) {
+            console.error("Erreur de parsing user depuis localStorage");
+            localStorage.removeItem("user");
+          }
+        }
+      }, []);
+
+    useEffect(() => {
         if (token) {
             try {
-                refreshToken({ token });
+                refreshToken( token );
                 const user = jwtDecode(token);
                 const fetchUserProfile = async () => {
                     const email = user.username;
