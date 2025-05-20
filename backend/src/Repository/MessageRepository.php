@@ -31,7 +31,7 @@ class MessageRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findByChat(int $chatId)
+    public function findByChat(int $chatId): array
     {
         $qb = $this->entityManager->createQueryBuilder();
     

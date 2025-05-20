@@ -20,12 +20,12 @@ function ChooseChat() {
         }
         
         executeRequest();
-    }, [userId]);
+    }, []);
 
     return (
         <div className="choose-chat-container">
             {chat.map(chat => (
-                <ChooseChatUser key={chat.user.id} user={chat.user} chat={chat.chat_id} />
+                <ChooseChatUser key={chat.chat_id} user={chat.user} lastMessage={chat.last_message} chat={chat.chat_id} />
             ))}
         </div>
     );

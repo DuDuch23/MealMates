@@ -223,6 +223,7 @@ export async function getAllChat(id) {
 }
 
 export async function getChat({user,chat}){
+    console.log({user,chat});
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
             method: 'POST',
@@ -232,8 +233,31 @@ export async function getChat({user,chat}){
             },
             body: JSON.stringify(
                 { 
-                    'client': user.id,
-                    'seller': chat,
+                    'client': user,
+                    'id': chat,
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    }
+}
+
+export async function sendChat({user,chat,message}){
+     console.log({user,chat});
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                {
+                    'user_id': user,
+                    'chat_id': chat,
+                    'content': message, 
                 }
             ),
         });

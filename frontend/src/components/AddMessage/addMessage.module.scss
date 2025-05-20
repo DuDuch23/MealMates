@@ -1,0 +1,27 @@
+@use '../../styles/main';
+@use '../../styles/mixins';
+@use '../../styles/variables' as variables;
+
+#addMessage{
+    width: 50%;
+    height: 10vh;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    input,button{
+        color: black;
+    }
+}
+
+#addMessage svg{
+    height: 100%;
+}
+
+#addMessage input{
+    width: 40vw;
+    height: 4vh;
+    outline: none;
+    border: 1px solid variables.$colorDarkGreen;
+    border-radius: 5px;
+    background-color: none;
+}

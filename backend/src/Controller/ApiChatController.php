@@ -66,10 +66,23 @@ class ApiChatController extends AbstractController
                 'message' => "Missing 'chat' parameter."
             ], 400);
         }
-        
-        $chat = $entityManager->getRepository(Message::class)->findByChat($data['id']);
 
-       return $this->json(['chat' => $chat], 200, [], ['groups' => ['public']]);
+        $messages = $entityManager->getRepository(Message::class)->findByChat($data['id']);
+
+        // Récupérer l'autre utilisateur en base
+        foreach($messages as $message){
+            $res [] = [
+                'user' => [
+                    'nameUser' => $message->getSender()->getFirstName(),
+                    'iconUser' => $message->getSender()->getIconUser(),
+                ],
+                'content' => [
+                    'message'=> $message->getContent(),
+                ],
+            ];
+        }
+
+       return $this->json(['messages' => $res], 200, [], ['groups' => ['public']]);
     }
 
     #[Route('/sendChat', methods:['POST'])]

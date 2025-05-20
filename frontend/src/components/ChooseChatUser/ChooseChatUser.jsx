@@ -4,9 +4,8 @@ import { Link, useNavigate } from 'react-router';
 import { IconUser } from "../IconUser/iconUser";
 
 
-function ChooseChatUser({user,chat}) {
+function ChooseChatUser({user,chat,lastMessage}) {
     const navigate = useNavigate();
-    console.log(chat);
 
     const handleClick = () => {
         navigate('/chat', {
@@ -20,9 +19,13 @@ function ChooseChatUser({user,chat}) {
     return (
         <div onClick={handleClick} className="container-user-chat" style={{ cursor: 'pointer' }}>
             <div className="user-part">
-                <IconUser id={user.iconUser} />
-                <h3>{user.firstName} {user.lastName}</h3>
+                <IconUser id={user.icon} />
+                <ul>
+                    <li><h3>{user.name}</h3></li>
+                    <p>{lastMessage.content}</p>
+                </ul>
             </div>
+
         </div>
     );
 }

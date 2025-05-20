@@ -35,11 +35,9 @@ function App() {
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
-  const imageUrl = "https://localhost:8000/uploads/offers-photos/chili.jpg";
 
     return (
         <section className={styles.landing}>
-            <img src={imageUrl} alt="Depuis Symfony" />
             <section className={styles.top}>
                 <h1>Et si on mangeait moins cher, plus respectueux de la planète ?</h1>
             </section>
