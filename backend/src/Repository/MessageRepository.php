@@ -51,6 +51,18 @@ class MessageRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findWithPolling(int $chatId,string $sentAt)
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.chat = :chatId')
+           ->andWhere('m.sentAt > :sentAt')
+           ->setParameter('chatId', $chatId)
+           ->setParameter('sentAt', new \DateTime($sentAt))
+            ->getQuery()
+            ->getResult();
+    }
+    
+
 
 //    /**
 //     * @return Offer[] Returns an array of Offer objects

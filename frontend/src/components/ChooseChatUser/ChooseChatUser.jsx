@@ -5,16 +5,14 @@ import { IconUser } from "../IconUser/iconUser";
 
 
 function ChooseChatUser({user,chat,lastMessage}) {
+    sessionStorage.setItem("user",user.id);
+    sessionStorage.setItem("chat",chat);
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate('/chat', {
-            state: {
-                user,
-                chat: chat
-            }
-        });
+        navigate('/chat');
     };
+
 
     return (
         <div onClick={handleClick} className="container-user-chat" style={{ cursor: 'pointer' }}>

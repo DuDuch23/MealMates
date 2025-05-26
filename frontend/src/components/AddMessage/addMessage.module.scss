@@ -4,17 +4,19 @@
 
 #addMessage{
     width: 50%;
-    height: 10vh;
+    height: 10%;
+    border: 1px solid red;
     margin: 0 auto;
     display: flex;
     align-items: center;
+    justify-content: space-around;
     input,button{
         color: black;
     }
 }
 
 #addMessage svg{
-    height: 100%;
+    height: 5vh;
 }
 
 #addMessage input{

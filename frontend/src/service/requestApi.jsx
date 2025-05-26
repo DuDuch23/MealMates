@@ -222,6 +222,30 @@ export async function getAllChat(id) {
     } 
 }
 
+export async function getPolling({chat,lastMessage}){
+    if(!lastMessage){
+        lastMessage = "0000-00-00 00:00:00";
+    }
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/polling/data`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    "chat": chat,
+                    'lastMessage': lastMessage
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    } 
+}
+
 export async function getChat({user,chat}){
     console.log({user,chat});
     try{
@@ -244,10 +268,9 @@ export async function getChat({user,chat}){
     }
 }
 
-export async function sendChat({user,chat,message}){
-     console.log({user,chat});
+export async function sendMessage({user,chat,message}){
     try{
-        const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
+        const response = await fetch(`${API_BASE_URL}/api/chat/send/message`,{
             method: 'POST',
             headers:{
                 accept: 'application/json',
@@ -255,8 +278,8 @@ export async function sendChat({user,chat,message}){
             },
             body: JSON.stringify(
                 {
-                    'user_id': user,
-                    'chat_id': chat,
+                    'user': user,
+                    'chat': chat,
                     'content': message, 
                 }
             ),

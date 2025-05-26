@@ -8,19 +8,13 @@ import ChatContainer from '../../components/ChatContainer/ChatContainer';
 function Chat() {
   const location = useLocation();
   const [messages, setMessages] = useState([]);
-  const { user, chat } = location.state || {};
-
-  if (!user || !chat) {
-      console.log()
-      return <p>Données de chat manquantes.</p>;
-  }
-
-  const userId = user.id;
+  const [user, setUser] = useState(sessionStorage.getItem("user"));
+  const [chat,setChat] = useState(sessionStorage.getItem("chat"));
 
   return(
   <>
-    <ChatContainer user={userId}/>
-    <AddMessage user={userId} chat={chat}/>
+    <ChatContainer user={user} chat={chat}/>
+    <AddMessage user={user} chat={chat}/>
   </>
   );
 
