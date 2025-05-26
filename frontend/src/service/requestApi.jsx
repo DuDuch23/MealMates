@@ -59,7 +59,7 @@ export async function logIn({ email, password }) {
             }),
         });
 
-        console.log(`${API_BASE_URL}/api/login`);
+        console.log(response);
 
         return await response.json();
 
