@@ -59,7 +59,7 @@ export async function logIn({ email, password }) {
             }),
         });
 
-        console.log(`${API_BASE_URL}/api/login`);
+        console.log(response);
 
         return await response.json();
 
@@ -235,7 +235,32 @@ export async function getAllChat(id) {
     } 
 }
 
+export async function getPolling({chat,lastMessage}){
+    if(!lastMessage){
+        lastMessage = "0000-00-00 00:00:00";
+    }
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/polling/data`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    "chat": chat,
+                    'lastMessage': lastMessage
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    } 
+}
+
 export async function getChat({user,chat}){
+    console.log({user,chat});
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
             method: 'POST',
@@ -245,8 +270,30 @@ export async function getChat({user,chat}){
             },
             body: JSON.stringify(
                 { 
-                    'client': user.id,
-                    'seller': chat,
+                    'client': user,
+                    'id': chat,
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    }
+}
+
+export async function sendMessage({user,chat,message}){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/send/message`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                {
+                    'user': user,
+                    'chat': chat,
+                    'content': message, 
                 }
             ),
         });

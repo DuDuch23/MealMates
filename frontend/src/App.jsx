@@ -26,6 +26,7 @@ const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'
 // Chat
 const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
 const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
+
 function App() {
   const [user, setUser] = useState(null);
   const userId = sessionStorage.getItem("user");

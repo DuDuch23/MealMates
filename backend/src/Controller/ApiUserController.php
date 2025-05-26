@@ -157,6 +157,7 @@ class ApiUserController extends AbstractController
         ], 201);
     }
 
+
     #[Route('/edit', methods: ['PUT'])]
     public function edit(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
     {
