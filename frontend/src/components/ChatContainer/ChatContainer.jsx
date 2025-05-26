@@ -59,7 +59,7 @@ function ChatContainer({ user, chat }) {
       return (
       <>
           {messages.map((message) => (
-            <Messages  key={message.id}  content={message.content.message} senderId={message.user.idForMessage} />
+            <Messages  key={message.id}  content={message.content.message} iconUser={message.user.iconUser} />
           ))}
       </>
     );
