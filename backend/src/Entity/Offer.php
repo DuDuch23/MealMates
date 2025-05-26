@@ -115,6 +115,7 @@ class Offer
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'offers')]
     #[ORM\JoinTable(name: 'offer_category')]
+    #[Groups(["public", "private"])]
     private Collection $categories;
 
     public function __construct()

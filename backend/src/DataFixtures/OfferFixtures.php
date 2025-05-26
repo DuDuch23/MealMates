@@ -18,7 +18,7 @@ use Cocur\Slugify\Slugify;
 
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const NB_OFFERS = 100;
+    public const NB_OFFERS = 10;
     public const OFFER_REF_PREFIX = 'offer_';
     public $publicPath;
 
@@ -79,6 +79,9 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $offer->setPickupLocation($faker->randomElement($locations));
             $offer->setIsRecurring($faker->boolean(30));
             $offer->setIsVegan($faker->boolean(30));
+            $offer->setLatitude(rand(-90000,90000)/1000);
+            $offer->setLongitude(rand(-90000,90000)/1000);
+            
 
             // Création de 1 à 3 créneaux horaires
             $slots = [];

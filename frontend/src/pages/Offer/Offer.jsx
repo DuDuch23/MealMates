@@ -12,12 +12,13 @@ import AllCategory from "../../components/AllCategory/AllCategory";
 import SliderSection from '../../components/SliderOffers/SliderOffers';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import UserLocationMap from '../../components/GoogleMaps/GoogleMaps';
+import SkeletonCard from "../../components/SkeletonCard/SkeletonCard";
 
 import 'swiper/css';
 
 
 function Offer(){
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const [userData, setUserData] = useState(null);
     const [pos, setPos] = useState(null);
     const [userPos, setUserPos] = useState(null);
@@ -29,9 +30,18 @@ function Offer(){
     const [searchResults, setSearchResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [showMap, setShowMap] = useState(false);
+
+    // Loading spinner
+    const [loadingOffers, setLoadingOffers] = useState(true);
+    const [loadingVegan, setLoadingVegan] = useState(true);
+    const [loadingAgain, setLoadingAgain] = useState(true);
+    const [loadingLastChance, setLoadingLastChance] = useState(true);
+    const [loadingLocal, setLoadingLocal] = useState(true);
+    
+
     useEffect(() => {
         if (userData) {
-            localStorage.setItem("user", userData.user.id);
+            sessionStorage.setItem("user", userData.user.id);
         }
     }, [userData]);
 
@@ -91,6 +101,7 @@ function Offer(){
     
         const fetchVeganOffers = async () => {
             try {
+                setLoadingVegan(true);
                 const data = await getVeganOffers();
                 if(data && data.data) {
                     // console.log("vegan",data);
@@ -101,11 +112,14 @@ function Offer(){
             } catch (err) {
                 console.error('Erreur lors de la récupération des offres vegan:', err);
                 setVeganOffers([]);
+            } finally {
+                setLoadingVegan(false);
             }
         };
     
         const fetchLastChanceOffers = async () => {
             try {
+                setLoadingLastChance(true);
                 const data = await getLastChanceOffers();
                 if(data && data.data){
                     // console.log("last", data);
@@ -116,16 +130,19 @@ function Offer(){
             } catch (err){
                 console.error('Erreur lors de la récupération des offres last chance:', err);
                 setLastChanceOffers([]);
+            } finally {
+                setLoadingLastChance(false);
             }
         };
         const fetchAgainOffers = async () => {
             try {
-                const token = localStorage.getItem('token'); // Ou autre méthode pour récupérer le JWT
+                setLoadingAgain(true);
+                const token = sessionStorage.getItem('token'); // Ou autre méthode pour récupérer le JWT
                 if (!token) {
                     console.error("Aucun token trouvé");
                     return;
                 }
-                const data = await getAgainOffers(token );
+                const data = await getAgainOffers(token);
                 console.log("again", data);
                 if(data && data.data){
                     // console.log("again", data);
@@ -136,12 +153,15 @@ function Offer(){
             } catch (err){
                 console.error('Erreur lors de la récupération des offres again :', err);
                 setAgainOffers([]);
+            } finally {
+                setLoadingAgain(false);
             }
         };
         fetchAgainOffers();
     
         const fetchLocalOffers = async () => {
             try {
+                setLoadingLocal(true);
                 navigator.geolocation.getCurrentPosition(async (position) => {
                     const { latitude, longitude } = position.coords;
                     const data = await getLocalOffers(latitude, longitude);
@@ -157,6 +177,8 @@ function Offer(){
             } catch (err) {
                 console.error('Erreur lors de la récupération des offres locales :', err);
                 setLocalOffers([]);
+            } finally {
+                setLoadingLocal(false);
             }
         };
     
@@ -214,7 +236,7 @@ function Offer(){
 
         <nav className={styles["container-offer__filter"]}>
             <ul className={styles["container-offer__filter-reference-list"]}>
-                <AllCategory />
+                {/* <AllCategory /> */}
             </ul>
         </nav>
         <div className={styles["container-offer__new-offer-show-map"]}>
@@ -237,17 +259,65 @@ function Offer(){
             {searchResults.length > 0 ? (
                 <>
                     <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery}/>
-                    <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                    <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                    <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                    <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
+                    {loadingAgain ? (
+                        <SliderSection title="Recommander à nouveau">
+                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                        </SliderSection>
+                        ) : (
+                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
+                        )}
+                    {loadingLastChance ? (
+                        <SliderSection title="Dernière chance">
+                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                        </SliderSection>
+                        ) : (
+                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
+                    )}
+                    {loadingVegan ? (
+                        <SliderSection title="Ce soir je mange vegan">
+                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                        </SliderSection>
+                        ) : (
+                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
+                        )}
+                    {loadingLocal ? (
+                        <SliderSection title="Tendances locales">
+                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                        </SliderSection>
+                        ) : (
+                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
+                    )}
                 </>
             ) : (
                 <>
-                    <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                    <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                    <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                    <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
+                    {loadingAgain ? (
+                        <SliderSection title="Recommander à nouveau">
+                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                        </SliderSection>
+                        ) : (
+                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
+                        )}
+                    {loadingLastChance ? (
+                        <SliderSection title="Dernière chance">
+                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                        </SliderSection>
+                        ) : (
+                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
+                    )}
+                    {loadingVegan ? (
+                        <SliderSection title="Ce soir je mange vegan">
+                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                        </SliderSection>
+                        ) : (
+                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
+                        )}
+                    {loadingLocal ? (
+                        <SliderSection title="Tendances locales">
+                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                        </SliderSection>
+                        ) : (
+                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
+                    )}
                 </>
             )}
         </div>

@@ -4,7 +4,7 @@ import Header from '../components/Header/Header';
 import BurgerMenue from '../components/BurgerMenue/burgerMenue';
 
 const NavLayout = () => {
-  const storedUser = localStorage.getItem("user");
+  const storedUser = sessionStorage.getItem("user");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const handleMenuToggle = () => {

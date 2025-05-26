@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useState,useEffect } from 'react';
 import { Routes, Route } from 'react-router';
 import { getUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
+import logo from '../src/assets/logo-mealmates.png';
 
 // Chargement différé des composants
 
@@ -28,7 +29,7 @@ const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 
 function App() {
   const [user, setUser] = useState(null);
-  const userId = localStorage.getItem("user");
+  const userId = sessionStorage.getItem("user");
 
   useEffect(() => {
     async function fetchUser() {
@@ -42,11 +43,20 @@ function App() {
   }, [userId]);
 
   return (
-    <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
+    <Suspense fallback={
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh"
+      }}>
+        <img src={logo} alt="Logo MealMates" />
+      </div>
+    }>
       <Routes>
         {/* route avec la nav bar */}
         <Route element={<NavLayout />}>
-          <Route path="/" element={user ? <Offer /> : <Home />} />
+          <Route path="/" element={<Home />} />
           {/* discution user */}
           <Route path="/chat" element={<Chat />} />
           <Route path='/ChooseChat' element={<ChooseChat/>}/>

@@ -11,7 +11,7 @@ export default function BurgerMenue({ onProfileClick }) {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userId = localStorage.getItem("user");
+      const userId = sessionStorage.getItem("user");
       const id  = Number(userId);
       if (id) {
         try {
@@ -44,11 +44,11 @@ export default function BurgerMenue({ onProfileClick }) {
   const navigate = useNavigate();
 
   const handleDeconnexion = () => {
-    const userId = localStorage.getItem("user");
+    const userId = sessionStorage.getItem("user");
 
     logOut(userId); // Exécute ton logout
-    localStorage.removeItem("user"); // On nettoie localStorage
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("user"); // On nettoie sessionStorage
+    sessionStorage.removeItem("token");
     
     navigate("/"); // Redirige
   };

@@ -5,7 +5,7 @@ import "./ChooseChat.scss";
 
 function ChooseChat() {
     const [chat, setChat] = useState([]);
-    const userId = localStorage.getItem("user");
+    const userId = sessionStorage.getItem("user");
 
     useEffect(() => {
         if (!userId) return;

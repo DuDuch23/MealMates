@@ -4,7 +4,6 @@
 
 
 .container-offer {
-    @include mixins.responsive-container(768px);
     padding: 12px;
     background-color: #242424;
     gap: 48px;
@@ -38,6 +37,7 @@
         width: fit-content;
         border-radius: 5px;
         padding: 10px 8px;
+        gap: 8px;
         display: flex;
         align-items: center;
         background-color: variables.$colorDarkGreen;
