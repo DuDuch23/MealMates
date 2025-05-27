@@ -216,6 +216,7 @@ export async function logOut({id}) {
 
 // Chat
 export async function getAllChat(id) {
+    const token = sessionStorage.getItem("token");
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/get/all`,{
             method: 'POST',
@@ -225,7 +226,7 @@ export async function getAllChat(id) {
             },
             body: JSON.stringify(
                 { 
-                    "id": id 
+                    "id": id
                 }
             ),
         });

@@ -29,12 +29,12 @@ const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 
 function App() {
   const [user, setUser] = useState(null);
-  const userId = sessionStorage.getItem("user");
+  const userId = localStorage.getItem("user");
 
   useEffect(() => {
     async function fetchUser() {
       if (userId) {
-        const id = parseInt(userId);
+        const id = parseInt(userId, 10); // Toujours préciser la base
         const userData = await getUserIndexDB(id);
         setUser(userData);
       }
@@ -56,21 +56,30 @@ function App() {
       <Routes>
         {/* route avec la nav bar */}
         <Route element={<NavLayout />}>
-          <Route path="/" element={<Home />} />
-          {/* discution user */}
+          {/* Home selon connexion */}
+          {user ? (
+            <Route path="/" element={<Offer />} />
+          ) : (
+            <Route path="/" element={<Home />} />
+          )}
+
+          {/* discussion user */}
           <Route path="/chat" element={<Chat />} />
-          <Route path='/ChooseChat' element={<ChooseChat/>}/>
+          <Route path="/ChooseChat" element={<ChooseChat />} />
+
           {/* offer */}
           <Route path="/offer" element={<Offer />} />
-          <Route path='/addOffer' element={<AddOffer />}/>
-          <Route path='/offerCard' element={<OfferCard/>}/>
+          <Route path="/addOffer" element={<AddOffer />} />
+          <Route path="/offerCard" element={<OfferCard />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
         </Route>
+
         {/* user profile */}
         <Route path="/userProfile/:id" element={<UserProfile />} />
         <Route path="/userMealCard/:id" element={<UserMealCard />} />
         <Route path="/userModify/:id" element={<UserModify />} />
-        {/* connexion */}
+
+        {/* auth */}
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription />} />
         <Route path="/deconnexion" element={<Deconnexion />} />

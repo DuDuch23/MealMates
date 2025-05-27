@@ -10,7 +10,7 @@ export function Messages({ content, senderId }) {
 
     useEffect(() => {
       async function fetchUser() {
-        setIdStorage(sessionStorage.getItem('user'));
+        setIdStorage(localStorage.getItem('user'));
 
         if(user == senderId){
             const userData = await getUserIndexDB(idStorage);

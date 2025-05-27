@@ -5,14 +5,15 @@ import "./ChooseChat.scss";
 
 function ChooseChat() {
     const [chat, setChat] = useState([]);
-    const userId = sessionStorage.getItem("user");
+    const userId = localStorage.getItem("user");
 
     useEffect(() => {
         if (!userId) return;
         
         async function executeRequest() {
             try {
-                const data = await getAllChat(userId);
+
+                const data = await getAllChat(parseInt(userId));
                 setChat(data.data);
             } catch (error) {
                 console.error("Failed to fetch chat data:", error);
