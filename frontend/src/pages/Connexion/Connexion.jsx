@@ -39,9 +39,11 @@ function Connexion() {
         sessionStorage.setItem("token_expiration", expiration.toString());
 
         const profile = await getProfile({ email, token });
+        sessionStorage.setItem("user",profile.user.id);
+        console.log(profile.user);
         const encryptedUser = CryptoJS.AES.encrypt(JSON.stringify(profile.user), SECRET_KEY).toString();
 
-        await addUserIndexDB({ ...profile.user, encrypted: encryptedUser }); // Optionnel si tu veux conserver original
+        await addUserIndexDB({ ...profile.user, encrypted: encryptedUser });
         navigate("/offer");
       } else {
         setError("Email ou mot de passe incorrect.");
