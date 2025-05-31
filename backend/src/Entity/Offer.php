@@ -97,6 +97,13 @@ class Offer
     #[Groups(["public", "private"])]
     private ?float $longitude = null;
 
+    
+    /**
+     * @var Collection<int, Offer>
+     */
+    #[ORM\OneToMany(targetEntity: Chat::class, mappedBy: 'offer')]
+    private Collection $chat;
+
     /**
      * @var Collection<int, Order>
      */
@@ -118,6 +125,7 @@ class Offer
         $this->images = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->chat = new ArrayCollection();
     }
     
     #[ORM\PrePersist]
@@ -296,6 +304,30 @@ class Offer
     public function removeCategory(Category $category): static
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chat>
+     */
+    public function getChat(): Collection
+    {
+        return $this->chat;
+    }
+
+    public function addChat(Chat $chat): static
+    {
+        if (!$this->categories->contains($chat)) {
+            $this->chat->add($chat);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): static
+    {
+        $this->chat->removeElement($chat);
 
         return $this;
     }
