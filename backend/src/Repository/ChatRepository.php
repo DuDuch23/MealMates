@@ -3,47 +3,50 @@
 namespace App\Repository;
 
 use App\Entity\Chat;
-use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Offer>
  */
 class ChatRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Chat::class);
+        $this->entityManager = $entityManager;
     }
 
 
-    public function findBySellerAndClient(int $sellerId): ?array
+    public function findBySellerAndClient(int $userId): array
     {
-        $qb = $this->createQueryBuilder('c')
-        ->where('c.client != :excludedId')
-        ->andWhere('c.seller != :excludedId')
-        ->andWhere('c.id = (
-            SELECT m.chat
-            FROM App\Entity\Message m
-            ORDER BY m.sentAt DESC
-        )')
-        ->setParameter('excludedId', $sellerId);
-
-        return $qb->getQuery()->getResult();
+        $query = $this->entityManager->createQuery(
+            'SELECT 
+                m.content, 
+                c.id AS idChat, 
+                m.sentAt,
+                CASE 
+                    WHEN client.id = :clientId THEN seller.id
+                    ELSE client.id
+                END AS otherUserId
+             FROM App\Entity\Message m
+             JOIN m.chat c
+             JOIN c.client client
+             JOIN c.seller seller
+             WHERE (client.id = :clientId OR seller.id = :clientId)
+               AND m.sentAt = (
+                   SELECT MAX(m2.sentAt)
+                   FROM App\Entity\Message m2
+                   WHERE m2.chat = c
+               )
+             ORDER BY c.id DESC'
+        )->setParameter('clientId', $userId);
+        
+        return $query->getResult();
     }
-
-    public function findByChat(int $sellerId, int $clientId): ?Chat
-    {
-        return $this->createQueryBuilder('c')
-        -> where('c.client = :clientId')
-        -> andWhere('c.seller = :sellerId')
-        ->setParameter('clientId', $clientId)
-        ->setParameter('sellerId', $sellerId)
-        ->getQuery()
-        ->getOneOrNullResult();
-    }
-
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */

@@ -3,13 +3,13 @@
 namespace App\DataFixtures;
 
 use App\Entity\Chat;
-use App\Entity\Image;
 use App\Entity\User;
+use App\Entity\Image;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class ChatFixture extends Fixture implements DependentFixtureInterface
+class ChatFixtures extends Fixture implements DependentFixtureInterface
 {
     public const CHATS = [
         [
@@ -36,7 +36,9 @@ class ChatFixture extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        $id = 1;
         foreach (self::CHATS as $index => $data) {
+
             $chat = new Chat();
 
             $client = $this->getReference($data['client'],  User::class);
@@ -52,7 +54,8 @@ class ChatFixture extends Fixture implements DependentFixtureInterface
             }
 
             $manager->persist($chat);
-            $this->addReference('chat_' . $index, $chat);
+            $this->addReference("chat_".$id, $chat);
+            $id ++;
         }
 
         $manager->flush();

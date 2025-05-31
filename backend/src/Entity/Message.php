@@ -21,15 +21,15 @@ class Message
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["private"])]
+    #[Groups(["private","public"])]
     private ?User $sender = null;
 
     #[ORM\Column(type: 'text')]
-    #[Groups(["private"])]
+    #[Groups(["private","public"])]
     private string $content;
 
     #[ORM\Column(type: 'datetime')]
-    #[Groups(["private"])]
+    #[Groups(["private","public"])]
     private \DateTimeInterface $sentAt;
 
     public function getId(): ?int

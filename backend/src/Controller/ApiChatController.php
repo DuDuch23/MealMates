@@ -1,12 +1,11 @@
 <?php
 namespace App\Controller;
 
+use DateTimeImmutable;
 use App\Entity\Chat;
 use App\Entity\User;
 use App\Entity\Message;
-use Symfony\Component\Mercure\Update;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,32 +28,32 @@ class ApiChatController extends AbstractController
             ], 400);
         }
 
-        $userId = $data['id'];
-        $chats = $entityManager->getRepository(Chat::class)->findBySellerAndClient($userId);
+        $userId = (int) $data['id'];
+        $results = $entityManager->getRepository(Chat::class)->findBySellerAndClient($userId);
 
         $res = [];
 
-        foreach ($chats as $chat) {
-            $otherUser = null;
+        foreach ($results as $row) {
+            // $row est un tableau avec : content, idChat, sentAt, otherUserId
 
-            if ($chat->getClient()->getId() !== $userId) {
-                $otherUser = $chat->getClient();
-            } elseif ($chat->getSeller()->getId() !== $userId) {
-                $otherUser = $chat->getSeller();
-            }
-
-            // Récupération du dernier message
-            $lastMessage = $entityManager->getRepository(Message::class)->getLastChat($chat->getId(), $userId);
+            // Récupérer l'autre utilisateur en base
+            $otherUser = $entityManager->getRepository(User::class)->find($row['otherUserId']);
 
             $res[] = [
-                'chat_id' => $chat->getId(),
-                'user' => $otherUser,
-                'last_message' => $lastMessage
+                'chat_id' => $row['idChat'],
+                'last_message' => [
+                    'content' => $row['content'],
+                    'sentAt' => $row['sentAt'],
+                ],
+                'user' => [
+                    'name' => $otherUser->getFirstName(),
+                    'icon' => $otherUser->getIconUser(),
+                    'id' => $otherUser->getId(),
+                ],
             ];
         }
 
         return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
-
     }
 
     #[Route('/get', methods: ['POST'])]
@@ -62,43 +61,59 @@ class ApiChatController extends AbstractController
     {
         $data = json_decode($request->getContent(),true);
 
-        if(!isset($data['client'])){
+        if(!isset($data['id'])){
             return new JsonResponse([
                 'status' => "Bad Request",
                 'code' => 400,
-                'message' => "Missing 'client' parameter."
+                'message' => "Missing 'chat' parameter."
             ], 400);
         }
 
-        if(!isset($data['seller'])){
-            return new JsonResponse([
-                'status' => "Bad Request",
-                'code' => 400,
-                'message' => "Missing 'seller' parameter."
-            ], 400);
-        }
-        
-        $chat = $entityManager->getRepository(Chat::class)->findBySellerAndClient($data['client'],$data['seller']);
+        $messages = $entityManager->getRepository(Message::class)->findByChat($data['id']);
 
-       return $this->json(['chat' => $chat], 200, [], ['groups' => ['public']]);
+        // Récupérer l'autre utilisateur en base
+        foreach($messages as $message){
+            $res [] = [
+                'id' => $message->getId(),
+                'sendAt' => $message->getSentAt(),
+                'user' => [
+                    'idForMessage' => $message->getSender()->getId(),
+                    'nameUser' => $message->getSender()->getFirstName(),
+                    'iconUser' => $message->getSender()->getIconUser(),
+                ],
+                'content' => [
+                    'message'=> $message->getContent(),
+                ],
+            ];
+        }
+
+       return $this->json(['messages' => $res], 200, [], ['groups' => ['public']]);
     }
 
-    #[Route('/sendChat', methods:['POST'])]
+    #[Route('/send/message', methods:['POST'])]
     public function sendMessage(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
+        $date = new \DateTime();
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['chat_id'], $data['user_id'], $data['content'])) {
+        if (!isset($data['chat'], $data['user'], $data['content'])) {
             return new JsonResponse([
                 'status' => 'Bad Request',
                 'message' => 'chat_id, user_id et content sont requis.'
             ], 400);
         }
 
-        $chat = $entityManager->getRepository(Chat::class)->find($data['chat_id']);
-        $user = $entityManager->getRepository(User::class)->find($data['user_id']);
+        $chat = $entityManager->getRepository(Chat::class)->find($data['chat']);
+        $user = $entityManager->getRepository(User::class)->find($data['user']);
 
         if (!$chat || !$user) {
+            return new JsonResponse([
+                'status' => 'Not Found',
+                'message' => 'Chat ou User introuvable.'
+            ], 404);
+        }
+
+        if($chat->getClient() !=$user && $chat->getSeller() != $user){
             return new JsonResponse([
                 'status' => 'Not Found',
                 'message' => 'Chat ou User introuvable.'
@@ -109,11 +124,52 @@ class ApiChatController extends AbstractController
         $message->setContent($data['content']);
         $message->setSender($user);
         $message->setChat($chat);
+        $message->setSentAt($date);
 
         $entityManager->persist($message);
         $entityManager->flush();
 
-        return new JsonResponse(['status' => 'Message envoyé'], 201);
+        return $this->json(['status' => $chat->getClient(),'user'=>$chat->getSeller()], 200, [], ['groups' => ['public']]);
+    }
+
+    #[Route('/polling/data', methods:['POST'])]
+    public function getPolling(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(),true);
+
+        if(!isset($data['chat'])){
+            return new JsonResponse([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'chat' parameter."
+            ], 400);
+        }
+
+        if(!isset($data['lastMessage'])){
+            $data['lastMessage'] = new \DateTime();
+            $data['lastMessage'] = $data['lastMessage']->format('Y-m-d H:i:s');
+        }
+
+
+        $messages = $entityManager->getRepository(Message::class)->findWithPolling($data['chat'], $data['lastMessage']);
+
+        // Récupérer l'autre utilisateur en base
+        foreach($messages as $message){
+            $res [] = [
+                'id' => $message->getId(),
+                'sendAt' => $message->getSentAt(),
+                'user' => [
+                    'idForMessage' => $message->getSender()->getId(),
+                    'nameUser' => $message->getSender()->getFirstName(),
+                    'iconUser' => $message->getSender()->getIconUser(),
+                ],
+                'content' => [
+                    'message'=> $message->getContent(),
+                ],
+            ];
+        }
+
+       return $this->json(['messages' => $messages], 200, [], ['groups' => ['public']]);
     }
 
 }
