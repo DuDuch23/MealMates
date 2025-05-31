@@ -11,7 +11,7 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import AllCategory from "../../components/AllCategory/AllCategory";
 import SliderSection from '../../components/SliderOffers/SliderOffers';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import UserLocationMap from '../../components/GoogleMaps/GoogleMaps';
+import OffersMap from '../../components/GoogleMaps/GoogleMaps';
 import SkeletonCard from "../../components/SkeletonCard/SkeletonCard";
 
 import 'swiper/css';
@@ -204,6 +204,16 @@ function Offer(){
         }
     };
 
+    const renderSlider = (loading, title, offers, type) => (
+        loading ? (
+            <SliderSection title={title}>
+            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+            </SliderSection>
+        ) : (
+            <SliderSection title={title} offers={offers} type={type} />
+        )
+    );
+
     return(
     <section className={styles["container-offer"]}>
         {/* <nav className={styles["container-offer__type"]}>
@@ -252,72 +262,24 @@ function Offer(){
         </div>
         {showMap && (
             <div className={styles["container-offer__map"]} style={{ height: "100vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
-                <UserLocationMap userPos={pos} offers={offers} setUserPos={setUserPos} />
+                <OffersMap userPos={pos} offers={offers} setUserPos={setUserPos} />
             </div>
         )}
         <div className={styles["container-offer__slider"]}>
             {searchResults.length > 0 ? (
                 <>
-                    <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery}/>
-                    {loadingAgain ? (
-                        <SliderSection title="Recommander à nouveau">
-                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-                        </SliderSection>
-                        ) : (
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                        )}
-                    {loadingLastChance ? (
-                        <SliderSection title="Dernière chance">
-                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-                        </SliderSection>
-                        ) : (
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                    )}
-                    {loadingVegan ? (
-                        <SliderSection title="Ce soir je mange vegan">
-                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-                        </SliderSection>
-                        ) : (
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                        )}
-                    {loadingLocal ? (
-                        <SliderSection title="Tendances locales">
-                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-                        </SliderSection>
-                        ) : (
-                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
-                    )}
+                    <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery} />
+                    {renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")}
+                    {renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")}
+                    {renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")}
+                    {renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")}
                 </>
             ) : (
                 <>
-                    {loadingAgain ? (
-                        <SliderSection title="Recommander à nouveau">
-                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-                        </SliderSection>
-                        ) : (
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                        )}
-                    {loadingLastChance ? (
-                        <SliderSection title="Dernière chance">
-                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-                        </SliderSection>
-                        ) : (
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                    )}
-                    {loadingVegan ? (
-                        <SliderSection title="Ce soir je mange vegan">
-                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-                        </SliderSection>
-                        ) : (
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                        )}
-                    {loadingLocal ? (
-                        <SliderSection title="Tendances locales">
-                            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-                        </SliderSection>
-                        ) : (
-                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
-                    )}
+                    {renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")}
+                    {renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")}
+                    {renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")}
+                    {renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")}
                 </>
             )}
         </div>

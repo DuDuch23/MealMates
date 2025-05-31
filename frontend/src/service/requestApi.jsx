@@ -381,6 +381,22 @@ export async function searchOfferByTitle(title) {
     }
 }
 
+export async function searchOffersByCriteria(criteria) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/search/filters`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(criteria),
+            credentials: "include",
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
+    }
+}
+
 export async function newOffer(data, isFormData = false) {
     try {
         // Envoi des données sous FormData sans utiliser JSON.stringify
