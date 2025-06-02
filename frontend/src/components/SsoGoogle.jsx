@@ -5,15 +5,20 @@ const CLIENT_ID = "947326609144-oed76j74qvdqh2ie1e4cdfobrtmpiq66.apps.googleuser
 
 const GoogleLoginButton = ({ setUser }) => {
   const handleSuccess = (response) => {
-    try {
-      const userObject = jwtDecode(response.credential);
-      localStorage.setItem("user", JSON.stringify(userObject));
-      console.log("Connexion réussie :", userObject);
-      setUser(userObject);
+  try {
+    const idToken = response.credential;
+    const userObject = jwtDecode(idToken);
+
+    localStorage.setItem("id_token", idToken);     
+    localStorage.setItem("user", JSON.stringify(userObject));  
+
+    console.log("Connexion réussie :", userObject);
+    setUser(userObject);
     } catch (error) {
       console.error("Erreur lors du décodage du token :", error);
     }
   };
+
 
   const handleFailure = () => {
     console.error("Échec de l'authentification Google");

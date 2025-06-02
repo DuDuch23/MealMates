@@ -12,6 +12,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+use Google\Client as GoogleClient;
+
 
 #[Route('/api/user', name: 'api_user')]
 class ApiUserController extends AbstractController
@@ -23,7 +25,6 @@ class ApiUserController extends AbstractController
     {
         $this->hasher = $hasher;
     }
-    
     
     #[Route('/get', methods: ['POST'])]
     public function get(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
@@ -157,6 +158,71 @@ class ApiUserController extends AbstractController
             'status' => "Created",
             'code' => 201,
         ], 201);
+    }
+
+    #[Route('/sso', methods: ['POST'])]
+    public function ssoLogin(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['id_token'])) {
+            return new JsonResponse([
+                'status' => 'Bad Request',
+                'code' => 400,
+                'message' => 'Missing id_token.'
+            ], 400);
+        }
+
+        $idToken = $data['id_token'];
+
+        $client = new GoogleClient(['client_id' => 'TON_CLIENT_ID']);
+
+        try {
+            $payload = $client->verifyIdToken($idToken);
+            if (!$payload) {
+                return new JsonResponse([
+                    'status' => 'Unauthorized',
+                    'code' => 401,
+                    'message' => 'Invalid ID token.'
+                ], 401);
+            }
+
+            $email = $payload['email'];
+            $givenName = $payload['given_name'];
+            $familyName = $payload['family_name'];
+            $picture = $payload['picture'];
+
+            // Recherche ou création utilisateur ici comme dans ton code
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
+            if (!$user) {
+                $user = new User();
+                $user->setEmail($email);
+                $user->setFirstName($givenName);
+                $user->setLastName($familyName);
+                $user->setIconUser($picture);
+                $user->setRoles(['ROLE_USER']);
+                $user->setIsVerified(true);
+                $user->setPassword("");
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+
+            return new JsonResponse([
+                'status' => 'Success',
+                'code' => 200,
+                'message' => 'SSO login successful',
+                'userId' => $user->getId()
+            ]);
+
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'status' => 'Error',
+                'code' => 500,
+                'message' => 'Server error: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     #[Route('/edit', methods: ['PUT'])]

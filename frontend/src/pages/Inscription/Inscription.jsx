@@ -90,8 +90,9 @@ function Inscription(){
                         </div>
                         <button type="submit">Inscription</button>
                     </form>
-                    <li className='button-log-in' key="connexion"><Link to="/connexion">Déjà un compte ? Connectez vous</Link></li>
+                    
                     <div className="otherAction">
+                        <li className='button-log-in' key="connexion"><Link to="/connexion">Déjà un compte ? Connectez vous</Link></li>
                         <div className="fill">
                         <p> Ou connexion avec </p>
                         <ul>

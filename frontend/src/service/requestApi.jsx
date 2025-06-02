@@ -112,36 +112,32 @@ export async function getUser({ user }) {
     }
 }
 
-export async function newUser({ email, password, confirmPassword, firstName, lastName }) {
-    try {
-        if (!email || !password || !confirmPassword || !firstName || !lastName) {
-            throw new Error("All fields are required.");
-        }
+export async function getSSO() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
 
-        if (password !== confirmPassword) {
-            throw new Error("Passwords do not match.");
-        }
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/sso`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
-        await fetch(`${API_BASE_URL}/api/user/new`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                password_confirm: confirmPassword,
-                firstName: firstName,
-                lastName: lastName,
-            }),
-        });
-
-        await logIn({ email, password });
-
-    } catch (error) {
-        console.error("Erreur API :", error);
-        throw error;
+    if (!response.ok) {
+      throw new Error(`Erreur ${response.status}: Impossible de récupérer les infos SSO`);
     }
+
+    const ssoData = await response.json();
+    localStorage.setItem("user", JSON.stringify(ssoData));
+
+    return ssoData;
+    }catch (error) {
+    console.error("Erreur API getSSOInfoFromApi :", error);
+    return null;
+  }
 }
 
 export async function editUser({ userData }) {
@@ -193,9 +189,9 @@ export async function deleteUser(id) {
     }
 }
 
-export async function getProfile({ email }) {
+export async function getProfile({ email, token }) {
     try {
-        const token = localStorage.getItem("token"); // <-- ici, au moment de l'appel
+        console.log("Token envoyé :", token);
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
             headers: {

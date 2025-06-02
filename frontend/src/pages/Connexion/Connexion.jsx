@@ -37,8 +37,7 @@ function Connexion() {
       const response = await logIn({ email, password });
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({email});
-        console.log()
+        const fullUser = await getProfile({ email});
 
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(fullUser.user.id));
@@ -52,10 +51,7 @@ function Connexion() {
       }
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
       setError("Une erreur s'est produite. Veuillez réessayer.");
-    
     }
   };
 
@@ -103,9 +99,9 @@ function Connexion() {
           </div>
 
           <div className={styles.contentElementForm}>
-            <p className={styles.linkText} onClick={() => navigate("/")}>
-              Retour au menu
-            </p>
+          <p className={styles.linkText} onClick={() => navigate("/")}>
+            Retour au menu
+          </p>
           </div>
         </form>
       </div>

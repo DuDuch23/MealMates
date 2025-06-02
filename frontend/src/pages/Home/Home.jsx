@@ -54,7 +54,7 @@ function App() {
 
                 <div className={styles.bottom__right}>
                     <h2>Obtenez des offres locales, qui suivent vos offres alimentaires</h2>
-                    <button>M'inscrire maintenant</button>
+                    <button onClick={() => navigate("/inscription")}>M'inscrire maintenant</button>
                 </div>
             </section>
             <footer className={styles.footer}>

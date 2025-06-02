@@ -34,7 +34,7 @@ h1{
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 48px 0;
+    padding: 14px 0;
 }
 .container{
     // max-width: 768px;
@@ -45,7 +45,7 @@ h1{
         height: 98vh;
         form{
             background-image: url(../../assets/background-form.png);
-            height: 70%;
+            height: 56vh;
             padding: 16px 68px;
             background-repeat: round;
             display: flex;
@@ -64,7 +64,7 @@ h1{
             }
             input{
                 outline: none;
-                padding: 12px;
+                padding: 8px;
                 font-size: 20px;
                 width: 100%;
                 border: 1px solid variables.$colorWhite;
@@ -121,9 +121,9 @@ h1{
             }
             ul{
                 list-style: none;
-                width: 70%;
+                width: 90%;
                 height: 40%;
-                margin: 2% auto;
+                margin: 1% auto;
                 display: flex;
                 align-items: center;
                 justify-content: space-around;
