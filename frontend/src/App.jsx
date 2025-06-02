@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useState,useEffect } from 'react';
 import { Routes, Route } from 'react-router';
 import { getUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
+import logo from '../src/assets/logo-mealmates.png';
 
 // Chargement différé des composants
 
@@ -12,6 +13,7 @@ const Home = React.lazy(() => import('./pages/Home/Home'));
 const Offer = React.lazy(() => import('./pages/Offer/Offer'));
 const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
 const OfferCard = React.lazy(() => import('./pages/OfferCard/OfferCard'));
+const SingleOffer = React.lazy(() => import('./pages/SingleOffer/SingleOffer'));
 
 // User
 const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
@@ -32,7 +34,7 @@ function App() {
   useEffect(() => {
     async function fetchUser() {
       if (userId) {
-        const id = parseInt(userId);
+        const id = parseInt(userId, 10); // Toujours préciser la base
         const userData = await getUserIndexDB(id);
         setUser(userData);
       }
@@ -41,24 +43,43 @@ function App() {
   }, [userId]);
 
   return (
-    <Suspense fallback={<div className="flex items-center justify-center h-screen p-4">Chargement...</div>}>
+    <Suspense fallback={
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh"
+      }}>
+        <img src={logo} alt="Logo MealMates" />
+      </div>
+    }>
       <Routes>
         {/* route avec la nav bar */}
         <Route element={<NavLayout />}>
-          <Route path="/" element={user ? <Offer /> : <Home />} />
-          {/* discution user */}
+          {/* Home selon connexion */}
+          {user ? (
+            <Route path="/" element={<Offer />} />
+          ) : (
+            <Route path="/" element={<Home />} />
+          )}
+
+          {/* discussion user */}
           <Route path="/chat" element={<Chat />} />
-          <Route path='/ChooseChat' element={<ChooseChat/>}/>
+          <Route path="/ChooseChat" element={<ChooseChat />} />
+
           {/* offer */}
           <Route path="/offer" element={<Offer />} />
-          <Route path='/addOffer' element={<AddOffer />}/>
-          <Route path='/offerCard' element={<OfferCard/>}/>
+          <Route path="/addOffer" element={<AddOffer />} />
+          <Route path="/offerCard" element={<OfferCard />} />
+          <Route path="/offer/:id" element={<SingleOffer />} />
         </Route>
+
         {/* user profile */}
         <Route path="/userProfile/:id" element={<UserProfile />} />
         <Route path="/userMealCard/:id" element={<UserMealCard />} />
         <Route path="/userModify/:id" element={<UserModify />} />
-        {/* connexion */}
+
+        {/* auth */}
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription />} />
         <Route path="/deconnexion" element={<Deconnexion />} />

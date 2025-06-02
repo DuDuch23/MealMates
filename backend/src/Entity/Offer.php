@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\OfferRepository;
 use Doctrine\Common\Collections\Collection;
@@ -34,6 +35,11 @@ class Offer
     #[ORM\Column(type: "text", nullable: true)]
     #[Groups(["public", "private"])] 
     private ?string $description = null;
+
+    #[ORM\Column(type: "string", length: 255, unique: true)]
+    #[Assert\NotBlank]
+    #[Groups(["public", "private"])]
+    private ?string $slug = null;
 
     #[ORM\Column(type: "integer")]
     #[Assert\Positive]
@@ -91,6 +97,13 @@ class Offer
     #[Groups(["public", "private"])]
     private ?float $longitude = null;
 
+    
+    /**
+     * @var Collection<int, Offer>
+     */
+    #[ORM\OneToMany(targetEntity: Chat::class, mappedBy: 'offer')]
+    private Collection $chat;
+
     /**
      * @var Collection<int, Order>
      */
@@ -102,6 +115,7 @@ class Offer
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'offers')]
     #[ORM\JoinTable(name: 'offer_category')]
+    #[Groups(["public", "private"])]
     private Collection $categories;
 
     public function __construct()
@@ -111,6 +125,22 @@ class Offer
         $this->images = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->chat = new ArrayCollection();
+    }
+    
+    #[ORM\PrePersist]
+    public function prePersist(){
+        if (empty($this->slug)) {
+            $this->slug = (new Slugify())->slugify($this->product);
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        if ($this->product) {
+            $this->slug = (new Slugify())->slugify($this->product);
+        }
     }
 
     #[ORM\PreUpdate]
@@ -274,6 +304,30 @@ class Offer
     public function removeCategory(Category $category): static
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chat>
+     */
+    public function getChat(): Collection
+    {
+        return $this->chat;
+    }
+
+    public function addChat(Chat $chat): static
+    {
+        if (!$this->categories->contains($chat)) {
+            $this->chat->add($chat);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): static
+    {
+        $this->chat->removeElement($chat);
 
         return $this;
     }

@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import API_BASE_URL from "./api";
 import { deleteUserIndexDB } from './indexDB';
 
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
 
 export async function geoCoding(location) {
     try {
@@ -21,17 +21,15 @@ export async function geoCoding(location) {
     }
 }
 
-export function refreshToken() {
-    const token = localStorage.getItem("token");
-    if (!token) return false;
-
+// Mettre à jour le token depuis localStorage
+export async function refreshToken() {
     const infoToken = jwtDecode(token);
-    const now = Date.now() / 1000; 
+    const now = Date.now() / 1000;
 
     if (infoToken.exp < now) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        return false;
+        navigate("/connexion");
     }
     return true;
 }
@@ -50,7 +48,7 @@ export async function logIn({ email, password }) {
             }),
         });
 
-        console.log(`${API_BASE_URL}/api/login`);
+        console.log(response);
 
         return await response.json();
     } catch (error) {
@@ -85,7 +83,7 @@ export async function newUser({ email, password, confirmPassword, firstName, las
 
         await response.json();
         const token = await logIn({ email, password });
-        localStorage.setItem("token",token.token);
+        sessionStorage.setItem("token",token.token);
         await getProfile({email});
 
     } catch (error) {
@@ -226,13 +224,14 @@ export async function logOut({id}) {
         console.error("Erreur lors de la déconnexion :", error);
     }
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     deleteUserIndexDB(id);
 }
 
 // Chat
 export async function getAllChat(id) {
+    const token = sessionStorage.getItem("token");
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/get/all`,{
             method: 'POST',
@@ -242,7 +241,31 @@ export async function getAllChat(id) {
             },
             body: JSON.stringify(
                 { 
-                    "id": id 
+                    "id": id
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    } 
+}
+
+export async function getPolling({chat,lastMessage}){
+    if(!lastMessage){
+        lastMessage = "0000-00-00 00:00:00";
+    }
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/polling/data`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    "chat": chat,
+                    'lastMessage': lastMessage
                 }
             ),
         });
@@ -253,6 +276,7 @@ export async function getAllChat(id) {
 }
 
 export async function getChat({user,chat}){
+    console.log({user,chat});
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
             method: 'POST',
@@ -262,8 +286,30 @@ export async function getChat({user,chat}){
             },
             body: JSON.stringify(
                 { 
-                    'client': user.id,
-                    'seller': chat,
+                    'client': user,
+                    'id': chat,
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    }
+}
+
+export async function sendMessage({user,chat,message}){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/send/message`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                {
+                    'user': user,
+                    'chat': chat,
+                    'content': message, 
                 }
             ),
         });
@@ -276,16 +322,15 @@ export async function getChat({user,chat}){
 // Offer
 
 
-export async function getOfferId({id}){
+export async function getOfferId(id){
     try{
-        const response = await fetch(`${API_BASE_URL}/api/${id}`,{
+        const response = await fetch(`${API_BASE_URL}/api/offers/get/${id}`,{
             method: 'GET',
             headers: { accept: 'application/json' },
         });
         return await response.json();
-    } catch (error) {
-        console.error(error);
-        return { result: [] };
+    }catch(error){
+        return console.error(error);
     }
 }
 
@@ -345,7 +390,7 @@ export async function getLastChanceOffers() {
     }
 }
 
-export async function getAgainOffers() {
+export async function getAgainOffers(token) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/offers/again`, {
             method: 'GET',
@@ -396,13 +441,30 @@ export async function searchOfferByTitle(title) {
     }
 }
 
+export async function searchOffersByCriteria(criteria) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/offers/search/filters`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(criteria),
+            credentials: "include",
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
+    }
+}
+
 export async function newOffer(data, isFormData = false) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
             method: "POST",
             body: data,
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                // Pas besoin de Content-Type avec FormData
             },
             credentials: "include",
         });
@@ -420,7 +482,7 @@ export async function newOffer(data, isFormData = false) {
 }
 
 export async function geocodeLocation(location) {
-    try {
+    try{
         const apiKey = import.meta.env.VITE_GOOGLE_MAP;
         const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`

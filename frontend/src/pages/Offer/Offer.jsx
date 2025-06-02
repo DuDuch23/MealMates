@@ -11,48 +11,58 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import AllCategory from "../../components/AllCategory/AllCategory";
 import SliderSection from '../../components/SliderOffers/SliderOffers';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import UserLocationMap from '../../components/GoogleMaps/GoogleMaps';
+import OffersMap from '../../components/GoogleMaps/GoogleMaps';
+import SkeletonCard from "../../components/SkeletonCard/SkeletonCard";
 
 import 'swiper/css';
 
 
 function Offer(){
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const [userData, setUserData] = useState(null);
     const [pos, setPos] = useState(null);
+    const [userPos, setUserPos] = useState(null);
     const [offers, setOffers] = useState([]);
     const [veganOffers, setVeganOffers] = useState([]);
     const [againOffers, setAgainOffers] = useState([]);
     const [lastChanceOffers, setLastChanceOffers] = useState([]);
     const [localOffers, setLocalOffers] = useState([]);
-    const [userPos, setUserPos] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [showMap, setShowMap] = useState(false);
+
+    // Loading spinner
+    const [loadingOffers, setLoadingOffers] = useState(true);
+    const [loadingVegan, setLoadingVegan] = useState(true);
+    const [loadingAgain, setLoadingAgain] = useState(true);
+    const [loadingLastChance, setLoadingLastChance] = useState(true);
+    const [loadingLocal, setLoadingLocal] = useState(true);
+    
+
     useEffect(() => {
         if (userData) {
-            localStorage.setItem("user", userData.user.id);
+            sessionStorage.setItem("user", userData.user.id);
         }
     }, [userData]);
 
     useEffect(() => {
-            const watchId = navigator.geolocation.watchPosition(
-            (position) => 
-                setPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
-            (error) => {
-                console.warn("Erreur de géolocalisation :", error);
-                const fallback = { lat: 48.8566, lng: 2.3522 };
-                console.log("Fallback position utilisée :", fallback);
-                setPos(fallback);
-            },
-            {
-                enableHighAccuracy: true,
-                maximumAge: 0,
-            }
-        );
+        const watchId = navigator.geolocation.watchPosition(
+        (position) => 
+            setPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
+        (error) => {
+            console.warn("Erreur de géolocalisation :", error);
+            const fallback = { lat: 48.8566, lng: 2.3522 };
+            console.log("Fallback position utilisée :", fallback);
+            setPos(fallback);
+        },
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+        }
+    );
     
-        return () => navigator.geolocation.clearWatch(watchId);
-      }, []);
+    return () => navigator.geolocation.clearWatch(watchId);
+    }, []);
     
     useEffect(() => {
         if (!token) {
@@ -74,23 +84,24 @@ function Offer(){
 
     useEffect(() => {
 
-        // const fetchOffers = async () => {
-        //     try {
-        //         const data = await getOffers();
-        //         if (data && data.data) {
-        //             console.log("offers",data);
-        //             setOffers(data.data);
-        //         } else {
-        //             console.log("Erreur ou offres vides");
-        //         }
-        //     } catch (err) {
-        //         console.error('Erreur lors de la récupération des offres:', err);
-        //         setOffers([]);
-        //     }
-        // };
+        const fetchOffers = async () => {
+            try {
+                const data = await getOffers();
+                if (data && data.data) {
+                    console.log("offers",data);
+                    setOffers(data.data);
+                } else {
+                    console.log("Erreur ou offres vides");
+                }
+            } catch (err) {
+                console.error('Erreur lors de la récupération des offres:', err);
+                setOffers([]);
+            }
+        };
     
         const fetchVeganOffers = async () => {
             try {
+                setLoadingVegan(true);
                 const data = await getVeganOffers();
                 if(data && data.data) {
                     // console.log("vegan",data);
@@ -101,11 +112,14 @@ function Offer(){
             } catch (err) {
                 console.error('Erreur lors de la récupération des offres vegan:', err);
                 setVeganOffers([]);
+            } finally {
+                setLoadingVegan(false);
             }
         };
     
         const fetchLastChanceOffers = async () => {
             try {
+                setLoadingLastChance(true);
                 const data = await getLastChanceOffers();
                 if(data && data.data){
                     // console.log("last", data);
@@ -116,16 +130,19 @@ function Offer(){
             } catch (err){
                 console.error('Erreur lors de la récupération des offres last chance:', err);
                 setLastChanceOffers([]);
+            } finally {
+                setLoadingLastChance(false);
             }
         };
         const fetchAgainOffers = async () => {
             try {
-                const token = localStorage.getItem('token'); // Ou autre méthode pour récupérer le JWT
+                setLoadingAgain(true);
+                const token = sessionStorage.getItem('token'); // Ou autre méthode pour récupérer le JWT
                 if (!token) {
                     console.error("Aucun token trouvé");
                     return;
                 }
-                const data = await getAgainOffers(token );
+                const data = await getAgainOffers(token);
                 console.log("again", data);
                 if(data && data.data){
                     // console.log("again", data);
@@ -136,12 +153,15 @@ function Offer(){
             } catch (err){
                 console.error('Erreur lors de la récupération des offres again :', err);
                 setAgainOffers([]);
+            } finally {
+                setLoadingAgain(false);
             }
         };
         fetchAgainOffers();
     
         const fetchLocalOffers = async () => {
             try {
+                setLoadingLocal(true);
                 navigator.geolocation.getCurrentPosition(async (position) => {
                     const { latitude, longitude } = position.coords;
                     const data = await getLocalOffers(latitude, longitude);
@@ -157,10 +177,12 @@ function Offer(){
             } catch (err) {
                 console.error('Erreur lors de la récupération des offres locales :', err);
                 setLocalOffers([]);
+            } finally {
+                setLoadingLocal(false);
             }
         };
     
-        // fetchOffers();
+        fetchOffers();
         fetchVeganOffers();
         fetchLastChanceOffers();
         fetchLocalOffers();
@@ -182,9 +204,19 @@ function Offer(){
         }
     };
 
+    const renderSlider = (loading, title, offers, type) => (
+        loading ? (
+            <SliderSection title={title}>
+            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+            </SliderSection>
+        ) : (
+            <SliderSection title={title} offers={offers} type={type} />
+        )
+    );
+
     return(
     <section className={styles["container-offer"]}>
-        <nav className={styles["container-offer__type"]}>
+        {/* <nav className={styles["container-offer__type"]}>
             <div className={styles["container__type-list"]}>
                 <Swiper className={styles["type-offer-swiper"]} slidesPerView={4} spaceBetween={10}>
                     <SwiperSlide>
@@ -209,12 +241,12 @@ function Offer(){
                     </SwiperSlide>
                 </Swiper>
             </div>
-        </nav>
+        </nav> */}
         <SearchBar onSearch={handleSearch} />
 
         <nav className={styles["container-offer__filter"]}>
             <ul className={styles["container-offer__filter-reference-list"]}>
-                <AllCategory />
+                {/* <AllCategory /> */}
             </ul>
         </nav>
         <div className={styles["container-offer__new-offer-show-map"]}>
@@ -227,29 +259,29 @@ function Offer(){
             <button className={styles["container-offer__show-map"]} onClick={() => setShowMap(!showMap)}>
                 <p>Afficher la carte des offres</p>
             </button>
-            {showMap && (
-                <div className={styles["container-offer__map"]}>
-                    <UserLocationMap onPosition={setUserPos} offers={offers} userPos={userPos} />
-                </div>
-            )}
         </div>
+        {showMap && (
+            <div className={styles["container-offer__map"]} style={{ height: "100vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
+                <OffersMap userPos={pos} offers={offers} setUserPos={setUserPos} />
+            </div>
+        )}
         <div className={styles["container-offer__slider"]}>
-                {searchResults.length > 0 ? (
-                    <>
-                        <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery}/>
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
-                    </>
-                ) : (
-                    <>
-                        <SliderSection title="Recommander à nouveau" offers={againOffers} type="again" />
-                        <SliderSection title="Dernière chance" offers={lastChanceOffers} type="dernière chance" />
-                        <SliderSection title="Ce soir je mange vegan" offers={veganOffers} type="vegans" />
-                        <SliderSection title="Tendances locales" offers={localOffers} type="locals" />
-                    </>
-                )}
+            {searchResults.length > 0 ? (
+                <>
+                    <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery} />
+                    {renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")}
+                    {renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")}
+                    {renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")}
+                    {renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")}
+                </>
+            ) : (
+                <>
+                    {renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")}
+                    {renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")}
+                    {renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")}
+                    {renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")}
+                </>
+            )}
         </div>
     </section>
     );

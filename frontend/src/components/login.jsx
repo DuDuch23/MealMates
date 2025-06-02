@@ -8,7 +8,7 @@ const Login = ({ setUser }) => {
     console.log("Utilisateur connecté :", user);
 
     setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("user", JSON.stringify(user.id));
   };
 
   const handleError = () => {

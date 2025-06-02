@@ -22,6 +22,10 @@ class Chat
     #[Groups(["public", "private"])]
     private User $client;
 
+    #[ORM\ManyToOne(targetEntity: Offer::class)]
+    #[Groups("public","private")]
+    private Offer $offer;
+
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(["public", "private"])]
@@ -68,6 +72,16 @@ class Chat
     {
         $this->seller = $seller;
         return $this;
+    }
+
+    public function getOffer(): Offer
+    {
+        return $this->offer;
+    }
+
+    public function setOffer(Offer $offer): void
+    {
+        $this->offer = $offer;
     }
 
     /**

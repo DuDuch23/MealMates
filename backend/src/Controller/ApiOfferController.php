@@ -32,6 +32,7 @@ class ApiOfferController extends AbstractController
         }
 
         $offersSerialized = $serializer->serialize($offers, 'json', ['groups' => 'public']);
+        $offersLocation = $serializer->serialize($offers, 'json', ['groups' => 'map']);
 
         return $this->json([
             'status' => "OK",
@@ -358,4 +359,27 @@ class ApiOfferController extends AbstractController
             }
         ]);
     }
+
+    #[Route('/search/filters', name: 'api_offer_search_filters', methods: ['POST'])]
+    public function searchByCriteria(Request $request, OfferRepository $offerRepository, SerializerInterface $serializer): JsonResponse
+    {
+        $criteria = json_decode($request->getContent(), true);
+
+        $offers = $offerRepository->findByFilters($criteria);
+
+        if (empty($offers)) {
+            return $this->json([
+                'status' => 'Not Found',
+                'code' => 404,
+                'message' => 'No offers match the given criteria.',
+            ], 404);
+        }
+
+        return $this->json([
+            'status' => 'OK',
+            'code' => 200,
+            'data' => json_decode($serializer->serialize($offers, 'json', ['groups' => 'public']), true),
+        ], 200);
+    }
+
 }

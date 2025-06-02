@@ -2,17 +2,16 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
+import CryptoJS from "crypto-js";
 import logo from '../../assets/logo-mealmates.png';
 import GoogleLoginButton from "../../components/SsoGoogle";
-import styles from "./Connexion.module.css"; // ✅ CSS Module
-
-
 
 function Connexion() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,26 +23,35 @@ function Connexion() {
         navigate("/");
       } catch (error) {
         console.error("Erreur de parsing JSON :", error);
-        localStorage.removeItem("user");
+        localStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
       }
     }
   }, [navigate]);
 
+  // Gestion des inputs de manière générique
   const handleInputChange = (setter) => (event) => setter(event.target.value);
 
+  // Gérer la soumission du formulaire de connexion
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await logIn({ email, password });
+      console.log("Réponse du serveur :", response);
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({ email});
+        const fullUser = await getProfile({email});
+        console.log()
 
+        // Stocker dans localStorage
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(fullUser.user.id));
 
-        setUser(fullUser.id);
+        const profile = await getProfile({ email, token });
+        sessionStorage.setItem("user",profile.user.id);
+        console.log(profile.user);
+        const encryptedUser = CryptoJS.AES.encrypt(JSON.stringify(profile.user), SECRET_KEY).toString();
 
+        // Ajouter l'utilisateur à IndexedDB
         await addUserIndexDB(fullUser.user);
         navigate("/");
       } else {
@@ -70,10 +78,8 @@ function Connexion() {
             <input
               id="email"
               type="email"
-              name="email"
-              placeholder="Test@email.com"
               value={email}
-              onChange={handleInputChange(setEmail)}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -83,10 +89,8 @@ function Connexion() {
             <input
               id="password"
               type="password"
-              name="password"
-              placeholder="********"
               value={password}
-              onChange={handleInputChange(setPassword)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
@@ -95,7 +99,7 @@ function Connexion() {
 
           <div className={styles.otherAction}>
             <p>Ou connexion avec</p>
-            <GoogleLoginButton setUser={setUser} />
+            <GoogleLoginButton />
           </div>
 
           <div className={styles.contentElementForm}>

@@ -64,7 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length:255, nullable:true)]
     #[Groups(["public","private"])]
-    private ?int $iconUser = null;
+    private int $iconUser = 1;
 
     #[ORM\Column(length:255, nullable:true)]
     #[Groups(["public","private"])]
@@ -332,7 +332,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->offers->contains($offer)) {
             $this->offers->add($offer);
-            $offer->setSeller($this);
+            $offer->setUser($this);
         }
 
         return $this;
@@ -343,7 +343,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->offers->removeElement($offer)) {
             // set the owning side to null (unless already changed)
             if ($offer->getSeller() === $this) {
-                $offer->setSeller(null);
+                $offer->setUser(null);
             }
         }
 

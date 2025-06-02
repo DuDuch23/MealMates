@@ -14,10 +14,14 @@
     "scss-components": "sass --no-source-map src/components:src/components --update"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@googlemaps/markerclusterer": "^2.5.3",
+    "@mui/material": "^7.1.0",
     "@react-google-maps/api": "^2.20.6",
     "@react-oauth/google": "^0.12.1",
     "axios": "^1.8.4",
+    "crypto-js": "^4.2.0",
     "google-map-react": "^2.2.1",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
