@@ -5,6 +5,8 @@ import { addUserIndexDB } from "../../service/indexDB";
 import CryptoJS from "crypto-js";
 import logo from '../../assets/logo-mealmates.png';
 import GoogleLoginButton from "../../components/SsoGoogle";
+import styles from "./Connexion.module.css";
+
 
 function Connexion() {
   const [email, setEmail] = useState("");

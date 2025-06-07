@@ -21,6 +21,28 @@ export async function geoCoding(location) {
     }
 }
 
+export async function getValidToken() {
+    let token = sessionStorage.getItem("token");
+    if (!token) return null;
+
+    try {
+        const infoToken = jwtDecode(token);
+        const now = Date.now() / 1000;
+
+        if (infoToken.exp < now) {
+            // Token expiré, on tente le refresh
+            const newToken = await getNewAccessToken();
+            return newToken;
+        }
+
+        return token; // toujours valide
+    } catch (e) {
+        console.error("Token invalide :", e);
+        return await getNewAccessToken();
+    }
+}
+
+
 // Mettre à jour le token depuis localStorage
 export async function refreshToken() {
     const infoToken = jwtDecode(token);
@@ -36,7 +58,7 @@ export async function refreshToken() {
 
 export async function logIn({ email, password }) {
     try {
-        const url = `${API_BASE_URL}/api/login`; // <- Slash ajouté
+        const url = `${API_BASE_URL}/api/login_check`; // <- Slash ajouté
         const response = await fetch(url, {
             method: "POST",
             headers: {
