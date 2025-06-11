@@ -60,7 +60,7 @@ class Offer
     #[Groups(["public"])] 
     private bool $isDonation = false;
     
-    #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'offers')]
+    #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'offers', cascade: ["persist"])]
     #[ORM\JoinTable(name: 'offer_image')]
     #[Groups(["public", "private"])]
     private Collection $images;
