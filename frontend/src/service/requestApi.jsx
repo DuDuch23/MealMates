@@ -446,28 +446,21 @@ export async function searchOffersByCriteria(criteria) {
 }
 
 export async function newOffer(data, isFormData = false) {
-    try {
-        // Envoi des données sous FormData sans utiliser JSON.stringify
-        const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
-            method: "POST",
-            body: data, // Ne pas utiliser JSON.stringify ici pour FormData
-            headers: {
-                "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
-                // Pas besoin de Content-Type avec FormData
-            },
-            credentials: "include",
-        });
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
+      method: "POST",
+      body: data,
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
+      },
+      credentials: "include",
+    });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Erreur lors de la création de l'offre.");
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Erreur API :", error);
-        return { result: [] };
-    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur API :", error);
+    return { result: [] };
+  }
 }
 
 export async function geocodeLocation(location) {
@@ -483,7 +476,6 @@ export async function geocodeLocation(location) {
         }
     } catch(error) {
         console.error("Erreur API :", error);
-        // throw new Error("Aucune coordonnée trouvée.");
         return { result: [] };
     }
 }
