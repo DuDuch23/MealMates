@@ -480,27 +480,22 @@ export async function searchOffersByCriteria(criteria) {
 }
 
 export async function newOffer(data, isFormData = false) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
-            method: "POST",
-            body: data,
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem('token')}`,
-                // Pas besoin de Content-Type avec FormData
-            },
-            credentials: "include",
-        });
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
+      method: "POST",
+      body: data,
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
+      },
+      credentials: "include",
+    });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Erreur lors de la création de l'offre.");
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Erreur API :", error);
-        return { result: [] };
-    }
+    const raw = await response.text();
+    console.log("Réponse brute :", raw);
+  } catch (error) {
+    console.error("Erreur API :", error);
+    return { result: [] };
+  }
 }
 
 export async function geocodeLocation(location) {
@@ -547,5 +542,26 @@ export async function getCategory() {
     } catch (error) {
         console.error("Erreur API getCategory :", error);
         return { data: [] }; 
+    }
+}
+
+export async function createOrder(offerId){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/order/create`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                "offerId": offerId,
+            }),
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
     }
 }
