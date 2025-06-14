@@ -77,10 +77,6 @@ class Offer
     #[Groups(["private", "public"])] 
     private bool $isRecurring = false;
 
-    #[ORM\Column(type: "boolean")]
-    #[Groups(["private", "public"])]
-    private bool $isVegan = false;
-
     #[ORM\Column(type: "datetime")]
     #[Groups(["private", "public"])]
     private \DateTimeInterface $createdAt;
@@ -129,21 +125,15 @@ class Offer
     }
     
     #[ORM\PrePersist]
-    public function prePersist(){
-        if (empty($this->slug)) {
-            $this->slug = (new Slugify())->slugify($this->product);
-        }
-    }
-
     #[ORM\PreUpdate]
-    public function preUpdate(): void
+    public function generateSlug(): void
     {
-        if ($this->product) {
-            $this->slug = (new Slugify())->slugify($this->product);
+        if (!$this->slug && $this->product) {
+            $slugify = new Slugify();
+            $this->slug = $slugify->slugify($this->product);
         }
     }
 
-    #[ORM\PreUpdate]
     public function setUpdatedAt(): void
     {
         $this->updatedAt = new \DateTime();
@@ -159,7 +149,8 @@ class Offer
     public function getSeller(): ?User { 
         return $this->seller; 
     }
-    public function setUser(?User $seller): static { 
+
+    public function setSeller(?User $seller): static { 
         $this->seller = $seller; 
         return $this; 
     }
@@ -234,16 +225,6 @@ class Offer
         $this->isRecurring = $isRecurring; return $this; 
     }
     
-    public function getIsVegan(): bool {
-        return $this->isVegan;
-    }
-
-    public function setIsVegan(bool $isVegan): static
-    {
-        $this->isVegan = $isVegan;
-        return $this;
-    }
-
     public function getCreatedAt(): \DateTimeInterface { return $this->createdAt; }
 
     public function getUpdatedAt(): ?\DateTimeInterface { return $this->updatedAt; }
@@ -318,7 +299,7 @@ class Offer
 
     public function addChat(Chat $chat): static
     {
-        if (!$this->categories->contains($chat)) {
+        if (!$this->chat->contains($chat)) {
             $this->chat->add($chat);
         }
 

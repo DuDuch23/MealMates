@@ -4,9 +4,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Offer;
-use App\Repository\CategoryRepository;
 use DateTimeImmutable;
+use App\Service\SlugService;
 use App\Repository\OfferRepository;
+use App\Repository\OrderRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +45,10 @@ class ApiOfferController extends AbstractController
     }
 
     #[Route('/get/{id}', methods: ['GET'])]
-    public function getOfferByID(int $id, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    public function getOfferByID(int $id,
+    OrderRepository $orderRepository,
+    EntityManagerInterface $entityManager,
+    SerializerInterface $serializer): JsonResponse
     {
         $offer = $entityManager->getRepository(Offer::class)->find($id);
 
@@ -55,7 +60,15 @@ class ApiOfferController extends AbstractController
             ], 404);
         }
 
+        $activeOrder = $orderRepository->findActiveForOffer($offer);
+
         $data = json_decode($serializer->serialize($offer, 'json', ['groups' => 'public']), true);
+
+        $data['order'] = $activeOrder ? [
+            'id'          => $activeOrder->getId(),
+            'isConfirmed' => $activeOrder->isConfirmed(),
+            'expiresAt'   => $activeOrder->getExpiresAt()?->format('Y-m-d H:i:s'),
+        ] : null;
 
         return $this->json([
             'status' => "OK",
@@ -191,7 +204,7 @@ class ApiOfferController extends AbstractController
     }
 
     #[Route('/new', methods: ['POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): JsonResponse
+    public function new(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository, SlugService $slugService): JsonResponse
     {
         if (!$this->getUser()) {
             return $this->json(['error' => 'Unauthorized'], 401);
@@ -200,6 +213,8 @@ class ApiOfferController extends AbstractController
         $offer = new Offer();
 
         $offer->setProduct($request->request->get('product'));
+        $slug = $slugService->generateUniqueSlug($request->request->get('product'));
+        $offer->generateSlug($slug);
         $offer->setDescription($request->request->get('description'));
         $offer->setQuantity($request->request->get('quantity'));
         $offer->setExpirationDate(new \DateTime($request->request->get('expirationDate')));
@@ -207,7 +222,6 @@ class ApiOfferController extends AbstractController
         $offer->setIsDonation(filter_var($request->request->get('isDonation'), FILTER_VALIDATE_BOOLEAN));
         $offer->setPickupLocation($request->request->get('pickupLocation'));
         $offer->setIsRecurring(filter_var($request->request->get('isRecurring'), FILTER_VALIDATE_BOOLEAN));
-        $offer->setIsVegan(filter_var($request->request->get('isVegan'), FILTER_VALIDATE_BOOLEAN));
         $offer->setLatitude($request->request->get('latitude'));
         $offer->setLongitude($request->request->get('longitude'));
 
@@ -237,7 +251,7 @@ class ApiOfferController extends AbstractController
         }
 
         $offer->setUpdatedAt(new \DateTimeImmutable());
-        $offer->setUser($this->getUser());
+        $offer->setSeller($this->getUser());
 
         $entityManager->persist($offer);
         $entityManager->flush();

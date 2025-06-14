@@ -18,7 +18,7 @@ use Cocur\Slugify\Slugify;
 
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const NB_OFFERS = 10;
+    public const NB_OFFERS = 500;
     public const OFFER_REF_PREFIX = 'offer_';
     public $publicPath;
 
@@ -63,14 +63,10 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < self::NB_OFFERS; $i++) {
             $offer = new Offer();
 
-            // Choix du produit
             $productName = $faker->randomElement($produits);
             $offer->setProduct($productName);
-
-            // Génération d’un slug unique
             $slug = $slugify->slugify($productName) . '-' . uniqid();
-            $offer->setProduct($slug);
-
+            $offer->setSlug($slug);
             $offer->setDescription($faker->randomElement($descriptions));
             $offer->setQuantity($faker->numberBetween(1, 10));
             $offer->setExpirationDate($faker->dateTimeBetween('now', '+10 days'));
@@ -78,7 +74,6 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $offer->setIsDonation($faker->boolean(20));
             $offer->setPickupLocation($faker->randomElement($locations));
             $offer->setIsRecurring($faker->boolean(30));
-            $offer->setIsVegan($faker->boolean(30));
             $offer->setLatitude(rand(-90000,90000)/1000);
             $offer->setLongitude(rand(-90000,90000)/1000);
             
