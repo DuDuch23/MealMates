@@ -456,7 +456,8 @@ export async function newOffer(data, isFormData = false) {
       credentials: "include",
     });
 
-    return await response.json();
+    const raw = await response.text();
+    console.log("Réponse brute :", raw);
   } catch (error) {
     console.error("Erreur API :", error);
     return { result: [] };
@@ -520,6 +521,27 @@ export async function getOfferById(id) {
         return await response.json();
     } catch (err) {
         console.error(err);
+        return { result: [] };
+    }
+}
+
+export async function createOrder(offerId){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/order/create`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                "offerId": offerId,
+            }),
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
         return { result: [] };
     }
 }
