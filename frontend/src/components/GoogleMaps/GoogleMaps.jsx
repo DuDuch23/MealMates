@@ -2,8 +2,6 @@ import React, { useState, useEffect , useRef} from 'react';
 import { GoogleMap, Marker, LoadScript, MarkerClusterer, InfoWindow, Circle  } from '@react-google-maps/api';
 import FilterMap from '../FilterMap/FilterMap';
 import styles from './GoogleMaps.module.css';
-import { geocodeLocation } from '../../service/requestApi';
-import { getCategory, searchOffersByCriteria  } from '../../service/requestApi';
 
 const containerStyle = {
     width: '100%',

@@ -6,4 +6,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ['google-map-react'], 
   },
+  server: {
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+    }
+  }
 })
