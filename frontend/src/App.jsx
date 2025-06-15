@@ -29,7 +29,7 @@ const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 
 function App() {
   const [user, setUser] = useState(null);
-  const userId = localStorage.getItem("user");
+  const userId = sessionStorage.getItem("user");
 
   useEffect(() => {
     async function fetchUser() {

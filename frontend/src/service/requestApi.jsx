@@ -43,14 +43,14 @@ export async function getValidToken() {
 }
 
 
-// Mettre à jour le token depuis localStorage
+// Mettre à jour le token depuis sessionStorage
 export async function refreshToken() {
     const infoToken = jwtDecode(token);
     const now = Date.now() / 1000;
 
     if (infoToken.exp < now) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
         navigate("/connexion");
     }
     return true;
@@ -58,7 +58,7 @@ export async function refreshToken() {
 
 export async function logIn({ email, password }) {
     try {
-        const url = `${API_BASE_URL}/api/login_check`; // <- Slash ajouté
+        const url = `${API_BASE_URL}/api/login`;
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -133,7 +133,7 @@ export async function getUser({ user }) {
 }
 
 export async function getSSO() {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   if (!token) return null;
 
   try {
@@ -151,7 +151,7 @@ export async function getSSO() {
     }
 
     const ssoData = await response.json();
-    localStorage.setItem("user", JSON.stringify(ssoData));
+    sessionStorage.setItem("user", JSON.stringify(ssoData));
 
     return ssoData;
     }catch (error) {
@@ -211,7 +211,6 @@ export async function deleteUser(id) {
 
 export async function getProfile({ email, token }) {
     try {
-        console.log("Token envoyé :", token);
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
             headers: {

@@ -30,7 +30,7 @@ security:
 
     access_control:
         - { path: ^/api, roles: PUBLIC_ACCESS, methods: [OPTIONS] }
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/login, methods: [OPTIONS], roles: PUBLIC_ACCESS }
         - { path: ^/api/user/sso, roles: PUBLIC_ACCESS }
         - { path: ^/api/user/new, roles: PUBLIC_ACCESS } 
         - { path: ^/api/offers/search, roles: PUBLIC_ACCESS }

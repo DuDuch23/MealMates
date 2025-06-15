@@ -11,7 +11,7 @@ export default function BurgerMenue({ onProfileClick }) {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userId = localStorage.getItem("user");
+      const userId = sessionStorage.getItem("user");
       const id  = Number(userId);
       if (id) {
         try {
