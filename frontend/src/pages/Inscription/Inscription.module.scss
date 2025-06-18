@@ -37,15 +37,13 @@ h1{
     padding: 14px 0;
 }
 .container{
-    // max-width: 768px;
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
     .action{
         height: 98vh;
         form{
             background-image: url(../../assets/background-form.png);
+            width: 50%;
             height: 56vh;
+            margin: 0 auto;
             padding: 16px 68px;
             background-repeat: round;
             display: flex;

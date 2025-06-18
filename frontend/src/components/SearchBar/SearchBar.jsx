@@ -16,10 +16,6 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <form className={styles['search-offer']} onSubmit={handleSubmit}>
-      {/* <AllCategory
-        categories={["Entrée", "Plat principal", "Dessert"]}
-        onChange={(event) => console.log(event.target.value)}
-      /> */}
       <input
         className={styles['search-offer__input']}
         type="text"
