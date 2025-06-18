@@ -9,7 +9,7 @@ const Checkout = () => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const storedOffers = JSON.parse(localStorage.getItem("cart")) || [];
+    const storedOffers = JSON.parse(sessionStorage.getItem("cart")) || [];
     setSelectedOffers(storedOffers);
 
     const sum = storedOffers.reduce((acc, offer) => acc + offer.price, 0);

@@ -134,14 +134,6 @@ class ApiUserController extends AbstractController
                 'message' => "Password and password confirmation don't match"
             ], 403);
         }
-        if (isset($data["role"]) && $data["role"]!= "ROLE_USER" && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
-        {
-            return new JsonResponse([
-                'status' => "Unauthorized",
-                'code' => 401,
-                'message' => "You are not abilitated to perform this action."
-            ], 403);
-        }
 
         $user = new User();
         $user->setEmail($data['email']);

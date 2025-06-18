@@ -214,7 +214,7 @@ class ApiOfferController extends AbstractController
 
         $offer->setProduct($request->request->get('product'));
         $slug = $slugService->generateUniqueSlug($request->request->get('product'));
-        $offer->generateSlug($slug);
+        $offer->setSlug($slug);
         $offer->setDescription($request->request->get('description'));
         $offer->setQuantity($request->request->get('quantity'));
         $offer->setExpirationDate(new \DateTime($request->request->get('expirationDate')));

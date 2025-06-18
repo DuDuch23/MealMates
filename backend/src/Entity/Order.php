@@ -22,13 +22,13 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?Offer $offer = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $purchasedAt = null;
 
     #[ORM\Column]
     private bool $isConfirmed = false;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $expiresAt = null;
 
     public function __construct()

@@ -1,11 +1,12 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\Offer;
+use App\Entity\Notification;
 use App\Entity\Order;
 use App\Repository\OfferRepository;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,8 +23,12 @@ class ApiOrderController extends AbstractController
         OfferRepository $offerRepository,
         OrderRepository $orderRepository,
         EntityManagerInterface $em,
-        #[CurrentUser] $user
+        #[CurrentUser] ?User $user
     ): JsonResponse {
+        if (!$user) {
+            return $this->json(['error' => 'Unauthenticated'], 401);
+        }
+
         $data = json_decode($request->getContent(), true);
         $offerId = $data['offerId'] ?? null;
 
@@ -36,37 +41,42 @@ class ApiOrderController extends AbstractController
             return $this->json(['error' => 'Offer not found'], 404);
         }
 
-        // Vérifier si offre déjà réservée
-        $existing = $orderRepository->findOneBy(['offer' => $offer]);
-        if ($existing && !$existing->isConfirmed()) {
-            return $this->json(['error' => 'Cette offre est déjà réservé'], 409);
+        if ($orderRepository->findOneBy(['offer' => $offer, 'isConfirmed' => false])) {
+            return $this->json(['error' => 'Cette offre est déjà réservée'], 409);
         }
 
-        $order = new Order();
-        $order->setBuyer($user);
-        $order->setOffer($offer);
-        $order->setExpiresAt((new \DateTimeImmutable())->modify('+1 hour')); // timeout d'1h
+        $order = (new Order())
+            ->setBuyer($user)
+            ->setOffer($offer)
+            ->setPurchasedAt(new \DateTimeImmutable())
+            ->setIsConfirmed(false)
+            ->setExpiresAt(new \DateTimeImmutable('+1 hour'));
 
         $em->persist($order);
         $em->flush();
 
-        // TODO : envoyer notification au vendeur
+        $notification = (new Notification())
+            ->setUser($offer->getSeller())
+            ->setTitle('Nouvelle réservation')
+            ->setMessage(sprintf(
+                'L’offre « %s » a été réservée par %s %s.',
+                $offer->getProduct(),
+                $user->getFirstName(),
+                $user->getLastName()
+            ))
+            ->setType('reservation_request')
+            ->setTargetId($order->getId());
+
+        $em->persist($notification);
+        $em->flush();
 
         return $this->json([
-            'success' => true,
             'order' => [
-                'id' => $order->getId(),
+                'id'          => $order->getId(),
                 'isConfirmed' => $order->isConfirmed(),
-                'expiresAt' => $order->getExpiresAt()->format('Y-m-d H:i:s'),
+                'expiresAt'   => $order->getExpiresAt()->format('Y-m-d H:i:s'),
                 'purchasedAt' => $order->getPurchasedAt()->format('Y-m-d H:i:s'),
-                'buyer' => [
-                    'id' => $user->getId(),
-                    'firstName' => $user->getFirstName(),
-                    'lastName' => $user->getLastName(),
-                ]
-            ]
-        ]);
+            ],
+        ], 201);
     }
-
-
 }
