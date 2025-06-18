@@ -2,78 +2,160 @@
 @use '../../styles/mixins.scss' as mixins;
 @use "../../styles/variables.scss" as variables;
 
+<<<<<<<<< Temporary merge branch 1
 .container{
     margin: 0 20px;
 }
 
-form{
-    height: 100%;
+form {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  background-color: #242424;
+
+  input {
+    background-color: #D9D9D9;
+    color: variables.$colorBlack;
+    border: none;
+    outline: none;
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .container-image-offer {
+    margin-top: auto;
     display: flex;
-    overflow: hidden;
+    justify-content: space-around;
+
+    img {
+      width: 15%;
+      border-radius: 5px;
+    }
+  }
+
+  .part-1, .part-2 {
+    min-width: 100%;
+    height: 100%;
+
+    ul {
+      list-style: none;
+    }
+  }
+
+  .part-1 {
+    display: flex;
     flex-direction: column;
-    background-color: #242424;
-    input{
-        color: white;
-        background-color: transparent;
-        border: 2px solid white;
-        padding: 15px;
-        border-radius: 10px;
+    justify-content: space-around;
+
+    .photo-input, .description-input, .titre-input {
+      display: flex;
+      flex-direction: column;
     }
-    .container-image-offer{
-        margin-top: auto;
-        display: flex;
-        justify-content: space-around;
-        img{
-            width: 15%;
-            border-radius: 5px;
-        }
+  }
+
+  .photo-input {
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 2px solid;
+    border-radius: 24px;
+
+    svg {
+      width: 5%;
+      margin: 0 auto;
     }
-    
-    .part-1,.part-2{
-        min-width: 100%;
+
+    .photo-slider {
+      width: 90vw;
+      height: 60%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      img {
         height: 100%;
-        ul{
-            list-style: none;
-        }
+        border-radius: 5px;
+      }
     }
-    
-    .part-1{
+
+    input {
+      border: 1px solid red;
+    }
+  }
+
+  .titre-input, .type-input, .description-input, .quantite, .date-final {
+    height: 5%;
+    width: 80%;
+    margin: 1% auto;
+
+    input {
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+    }
+  }
+
+  .description-input input {
+    height: 80%;
+  }
+
+  .button-check, #button-check {
+    height: 5%;
+    width: 20%;
+    margin: 0 auto;
+    margin-top: 5%;
+    cursor: pointer;
+    border-radius: 5px;
+    @include mixins.flex-center;
+    background-color: variables.$colorDarkGreen;
+  }
+
+  .part-2 {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    .disponibilite {
+      height: 35%;
+
+      ul {
+        height: 80%;
+        width: 80%;
+        margin: 0 auto;
+        padding-top: 1%;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        .photo-input,.description-input{
+
+        li label {
+          width: 70%;
+          margin: 0 5%;
         }
-        .titre-input{
-        }
-        .photo-input,.titre-input,.description-input{
-            display: flex;
-            flex-direction: column;
-        }
+      }
     }
-    
-    .photo-input{
-        border: solid 2px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 24px;
-        svg{
-            width: 25%;
-        }
-        input{
-            border: 1px solid red;
-        }
+
+    .date-limit {
+      height: 15%;
+      display: flex;
+      flex-direction: column;
+
+      input {
+        width: 70%;
+        margin: 2% auto;
+      }
     }
-    
-    .description-input{
-        input{
-            height: 80%;
-        }
-    }
-    
-    #button-check{
-        margin: 0 auto;
-        cursor: pointer;
+
+    .prix-option {
+      height: 20%;
+      display: flex;
+      flex-direction: column;
+
+      label {
+        margin-left: 5%;
         width: fit-content;
     }
     
@@ -161,3 +243,77 @@ form{
         }
     }
 }
+=========
+form {
+//   height: 87vh;
+//   display: flex;
+//   overflow: hidden;
+  background-color: #242424;
+  input {
+    background-color: #D9D9D9;
+    color: variables.$colorBlack;
+    border: none;
+    outline: none;
+  }
+}
+
+.part-form{
+    height: 100vh;
+    width: 100%;
+    border: 1px solid blue;
+}
+
+.button-check{
+    height: 5%;
+    width: 20%;
+    margin: 0 auto;
+    margin-top: 5%;
+    cursor: pointer;
+    border-radius: 5px;
+    @include mixins.flex-center;
+    background-color: variables.$colorDarkGreen;
+}
+
+.titre-input,.type-input,.description-input,.quantite,.date-final{
+    height: 5%;
+    width: 80%;
+    margin: 1% auto;
+    input{
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+    }
+}
+
+// part 1
+#part-1{
+    height: 87vh;
+}
+
+.photo-input{
+    height: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    svg{
+        width: 5%;
+        margin: 0 auto;
+    }
+    .photo-slider{
+        width: 90vw;
+        height: 60%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        img{
+            height: 100%;
+            border-radius: 5px;
+        }
+    }
+}
+
+// part 2
+#photo-first{
+    border-radius: 5px;
+}
+>>>>>>>>> Temporary merge branch 2
