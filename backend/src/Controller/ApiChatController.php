@@ -80,14 +80,14 @@ class ApiChatController extends AbstractController
         $userId = (int) $data['id'];
         $results = $entityManager->getRepository(Chat::class)->find($userId);
 
-        // if ($results->getClient()->getId() !== $userId && $results->getSeller()->getId() !== $userId) 
-        // {
-        //     return new JsonResponse([
-        //         'status' => "Forbidden",
-        //         'code' => 403,
-        //         'message' => "Vous ne pouvez pas accéder à cette conversation"
-        //     ], 403);
-        // }
+        if ($results->getClient()->getId() !== $userId && $results->getSeller()->getId() !== $userId) 
+        {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'code' => 403,
+                'message' => "Vous ne pouvez pas accéder à cette conversation"
+            ], 403);
+        }
 
         $res = [];
         $res[] = ["chat_id" => $results->getId()];
