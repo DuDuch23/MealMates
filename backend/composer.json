@@ -28,6 +28,7 @@
         "symfony/flex": "^2.7.0",
         "symfony/form": "7.2.*",
         "symfony/framework-bundle": "7.2.*",
+        "symfony/http-client": "7.2.*",
         "symfony/mailer": "7.2.*",
         "symfony/mailtrap-mailer": "7.2.*",
         "symfony/messenger": "7.2.*",

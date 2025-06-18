@@ -35,3 +35,7 @@ export const updateUserIndexDB = async (userId, newUserData) => {
     getRequest.onerror = (event) => reject(`Erreur récupération utilisateur : ${event.target.error}`);
   });
 };
+
+export const getUserIndexDB = () => {};
+export const deleteUserIndexDB = () => {};
+export const addUserIndexDB = () => {};
