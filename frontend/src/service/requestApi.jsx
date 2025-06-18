@@ -533,7 +533,7 @@ export async function fetchFilteredOffers(filters) {
 
 export async function getCategory() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/categories`, {
+        const response = await fetch(`${API_BASE_URL}/api/category`, {
             method: 'GET',
             headers: { accept: 'application/json' },
         });

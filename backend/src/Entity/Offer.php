@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use Cocur\Slugify\Slugify;
+use Service\SlugService;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\OfferRepository;
 use Doctrine\Common\Collections\Collection;
@@ -126,12 +126,13 @@ class Offer
     
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function generateSlug(): void
-    {
-        if (!$this->slug && $this->product) {
-            $slugify = new Slugify();
-            $this->slug = $slugify->slugify($this->product);
-        }
+    public function getSlug(): ?string { 
+        return $this->slug; 
+    }
+
+    public function setSlug(?string $slug): static { 
+        $this->slug = $slug; 
+        return $this;
     }
 
     public function setUpdatedAt(): void

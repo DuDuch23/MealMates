@@ -111,7 +111,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $productName = $faker->randomElement($produits);
             $offer->setProduct($productName);
             $slug = $slugify->slugify($productName) . '-' . uniqid();
-            $offer->generateSlug($slug);
+            $offer->setSlug($slug);
             $offer->setDescription($faker->randomElement($descriptions));
             $offer->setQuantity($faker->numberBetween(1, 10));
             $offer->setExpirationDate($faker->dateTimeBetween('now', '+10 days'));
