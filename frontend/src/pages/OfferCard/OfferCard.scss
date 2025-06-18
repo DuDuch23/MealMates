@@ -1,0 +1,27 @@
+.container{
+    margin: 0 auto;
+    width: 768px;
+    height: 100vh;
+    height: 87vh;
+    border: 1px solid red;
+}
+
+.img-offer-card{
+    height: 50%;
+    overflow: hidden;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{
+        width: 100%;
+    }
+}
+
+.user-offer{
+    width: 20%;
+    margin-top: 5%;
+    margin-left: 5%;
+    border: 1px solid red;
+}
