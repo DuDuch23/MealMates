@@ -24,11 +24,7 @@ class Image
     #[Groups(["public", "private"])]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(["public", "private"])]
-    private ?string $link = null;
-
-    #[Vich\UploadableField(mapping: "images", fileNameProperty: "link")]
+    #[Vich\UploadableField(mapping: "offer_images", fileNameProperty: "name")]
     private ?File $imageFile = null;
 
     #[ORM\Column(type: 'datetime')]
@@ -65,28 +61,24 @@ class Image
         $this->name = $name;
     }
 
-    public function getLink(): ?string
-    {
-        return $this->link;
-    }
-
-    public function setLink(string $link): void
-    {
-        $this->link = $link;
-    }
-
     public function getImageFile(): ?File
     {
         return $this->imageFile;
     }
-
-    public function setImageFile(?File $imageFile = null): void
+    public function setImageFile(?File $file = null): void
     {
-        $this->imageFile = $imageFile;
-
-        if (null !== $imageFile) {
+        $this->imageFile = $file;
+        if ($file !== null) {
             $this->updatedAt = new \DateTimeImmutable();
         }
+    }
+
+    #[Groups(["public","private"])]
+    public function getUrl(): ?string
+    {
+        return $this->name
+            ? '/uploads/offers-photos/' . $this->name
+            : null;
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface

@@ -5,8 +5,11 @@
 
 #root{
     margin: 0 auto;
-    max-width: 1280px;
     width: 100%;
+}
+
+p, a{
+    font-size: variables.$fontSize;
 }
 
 a{
