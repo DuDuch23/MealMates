@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router";
 import { getUser, editUser } from "../../service/requestApi";
 import { getUserIndexDB, updateUserIndexDB } from "../../service/indexDB";
 import { IconUser, ChooseYourIcon } from "../../components/IconUser/iconUser";
-import './UserModify.css';
+import styles from './UserModify.module.css';
 
 function UserModify() {
     const [user, setUser] = useState(null);
@@ -26,7 +26,6 @@ function UserModify() {
               try {
                 const localData = await getUserIndexDB(userId);
                 setUser(localData);
-                console.log("Utilisateur depuis IndexedDB :", localData);
               } catch (err) {
                   console.error("Erreur lors de la récupération des données :", err);
               }
@@ -67,7 +66,7 @@ function UserModify() {
  
     return (
         <>
-        <div className="card-user">
+        <div className={styles.cardUser}>
             <nav>
                 <Link to={"/"}>
                     <img src="/img/logo-mealmates.png" alt="logo mealmates" />
@@ -75,12 +74,12 @@ function UserModify() {
                 </Link>
             </nav>
       
-            <div className="user-face">
+            <div className={styles[`user-face`]}>
               <IconUser id={idIcon}/>
               <ChooseYourIcon onValueChange={handleIconChange}/>
             </div>
       
-            <div className="content-user">
+            <div className={styles[`content-user`]}>
               <div className="container-link">
                 <Link to={`/userProfile/${userId}`}>Mes informations</Link>
                 <span>
@@ -97,32 +96,32 @@ function UserModify() {
                 <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
               </div>
       
-              <div className="container-info-user" onSubmit={handleEdit}>
+              <div className={styles[`container-info-user`]} onSubmit={handleEdit}>
                 <form action="#">
                   {/* nom et prénom */}
-                  <div className="name-select">
+                  <div className={styles[`name-select`]}>
                     <input type="text" name="lastName" placeholder="Nom"  value={lastName} onChange={(event) => setLastName(event.target.value)}/>
                     <input type="text" name="firstName" placeholder="Prénom" value={firstName} onChange={(event) => setFirstName(event.target.value)}/>
                   </div>
       
                   {/* email */}
                   <div>
-                    <input type="text" id="email" name="email" placeholder="Mon email" value={email} onChange={(event) => setEmail(event.target.value)}/>
+                    <input type="text" id={styles.email} name="email" placeholder="Mon email" value={email} onChange={(event) => setEmail(event.target.value)}/>
                   </div>
       
                   {/* ville */}
                   <div>
-                    <input type="text" id="city" name="city" placeholder="Ma ville" value={city} onChange={(event) => setCity(event.target.value)}/>
+                    <input type="text" id={styles.city} name="city" placeholder="Ma ville" value={city} onChange={(event) => setCity(event.target.value)}/>
                   </div>
       
                   {/* adresse rue */}
                   <div>
-                    <input type="text" id="address" name="address" placeholder="Mon adresse" value={address} onChange={(event) => setAdress(event.target.value)}/>
+                    <input type="text" id={styles.address} name="address" placeholder="Mon adresse" value={address} onChange={(event) => setAdress(event.target.value)}/>
                   </div>
 
                   <div>
                     <label htmlFor="preferences">Mes preferences :</label>
-                    <select name="preference" id="preference-select"value={option} onChange={(event) => setOption(event.target.value)}>
+                    <select name="preference" id={styles[`preference-select`]} value={option} onChange={(event) => setOption(event.target.value)}>
                       <option value="">--choisir un preference--</option>
                       {/* <option value=""><p>hey</p></option> */}
                     </select>

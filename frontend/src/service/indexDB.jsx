@@ -85,7 +85,8 @@ export const getUserIndexDB = async (id) => {
       if (!result) return resolve(null);
 
       const decrypted = JSON.parse(CryptoJS.AES.decrypt(result.encrypted, SECRET_KEY).toString(CryptoJS.enc.Utf8));
-      resolve(decrypted);
+
+      return resolve(decrypted);
     };
     request.onerror = (event) => reject(`Erreur récupération utilisateur : ${event.target.error}`);
   });

@@ -9,7 +9,7 @@ function Chat() {
   const location = useLocation();
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState(sessionStorage.getItem("user"));
-  const [chat,setChat] = useState(sessionStorage.getItem("chat"));
+  const [chat,setChat] = useState(parseInt(sessionStorage.getItem("chat"), 10));
 
   return(
   <>

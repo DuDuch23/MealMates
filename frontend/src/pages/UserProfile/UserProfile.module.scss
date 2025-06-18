@@ -1,6 +1,6 @@
 @use "../../styles/globals";
 @use '../../styles/mixins.scss';
-@use "../../styles/variables";
+@use "../../styles/variables" as variables;
 
 p,li{
     color: black;
@@ -10,7 +10,7 @@ p,li{
     background-color: #242424;
 }
 
-.card-user{
+.cardUser{
     margin: 0 auto;
     width: 768px;
     height: 100vh;
@@ -23,14 +23,14 @@ p,li{
             text-decoration: none;
         }
     }
-    .icon-user{
+    .iconUser{
         margin: 0 auto;
     }
 }
 
-.content-user{
+.contentUser{
     height: 61%;
-    .container-link{
+    .containerLink{
         height: 10%;
         display: flex;
         align-items: center;
@@ -39,12 +39,12 @@ p,li{
             text-decoration: none;
         }
     }
-    .container-info-user{
+    .containerInfoUser{
         height: 90%;
     }
 }
 
-.basics-elements{
+.basicsElements{
     height: 40%;
     display: flex;
     align-items: center;
@@ -56,9 +56,30 @@ p,li{
         border-radius: 5px;
         padding: 2px;
         margin: 0 auto;
-        background-color: #FFF;
+        border: 1px solid #FFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         p{
-            color: #242424;
+            color: variables.$colorWhite;
         }
+    }
+}
+
+.preferenceUser{
+    height: 20vh;
+    margin-top: 5%;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    li{
+        width: 20%;
+        height: 100%;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: variables.$colorDarkGreen;
     }
 }
