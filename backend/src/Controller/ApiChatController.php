@@ -59,9 +59,17 @@ class ApiChatController extends AbstractController
     #[Route('/get', methods: ['POST'])]
     public function getToChat(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $data = json_decode($request->getContent(),true);
+        $data = json_decode($request->getContent(), true);
 
-        if(!isset($data['id'])){
+        if (!isset($data['id'])) {
+            return new JsonResponse([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'id' parameter."
+            ], 400);
+        }
+
+        if (!isset($data['chat'])) {
             return new JsonResponse([
                 'status' => "Bad Request",
                 'code' => 400,
@@ -69,25 +77,38 @@ class ApiChatController extends AbstractController
             ], 400);
         }
 
-        $messages = $entityManager->getRepository(Message::class)->findByChat($data['id']);
+        $userId = (int) $data['id'];
+        $results = $entityManager->getRepository(Chat::class)->find($userId);
 
-        // Récupérer l'autre utilisateur en base
-        foreach($messages as $message){
-            $res [] = [
-                'id' => $message->getId(),
-                'sendAt' => $message->getSentAt(),
+        // if ($results->getClient()->getId() !== $userId && $results->getSeller()->getId() !== $userId) 
+        // {
+        //     return new JsonResponse([
+        //         'status' => "Forbidden",
+        //         'code' => 403,
+        //         'message' => "Vous ne pouvez pas accéder à cette conversation"
+        //     ], 403);
+        // }
+
+        $res = [];
+        $res[] = ["chat_id" => $results->getId()];
+
+       foreach ($results->getMessages() as $message) {
+            $sender = $message->getSender();
+
+            $res[] = [
+                'message' => [
+                    'idForMessage' => $message->getId(),
+                    'content' => $message->getContent(),
+                ],
                 'user' => [
-                    'idForMessage' => $message->getSender()->getId(),
-                    'nameUser' => $message->getSender()->getFirstName(),
-                    'iconUser' => $message->getSender()->getIconUser(),
-                ],
-                'content' => [
-                    'message'=> $message->getContent(),
-                ],
+                    'name' => $sender->getFirstName(),
+                    'icon' => $sender->getIconUser(),
+                    'id' => $sender->getId(),
+                ]
             ];
         }
 
-       return $this->json(['messages' => $res], 200, [], ['groups' => ['public']]);
+        return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
     }
 
     #[Route('/send/message', methods:['POST'])]

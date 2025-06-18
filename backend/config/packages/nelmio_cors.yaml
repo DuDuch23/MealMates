@@ -18,4 +18,4 @@ nelmio_cors:
             allow_methods: ['GET']
             allow_headers: ['*']
             expose_headers: ['Content-Type']
-            max_age: 3600
+            max_age: 7200

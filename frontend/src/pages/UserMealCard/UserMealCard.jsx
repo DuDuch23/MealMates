@@ -3,7 +3,7 @@ import { useParams,Link } from 'react-router';
 import { getUser,getOfferBySeller } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
-import './UserMealCard.css';
+import styles from './UserMealCard.module.css';
 
 function UserMealCard() {
     const params = useParams();
@@ -55,7 +55,7 @@ function UserMealCard() {
         if (user) {
             return (
                 <>
-                    <ul className="list-user">
+                    <ul className={styles.listUser}>
                         <li><p>{user.firstName}</p></li>
                     </ul>
                     <div>
@@ -75,7 +75,7 @@ function UserMealCard() {
         if (userOffer) {
             console.log(userOffer);
             return (
-                <div className="preferences">
+                <div className={styles[`offer-container`]}>
                     <h3>Mes offres :</h3>
                     <ul>
                         {userOffer.map((offer) => (
@@ -91,7 +91,7 @@ function UserMealCard() {
 
     return (
     <>
-        <div className="card-user">
+        <div className={styles.cardUser}>
             <nav>
                 <Link to={"/"}>
                     <img src="/img/logo-mealmates.png" alt="logo mealmates" />
@@ -99,8 +99,8 @@ function UserMealCard() {
                 </Link>
             </nav>
             <IconUser id={userIcon()}/>
-            <div className="content-user">
-                <div className="container-link">
+            <div className={styles.contentUser}>
+                <div className={styles.containerLink}>
                     <Link to={`/userProfile/${userId}`}>Mes informations</Link>
                     <span>
                       <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -115,8 +115,8 @@ function UserMealCard() {
                     </span>
                     <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                 </div>
-                <div className="container-info-user">
-                    <div className="basics-elements card">
+                <div className={styles.containerInfoUser}>
+                    <div className={`${styles.basicsElements} ${styles.card}`} >
                         {infoUser()}
                     </div>
                     {userPreference()}

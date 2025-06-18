@@ -16,8 +16,8 @@ export default function BurgerMenue({ onProfileClick }) {
       if (id) {
         try {
           const data = await getUserIndexDB(id);
+            console.log(data);
           setUserData(data);
-          console.log(data);
         } catch (error) {
           console.error("Erreur lors de la récupération de l'utilisateur :", error);
         }
@@ -31,14 +31,14 @@ export default function BurgerMenue({ onProfileClick }) {
     if (userData) {
       return (
         <li>
-          <IconUser id={userData.iconUser || 1} />
+          <IconUser id={userData.iconUser || 4} />
           <p>
-            <Link to={`/userProfile/${userData.id}`}>Mon Profil</Link>
+            <Link to={`/userProfile/${userData.id || 4}`}>Mon Profil</Link>
           </p>
         </li>
       );
     }
-    return null; 
+    // return null; 
   };
 
   const navigate = useNavigate();
