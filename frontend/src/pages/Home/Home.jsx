@@ -1,7 +1,7 @@
 import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
-import UserLocationMap from '../../components/GoogleMaps/GoogleMaps';
+import OffersMap from '../../components/GoogleMaps/GoogleMaps';
 import { jwtDecode } from 'jwt-decode';
 
 function App() {
@@ -53,7 +53,7 @@ function App() {
 
                 <div className={styles.bottom__right}>
                     <h2>Obtenez des offres locales, qui suivent vos offres alimentaires</h2>
-                    <button>M'inscrire maintenant</button>
+                    <button onClick={() => navigate("/inscription")}>M'inscrire maintenant</button>
                 </div>
             </section>
             <footer className={styles.footer}>

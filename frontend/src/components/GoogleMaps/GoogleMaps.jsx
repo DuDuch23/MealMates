@@ -1,8 +1,7 @@
 import React, { useState, useEffect , useRef} from 'react';
-import { GoogleMap, Marker, LoadScript, MarkerClusterer, InfoWindow  } from '@react-google-maps/api';
+import { GoogleMap, Marker, LoadScript, MarkerClusterer, InfoWindow, Circle  } from '@react-google-maps/api';
 import FilterMap from '../FilterMap/FilterMap';
 import styles from './GoogleMaps.module.css';
-import { geocodeLocation } from '../../service/requestApi';
 
 const containerStyle = {
     width: '100%',
@@ -10,12 +9,13 @@ const containerStyle = {
 };
 
 
-const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
+const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
     const [map, setMap] = useState(null);
     const [address, setAddress] = useState("");
     const [initialCenter, setInitialCenter] = useState(null);
     const [radius, setRadius] = useState(5); // rayon en km
     const [filteredOffers, setFilteredOffers] = useState([]);
+    const [filters, setFilters] = useState({ distance: radius })
     // clusterer pour les markers (regroupement de markers proches)
 
     const renderMarkers = (clusterer) =>
@@ -31,6 +31,26 @@ const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                 onClick={() => handleMarkerClick(offer)}
             />
     ));
+
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await getCategory();
+                if (data && data.data) {
+                    setCategories(data.data);
+                    console.log("Catégories chargées :", data.data);
+                } else {
+                    console.error("Erreur de récupération des catégories");
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'appel à l'API des catégories :", error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     const [selectedOffer, setSelectedOffer] = useState(null);
 
@@ -93,6 +113,17 @@ const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
         }
     };
 
+    const fetchOffers = async (filters) => {
+        const result = await searchOffersByCriteria(filters);
+
+        if (result.code === 200 && result.data) {
+            setFilteredOffers(result.data);
+        } else {
+            console.warn(result.message || 'Aucune offre trouvée.');
+            setFilteredOffers([]); // pour éviter des erreurs d’affichage
+        }
+    };
+
     return (
         <>
             <LoadScript className="map" googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
@@ -105,6 +136,14 @@ const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                     />
                     <button type="submit">Rechercher</button>
                 </form>
+                <FilterMap
+                    categories={categories}
+                    onFilterChange={(newFilters) => {
+                        setFilters(newFilters);
+                        fetchOffers(newFilters);
+                        drawCircle(newFilters.distance);
+                    }}
+                />
                 <GoogleMap className="map"
                     mapContainerStyle={containerStyle}
                     center={initialCenter}
@@ -117,6 +156,19 @@ const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                         title="Votre position"
                         />
                     )}
+                    {map && userPos && (
+                        <Circle
+                            center={userPos}
+                            radius={filters.distance * 1000}
+                            options={{
+                                strokeColor: '#3B82F6',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 2,
+                                fillColor: '#3B82F6',
+                                fillOpacity: 0.2,
+                            }}
+                        />
+                        )}
                     <MarkerClusterer>
                         {(clusterer) => renderMarkers(clusterer)}
                     </MarkerClusterer>
@@ -146,4 +198,4 @@ const UserLocationMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
     );
 };
 
-export default UserLocationMap;
+export default OffersMap;

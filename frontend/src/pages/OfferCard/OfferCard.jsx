@@ -1,8 +1,14 @@
+<<<<<<<<< Temporary merge branch 1
+=========
 import { useParams } from 'react-router';
+>>>>>>>>> Temporary merge branch 2
 import { useState,useEffect } from "react";
 import './OfferCard.css';
 
 function OfferCard({id}){
+<<<<<<<<< Temporary merge branch 1
+    return(<></>)
+=========
     const [infOffer,setOffer] = useState([]);
     const params = useParams();
     const offerId = params.id ? parseInt(params.id) : null;
@@ -32,6 +38,7 @@ function OfferCard({id}){
     </div>
     </>
     );
+>>>>>>>>> Temporary merge branch 2
 }
 
 export default OfferCard;

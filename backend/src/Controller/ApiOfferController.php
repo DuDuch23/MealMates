@@ -5,7 +5,10 @@ use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Offer;
 use DateTimeImmutable;
+use App\Service\SlugService;
 use App\Repository\OfferRepository;
+use App\Repository\OrderRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +35,7 @@ class ApiOfferController extends AbstractController
         }
 
         $offersSerialized = $serializer->serialize($offers, 'json', ['groups' => 'public']);
+        $offersLocation = $serializer->serialize($offers, 'json', ['groups' => 'map']);
 
         return $this->json([
             'status' => "OK",
@@ -41,7 +45,10 @@ class ApiOfferController extends AbstractController
     }
 
     #[Route('/get/{id}', methods: ['GET'])]
-    public function getOfferByID(int $id, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    public function getOfferByID(int $id,
+    OrderRepository $orderRepository,
+    EntityManagerInterface $entityManager,
+    SerializerInterface $serializer): JsonResponse
     {
         $offer = $entityManager->getRepository(Offer::class)->find($id);
 
@@ -53,7 +60,15 @@ class ApiOfferController extends AbstractController
             ], 404);
         }
 
+        $activeOrder = $orderRepository->findActiveForOffer($offer);
+
         $data = json_decode($serializer->serialize($offer, 'json', ['groups' => 'public']), true);
+
+        $data['order'] = $activeOrder ? [
+            'id'          => $activeOrder->getId(),
+            'isConfirmed' => $activeOrder->isConfirmed(),
+            'expiresAt'   => $activeOrder->getExpiresAt()?->format('Y-m-d H:i:s'),
+        ] : null;
 
         return $this->json([
             'status' => "OK",
@@ -189,57 +204,61 @@ class ApiOfferController extends AbstractController
     }
 
     #[Route('/new', methods: ['POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function new(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository, SlugService $slugService): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
-        // if (!isset($data['name'])) {
-        //     return $this->json([
-        //         'status' => "Bad Request",
-        //         'code' => 400,
-        //         'message' => "Missing 'name' parameter."
-        //     ], 400);
-        // }
-
-        // $existingOffer = $entityManager->getRepository(Offer::class)->findOneBy(['name' => $data['name']]);
-        // if ($existingOffer) {
-        //     return $this->json([
-        //         'status' => "Forbidden",
-        //         'code' => 403,
-        //         'message' => "Offer already exists."
-        //     ], 403);
-        // }
-
+        if (!$this->getUser()) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+        
         $offer = new Offer();
-        $offer->setProduct($data['product']);
-        $offer->setDescription($data['description']);
-        $offer->setQuantity($data['quantity']);
-        $offer->setExpirationDate(new \DateTime($data['expirationDate']));
-        $offer->setPrice($data['price']);
-        $offer->setIsDonation($data['isDonation']);
-        $offer->setPickupLocation($data['pickupLocation']);
-        $offer->setAvailableSlots($data['availableSlots']);
-        $offer->setIsRecurring($data['isRecurring']);
-        if (!empty($data['photos_offer'])) {
-            foreach ($data['photos_offer'] as $filename) {
-                $image = new Image();
-                $image->setImageFile($filename);
-                $offer->addImage($image); // ajoute automatiquement l'image à l'offre
+
+        $offer->setProduct($request->request->get('product'));
+        $slug = $slugService->generateUniqueSlug($request->request->get('product'));
+        $offer->generateSlug($slug);
+        $offer->setDescription($request->request->get('description'));
+        $offer->setQuantity($request->request->get('quantity'));
+        $offer->setExpirationDate(new \DateTime($request->request->get('expirationDate')));
+        $offer->setPrice($request->request->get('price'));
+        $offer->setIsDonation(filter_var($request->request->get('isDonation'), FILTER_VALIDATE_BOOLEAN));
+        $offer->setPickupLocation($request->request->get('pickupLocation'));
+        $offer->setIsRecurring(filter_var($request->request->get('isRecurring'), FILTER_VALIDATE_BOOLEAN));
+        $offer->setLatitude($request->request->get('latitude'));
+        $offer->setLongitude($request->request->get('longitude'));
+
+        $availableSlots = json_decode($request->request->get('availableSlots'), true);
+        $offer->setAvailableSlots($availableSlots ?? []);
+
+        $categoryIds = $request->request->all('categories');
+        foreach ($categoryIds as $id) {
+            $category = $categoryRepository->find($id);
+            if ($category) {
+                $offer->addCategory($category);
             }
         }
-        // $offer->setCreatedAt(new \DateTimeImmutable());
-        $offer->setUpdatedAt(new DateTimeImmutable());
-        $offer->setUser($this->getUser()); // Assurez-vous que l'utilisateur est connecté
 
+        $files = $request->files->get('photos_offer');
+
+        if ($files) {
+            if (!is_array($files)) {
+                $files = [$files];
+            }
+
+            foreach ($files as $file) {
+                $image = new Image();
+                $image->setImageFile($file);
+                $offer->addImage($image);
+            }
+        }
+
+        $offer->setUpdatedAt(new \DateTimeImmutable());
+        $offer->setSeller($this->getUser());
 
         $entityManager->persist($offer);
         $entityManager->flush();
 
-        return $this->json([
-            'status' => "Created",
-            'code' => 201,
-        ], 201);
+        return $this->json(['status' => "Created", 'code' => 201], 201);
     }
+
 
     #[Route('/edit', methods: ['PUT'])]
     public function edit(Request $request, EntityManagerInterface $entityManager): JsonResponse
@@ -358,4 +377,27 @@ class ApiOfferController extends AbstractController
             }
         ]);
     }
+
+    #[Route('/search/filters', name: 'api_offer_search_filters', methods: ['POST'])]
+    public function searchByCriteria(Request $request, OfferRepository $offerRepository, SerializerInterface $serializer): JsonResponse
+    {
+        $criteria = json_decode($request->getContent(), true);
+
+        $offers = $offerRepository->findByFilters($criteria);
+
+        if (empty($offers)) {
+            return $this->json([
+                'status' => 'Not Found',
+                'code' => 404,
+                'message' => 'No offers match the given criteria.',
+            ], 404);
+        }
+
+        return $this->json([
+            'status' => 'OK',
+            'code' => 200,
+            'data' => json_decode($serializer->serialize($offers, 'json', ['groups' => 'public']), true),
+        ], 200);
+    }
+
 }

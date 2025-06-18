@@ -12,6 +12,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+use Google\Client as GoogleClient;
+
+
 #[Route('/api/user', name: 'api_user')]
 class ApiUserController extends AbstractController
 {
@@ -156,7 +159,6 @@ class ApiUserController extends AbstractController
             'code' => 201,
         ], 201);
     }
-
 
     #[Route('/edit', methods: ['PUT'])]
     public function edit(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
