@@ -526,7 +526,7 @@ export async function fetchFilteredOffers(filters) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(filters),
-            credentials: "include", // <- Ajouté
+            credentials: "include", 
         });
 
         return await response.json();
