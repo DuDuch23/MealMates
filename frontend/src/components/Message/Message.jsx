@@ -5,18 +5,19 @@ import { getUserIndexDB } from "../../service/indexDB";
 
 export function Messages({ content, senderId }) {
 
-    const [user,setUser] = useState([senderId]);
+    const [userId,setUser] = useState([senderId]);
     const [idStorage, setIdStorage] = useState([]);
 
     useEffect(() => {
       async function fetchUser() {
-        setIdStorage(sessionStorage.getItem('user'));
 
-        if(user == senderId){
-            const userData = await getUserIndexDB(idStorage);
+        setIdStorage(JSON.parse(sessionStorage.getItem('user')));
+
+        if(userId == senderId){
+            const userData = await getUserIndexDB(idStorage.id);
             setUser(userData);
         }else{
-          const userData = await getUser(idStorage);
+          const userData = await getUser(idStorage.id);
           setUser(userData);
         }
 

@@ -6,10 +6,9 @@ import "./ChooseChat.scss";
 function ChooseChat() {
     const [chat, setChat] = useState([]);
     const user = JSON.parse(sessionStorage.getItem("user"));
-    console.log(user.id);
 
     useEffect(() => {
-        if (!user) return;
+        if (!user.id) return;
         
         async function executeRequest() {
             try {
