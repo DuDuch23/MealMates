@@ -11,13 +11,34 @@ form{
     display: flex;
     overflow: hidden;
     flex-direction: column;
-    background-color: #242424;
-    input{
-        color: white;
-        background-color: transparent;
-        border: 2px solid white;
-        padding: 15px;
-        border-radius: 10px;
+    label{
+        font-size: variables.$fontSize;
+        font-weight: 600;
+    }
+    .container-inputs{
+        padding: 46px 0px;
+        border-bottom: solid 1px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        width: 50%;
+        input{
+            color: black;
+            font-size: variables.$fontSize;
+            background-color: white;
+            border: 2px solid white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 1px 14px 22px -16px black, 1px 4px 22px -16px black;
+        }
+        button{
+            box-shadow: 1px 14px 22px -16px black, 1px 4px 22px -16px black;
+            padding: 20px;
+            background-color: variables.$colorDarkGreen;
+            border: none;
+            font-size: variables.$fontSize;
+            border-radius: 12px;
+        }
     }
     .container-image-offer{
         margin-top: auto;
@@ -157,6 +178,24 @@ form{
                     width: 70%;
                     margin: 0 5%;
                 }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    form{
+        .container-inputs{
+            width: 100%;
+        }
+        .part-1,.part-2{
+            width: 100%;
+        }
+        .container-image-offer{
+            flex-direction: column;
+            img{
+                width: 80%;
+                margin: 0 auto;
             }
         }
     }
