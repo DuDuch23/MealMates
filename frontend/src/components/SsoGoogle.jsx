@@ -13,8 +13,17 @@ const GoogleLoginButton = ({ setUser }) => {
       }
 
       const userObject = jwtDecode(credentialResponse.credential);
-      sessionStorage.setItem("user", JSON.stringify(userObject));
-      console.log("Connexion réussie :", userObject);
+      
+      const userInfo = {
+        email: userObject.email,
+        firstName: userObject.given_name,
+        iconUser: userObject.picture,
+      };
+
+      // Stocker dans sessionStorage
+      sessionStorage.setItem("user", JSON.stringify(userInfo));
+      setUser(userInfo);
+      navigate("/offer");
 
       if (typeof setUser === "function") {
         setUser(userObject);
