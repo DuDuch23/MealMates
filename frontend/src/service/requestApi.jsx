@@ -296,8 +296,8 @@ export async function getPolling({chat,lastMessage}){
     } 
 }
 
-export async function getChat({user,chat}){
-    console.log({user,chat});
+export async function getChat({userId,chat}){
+    console.log({userId,chat});
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
             method: 'POST',
@@ -307,8 +307,8 @@ export async function getChat({user,chat}){
             },
             body: JSON.stringify(
                 { 
-                    'client': user,
-                    'id': chat,
+                    'id': userId,
+                    'chat': chat,
                 }
             ),
         });

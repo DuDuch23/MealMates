@@ -9,7 +9,6 @@ p,li{
 #root{
     background-color: #242424;
 }
-
 nav{
     display: flex;
     align-items: center;
@@ -19,17 +18,36 @@ nav{
         text-decoration: none;
     }
 }
-
-.card-user{
-    margin: 0 auto;
-    width: 768px;
-    height: 100vh;
-    .icon-user{
-        margin: 0 auto;
+form{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    input{
+        border: none;
+        outline: none;
+        border-radius: 5px;
+        height: 5vh;
+        color: black;
+    }
+    div{
+        width: 70%;
+        input{
+            width: 90%;
+        }
+    }
+    .name-select{
+        width: 90%;
+        display: flex;
+        justify-content: space-around;
+        input{
+            width: 45%;
+        }
     }
 }
 
-#icon-user{
+.user-face{
     width: fit-content;
     height: 25%;
     margin: 0 auto;
@@ -40,6 +58,21 @@ nav{
     svg{
         width: 100% !important;
         height: 100% !important;
+    }
+}
+
+.cardUser{
+    margin: 0 auto;
+    width: 768px;
+    height: 100vh;
+    nav{
+        display: flex;
+        align-items: center;
+    }
+    #icon-user{
+        width: 95%;
+        height: 100%;
+        margin: 0 auto;
     }
 }
 
@@ -59,20 +92,12 @@ nav{
     }
 }
 
-.basics-elements.card{
+.basics-elements{
     height: 40%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    flex-direction: column;
-    .list-user{
-        height: 50%;
-        width: 70%;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        list-style: none;
-    }
+    justify-content: center;
+    flex-wrap: wrap;
     div{
         width: 45%;
         height: 30%;

@@ -34,7 +34,7 @@ function App() {
   useEffect(() => {
     async function fetchUser() {
       if (userId) {
-        const id = parseInt(userId, 10); // Toujours préciser la base
+        const id = parseInt(userId, 10);
         const userData = await getUserIndexDB(id);
         setUser(userData);
       }

@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router";
 import { getUser } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
-import './UserProfile.css'
+import styles from './UserProfile.module.css'
 
 const UserProfile = () => {
     const params = useParams();
@@ -43,7 +43,6 @@ const UserProfile = () => {
     if (!user) return <p>Aucun utilisateur trouvé.</p>;
 
     function infoUser() {
-        console.log(user);
         return (
             <>
                 <div><p>{user?.firstName}</p></div>
@@ -56,10 +55,10 @@ const UserProfile = () => {
     const userPreference = () => {
         if (user) {
             return (
-                <div className="preferences">
+                <div className={styles.preferences}>
                     <h3>Mes préférences</h3>
                     {user.preferences?.length > 0 ? (
-                    <ul>
+                    <ul className={styles.preferenceUser}>
                         {user.preferences.map((preference) => (
                             <li key={preference.id}>{preference.name}</li>
                         ))}
@@ -76,16 +75,16 @@ const UserProfile = () => {
 
     return (
         <>
-            <div className="card-user">
+            <div className={styles.cardUser}>
                 <nav>
                     <Link to={"/"}>
                         <img src="/img/logo-mealmates.png" alt="logo mealmates" />
                         <h2>MealMates</h2>
                     </Link>
                 </nav>
-                <IconUser id={user.iconUser}/>
-                <div className="content-user">
-                    <div className="container-link">
+                <IconUser className={styles.iconUser} id={user.iconUser}/>
+                <div className={styles.contentUser}>
+                    <div className={styles.containerLink}>
                         <Link to={`/userProfile/${userId}`}>Mes informations</Link>
                         <span>
                           <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,8 +99,8 @@ const UserProfile = () => {
                         </span>
                         <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                     </div>
-                    <div className="container-info-user">
-                        <div className="basics-elements">
+                    <div className={styles.containerInfoUser}>
+                        <div className={styles.basicsElements}>
                             {infoUser()}
                         </div>
                         {userPreference()}
