@@ -35,6 +35,7 @@ function App() {
         const userSession = sessionStorage.getItem("user");
         if (userSession) {
           const parsedUser = JSON.parse(userSession);
+          console.log(parsedUser);
           const id = parseInt(parsedUser.id, 10);
           const userData = await getUserIndexDB(id);
           setUser(userData);

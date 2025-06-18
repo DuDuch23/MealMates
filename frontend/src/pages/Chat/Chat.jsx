@@ -16,6 +16,7 @@ function Chat() {
 
       if (userSession && chatId) {
         const parsedUser = JSON.parse(userSession);
+        console.log(userSession);
         setUser(parsedUser);
         setChat(parseInt(chatId, 10));
       }
@@ -23,6 +24,8 @@ function Chat() {
       console.error("Erreur lors de la lecture du sessionStorage :", err);
     }
   }, []);
+
+  console.log(user);
 
   // Ne rend rien tant que les données ne sont pas prêtes
   if (!user || !chat) return null;

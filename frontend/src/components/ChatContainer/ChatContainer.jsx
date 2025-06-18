@@ -6,29 +6,35 @@ import "./container-message.css";
 function ChatContainer({ user, chat }) {
   const [messages, setMessages] = useState([]);
   const containerRef = useRef(null);
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   // Fonction réutilisable de récupération
   const fetchMessages = async () => {
     try {
       const res = await getChat({ userId: user.id, chat });
       const array = Object.values(res);
-      return array[0] || [];
+    return array[0] || [];
     } catch (error) {
-      console.error("Erreur lors de la récupération du chat :", error);
-      return [];
+        console.error("Erreur lors de la récupération du chat :", error);
+        return [];
     }
   };
 
   // Initialisation
   useEffect(() => {
-    if (!user || !chat) return;
+    console.log(user);
+      if (!user || !chat) return;
 
-    const init = async () => {
-      const initialMessages = await fetchMessages();
-      setMessages(initialMessages);
-    };
+    if(user.id){
+        const init = async () => {
+          await sleep(1000);
+          const initialMessages = await fetchMessages();
+          setMessages(initialMessages);
+        };
+      
 
-    init();
+      init();
+    }
   }, [user, chat]);
 
   // Polling
