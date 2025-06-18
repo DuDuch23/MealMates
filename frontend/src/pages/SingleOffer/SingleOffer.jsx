@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { getOfferId } from "../../service/requestApi";
+import { createOrder, getOfferId } from "../../service/requestApi";
 import "./SingleOffer.scss";
 
 export default function SingleOffer() {
@@ -24,6 +24,19 @@ export default function SingleOffer() {
 
         fetchOffer();
     }, [id]);
+
+    const handleReservation = async () => {
+        console.log("Réservation en cours pour l'offre ID :", id);
+        try{
+            const response = await createOrder(id);
+            setOffer(prev => ({
+            ...prev,
+            order: response.order
+        }));
+        } catch (error) {
+            console.error("Erreur lors de la création de la réservation :", error);
+        }
+    };
 
     if (!offer) {
         return <div className="single-offer"><p>Chargement...</p></div>;
@@ -50,12 +63,25 @@ export default function SingleOffer() {
                 <p><strong>Créée le :</strong> {new Date(offer.createdAt).toLocaleString()}</p>
             </div>
 
-            <div className="single-offer__seller">
-                <h2>Vendeur</h2>
-                <p><strong>Nom :</strong> {offer.seller.firstName} {offer.seller.lastName}</p>
-                <p><strong>Email :</strong> {offer.seller.email}</p>
-                <p><strong>Localisation :</strong> {offer.seller.location}</p>
-            </div>
+
+            {!offer.order && (
+            <button className="single-offer__reserve-btn" onClick={handleReservation}>
+                Réserver cette offre
+            </button>
+            )}
+
+            {offer.order && !offer.order.isConfirmed && (
+            <p className="single-offer__status">
+                Réservation en attente de confirmation<br />
+                (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
+            </p>
+            )}
+
+            {offer.order && offer.order.isConfirmed && (
+            <p className="single-offer__status confirmed">
+                Réservation confirmée ✅
+            </p>
+            )}
         </div>
     );
 }

@@ -43,14 +43,14 @@ export async function getValidToken() {
 }
 
 
-// Mettre à jour le token depuis localStorage
+// Mettre à jour le token depuis sessionStorage
 export async function refreshToken() {
     const infoToken = jwtDecode(token);
     const now = Date.now() / 1000;
 
     if (infoToken.exp < now) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
         navigate("/connexion");
     }
     return true;
@@ -58,7 +58,7 @@ export async function refreshToken() {
 
 export async function logIn({ email, password }) {
     try {
-        const url = `${API_BASE_URL}/api/login_check`; // <- Slash ajouté
+        const url = `${API_BASE_URL}/api/login`;
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -133,7 +133,7 @@ export async function getUser({ user }) {
 }
 
 export async function getSSO() {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   if (!token) return null;
 
   try {
@@ -151,7 +151,7 @@ export async function getSSO() {
     }
 
     const ssoData = await response.json();
-    localStorage.setItem("user", JSON.stringify(ssoData));
+    sessionStorage.setItem("user", JSON.stringify(ssoData));
 
     return ssoData;
     }catch (error) {
@@ -211,7 +211,6 @@ export async function deleteUser(id) {
 
 export async function getProfile({ email, token }) {
     try {
-        console.log("Token envoyé :", token);
         const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
             method: "POST",
             headers: {
@@ -297,8 +296,8 @@ export async function getPolling({chat,lastMessage}){
     } 
 }
 
-export async function getChat({user,chat}){
-    console.log({user,chat});
+export async function getChat({userId,chat}){
+    console.log({userId,chat});
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/get`,{
             method: 'POST',
@@ -308,8 +307,8 @@ export async function getChat({user,chat}){
             },
             body: JSON.stringify(
                 { 
-                    'client': user,
-                    'id': chat,
+                    'id': userId,
+                    'chat': chat,
                 }
             ),
         });
@@ -480,27 +479,22 @@ export async function searchOffersByCriteria(criteria) {
 }
 
 export async function newOffer(data, isFormData = false) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
-            method: "POST",
-            body: data,
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem('token')}`,
-                // Pas besoin de Content-Type avec FormData
-            },
-            credentials: "include",
-        });
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
+      method: "POST",
+      body: data,
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
+      },
+      credentials: "include",
+    });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Erreur lors de la création de l'offre.");
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Erreur API :", error);
-        return { result: [] };
-    }
+    const raw = await response.text();
+    console.log("Réponse brute :", raw);
+  } catch (error) {
+    console.error("Erreur API :", error);
+    return { result: [] };
+  }
 }
 
 export async function geocodeLocation(location) {
@@ -539,7 +533,7 @@ export async function fetchFilteredOffers(filters) {
 
 export async function getCategory() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/categories`, {
+        const response = await fetch(`${API_BASE_URL}/api/category`, {
             method: 'GET',
             headers: { accept: 'application/json' },
         });
@@ -547,5 +541,26 @@ export async function getCategory() {
     } catch (error) {
         console.error("Erreur API getCategory :", error);
         return { data: [] }; 
+    }
+}
+
+export async function createOrder(offerId){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/order/create`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                "offerId": offerId,
+            }),
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
     }
 }

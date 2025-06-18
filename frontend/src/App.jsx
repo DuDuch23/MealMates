@@ -12,7 +12,6 @@ const Home = React.lazy(() => import('./pages/Home/Home'));
 // Offre
 const Offer = React.lazy(() => import('./pages/Offer/Offer'));
 const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
-const OfferCard = React.lazy(() => import('./pages/OfferCard/OfferCard'));
 const SingleOffer = React.lazy(() => import('./pages/SingleOffer/SingleOffer'));
 
 // User
@@ -29,12 +28,12 @@ const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 
 function App() {
   const [user, setUser] = useState(null);
-  const userId = localStorage.getItem("user");
+  const userId = sessionStorage.getItem("user");
 
   useEffect(() => {
     async function fetchUser() {
       if (userId) {
-        const id = parseInt(userId, 10); // Toujours préciser la base
+        const id = parseInt(userId, 10);
         const userData = await getUserIndexDB(id);
         setUser(userData);
       }
@@ -70,7 +69,6 @@ function App() {
           {/* offer */}
           <Route path="/offer" element={<Offer />} />
           <Route path="/addOffer" element={<AddOffer />} />
-          <Route path="/offerCard" element={<OfferCard />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
         </Route>
 

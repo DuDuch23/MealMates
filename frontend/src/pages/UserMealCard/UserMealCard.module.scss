@@ -9,6 +9,7 @@ p,li{
 #root{
     background-color: #242424;
 }
+
 nav{
     display: flex;
     align-items: center;
@@ -18,36 +19,17 @@ nav{
         text-decoration: none;
     }
 }
-form{
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-direction: column;
-    input{
-        border: none;
-        outline: none;
-        border-radius: 5px;
-        height: 5vh;
-        color: black;
-    }
-    div{
-        width: 70%;
-        input{
-            width: 90%;
-        }
-    }
-    .name-select{
-        width: 90%;
-        display: flex;
-        justify-content: space-around;
-        input{
-            width: 45%;
-        }
+
+.cardUser{
+    margin: 0 auto;
+    width: 768px;
+    height: 100vh;
+    .icon-user{
+        margin: 0 auto;
     }
 }
 
-.user-face{
+#icon-user{
     width: fit-content;
     height: 25%;
     margin: 0 auto;
@@ -61,24 +43,9 @@ form{
     }
 }
 
-.card-user{
-    margin: 0 auto;
-    width: 768px;
-    height: 100vh;
-    nav{
-        display: flex;
-        align-items: center;
-    }
-    #icon-user{
-        width: 95%;
-        height: 100%;
-        margin: 0 auto;
-    }
-}
-
-.content-user{
+.contentUser{
     height: 61%;
-    .container-link{
+    .containerLink{
         height: 10%;
         display: flex;
         align-items: center;
@@ -87,17 +54,25 @@ form{
             text-decoration: none;
         }
     }
-    .container-info-user{
+    .containerInfoUser{
         height: 90%;
     }
 }
 
-.basics-elements{
+.basicsElements.card{
     height: 40%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: space-around;
+    flex-direction: column;
+    .listUser{
+        height: 50%;
+        width: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        list-style: none;
+    }
     div{
         width: 45%;
         height: 30%;
@@ -107,6 +82,22 @@ form{
         background-color: #FFF;
         p{
             color: #242424;
+        }
+    }
+}
+
+.offer-container{
+    height: 40%;
+    ul{
+        height: 100%;
+        list-style: none;
+        display: flex;
+        overflow: hidden;
+        li{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20%;
         }
     }
 }

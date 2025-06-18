@@ -261,7 +261,7 @@ function Offer(){
             </button>
         </div>
         {showMap && (
-            <div className={styles["container-offer__map"]} style={{ height: "100vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
+            <div className={styles["container-offer__map"]} style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
                 <OffersMap userPos={pos} offers={offers} setUserPos={setUserPos} />
             </div>
         )}

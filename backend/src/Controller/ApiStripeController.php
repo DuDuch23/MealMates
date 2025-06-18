@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class StripeController extends AbstractController
+class ApiStripeController extends AbstractController
 {
     #[Route('/api/stripe/create-checkout-session', name: 'create_checkout_session', methods: ['POST'])]
     public function createCheckoutSession(Request $request): JsonResponse

@@ -22,8 +22,14 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?Offer $offer = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $purchasedAt = null;
+
+    #[ORM\Column]
+    private bool $isConfirmed = false;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $expiresAt = null;
 
     public function __construct()
     {
@@ -68,6 +74,28 @@ class Order
     {
         $this->purchasedAt = $purchasedAt;
 
+        return $this;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->isConfirmed;
+    }
+
+    public function setIsConfirmed(bool $isConfirmed): static
+    {
+        $this->isConfirmed = $isConfirmed;
+        return $this;
+    }
+
+    public function getExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->expiresAt;
+    }
+
+    public function setExpiresAt(\DateTimeImmutable $expiresAt): static
+    {
+        $this->expiresAt = $expiresAt;
         return $this;
     }
 }
