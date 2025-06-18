@@ -70,6 +70,7 @@ function ChatContainer({ user, chat }) {
           <Messages
             key={messageWrapper.message.idForMessage || index}
             content={messageWrapper.message.content}
+            id = {messageWrapper.user.id}
             iconUser={messageWrapper.user.icon}
           />
         ))

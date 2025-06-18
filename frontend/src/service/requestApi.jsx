@@ -132,6 +132,23 @@ export async function getUser({ user }) {
     }
 }
 
+export async function getTokenSSo({token}){
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/user/ssoUser`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: token }),
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API:", error);
+        throw error;
+    }
+}
+
 export async function getSSO() {
   const token = sessionStorage.getItem("token");
   if (!token) return null;

@@ -26,7 +26,7 @@ function Connexion() {
         navigate("/");
       } catch (error) {
         console.error("Erreur de parsing JSON :", error);
-        sessionStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
+        sessionStorage.removeItem("user");
       }
     }
   }, [navigate]);
