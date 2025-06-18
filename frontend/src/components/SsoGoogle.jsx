@@ -15,6 +15,7 @@ const GoogleLoginButton = ({ setUser }) => {
     }
   };
 
+
   const handleFailure = () => {
     console.error("Échec de l'authentification Google");
   };

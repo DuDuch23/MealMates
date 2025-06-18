@@ -41,7 +41,7 @@ class Image
 
     #[ORM\ManyToMany(targetEntity: Chat::class, mappedBy: 'images')]
     private Collection $chats;
-
+    
     public function __construct()
     {
         $this->offers = new ArrayCollection();

@@ -67,9 +67,9 @@
     }
   
     &__image {
-        width: 400px;
+        width: 100%;
     height: 300px;
-    object-fit: cover;
+    // object-fit: cover;
     }
   
     &__link {

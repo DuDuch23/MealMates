@@ -12,6 +12,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+use Google\Client as GoogleClient;
+
+
 #[Route('/api/user', name: 'api_user')]
 class ApiUserController extends AbstractController
 {
@@ -131,14 +134,6 @@ class ApiUserController extends AbstractController
                 'message' => "Password and password confirmation don't match"
             ], 403);
         }
-        if (isset($data["role"]) && $data["role"]!= "ROLE_USER" && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
-        {
-            return new JsonResponse([
-                'status' => "Unauthorized",
-                'code' => 401,
-                'message' => "You are not abilitated to perform this action."
-            ], 403);
-        }
 
         $user = new User();
         $user->setEmail($data['email']);
@@ -156,7 +151,6 @@ class ApiUserController extends AbstractController
             'code' => 201,
         ], 201);
     }
-
 
     #[Route('/edit', methods: ['PUT'])]
     public function edit(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse

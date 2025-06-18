@@ -4,46 +4,59 @@ import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
 import CryptoJS from "crypto-js";
 import logo from '../../assets/logo-mealmates.png';
-import styles from "./Connexion.module.css";
 import GoogleLoginButton from "../../components/SsoGoogle";
-
+import styles from "./Connexion.module.css";
 const SECRET_KEY = import.meta.env.VITE_CRYPTO_KEY || "default-key";
+
 
 function Connexion() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    const expiration = sessionStorage.getItem("token_expiration");
-
-    if (token && expiration && Date.now() < parseInt(expiration, 10)) {
-      navigate("/offer");
-    } else {
-      sessionStorage.clear(); // token périmé
+    const storedUser = sessionStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        navigate("/");
+      } catch (error) {
+        console.error("Erreur de parsing JSON :", error);
+        sessionStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
+      }
     }
   }, [navigate]);
 
+  // Gestion des inputs de manière générique
+  const handleInputChange = (setter) => (event) => setter(event.target.value);
+
+  // Gérer la soumission du formulaire de connexion
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError(null); 
     try {
       const response = await logIn({ email, password });
-
       if (response.token) {
         const token = response.token;
-        const expiration = Date.now() + 60 * 60 * 1000; // 1h
+        const fullUser = await getProfile({email, token});
+        const { user: profileUser } = await getProfile({ email, token });
 
+        // Stocker dans sessionStorage
+        const expiration = Date.now() + 60 * 60 * 1000;
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("token_expiration", expiration.toString());
+        sessionStorage.setItem("user", JSON.stringify(profileUser.id));
 
-        const profile = await getProfile({ email, token });
-        sessionStorage.setItem("user",profile.user.id);
-        console.log(profile.user);
-        const encryptedUser = CryptoJS.AES.encrypt(JSON.stringify(profile.user), SECRET_KEY).toString();
+        const encrypted = CryptoJS.AES.encrypt(
+          JSON.stringify(profileUser),
+          SECRET_KEY
+        ).toString();
+        await addUserIndexDB({ ...profileUser, encrypted });
 
-        await addUserIndexDB({ ...profile.user, encrypted: encryptedUser });
         navigate("/offer");
       } else {
         setError("Email ou mot de passe incorrect.");
@@ -56,7 +69,7 @@ function Connexion() {
 
   return (
     <div className={styles.container}>
-      <div className={styles["title-logo"]}>
+      <div className={styles.titleLogo}>
         <img src={logo} alt="logo" className={styles.logo} />
         <h1>MealMates</h1>
       </div>
@@ -64,7 +77,7 @@ function Connexion() {
       <div className={styles.action}>
         {error && <p className={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className={styles["content-element-form"]}>
+          <div className={styles.contentElementForm}>
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -75,7 +88,7 @@ function Connexion() {
             />
           </div>
 
-          <div className={styles["content-element-form"]}>
+          <div className={styles.contentElementForm}>
             <label htmlFor="password">Mot de Passe</label>
             <input
               id="password"
@@ -91,6 +104,12 @@ function Connexion() {
           <div className={styles.otherAction}>
             <p>Ou connexion avec</p>
             <GoogleLoginButton />
+          </div>
+
+          <div className={styles.contentElementForm}>
+          <p className={styles.linkText} onClick={() => navigate("/")}>
+            Retour au menu
+          </p>
           </div>
         </form>
       </div>
