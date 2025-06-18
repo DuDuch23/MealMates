@@ -49,7 +49,6 @@ function AddOffer() {
     setError(newError);
     return Object.keys(newError).length === 0;
   };
-  console.log(images);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,7 +64,6 @@ function AddOffer() {
           data.append(key, value);
         }
       });
-      console.log("Image ajoutée :", images),
       images.forEach((image) => 
         data.append("photos_offer[]", image));
       try{
