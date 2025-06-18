@@ -5,6 +5,8 @@ import { sendMessage } from '../../service/requestApi';
 export default function AddMessage({ user, chat }) {
     const [query, setQuery] = useState('');
 
+    const userId = user.id;
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (query.trim() === '') return;
@@ -12,7 +14,7 @@ export default function AddMessage({ user, chat }) {
         console.log('Message envoyé :', query);
 
         try {
-            await sendMessage({ user, chat, message: query });
+            await sendMessage({ userId, chat, message: query });
             setQuery('');
         } catch (error) {
             console.error("Erreur lors de l'envoi du message", error);

@@ -49,7 +49,6 @@ export const addUserIndexDB = async (utilisateur) => {
 
 // Récupérer un utilisateur par ID
 export const getUserIndexDB = async (id) => {
-   console.log("getUserIndexDB id reçu :", id, typeof id);
   const numericId = Number(id);
   if (Number.isNaN(numericId)) {
     return Promise.reject("ID utilisateur invalide : " + id);

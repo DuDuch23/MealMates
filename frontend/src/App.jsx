@@ -28,18 +28,25 @@ const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 
 function App() {
   const [user, setUser] = useState(null);
-  const userId = sessionStorage.getItem("user");
 
-  useEffect(() => {
+    useEffect(() => {
     async function fetchUser() {
-      if (userId) {
-        const id = parseInt(userId, 10);
-        const userData = await getUserIndexDB(id);
-        setUser(userData);
+      try {
+        const userSession = sessionStorage.getItem("user");
+        if (userSession) {
+          const parsedUser = JSON.parse(userSession);
+          console.log(parsedUser);
+          const id = parseInt(parsedUser.id, 10);
+          const userData = await getUserIndexDB(id);
+          setUser(userData);
+        }
+      } catch (err) {
+        console.error("Erreur lors de la récupération de l'utilisateur :", err);
       }
     }
+
     fetchUser();
-  }, [userId]);
+  }, []);
 
   return (
     <Suspense fallback={

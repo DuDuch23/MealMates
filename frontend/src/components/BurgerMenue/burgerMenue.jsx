@@ -16,7 +16,6 @@ export default function BurgerMenue({ onProfileClick }) {
       if (id) {
         try {
           const data = await getUserIndexDB(id);
-            console.log(data);
           setUserData(data);
         } catch (error) {
           console.error("Erreur lors de la récupération de l'utilisateur :", error);
