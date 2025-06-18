@@ -15,7 +15,7 @@ class TestController extends AbstractController
     public function sendTestEmail(MailerInterface $mailer)
     {
         $this->sendMail(
-            'dimitrigranit22@gmail.com',
+            'mealmates.g5@gmail.com',
             'aquasword60@gmail.com',
             'Test Email from Trait',
             'This is a plain text version.',

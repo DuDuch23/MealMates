@@ -8,6 +8,7 @@ use Symfony\Component\Mime\Email;
 trait MailerTrait
 {
     public function sendMail(
+        string $sender,
         string $recipient,
         string $subject,
         string $message,
