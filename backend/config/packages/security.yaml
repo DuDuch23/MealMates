@@ -30,6 +30,6 @@ security:
 
     access_control:
         - { path: ^/api/login, methods: [OPTIONS], roles: PUBLIC_ACCESS }
-        - { path: ^/api/user/ssoUser, methods: [OPTIONS], roles: PUBLIC_ACCESS }
+        - { path: ^/api/user/ssoUser, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
