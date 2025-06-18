@@ -29,11 +29,6 @@ security:
             security: false
 
     access_control:
-        - { path: ^/api, roles: PUBLIC_ACCESS, methods: [OPTIONS] }
         - { path: ^/api/login, methods: [OPTIONS], roles: PUBLIC_ACCESS }
-        - { path: ^/api/user/sso, roles: PUBLIC_ACCESS }
-        - { path: ^/api/user/new, roles: PUBLIC_ACCESS } 
-        - { path: ^/api/offers/search, roles: PUBLIC_ACCESS }
-        - { path: ^/api/offers, roles: PUBLIC_ACCESS }
-        - { path: ^/api/category, roles: PUBLIC_ACCESS }
+        - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
