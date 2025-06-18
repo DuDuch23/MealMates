@@ -49,7 +49,7 @@ export const addUserIndexDB = async (utilisateur) => {
 
 // Récupérer un utilisateur par ID
 export const getUserIndexDB = async (id) => {
-  console.log("getUserIndexDB id reçu :", id, typeof id);
+   console.log("getUserIndexDB id reçu :", id, typeof id);
   const numericId = Number(id);
   if (Number.isNaN(numericId)) {
     return Promise.reject("ID utilisateur invalide : " + id);
@@ -99,25 +99,10 @@ export const updateUserIndexDB = async (userId, newUserData) => {
 
       if (!existing) return reject("Utilisateur introuvable");
 
-      try {
-        const decrypted = JSON.parse(
-          CryptoJS.AES.decrypt(existing.encrypted, SECRET_KEY).toString(CryptoJS.enc.Utf8)
-        );
-
-        const merged = { ...decrypted, ...newUserData };
-        const reEncrypted = CryptoJS.AES.encrypt(JSON.stringify(merged), SECRET_KEY).toString();
-
-        const updateRequest = store.put({ id: userId, encrypted: reEncrypted });
-
-        updateRequest.onsuccess = () => resolve("Utilisateur mis à jour");
-        updateRequest.onerror = (event) => reject(`Erreur mise à jour : ${event.target.error}`);
-      } catch (e) {
-        console.error("Déchiffrement impossible lors de la mise à jour :", e);
-        reject("Données utilisateur corrompues");
-      }
+      const decrypted = JSON.parse(CryptoJS.AES.decrypt(result.encrypted, SECRET_KEY).toString(CryptoJS.enc.Utf8));
+      resolve(decrypted);
     };
-
-    getRequest.onerror = (event) => reject(`Erreur récupération utilisateur : ${event.target.error}`);
+    request.onerror = (event) => reject(`Erreur récupération utilisateur : ${event.target.error}`);
   });
 };
 

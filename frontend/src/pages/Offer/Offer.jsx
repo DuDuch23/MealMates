@@ -216,32 +216,6 @@ function Offer(){
 
     return(
     <section className={styles["container-offer"]}>
-        {/* <nav className={styles["container-offer__type"]}>
-            <div className={styles["container__type-list"]}>
-                <Swiper className={styles["type-offer-swiper"]} slidesPerView={4} spaceBetween={10}>
-                    <SwiperSlide>
-                        <img src="/img/offre/sushi.png" alt="icon de sushi" />
-                        <p>Sushi</p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/img/offre/burger.png" alt="" />
-                        <p>Burger</p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/img/offre/tarte.png" alt="" />
-                        <p>Tarte</p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/img/offre/produits-frais.png" alt="" />
-                        <p>Produit Frais</p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/img/offre/derniere-chance.png" alt="" />
-                        <p>Derniére Chance</p>
-                    </SwiperSlide>
-                </Swiper>
-            </div>
-        </nav> */}
         <SearchBar onSearch={handleSearch} />
 
         <nav className={styles["container-offer__filter"]}>
