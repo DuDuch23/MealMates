@@ -63,12 +63,6 @@ export default function SingleOffer() {
                 <p><strong>Créée le :</strong> {new Date(offer.createdAt).toLocaleString()}</p>
             </div>
 
-            <div className="single-offer__seller">
-                <h2>Vendeur</h2>
-                <p><strong>Nom :</strong> {offer.seller.firstName} {offer.seller.lastName}</p>
-                <p><strong>Email :</strong> {offer.seller.email}</p>
-                <p><strong>Localisation :</strong> {offer.seller.location}</p>
-            </div>
 
             {!offer.order && (
             <button className="single-offer__reserve-btn" onClick={handleReservation}>

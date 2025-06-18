@@ -50,9 +50,9 @@ export const addUserIndexDB = async (utilisateur) => {
 // Récupérer un utilisateur par ID
 export const getUserIndexDB = async (id) => {
   console.log("getUserIndexDB id reçu :", id, typeof id);
-
-  if (id === undefined || id === null || (typeof id !== "string" && typeof id !== "number")) {
-    return Promise.reject("ID utilisateur invalide ou non fourni");
+  const numericId = Number(id);
+  if (Number.isNaN(numericId)) {
+    return Promise.reject("ID utilisateur invalide : " + id);
   }
 
   const db = await getDatabase();
@@ -61,7 +61,7 @@ export const getUserIndexDB = async (id) => {
     const tx = db.transaction("utilisateurs", "readonly");
     const store = tx.objectStore("utilisateurs");
 
-    const request = store.get(id);
+    const request = store.get(numericId);
 
     request.onsuccess = () => {
       const record = request.result;
