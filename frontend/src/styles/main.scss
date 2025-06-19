@@ -8,6 +8,10 @@
     width: 100%;
 }
 
+p, a{
+    font-size: variables.$fontSize;
+}
+
 a{
     text-decoration: none;
 }

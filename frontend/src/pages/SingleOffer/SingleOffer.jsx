@@ -4,14 +4,14 @@ import { createOrder, getOfferId } from "../../service/requestApi";
 import "./SingleOffer.scss";
 
 export default function SingleOffer() {
-    const { id } = useParams();
+    const { slug } = useParams();
     const [offer, setOffer] = useState(null);
     const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL;
 
     useEffect(() => {
         const fetchOffer = async () => {
             try {
-                const data = await getOfferId(id);
+                const data = await getOfferId(slug);
                 if (data && data.data) {
                     setOffer(data.data);
                 } else {
@@ -23,7 +23,7 @@ export default function SingleOffer() {
         };
 
         fetchOffer();
-    }, [id]);
+    }, [slug]);
 
     const handleReservation = async () => {
         console.log("Réservation en cours pour l'offre ID :", id);
@@ -48,7 +48,7 @@ export default function SingleOffer() {
 
             <div className="single-offer__images">
                 {offer.images && offer.images.map((img) => (
-                    <img key={img.id} src={`${uploadsBaseUrl}/${img.link}`} alt={img.name} className="single-offer__image" />
+                    <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className="single-offer__image" />
                 ))}
             </div>
 

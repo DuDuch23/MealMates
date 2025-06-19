@@ -88,7 +88,7 @@ function Offer(){
             try {
                 const data = await getOffers();
                 if (data && data.data) {
-                    console.log("offers",data);
+                    // console.log("offers",data);
                     setOffers(data.data);
                 } else {
                     console.log("Erreur ou offres vides");
@@ -107,7 +107,7 @@ function Offer(){
                     // console.log("vegan",data);
                     setVeganOffers(data.data);
                 } else {
-                    // console.log("Erreur ou offres vegans vides");
+                    console.log("Erreur ou offres vegans vides");
                 }
             } catch (err) {
                 console.error('Erreur lors de la récupération des offres vegan:', err);
@@ -143,7 +143,6 @@ function Offer(){
                     return;
                 }
                 const data = await getAgainOffers(token);
-                console.log("again", data);
                 if(data && data.data){
                     // console.log("again", data);
                     setAgainOffers(data.data);
@@ -235,7 +234,7 @@ function Offer(){
             </button>
         </div>
         {showMap && (
-            <div className={styles["container-offer__map"]} style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
+            <div className={styles["container-offer__map"]} style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 98 }}>
                 <OffersMap userPos={pos} offers={offers} setUserPos={setUserPos} />
             </div>
         )}

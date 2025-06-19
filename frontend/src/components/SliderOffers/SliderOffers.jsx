@@ -6,6 +6,7 @@ import React from 'react';
 export default function SliderSection({ title, offers = [], type, children }) {
   const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL;
 
+
   return (
     <section className={styles['slider-offer']}>
       <div className={styles['slider-offer__header']}>
@@ -39,7 +40,7 @@ export default function SliderSection({ title, offers = [], type, children }) {
                     {o.images?.length > 0 && (
                       <img
                         className={styles["slider-offer__image"]}
-                        src={`${uploadsBaseUrl}/${o.images[0].link}`}
+                        src={`${uploadsBaseUrl}/${o.images[0].name}`}
                         alt={o.product}
                       />
                     )}
