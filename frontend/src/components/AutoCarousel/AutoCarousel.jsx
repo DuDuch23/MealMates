@@ -1,24 +1,30 @@
+import { useEffect, useState } from "react";
 import styles from "./AutoCarousel.module.css";
 
-const images = [
-  "../../assets/carousel/background-form.png",
-  "../../assets/carousel/background-form.png",
-  "../../assets/carousel/background-form.png",
-  "../../assets/carousel/background-form.png",
-];
+export default function AutoCarousel() {
+  const [images, setImages] = useState([]);
 
-export default function AutoCarouselCarousel() {
-  // On duplique les images pour une boucle infinie
-  const carouselImages = [...images, ...images];
+  useEffect(() => {
+    fetch("/api/images")
+      .then((res) => {
+        if (!res.ok) throw new Error("Erreur réseau");
+        return res.json();
+      })
+      .then((data) => {
+        const urls = data.map((img) => img.url);
+        setImages([...urls, ...urls]);
+      })
+      .catch((err) => console.error("Erreur chargement des images :", err));
+  }, []);
 
   return (
     <div className={styles.carousel}>
       <div className={styles.track}>
-        {carouselImages.map((src, index) => (
+        {images.map((src, index) => (
           <img
             key={index}
             src={src}
-            alt={`Panier ${index % images.length + 1}`}
+            alt={`Image ${index % (images.length / 2) + 1}`}
             className={styles.image}
           />
         ))}

@@ -1,24 +1,24 @@
 <?php
-namespace App\Controller\Api;
+namespace App\Controller;
 
 use App\Repository\ImageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ImageController extends AbstractController
+class ApiImageController extends AbstractController
 {
-    #[Route('/api/images', name: 'api_images', methods: ['GET'])]
+    #[Route('/api/images', name: 'api_images', methods: ['POST'])]
     public function list(ImageRepository $imageRepository): JsonResponse
     {
         $images = $imageRepository->findAll();
+        $res = [];
 
-        $data = array_map(fn($image) => [
-            'id' => $image->getId(),
-            'name' => $image->getName(),
-            'url' => '/uploads/images/' . $image->getLink(), // Vich stocke par défaut dans /public/uploads/images
-        ], $images);
+        foreach($images as $element){
+            array_push($res,$element->getImageFile());
+        }
 
-        return $this->json($data);
+        return $this->json($res);
     }
+
 }
