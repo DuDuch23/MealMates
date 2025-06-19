@@ -22,15 +22,14 @@ function ChatContainer({ user, chat }) {
 
   // Initialisation
   useEffect(() => {
-    console.log(user);
-      if (!user || !chat) return;
+    if (!user || !chat) return;
 
     if(user.id){
         const init = async () => {
           await sleep(1000);
           const initialMessages = await fetchMessages();
           setMessages(initialMessages);
-        };
+    };
       
 
       init();
@@ -54,7 +53,7 @@ function ChatContainer({ user, chat }) {
     }, 5000);
 
     return () => clearInterval(intervalId);
-  }, [user, chat, messages]);
+  }, []);
 
   // Scroll automatique vers le bas
   useEffect(() => {
@@ -70,6 +69,7 @@ function ChatContainer({ user, chat }) {
           <Messages
             key={messageWrapper.message.idForMessage || index}
             content={messageWrapper.message.content}
+            id = {messageWrapper.user.id}
             iconUser={messageWrapper.user.icon}
           />
         ))

@@ -4,9 +4,29 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
-    border-bottom: solid 1px;
-    border-color: black;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid;
+    width: 100%;
+    z-index: 99;
+    background: hsl(0deg 0% 15% / 50%);
+    &__container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+    a{
+        display: flex;
+        font-size: variables.$fontSize;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+    }
     &__rightInfo{
         display: flex;
         list-style: none;
@@ -63,17 +83,47 @@
     &__left{
         display: flex;
         align-items: center;
-        width: 50%;
         height: 100%;
 
+        ul{
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            margin-left: 10px;
+            padding: 0;
+            margin: 0;
+            align-items: center;
+            justify-self: center;
+            li{
+                list-style-type: none;
+                a:not(.logo){
+                    text-decoration: none;
+                    padding: 20px 8px;
+                }
+            }
+        }
+
         h1 {
-            font-size: 3rem;
-            margin-left: 1%;
+            font-size: 2.5rem;
+        }
+    }
+
+    &__leftMenu{
+        
+    }
+
+    &__leftMenuUser{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        svg{
+            width: 30px;
+            height: 30px;
         }
     }
     &__right {
         justify-content: right;
-        width: 50%;
         height: 100%;
         display: flex;
         align-items: center;
@@ -89,26 +139,36 @@
 }
 
 @media screen and (max-width: 1280px) {
-    
+    .header{
+        &__leftMenuUser{
+            display: none;
+        }
+    }
 }
 
 @media screen and (max-width: 768px) {
     .header{
-        padding: 0 10px;
+        padding: 20px 10px;
         gap: 10px;
+        flex-wrap: wrap;
+        a{
+            justify-content: unset;
+        }
 
         &__rightInfo{
             gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
             .button-login{
                 a{
-                    padding: 12px 22px;
+                    padding: 10px 14px;
 
                 }
             }
 
             .button-sign-in{
                 a{
-                    padding: 12px 22px;
+                    padding: 10px 14px;
                 }
             }
         }
@@ -118,7 +178,7 @@
         div{
             width: unset;
             h1{
-                font-size: 1.75rem;
+                font-size: 1.5rem;
             }
         }
         .menu-mobile{

@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { IconUser } from '../IconUser/iconUser';
 import React, { useEffect, useState } from 'react';
 import logo from '../../assets/logo-mealmates.png';
-import { getProfile, refreshToken } from '../../service/requestApi';
+import { getProfile, refreshToken, logOut } from '../../service/requestApi';
 
 export default function Header({ onProfileClick }) {
     const token = sessionStorage.getItem("token");
@@ -19,15 +19,15 @@ export default function Header({ onProfileClick }) {
     useEffect(() => {
         const storedUser = sessionStorage.getItem("user");
         if (storedUser) {
-          try {
-            const parsedUser = JSON.parse(storedUser);
-            setUserData({ user: parsedUser });
-          } catch (e) {
-            console.error("Erreur de parsing user depuis sessionStorage");
-            sessionStorage.removeItem("user");
-          }
+            try {
+                const parsedUser = JSON.parse(storedUser);
+                setUserData({ user: parsedUser });
+            } catch (e) {
+                console.error("Erreur de parsing user depuis sessionStorage");
+                sessionStorage.removeItem("user");
+            }
         }
-      }, []);
+    }, []);
 
     useEffect(() => {
         if (token) {
@@ -45,6 +45,16 @@ export default function Header({ onProfileClick }) {
             }
         }
     }, [token]);
+
+    const handleDeconnexion = () => {
+        const userId = sessionStorage.getItem("user");
+    
+        logOut(userId);
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("token");
+        
+        navigate("/");
+    };
 
     const infoUser = () => {
         if (userData) {
@@ -70,14 +80,49 @@ export default function Header({ onProfileClick }) {
 
     return (
         <section className={styles.header}>
-            <div className={styles.header__left}>
-                <img src={logo} alt="Logo MealMates" />
-                <h1>MealMates</h1>
-            </div>
-            <div className={styles.header__right}>
-                <ul className={styles.header__rightInfo}>
-                    {infoUser()}
-                </ul>
+            <div className={styles.header__container}>
+                <div className={styles.header__left}>
+                    <ul className={styles.header__leftMenu}>
+                        <li>
+                            <Link className={styles.logo} key="home" to="/">
+                                <img src={logo} alt="Logo MealMates" />
+                                <h1>MealMates</h1>
+                            </Link>
+                        </li>
+                        {
+                            userData && 
+                            <>
+                                <div className={styles.header__leftMenuUser}>
+                                    <li>
+                                        <Link key="offer" to="/offer">
+                                            Offres
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link key="ChooseChat" to="/ChooseChat">
+                                            Messages
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link key="addOffer" to="/addOffer">
+                                            Ajouter une offre
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link key="logout" to="/" onClick={handleDeconnexion}>
+                                            Se déconnecter
+                                        </Link>
+                                    </li>
+                                </div>
+                            </>
+                        }
+                    </ul>
+                </div>
+                <div className={styles.header__right}>
+                    <ul className={styles.header__rightInfo}>
+                        {infoUser()}
+                    </ul>
+                </div>
             </div>
         </section>
     );

@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -236,17 +237,17 @@ class ApiOfferController extends AbstractController
             }
         }
 
+        /** @var UploadedFile[]|UploadedFile|null $files */
         $files = $request->files->get('photos_offer');
 
         if ($files) {
-            if (!is_array($files)) {
-                $files = [$files];
-            }
-
-            foreach ($files as $file) {
+            // assure qu'on boucle toujours sur un tableau
+            foreach ((array) $files as $file) {
                 $image = new Image();
-                $image->setImageFile($file);
+                $image->setImageFile($file);     // Vich déplacera le fichier
+
                 $offer->addImage($image);
+                // Pas besoin de $em->persist($image); cascade={"persist"} suffit
             }
         }
 

@@ -132,6 +132,23 @@ export async function getUser({ user }) {
     }
 }
 
+export async function getTokenSSo({token}){
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/user/ssoUser`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: token }),
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API:", error);
+        throw error;
+    }
+}
+
 export async function getSSO() {
   const token = sessionStorage.getItem("token");
   if (!token) return null;
@@ -193,6 +210,7 @@ export async function editUser({ userData }) {
 
 export async function deleteUser(id) {
     try {
+        const token = sessionStorage.getItem("token");
         const response = await fetch(`${API_BASE_URL}/api/user/delete/`, {
             method: "POST",
             headers: {
@@ -342,7 +360,7 @@ export async function sendMessage({userId,chat,message}){
 // Offer
 
 
-export async function getOfferId(id){
+export async function getOfferSingle(id){
     try{
         const response = await fetch(`${API_BASE_URL}/api/offers/get/${id}`,{
             method: 'GET',
@@ -358,7 +376,9 @@ export async function getOffers() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/offers`, {
             method: 'GET',
-            headers: { accept: 'application/json' },
+            headers: { accept: 'application/json',
+                authorization: `Bearer ${token}`, 
+            },
         });
 
         return await response.json();
@@ -370,9 +390,13 @@ export async function getOffers() {
 
 export async function getVeganOffers() {
     try {
+        const token = sessionStorage.getItem('token');
         const response = await fetch(`${API_BASE_URL}/api/offers/vegan?limit=10&offset=0`, {
             method: 'GET',
-            headers: { accept: 'application/json' },
+            headers: { 
+                accept: 'application/json',
+                authorization: `Bearer ${token}`,
+            }
         });
 
         return await response.json();
@@ -384,9 +408,12 @@ export async function getVeganOffers() {
 
 export async function getLocalOffers(lat, lng, radius = 5) {
     try {
+        const token = sessionStorage.getItem("token");
         const response = await fetch(`${API_BASE_URL}/api/offers/local?lat=${lat}&lng=${lng}&radius=${radius}`, {
             method: 'GET',
-            headers: { accept: 'application/json' },
+            headers: { accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         return await response.json();
@@ -400,7 +427,9 @@ export async function getLastChanceOffers() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/offers/last-chance`, {
             method: 'GET',
-            headers: { accept: 'application/json' },
+            headers: { accept: 'application/json',
+                authorization: `Bearer ${token}`, 
+            },
         });
 
         return await response.json();

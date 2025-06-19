@@ -1,4 +1,27 @@
-.container-message{
+@use '../../styles/main';
+@use '../../styles/mixins';
+@use '../../styles/variables' as variables;
+
+.container-message {
     display: flex;
     align-items: center;
+
+    .content-message {
+        min-height: 4vh;
+        border-radius: 5px;
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: variables.$colorDarkGreen;
+    }
+    .content-message &.white {
+        min-height: 4vh;
+        border-radius: 5px;
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: variables.$colorDarkGreen;
+    }
 }
