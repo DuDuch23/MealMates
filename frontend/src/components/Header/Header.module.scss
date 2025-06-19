@@ -7,10 +7,19 @@
     padding: 10px 20px;
     position: sticky;
     top: 0;
-    width: 100%;
     backdrop-filter: blur(10px);
+    border-bottom: 1px solid;
+    width: 100%;
     z-index: 99;
     background: hsl(0deg 0% 15% / 50%);
+    &__container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+    }
     a{
         display: flex;
         font-size: variables.$fontSize;

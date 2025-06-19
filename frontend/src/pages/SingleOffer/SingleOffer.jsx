@@ -1,19 +1,23 @@
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { createOrder, getOfferId } from "../../service/requestApi";
+import { createOrder, getOfferSingle } from "../../service/requestApi";
 import "./SingleOffer.scss";
 
 export default function SingleOffer() {
-    const { slug } = useParams();
+    const { id } = useParams();
     const [offer, setOffer] = useState(null);
     const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL;
 
     useEffect(() => {
         const fetchOffer = async () => {
             try {
-                const data = await getOfferId(slug);
+                const data = await getOfferSingle(id);
+                console.log("Données de l'offre récupérées :", data.data);
                 if (data && data.data) {
                     setOffer(data.data);
+                    if (id !== data.data.slug) {
+                        navigate(`/offer/${data.data.slug}`, { replace: true });
+                    }
                 } else {
                     console.error("Aucune offre trouvée");
                 }
@@ -23,12 +27,12 @@ export default function SingleOffer() {
         };
 
         fetchOffer();
-    }, [slug]);
+    }, [id]);
 
     const handleReservation = async () => {
         console.log("Réservation en cours pour l'offre ID :", id);
         try{
-            const response = await createOrder(id);
+            const response = await createOrder(offer.id);
             setOffer(prev => ({
             ...prev,
             order: response.order
@@ -44,44 +48,49 @@ export default function SingleOffer() {
 
     return (
         <div className="single-offer">
-            <h1 className="single-offer__title">{offer.product}</h1>
+            <div className="single-offer__container">
+                <div className="single-offer__content">
+                    <div className="single-offer__images">
+                        {offer.images && offer.images.map((img) => (
+                            <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className="single-offer__image" />
+                        ))}
+                    </div>
+                    <h1 className="single-offer__title">{offer.product}</h1>
+                    <div className="single-offer__details">
+                        <p><strong>Description :</strong> {offer.description || "Aucune description."}</p>
+                        <p><strong>Prix :</strong> {offer.price ? `${offer.price} €` : "Gratuit"}</p>
+                        <p><strong>Quantité :</strong> {offer.quantity}</p>
+                        <p><strong>Don :</strong> {offer.isDonation ? "Oui" : "Non"}</p>
+                        <p><strong>Récurrent :</strong> {offer.isRecurring ? "Oui" : "Non"}</p>
+                        <p><strong>Disponible jusqu'au :</strong> {new Date(offer.expirationDate).toLocaleDateString()}</p>
+                        <p><strong>Lieu de retrait :</strong> {offer.pickupLocation}</p>
+                        <p><strong>Créée le :</strong> {new Date(offer.createdAt).toLocaleString()}</p>
+                    </div>
+                </div>
+                <aside className="single-offer__sidebar">
+                    {!offer.order && (
+                    <button className="single-offer__reserve-btn" onClick={handleReservation}>
+                        Réserver cette offre
+                    </button>
+                    )}
 
-            <div className="single-offer__images">
-                {offer.images && offer.images.map((img) => (
-                    <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className="single-offer__image" />
-                ))}
+                    {offer.order && !offer.order.isConfirmed && (
+                    <p className="single-offer__status">
+                        Réservation en attente de confirmation<br />
+                        (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
+                    </p>
+                    )}
+
+                    {offer.order && offer.order.isConfirmed && (
+                    <p className="single-offer__status confirmed">
+                        Réservation confirmée
+                    </p>
+                    )}
+                    <button>
+                        <p>Envoyer un message</p>
+                    </button>
+                </aside>
             </div>
-
-            <div className="single-offer__details">
-                <p><strong>Description :</strong> {offer.description || "Aucune description."}</p>
-                <p><strong>Prix :</strong> {offer.price ? `${offer.price} €` : "Gratuit"}</p>
-                <p><strong>Quantité :</strong> {offer.quantity}</p>
-                <p><strong>Don :</strong> {offer.isDonation ? "Oui" : "Non"}</p>
-                <p><strong>Récurrent :</strong> {offer.isRecurring ? "Oui" : "Non"}</p>
-                <p><strong>Disponible jusqu'au :</strong> {new Date(offer.expirationDate).toLocaleDateString()}</p>
-                <p><strong>Lieu de retrait :</strong> {offer.pickupLocation}</p>
-                <p><strong>Créée le :</strong> {new Date(offer.createdAt).toLocaleString()}</p>
-            </div>
-
-
-            {!offer.order && (
-            <button className="single-offer__reserve-btn" onClick={handleReservation}>
-                Réserver cette offre
-            </button>
-            )}
-
-            {offer.order && !offer.order.isConfirmed && (
-            <p className="single-offer__status">
-                Réservation en attente de confirmation<br />
-                (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
-            </p>
-            )}
-
-            {offer.order && offer.order.isConfirmed && (
-            <p className="single-offer__status confirmed">
-                Réservation confirmée ✅
-            </p>
-            )}
         </div>
     );
 }
