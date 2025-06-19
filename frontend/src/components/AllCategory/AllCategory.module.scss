@@ -1,0 +1,24 @@
+.category-select {
+    display: flex;
+    align-items: center;
+    background: #D9D9D9;
+    padding: 5px 10px;
+    &__dropdown{
+        background: transparent;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+        outline: none;
+        color: black;
+        font-weight: bold;
+        border-radius: 5px;
+        padding: 10px 8px;
+        option{
+            background: white;
+            color: black;
+        }
+    }
+}
+@media screen and (max-width: 1280px) {
+    
+}

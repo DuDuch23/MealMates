@@ -1,0 +1,74 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss' as mixins;
+@use "../../styles/variables.scss" as variables;
+
+
+.container-offer {
+    padding: 12px;
+    gap: 48px;
+    display: flex;
+    flex-direction: column;
+    &__type{
+        img{
+            width: 100px;
+        }
+    }
+
+    &__type-list{
+
+    }
+
+    &__filter{
+
+    }
+
+    &__filter-reference-list{
+
+    }
+
+    &__new-offer-show-map{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__new-offer{
+        color: #888;
+        width: fit-content;
+        border-radius: 5px;
+        padding: 10px 8px;
+        gap: 8px;
+        display: flex;
+        align-items: center;
+        background-color: variables.$colorDarkGreen;
+        box-shadow: inset 1px -1px 0 1px black;
+
+        &:hover{
+            box-shadow: inset 0 0 0 1px black;
+        }
+    }
+
+    &__show-map{
+        color: #888;
+        width: fit-content;
+        border-radius: 5px;
+        padding: 10px 8px;
+        display: flex;
+        align-items: center;
+        background-color: variables.$colorDarkGreen;
+    }
+
+    &__slider{
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+    }
+    .swiper-slide{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    ul {
+        list-style: none;
+    }
+}

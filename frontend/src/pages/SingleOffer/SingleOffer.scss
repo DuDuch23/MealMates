@@ -1,0 +1,55 @@
+.single-offer {
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+
+    &__title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    &__images {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+
+    &__image {
+        width: 200px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    &__details {
+        margin-bottom: 2rem;
+
+        p {
+            margin: 0.5rem 0;
+        }
+    }
+
+    &__seller {
+        background-color: #f9f9f9;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+
+        strong{
+            color: #000;
+        }
+
+        h2 {
+            color: #000;
+            margin-top: 0;
+        }
+
+        p {
+            color: #000;
+            margin: 0.3rem 0;
+        }
+    }
+}

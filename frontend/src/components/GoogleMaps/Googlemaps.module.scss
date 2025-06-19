@@ -1,0 +1,19 @@
+.searchForm {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: black;
+    input, button {
+        color: black;
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+}
+.info-window{
+    h2{
+        color: black !important;
+    }
+    p{
+        color: black !important;
+    }
+}

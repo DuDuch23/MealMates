@@ -1,0 +1,58 @@
+#root{
+    overflow: hidden;
+}
+
+
+.container-cursor{
+    margin-top: auto;
+    position: relative;
+}
+
+.cursor-user{
+    cursor: pointer;
+}
+
+.container-icon.active{
+    display: flex;
+}
+
+.icon-cursor{
+    cursor: pointer;
+}
+
+.container-icon{
+    margin-top: auto;
+    position: absolute;
+    height: 50vh;
+    width: 50vh;
+    background-color: #242424;
+    overflow-y: auto;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    span{
+        width: 15%;
+        height: 15%;
+        margin: 5% 5%;
+        svg{
+            height: 100%;
+            width: 100%;
+        }
+    }
+}
+.container-icon::-webkit-scrollbar {
+    width: 8px;
+}
+.container-icon::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 10px;
+    border: 2px solid #242424;
+}
+.container-icon::-webkit-scrollbar-track {
+    background-color: #242424;
+    border-radius: 10px;
+}
+.container-icon::-webkit-scrollbar-corner {
+    background-color: #242424;
+}

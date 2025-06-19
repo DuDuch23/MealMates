@@ -1,0 +1,142 @@
+@use '../../styles/variables.scss';
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: solid 1px;
+    border-color: black;
+    &__rightInfo{
+        display: flex;
+        list-style: none;
+        justify-content: end;
+        gap: 24px;
+        li{
+            list-style-type: none;
+        }
+        .button-sign-in{
+            a{
+                background-color: variables.$colorDarkGreen;
+                color: white;
+                padding: 16px 28px;
+                border-radius: 10px;
+                font-weight: 600;
+                transition: all 0.3s ease-in-out;
+                &:hover{
+                    transition: all 0.3s ease-in-out;
+                    background-color: white;
+                    color: variables.$colorDarkGreen;
+                }
+            }
+        }
+        .button-login{
+            a{
+                background-color: white;
+                color: variables.$colorDarkGreen;
+                padding: 16px 28px;
+                border-radius: 10px;
+                font-weight: 600;
+                transition: all 0.3s ease-in-out;
+
+                &:hover{
+                    transition: all 0.3s ease-in-out;
+                    background-color: variables.$colorDarkGreen;
+                    color: white;
+                }
+            }
+        }
+        .button-user-info{
+            display: flex;
+            background-color: variables.$colorDarkGreen;
+            border-radius: 10px;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 26px;
+        }
+    }
+    &__sign-in{
+        background-color: variables.$colorDarkGreen;
+    }
+    
+    &__left{
+        display: flex;
+        align-items: center;
+        width: 50%;
+        height: 100%;
+
+        h1 {
+            font-size: 3rem;
+            margin-left: 1%;
+        }
+    }
+    &__right {
+        justify-content: right;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    #icon-user{
+    }
+    .button-user{
+        width: 30%;
+        display: flex;
+        cursor: pointer;
+        justify-content: space-around;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    
+}
+
+@media screen and (max-width: 768px) {
+    .header{
+        padding: 0 10px;
+        gap: 10px;
+
+        &__rightInfo{
+            gap: 8px;
+            .button-login{
+                a{
+                    padding: 12px 22px;
+
+                }
+            }
+
+            .button-sign-in{
+                a{
+                    padding: 12px 22px;
+                }
+            }
+        }
+        img{
+            width: 30%;
+        }
+        div{
+            width: unset;
+            h1{
+                font-size: 1.75rem;
+            }
+        }
+        .menu-mobile{
+            display: block;
+        }
+        .header-left{
+            img{
+                width: 30%;
+            }
+        }
+        .header-right{
+            display: none;
+            .button-log-in {
+                display: none;
+            }
+            .button-sign-in {
+                display: none;
+            }
+        }
+    } 
+}

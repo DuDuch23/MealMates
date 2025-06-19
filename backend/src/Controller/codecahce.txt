@@ -1,0 +1,50 @@
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['id'])) {
+            return new JsonResponse([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'id' parameter."
+            ], 400);
+        }
+
+        if (!isset($data['chat'])) {
+            return new JsonResponse([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'chat' parameter."
+            ], 400);
+        }
+
+        $userId = (int) $data['id'];
+        $results = $entityManager->getRepository(Chat::class)->find($userId);
+
+        if ($results->getClient()->getId() !== $userId && $results->getSeller()->getId() !== $userId) 
+        {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'code' => 403,
+                'message' => "Vous ne pouvez pas accéder à cette conversation"
+            ], 403);
+        }
+
+        $res = [];
+        $res[] = ["chat_id" => $results->getId()];
+
+       foreach ($results->getMessages() as $message) {
+            $sender = $message->getSender();
+
+            $res[] = [
+                'message' => [
+                    'content' => $message->getContent(),
+                    'sentAt' => $message->getSentAt()->format('c'), // ISO 8601
+                ],
+                'user' => [
+                    'name' => $sender->getFirstName(),
+                    'icon' => $sender->getIconUser(),
+                    'id' => $sender->getId(),
+                ],
+            ];
+        }
+
+        return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
