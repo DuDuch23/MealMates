@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import randomId from "../../service/randomKey";
 import styles from "./addOffer.module.css";
-import { geocodeLocation, newOffer } from "../../service/requestApi";
+import { geocodeLocation, newOffer } from "../../service/requestApi"; // adapte le chemin si besoin
 import AllCategories from "../../components/AllCategory/AllCategory";
+
 
 function AddOffer() {
   const [formData, setFormData] = useState({
@@ -34,7 +35,17 @@ function AddOffer() {
   const validateForm = () => {
     const newError = {};
     if (!formData.product) newError.product = "Titre requis";
-    // (Other validations here...)
+    if (!formData.description) newError.description = "Description requise";
+    if (!formData.startDate) newError.startDate = "Date de début requise";
+    if (!formData.endDate) newError.endDate = "Date de fin requise";
+    if (!formData.expirationDate) newError.expirationDate = "Date limite requise";
+    if (!formData.quantity || isNaN(formData.quantity)) newError.quantity = "Quantité invalide";
+    if (formData.option === "prix" && (!formData.price || isNaN(formData.price))) newError.price = "Prix requis";
+    if (!formData.pickupLocation) newError.pickupLocation = "Adresse requise";
+    if (!formData.latitude || !formData.longitude) newError.pickupLocation = "Adresse introuvable";
+    if (formData.categories.length === 0) newError.categories = "Sélectionner au moins une catégorie";
+    if (formData.availableSlots.length === 0) newError.availableSlots = "Ajouter au moins un créneau";
+
     setError(newError);
     return Object.keys(newError).length === 0;
   };
@@ -60,16 +71,12 @@ function AddOffer() {
       } catch(error){
         console.error("Erreur lors de la soumission de l'offre :", error);
       }
-    };
-    images.forEach((image) => data.append("photos_offer[]", image));
-
-    try {
-      await newOffer(data, true);
-    } catch (error) {
-      console.error("Erreur lors de la soumission de l'offre :", error);
+    }
+    else{
+      console.error("Formulaire invalide :", validateForm());
     }
   };
-
+  
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
     const previews = files.map((file) => URL.createObjectURL(file));
@@ -100,20 +107,31 @@ function AddOffer() {
   const handleAddressChange = async (e) => {
     const address = e.target.value;
     setFormData((prev) => ({ ...prev, pickupLocation: address }));
+    setAddressNotFound(false);
+
     try {
       const coords = await geocodeLocation(address);
+      if (coords?.lat && coords?.lng) {
+        setFormData((prev) => ({
+          ...prev,
+          latitude: coords.lat,
+          longitude: coords.lng,
+        }));
+        setAddressNotFound(false);
+      } else {
+        return (
+          <p>Address introuvable</p>
+        );
+      }
+    } catch (err) {
       setFormData((prev) => ({
         ...prev,
-        latitude: coords.lat,
-        longitude: coords.lng,
+        latitude: null,
+        longitude: null,
       }));
-      setAddressNotFound(false);
-    } catch {
       setAddressNotFound(true);
     }
   };
-
-  // ...return JSX same as in preprod version
 
   return (
     <div className={styles.container}>
