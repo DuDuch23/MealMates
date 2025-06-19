@@ -3,15 +3,16 @@
 namespace App\Entity;
 
 use App\Enum\PreferenceEnum;
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -22,11 +23,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Groups(["public", "private"])]
     private ?int $id = null;
+    
     #[ORM\Column(length: 180)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(["public", "private"])]
     private array $roles = [];
 
     #[ORM\Column]
@@ -41,31 +44,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private Collection $preferences;
+
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[Groups(["public", "private"])]
+    private Collection $searchHistory;
 
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rater', orphanRemoval: true)]
     private Collection $ratingsGiven;
 
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'rated', orphanRemoval: true)]
-    #[Groups(["private"])]
+    #[Groups(["public", "private"])]
     private Collection $ratingsReceived;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["public", "private"])]
     private ?string $location = null;
+
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private int $iconUser = 1;
+
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private ?string $adress = null;
 
     /**
      * @var Collection<int, Offer>
      */
-    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'seller')]
     private Collection $offers;
+
+
+
+    #[ORM\Column(options: ['default' => false])]
+    private ?bool $isVerified = null;
+
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'buyer')]
+    private Collection $orders;
 
     public function __construct()
     {
+        $this->offers = new ArrayCollection();
         $this->ratingsGiven = new ArrayCollection();
         $this->ratingsReceived = new ArrayCollection();
-        $this->offers = new ArrayCollection();
-        $this->preferences = new ArrayCollection(); // Initialiser la collection de catégories
+        $this->searchHistory = new ArrayCollection();
+        $this->preferences = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,6 +105,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    public function getsearchHistory(): Collection
+    {
+        return $this->searchHistory;
+    }
+
+    public function addSearch(SearchHistory $search): void
+    {
+        $this->searchHistory->add($search);
+    }
+
+    public function deleteSearch(SearchHistory $search): void
+    {
+        $this->searchHistory->removeElement($search);
     }
 
     public function setEmail(string $email): static
@@ -107,6 +151,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
+    }
+
+    public function getAdress(): string
+    {
+        return $this->adress;
+    }
+
+    public function setAdress(string $adress): void
+    {
+        $this->adress = $adress;
     }
 
     /**
@@ -175,7 +229,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->preferences;
     }
 
-    public function addPreferences(Category $preferences): static
+    public function addPreferences(Category $preferences): self
     {
         if (!$this->preferences->contains($preferences)) {
             $this->preferences[] = $preferences;
@@ -275,7 +329,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->offers->contains($offer)) {
             $this->offers->add($offer);
-            $offer->setUser($this);
+            $offer->setSeller($this);
         }
 
         return $this;
@@ -285,8 +339,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->offers->removeElement($offer)) {
             // set the owning side to null (unless already changed)
-            if ($offer->getUser() === $this) {
-                $offer->setUser(null);
+            if ($offer->getSeller() === $this) {
+                $offer->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIconUser(): int
+    {
+        return $this->iconUser;
+    }
+
+    public function setIconUser(int $icon): void
+    {
+        $this->iconUser = $icon;
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setBuyer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getBuyer() === $this) {
+                $order->setBuyer(null);
             }
         }
 

@@ -1,46 +1,113 @@
-import { useState, useEffect } from "react";
-import { useParams } from 'react-router'
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router";
 import { getUser } from "../../service/requestApi";
-import Avis from "../../components/Avis/Avis";
+import { getUserIndexDB } from "../../service/indexDB";
+import { IconUser } from "../../components/IconUser/iconUser";
+import styles from './UserProfile.module.css'
 
-import './UserProfile.css';
+const UserProfile = () => {
+    const params = useParams();
+    const userId = params.id ? parseInt(params.id) : null;
 
-function UserProfile(){
-    // const {id} = useParams();
-    // const [dataUser,setDataUser] = useState([]);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // useEffect(()=>{
-    //     getUser({id});
-    // },
-    // [{id}]);
+    useEffect(() => {
+        async function fetchUserData() {
+            if (!userId) return;
 
-    return(
-        <>
-            <div id="page-user">
-                <div id="identy-user">
-                    <img id="image-user"  alt="user image" />
-                    <ul>
-                        <li>Nom de l'utilisateur</li>
-                        <li>Adresse de l'utilisateur</li>
+            try {
+                const localData = await getUserIndexDB(userId);
+
+                if (localData) {
+                    setUser(localData);
+                } else {
+                    const token = sessionStorage.getItem("token");
+                    const remoteData = await getUser({ user: userId, token });
+                    setUser(remoteData.data);
+                }
+            } catch (err) {
+                console.error("Erreur lors de la récupération des données :", err);
+                setError("Une erreur est survenue.");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchUserData();
+    }, [userId]);
+
+    if (loading) return <p>Chargement...</p>;
+    if (error) return <p>{error}</p>;
+    if (!user) return <p>Aucun utilisateur trouvé.</p>;
+
+    function infoUser() {
+        return (
+            <>
+                <div><p>{user?.firstName}</p></div>
+                <div><p>{user?.lastName}</p></div>
+                <div><p>{user?.email}</p></div>
+            </>
+        );
+    }
+
+    const userPreference = () => {
+        if (user) {
+            return (
+                <div className={styles.preferences}>
+                    <h3>Mes préférences</h3>
+                    {user.preferences?.length > 0 ? (
+                    <ul className={styles.preferenceUser}>
+                        {user.preferences.map((preference) => (
+                            <li key={preference.id}>{preference.name}</li>
+                        ))}
                     </ul>
+                ) : (
+                    <p>Aucune préférence disponible.</p>
+                )}
                 </div>
+            );
+        } else {
+            return <p>Aucune préférence disponible.</p>;
+        }
+    };
 
-                <ul id="params-user">
-                    <li>
-                        Préférence de l'utilisateur:<br/>
-                    </li>
-                    <li>
-                        Disponibilité de l'utilisateur:<br/>
-                    </li>
-                </ul>
-
-                {/* creer un composant pour le slider avis afin de pouvoir gerer le fait que certain utilisateur n'ont pas d'avis */}
-                <div id="slider-avis">
-
+    return (
+        <>
+            <div className={styles.cardUser}>
+                <nav>
+                    <Link to={"/"}>
+                        <img src="/img/logo-mealmates.png" alt="logo mealmates" />
+                        <h2>MealMates</h2>
+                    </Link>
+                </nav>
+                <IconUser className={styles.iconUser} id={user.iconUser}/>
+                <div className={styles.contentUser}>
+                    <div className={styles.containerLink}>
+                        <Link to={`/userProfile/${userId}`}>Mes informations</Link>
+                        <span>
+                          <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
+                          </svg>
+                        </span>
+                        <Link to={`/userMealCard/${userId}`}>MealCard</Link>
+                        <span>
+                          <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
+                          </svg>
+                        </span>
+                        <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                    </div>
+                    <div className={styles.containerInfoUser}>
+                        <div className={styles.basicsElements}>
+                            {infoUser()}
+                        </div>
+                        {userPreference()}
+                    </div>
                 </div>
             </div>
-        </>
-    );
-}
+        </>);
+};
 
 export default UserProfile;

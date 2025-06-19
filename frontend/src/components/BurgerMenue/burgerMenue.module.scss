@@ -1,0 +1,99 @@
+.menu-mobile {
+  display: none;
+  width: 30%;
+  z-index: 99;
+  height: 100%;
+  position: fixed;
+  left: 70%;
+  top: 0%;
+  list-style: none;
+  background-color: #000;
+  &__nav-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    color: #fff;
+
+    button{
+      background: transparent;
+      border: none;
+    }
+  }
+
+  &__nav-bottom{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    font-size: 1rem;
+  }
+  .logo{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  button{
+    svg{
+      z-index: 100000000000;
+      position: relative;
+      path{}
+    }
+  }
+}
+.ul-burger #icon-user {
+  margin: 0;
+}
+.ul-burger li {
+  display: flex;
+  align-items: center;
+}
+.ul-burger li a {
+  text-decoration: none;
+}
+.ul-burger li svg {
+  width: 15%;
+}
+
+#delete-burger-menue {
+  cursor: pointer;
+  position: absolute;
+  left: 85%;
+  width: 15%;
+  border: 1px solid red;
+}
+
+#log-out{
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1280px) {
+  .menu-mobile {
+    display: block;
+    width: 50%;
+    left: 50%;
+    top: 0%;
+    background-color: #000;
+  }
+}
+@media screen and (max-width: 768px) {
+  .menu-mobile {
+    width: 100%;
+    left: 0%;
+    display: block;
+    top: 0%;
+    height: 100vh;
+    background-color: #000;
+    padding: 0 10px;
+    li {
+      display: flex;
+      align-items: center;
+    }
+    a{
+      text-decoration: none;
+    }
+  }
+  .ul-burger li svg {
+    width: 15%;
+  }
+}

@@ -1,0 +1,52 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss' as mixins;
+@use "../../styles/variables.scss" as variables;
+
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.button {
+  background: #d9d9d9;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.caret {
+  font-size: 12px;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 20;
+    background: white;
+    border: 1px solid white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 4px 0 0;
+    padding: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    li {
+        list-style: none;
+        color: black;
+        gap: 12px;
+        margin-bottom: 4px;
+        display: flex;
+        font-size: variables.$fontSize;
+
+        label {
+            cursor: pointer;
+        }
+    }
+}

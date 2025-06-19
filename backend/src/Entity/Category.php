@@ -13,17 +13,18 @@ class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: "integer")]
+    #[Groups(["public", "private"])] 
     private ?int $id = null;
 
-    #[Groups("public")]
+    #[Groups(["public", "private"])] 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Offer>
      */
-    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'category')]
+    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'categories')]
     private Collection $offers;
 
     public function __construct()
@@ -60,6 +61,7 @@ class Category
     {
         if (!$this->offers->contains($offer)) {
             $this->offers->add($offer);
+            $offer->addCategory($this);
         }
 
         return $this;
@@ -67,7 +69,9 @@ class Category
 
     public function removeOffer(Offer $offer): static
     {
-        $this->offers->removeElement($offer);
+        if ($this->offers->removeElement($offer)) {
+            $offer->removeCategory($this);
+        }
 
         return $this;
     }

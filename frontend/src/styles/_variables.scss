@@ -8,4 +8,23 @@ $colorPink: #FAD6E4;
 $colorGreen: #96C461;
 $colorOrangeRed: #ee3e03;
 
+<<<<<<< HEAD
 $colorDarkGreen: #1D8915;
+=======
+$colorDarkGreen: #1D8915;
+
+$colorError :  red;
+
+
+$widthBtn: 12px 18px;
+$fontSize: 1.25rem;
+@media screen and (max-width: 1280px) {
+    $widthBtn: 10px 14px;
+    $fontSize: 1.15rem;
+}
+
+@media screen and (max-width: 768px) {
+    $widthBtn: 8px 12px;
+    $fontSize: 1rem;
+}
+>>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8

@@ -2,147 +2,169 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Offer;
+use Faker\Factory;
 use App\Entity\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\Entity\Offer;
+use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use Symfony\Component\HttpKernel\KernelInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Cocur\Slugify\Slugify;
 
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const NB_OFFERS = 500;
+    public const OFFER_REF_PREFIX = 'offer_';
     public $publicPath;
-    public const OFFERS = [
-        [
-            'product' => 'Laptop',
-            'description' => 'A powerful laptop for gaming and work.',
-            'quantity' => 5,
-            'expirationDate' => '2024-12-31',
-            'price' => 5.99,
-            'isDonation' => false,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '123 Main St, Cityville',
-            'availableSlots' => ['2024-01-01 10:00:00', '2024-01-02 14:00:00'],
-            'isRecurring' => true,
-            'user' => 'user@example.com'
-        ],
-        [
-            'product' => 'Smartphone',
-            'description' => 'Latest model smartphone with all features.',
-            'quantity' => 10,
-            'expirationDate' => '2024-11-30',
-            'price' => 799.99,
-            'isDonation' => false,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '456 Elm St, Townsville',
-            'availableSlots' => ['2024-01-03 11:00:00', '2024-01-04 15:00:00'],
-            'isRecurring' => false,
-            'user' => 'user@example.com'
-        ],
-        [
-            'product' => 'Headphones',
-            'description' => 'Noise-cancelling headphones for immersive sound.',
-            'quantity' => 20,
-            'expirationDate' => '2024-10-31',
-            'price' => 199.99,
-            'isDonation' => true,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '789 Oak St, Villageville',
-            'availableSlots' => ['2024-01-05 12:00:00', '2024-01-06 16:00:00'],
-            'isRecurring' => false,
-             'user' => 'user@example.com'
-        ],
-        [
-            'product' => 'Camera',
-            'description' => 'High-resolution camera for photography enthusiasts.',
-            'quantity' => 3,
-            'expirationDate' => '2024-09-30',
-            'price' => 499.99,
-            'isDonation' => false,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '321 Pine St, Hamletville',
-            'availableSlots' => ['2024-01-07 13:00:00', '2024-01-08 17:00:00'],
-            'isRecurring' => true,
-             'user' => 'user@example.com'
-        ],
-        [
-            'product' => 'Smartwatch',
-            'description' => 'Smartwatch with fitness tracking features.',
-            'quantity' => 15,
-            'expirationDate' => '2024-08-31',
-            'price' => 299.99,
-            'isDonation' => false,
-            'photos_offer' => [
-                'repas.jpg',
-                'repas2.jpg',
-                'repas3.jpg',
-            ],
-            'pickupLocation' => '654 Maple St, Boroughville',
-            'availableSlots' => ['2024-01-09 14:00:00', '2024-01-10 18:00:00'],
-            'isRecurring' => false,
-             'user' => 'user@example.com'
-        ],
-    ];
+
     public function __construct(KernelInterface $kernel)
     {
         $this->publicPath = $kernel->getProjectDir();
     }
+
     public function load(ObjectManager $manager): void
     {
-        foreach (self::OFFERS as $attributes) {
+        $faker = Factory::create('fr_FR');
+        $slugify = new Slugify();
+
+        $user = $this->getReference('user@example.com', User::class);
+        $seller = $this->getReference('user@example.com', User::class);
+        $allCatIds = array_keys(CategoryFixtures::CATEGORIES);
+
+        $produits = [
+            'Panier de légumes bio', 'Repas chaud', 'Baguette de pain', 'Plateau de fromages',
+            'Pâtes maison', 'Soupe aux légumes', 'Tarte aux pommes', 'Yaourt nature',
+            'Viande marinée', 'Fruits de saison', 'Salade composée', 'Sandwich préparé',
+            'Pâtisseries', 'Croissants du jour', 'Box surprise', 'Panier anti-gaspi'
+        ];
+
+        $descriptions = [
+            'Produit frais à consommer rapidement.',
+            'Préparé aujourd’hui, à récupérer avant ce soir.',
+            'Panier surprise avec plusieurs produits invendus.',
+            'Fait maison avec des ingrédients frais.',
+            'Reste d’invendus, très bon état.',
+            'Plat cuisiné avec soin, prêt à réchauffer.',
+        ];
+
+        $locations = [
+            'Paris',
+            'Lyon',
+            'Lille',
+            'Bordeaux',
+            'Toulouse',
+            'Acy en multien',
+            'Betz',
+            'Crépy en Valois',
+            'Compiègne',
+            'Saint-Quentin',
+            'Bordeaux',
+            'Marseille',
+            'Montpellier',
+            'Nantes',
+            'Strasbourg',
+            'Marseille',
+            'Nice',
+            'Nîmes',
+            'Nanteuil le Haudouin',
+            'Jaux',
+            'Chantilly',
+            'Senlis',
+            'Beauvais',
+            'Soissons',
+            'Toulouse',
+        ];
+
+        $cityCoords = [
+            'Paris'                     => ['lat' => 48.8566, 'lon' => 2.3522],
+            'Lyon'                      => ['lat' => 45.7640, 'lon' => 4.8357],
+            'Lille'                     => ['lat' => 50.6292, 'lon' => 3.0573],
+            'Bordeaux'                  => ['lat' => 44.8378, 'lon' => -0.5792],
+            'Toulouse'                  => ['lat' => 43.6045, 'lon' => 1.4440],
+            'Acy en multien'            => ['lat' => 49.0847, 'lon' => 3.0033],
+            'Betz'                      => ['lat' => 49.1539, 'lon' => 2.9303],
+            'Crépy en Valois'           => ['lat' => 49.2372, 'lon' => 2.8907],
+            'Compiègne'                 => ['lat' => 49.4171, 'lon' => 2.8261],
+            'Saint-Quentin'             => ['lat' => 49.8489, 'lon' => 3.2870],
+            'Marseille'                 => ['lat' => 43.2965, 'lon' => 5.3698],
+            'Montpellier'               => ['lat' => 43.6108, 'lon' => 3.8767],
+            'Nantes'                    => ['lat' => 47.2184, 'lon' => -1.5536],
+            'Strasbourg'                => ['lat' => 48.5734, 'lon' => 7.7521],
+            'Nice'                      => ['lat' => 43.7102, 'lon' => 7.2620],
+            'Nîmes'                     => ['lat' => 43.8367, 'lon' => 4.3601],
+            'Nanteuil le Haudouin'      => ['lat' => 49.1392, 'lon' => 2.8891],
+            'Jaux'                      => ['lat' => 49.3971, 'lon' => 2.8104],
+            'Chantilly'                 => ['lat' => 49.1930, 'lon' => 2.4690],
+            'Senlis'                    => ['lat' => 49.2096, 'lon' => 2.5869],
+            'Beauvais'                  => ['lat' => 49.4295, 'lon' => 2.0810],
+            'Soissons'                  => ['lat' => 49.3818, 'lon' => 3.3233],
+        ];
+
+        for ($i = 0; $i < self::NB_OFFERS; $i++) {
             $offer = new Offer();
-            $offer->setProduct($attributes['product']);
-            $offer->setDescription($attributes['description']);
-            $offer->setQuantity($attributes['quantity']);
-            $offer->setExpirationDate(new \DateTime($attributes['expirationDate']));
-            $offer->setPrice($attributes['price']);
-            $offer->setIsDonation($attributes['isDonation']);
-            $offer->setPickupLocation($attributes['pickupLocation']);
-            $offer->setAvailableSlots($attributes['availableSlots']);
-            $offer->setIsRecurring($attributes['isRecurring']);
 
-            // Ajouter les photos comme une collection
-            $photos = new ArrayCollection();
-            foreach ($attributes["photos_offer"] as $photo) {
-                // Créer une instance de File pour chaque photo (tu dois spécifier un chemin réel ici)
-                $photoPath = $this->publicPath.'/public/uploads/offers-photos/' . $photo; // Remplace par un chemin réel
-                $photos[] = new File($photoPath);
+            $productName = $faker->randomElement($produits);
+            $offer->setProduct($productName);
+            $slug = $slugify->slugify($productName) . '-' . uniqid();
+            $offer->setSlug($slug);
+            $offer->setDescription($faker->randomElement($descriptions));
+            $offer->setQuantity($faker->numberBetween(1, 10));
+            $offer->setExpirationDate($faker->dateTimeBetween('now', '+10 days'));
+            $offer->setPrice($faker->randomFloat(2, 0, 10));
+            $offer->setIsDonation($faker->boolean(20));
+            $city = $faker->randomElement(array_keys($cityCoords));     // choix aléatoire
+            $offer->setPickupLocation($city);
+            $offer->setIsRecurring($faker->boolean(30));
+            $offer->setLatitude($cityCoords[$city]['lat']);
+            $offer->setLongitude($cityCoords[$city]['lon']);
+
+            // Création de 1 à 3 créneaux horaires
+            $slots = [];
+            for ($j = 0; $j < rand(1, 3); $j++) {
+                $slots[] = $faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s');
             }
-            $offer->setPhotosFileOffers($photos->toArray()); // Appel de la méthode définie dans l'entité
+            $offer->setAvailableSlots($slots);
 
-            // Récupérer un utilisateur aléatoire
-            $user = $this->getReference($attributes["user"], User::class); 
-            $offer->setUser($user);
+            $photosDirectory = $this->publicPath . '/public/uploads/offers-photos';
+            $availablePhotos = glob($photosDirectory . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE);
 
+            if (!empty($availablePhotos)) {
+                $photos = new ArrayCollection();
+                $selectedPhotos = $faker->randomElements($availablePhotos, rand(1, 3));
+
+                foreach ($selectedPhotos as $photoPath) {
+                    if (file_exists($photoPath)) {
+                        $photos[] = new File($photoPath);
+                    }
+                }
+            }
+
+            $randomCatCodes = $faker->randomElements($allCatIds, rand(1, 3));
+            foreach ($randomCatCodes as $catCode) {
+                /** @var Category $cat */
+                $cat = $this->getReference($catCode, Category::class);
+                $offer->addCategory($cat);
+            }
+
+            $offer->setSeller($seller);
             $manager->persist($offer);
+
+            $this->addReference(self::OFFER_REF_PREFIX . $i, $offer);
         }
 
         $manager->flush();
     }
+
     public function getDependencies(): array
     {
         return [
             UserFixtures::class,
+            CategoryFixtures::class,
         ];
     }
 }

@@ -1,9 +1,26 @@
+<<<<<<< HEAD
 @import "./globals";
 @import './mixins';
 @import "./variables";
+=======
+@use "./globals";
+@use './mixins';
+@use './variables';
+>>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+#root{
+    margin: 0 auto;
+    width: 100%;
+}
 
+p, a{
+    font-size: variables.$fontSize;
+}
+
+a{
+    text-decoration: none;
+}
 
 *,::before,::after{
     margin: 0;
@@ -14,10 +31,28 @@
 }
 
 body{
+<<<<<<< HEAD
     background-color: #333333;
+=======
+    background-color: #262626;
+>>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
     overflow-x: hidden;
 }
 
 .mobile {
     width: 480px;
+<<<<<<< HEAD
+=======
+}
+
+.swiper-wrapper{
+    display: flex;
+}
+
+#icon-user{
+    svg{
+        height: 50px;
+        width: 50px;
+    }
+>>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
 }
