@@ -1,4 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from "react-router";
 import API_BASE_URL from "./api";
 import { deleteUserIndexDB } from './indexDB';
 
@@ -45,6 +46,7 @@ export async function getValidToken() {
 
 // Mettre à jour le token depuis sessionStorage
 export async function refreshToken() {
+    const navigate = useNavigate();
     const infoToken = jwtDecode(token);
     const now = Date.now() / 1000;
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect , useRef} from 'react';
 import { GoogleMap, Marker, LoadScript, MarkerClusterer, InfoWindow, Circle  } from '@react-google-maps/api';
+import { geocodeLocation } from "../../service/requestApi"
 import FilterMap from '../FilterMap/FilterMap';
 import styles from './GoogleMaps.module.css';
 

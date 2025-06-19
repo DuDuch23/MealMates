@@ -78,7 +78,8 @@ class ApiChatController extends AbstractController
         }
 
         $userId = (int) $data['id'];
-        $results = $entityManager->getRepository(Chat::class)->find($userId);
+        $chatId = (int) $data['chat'];
+        $results = $entityManager->getRepository(Chat::class)->find($chatId);
 
         if ($results->getClient()->getId() !== $userId && $results->getSeller()->getId() !== $userId) 
         {
