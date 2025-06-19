@@ -1,123 +1,206 @@
-@use '../../styles/main';
-@use '../../styles/variables';
-@use '../../styles/mixins';
+@import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  color: white;
+}
 
+body {
+  background-color: #262626;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+#root {
+  width: 100%;
+  margin: 0 auto;
+}
+
+// Main landing styles
 .landing {
-    .header-container{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .top  {
-        height: 97.5vh;
-        background-image: url('../../assets/landing-background.png') ;
-        background-size: cover;
-        background-color: rgba(0, 0, 0, 0.4); 
-        background-blend-mode: darken; 
-        h1 {
-            font-size: 4rem;
-            width: 40%;
-            padding: 10% 0 0 3%;
-        }
-    }
-    .inbetween {
-        position: absolute;
-        z-index: 1;
-        top: 100%;
-        left: 20%;
-        
-        width: 40%;
-        background-color: white;
-        padding: 3%;
-        border-radius: 30px;
-        p {
-            color: black;
-        }
-    }
-    .bottom {
-        position: relative;
-        height: 100vh;
-        background-color: black;
-        padding: 10% 5%;;
-        display: flex;
-        overflow-y: hidden;
-        justify-content: space-between;
-        &__maps{
-            width: 50%;
-            height: 100%;
-            img{
-                border-radius: 10px;
-                position: relative;
-                z-index: 2;
-                width: 60%;
-            }
-        }
-
-        &__right{
-            text-align: right;;
-            h1 {
-                font-size: 3rem;
-            }
-            button {
-                margin-top: 5%;
-                font-size: 1.5rem;
-                padding: 2% 4%;
-                border-radius: 15px;
-                border: 2px solid variables.$colorDarkGreen;
-                background-color: variables.$colorDarkGreen;
-                margin-right: 2%;
-                font-weight: bold;
-
-                transition: .3s;
-            }
-            button:hover {
-                border: 2px solid white;
-            }
-            .footer {
-                position: absolute;
-                bottom: 10px;
-                right: 10px;
-            }
-        }
-
-        &__circle{
-            // z-index: -1;
-            position: absolute;
-            left: -50vh;
-            top: 30vh;
-            width: 180vh;
-            height: 180vh;
-            background-color: variables.$colorDarkGreen;
-            border-radius: 100%;
-        }
-    }
-    .vegan-offers {
-        padding: 2rem;
-    }
+  .top {
+    height: 97.5vh;
+    background: 
+      linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+      url("../../assets/landing-background.png") center/cover no-repeat;
     
-    .offer-card {
-        background: gray;
-        border-radius: 10px;
-        padding: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    h1 {
+      font-size: 4rem;
+      width: 40%;
+      padding: 10% 0 0 3%;
     }
-}
+  }
 
-.swiper-wrapper{
+  .inbetween {
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    width: 40%;
+    background-color: white;
+    padding: 3%;
+    border-radius: 30px;
+    z-index: 1;
+
+    p {
+      color: black;
+    }
+  }
+
+  .bottom {
+    position: relative;
     display: flex;
+    justify-content: space-between;
+    padding: 10% 5%;
+    height: 100vh;
+    background-color: black;
+    overflow-y: hidden;
+
+    &__maps {
+      width: 50%;
+      height: 100%;
+
+      img {
+        width: 60%;
+        border-radius: 10px;
+        z-index: 2;
+        position: relative;
+      }
+    }
+
+    &__circle {
+      position: absolute;
+      top: 30vh;
+      left: -50vh;
+      width: 180vh;
+      height: 180vh;
+      background-color: #1d8915;
+      border-radius: 50%;
+    }
+
+    &__right {
+      text-align: right;
+
+      h2 {
+        font-size: 3rem;
+      }
+
+      button {
+        margin-top: 5%;
+        padding: 2% 4%;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border: 2px solid #1d8915;
+        border-radius: 15px;
+        background-color: #1d8915;
+        margin-right: 2%;
+        transition: 0.3s;
+
+        &:hover {
+          border-color: white;
+        }
+      }
+    }
+  }
+
+  .footer {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
 }
 
-@media screen and (max-width: 1280px) {
-    .landing{
-        .bottom{
-            flex-direction: column-reverse;
-            padding: 64px 5%;
-            gap: 24px;
-            &__maps{
-                width: 100%;
-                height: 100%;
-            }
-        }
+// Work/testimonial section
+.work-section-wrapper {
+  padding: 4rem 2rem;
+  background-color: #1a1a1a;
+  text-align: center;
+
+  .work-section-top {
+    .primary-subheading {
+      color: #1d8915;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
     }
+
+    .primary-heading {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .primary-text {
+      font-size: 1rem;
+      color: #ccc;
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+    }
+  }
+
+  .testimonial-section-bottom {
+    background: #333;
+    padding: 2rem;
+    border-radius: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+
+    p {
+      font-size: 1rem;
+      color: #eee;
+      margin-bottom: 1rem;
+    }
+
+    .testimonials-stars-container {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      color: #ffcc00;
+      margin-bottom: 1rem;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 1280px) {
+  .landing {
+    .bottom {
+      flex-direction: column-reverse;
+      gap: 24px;
+      padding: 64px 5%;
+
+      &__maps {
+        width: 100%;
+        height: 300px;
+      }
+    }
+
+    .top h1 {
+      width: 80%;
+      font-size: 2.5rem;
+    }
+
+    .inbetween {
+      width: 70%;
+      left: 15%;
+    }
+  }
 }
