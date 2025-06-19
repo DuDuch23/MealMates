@@ -7,8 +7,9 @@ import backgroundForm from '../../assets/background-form.png';
 import { Link } from "react-router";
 
 
+
 // css
-import "./Inscription.css";
+import styles from "./Inscription.module.css";
 
 function Inscription(){
     const [firstName, setFirstName] = useState("");
@@ -47,44 +48,41 @@ function Inscription(){
             }
             setError(null);
             console.log(error);
-            navigate("/");
         } catch (error) {
             console.error("Erreur lors de la connexion :", error);
         }
+        navigate("/");
     };
 
     return(
         <>
-            <div className="container">
-            {/* <div className="background-form">
-                <img src={backgroundForm} alt="background" className="background-form"/>
-            </div> */}
-                <div className="title-logo">
+            <div className={styles["container"]}>
+                <div className={styles["title-logo"]}>
                     <img src={logo} alt="logo" className="logo"/>
                     <h1>MealMates</h1>
                 </div>
-                <div className="action">
+                <div className={styles["action"]}>
                 {error && <p className="error">{error}</p>}
                     <form action="#" onSubmit={handleSubmit}>
-                        <div className="content-element">
-                            <div className="content-element-form">
+                        <div className={styles["content-element"]}>
+                            <div className={styles["content-element-form"]}>
                                 <label htmlFor="last-name">Nom</label>
                                 <input type="last-name" name="lastName" placeholder="Nom" value={lastName} onChange={handleLastName}/>
                             </div>
-                            <div className="content-element-form">
+                            <div className={styles["content-element-form"]}>
                                 <label htmlFor="name">Prénom</label>
                                 <input type="name" name="firstName" placeholder="Prénom" value={firstName} onChange={handleFirstName}/>
                             </div>
                         </div>
-                        <div className="content-element-form">
+                        <div className={styles["content-element-form"]}>
                             <label htmlFor="email">Email</label>
                             <input type="email" name="email" placeholder="Veuillez renseigner votre email" value={email} onChange={handleEmail}/>
                         </div>
-                        <div className="content-element-form">
+                        <div className={styles["content-element-form"]}>
                             <label htmlFor="password">Mot de Passe</label>
                             <input type="password" name="password" placeholder="Votre mot de passe..." value={password} onChange={handlePassword}/>
                         </div>
-                        <div className="content-element-form">
+                        <div className={styles["content-element-form"]}>
                             <label htmlFor="confirm-password">Confimer le mot de passe</label>
                             <input type="password" name="confirmPassword" placeholder="Vérification de votre mot de passe" value={confirmPassword} onChange={handleConfirmPassword}/>
                         </div>

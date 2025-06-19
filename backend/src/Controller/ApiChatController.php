@@ -80,14 +80,14 @@ class ApiChatController extends AbstractController
         $userId = (int) $data['id'];
         $results = $entityManager->getRepository(Chat::class)->find($userId);
 
-        // if ($results->getClient()->getId() !== $userId && $results->getSeller()->getId() !== $userId) 
-        // {
-        //     return new JsonResponse([
-        //         'status' => "Forbidden",
-        //         'code' => 403,
-        //         'message' => "Vous ne pouvez pas accéder à cette conversation"
-        //     ], 403);
-        // }
+        if ($results->getClient()->getId() !== $userId && $results->getSeller()->getId() !== $userId) 
+        {
+            return new JsonResponse([
+                'status' => "Forbidden",
+                'code' => 403,
+                'message' => "Vous ne pouvez pas accéder à cette conversation"
+            ], 403);
+        }
 
         $res = [];
         $res[] = ["chat_id" => $results->getId()];
@@ -120,24 +120,27 @@ class ApiChatController extends AbstractController
         if (!isset($data['chat'], $data['user'], $data['content'])) {
             return new JsonResponse([
                 'status' => 'Bad Request',
-                'message' => 'chat_id, user_id et content sont requis.'
+                'message' => 'chat_id, user_id et content sont requis.',
             ], 400);
         }
 
         $chat = $entityManager->getRepository(Chat::class)->find($data['chat']);
         $user = $entityManager->getRepository(User::class)->find($data['user']);
 
-        if (!$chat || !$user) {
+        if (!$chat ||!$user) {
             return new JsonResponse([
                 'status' => 'Not Found',
-                'message' => 'Chat ou User introuvable.'
+                'message' => 'Chat ou User introuvable.',
+                'data' => $chat,
             ], 404);
         }
 
         if($chat->getClient() !=$user && $chat->getSeller() != $user){
             return new JsonResponse([
                 'status' => 'Not Found',
-                'message' => 'Chat ou User introuvable.'
+                'message' => 'Chat ou User introuvable.',
+                'chat' =>  $entityManager->getRepository(Chat::class)->find($data['chat']),
+                'data' => $chat,
             ], 404);
         }
 

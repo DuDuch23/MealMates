@@ -1,11 +1,13 @@
 <?php
 namespace App\Controller;
 
+use Google_Client;
 use App\Entity\User;
 use App\Enum\PreferenceEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -55,6 +57,48 @@ class ApiUserController extends AbstractController
             'code' => 200,
             'data' => $data
         ], 200);
+    }
+
+    #[Route('/ssoUser', methods:['POST'])]
+    public function ssoUsers(    Request $request, JWTTokenManagerInterface $JWTManager, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $tokenFromGoogle = $data['token'] ?? null;
+
+        if (!$tokenFromGoogle) {
+            return new JsonResponse(['error' => 'No token provided'], 400);
+        }
+
+        $client = new Google_Client(['client_id' =>  $_ENV['CLIENT_ID_GOOGLE']]);
+
+        $payload = $client->verifyIdToken($tokenFromGoogle);
+
+        if (!$payload) {
+            return new JsonResponse(['error' => 'Invalid Google token'], 401);
+        }
+
+        $email = $payload['email'];
+        $firstName = $payload['given_name'] ?? '';
+
+        // Recherche ou création utilisateur
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
+        if (!$user) {
+            $user = new User();
+            $user->setEmail($email);
+            $user->setFirstName($firstName);
+
+            // Génère un mot de passe aléatoire (jamais utilisé ici)
+            $randomPassword = bin2hex(random_bytes(16));
+            $user->setPassword($passwordHasher->hashPassword($user, $randomPassword));
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        $token = $JWTManager->create($user);
+
+        return new JsonResponse(['token' => $token]);
     }
 
     #[Route('/profile', methods: ['POST'])]

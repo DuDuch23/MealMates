@@ -26,7 +26,7 @@ function Connexion() {
         navigate("/");
       } catch (error) {
         console.error("Erreur de parsing JSON :", error);
-        sessionStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
+        sessionStorage.removeItem("user");
       }
     }
   }, [navigate]);
@@ -68,50 +68,52 @@ function Connexion() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.titleLogo}>
-        <img src={logo} alt="logo" className={styles.logo} />
-        <h1>MealMates</h1>
-      </div>
+    <div className={styles.block}>
+      <div className={styles.container}>
+        <div className={styles.titleLogo}>
+          <img src={logo} alt="logo" className={styles.logo} />
+          <h1>MealMates</h1>
+        </div>
 
-      <div className={styles.action}>
-        {error && <p className={styles.error}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className={styles.contentElementForm}>
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        <div className={styles.action}>
+          {error && <p className={styles.error}>{error}</p>}
+          <form onSubmit={handleSubmit}>
+            <div className={styles.contentElementForm}>
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-          <div className={styles.contentElementForm}>
-            <label htmlFor="password">Mot de Passe</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div className={styles.contentElementForm}>
+              <label htmlFor="password">Mot de Passe</label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-          <button type="submit">Connexion</button>
+            <button type="submit">Connexion</button>
 
-          <div className={styles.otherAction}>
-            <p>Ou connexion avec</p>
-            <GoogleLoginButton />
-          </div>
+            <div className={styles.otherAction}>
+              <p>OU</p>
+              <GoogleLoginButton />
+            </div>
 
-          <div className={styles.contentElementForm}>
-          <p className={styles.linkText} onClick={() => navigate("/")}>
-            Retour au menu
-          </p>
-          </div>
-        </form>
+            <div className={styles.contentElementForm}>
+            <p className={styles.linkText} onClick={() => navigate("/")}>
+              Retour au menu
+            </p>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

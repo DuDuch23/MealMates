@@ -26,7 +26,7 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
         ],
         [
             'chat' => 1,
-            'sender' => 'user@example.com',
+            'sender' => 'jean.dupont@example.com',
             'content' => 'Hey ! Sérieux ? Tu les fais toi-même ?',
             'sent_at' => '2025-05-15 14:01:45',
         ],
@@ -38,7 +38,7 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
         ],
         [
             'chat' => 1,
-            'sender' => 'user@example.com',
+            'sender' => 'jean.dupont@example.com',
             'content' => 'Ça donne trop envie ! Tu les vends combien ?',
             'sent_at' => '2025-05-15 14:03:05',
         ],
@@ -50,7 +50,7 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
         ],
         [
             'chat' => 1,
-            'sender' => 'user@example.com',
+            'sender' => 'jean.dupont@example.com',
             'content' => 'Parfait, j’en prends une pour samedi. Tu peux me la livrer vers 16h ?',
             'sent_at' => '2025-05-15 14:04:20',
         ],
