@@ -343,9 +343,9 @@ export async function sendMessage({user,chat,message}){
 // Offer
 
 
-export async function getOfferId(slug){
+export async function getOfferSingle(id){
     try{
-        const response = await fetch(`${API_BASE_URL}/api/offers/get/${slug}`,{
+        const response = await fetch(`${API_BASE_URL}/api/offers/get/${id}`,{
             method: 'GET',
             headers: { accept: 'application/json' },
         });
