@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { createOrder, getOfferSingle } from "../../service/requestApi";
 import "./SingleOffer.scss";
@@ -15,9 +15,6 @@ export default function SingleOffer() {
                 console.log("Données de l'offre récupérées :", data.data);
                 if (data && data.data) {
                     setOffer(data.data);
-                    if (id !== data.data.slug) {
-                        navigate(`/offer/${data.data.slug}`, { replace: true });
-                    }
                 } else {
                     console.error("Aucune offre trouvée");
                 }
@@ -41,6 +38,14 @@ export default function SingleOffer() {
             console.error("Erreur lors de la création de la réservation :", error);
         }
     };
+
+    const handleInput = async () => {
+        // tryc{
+
+        // }catch(){
+
+        // }
+    }
 
     if (!offer) {
         return <div className="single-offer"><p>Chargement...</p></div>;
@@ -86,7 +91,7 @@ export default function SingleOffer() {
                         Réservation confirmée
                     </p>
                     )}
-                    <button>
+                    <button onInput={handleInput}>
                         <p>Envoyer un message</p>
                     </button>
                 </aside>
