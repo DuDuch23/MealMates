@@ -45,7 +45,7 @@ class ApiOfferController extends AbstractController
         ], 200);
     }
 
-    #[Route('/get/{slug}', methods: ['GET'])]
+    #[Route('/get/{id}', methods: ['GET'])]
     public function getOfferByID(int $id,
     OrderRepository $orderRepository,
     EntityManagerInterface $entityManager,

@@ -1,8 +1,22 @@
 .single-offer {
-    padding: 2rem;
-    max-width: 900px;
+    padding: 4rem 0;
     margin: 0 auto;
+    max-width: 1280px;
     font-family: Arial, sans-serif;
+
+    &__container{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    &__sidebar{
+        width: 30%;
+    }
+
+    &__content {
+        width: 70%;
+    }
 
     &__title {
         font-size: 2rem;

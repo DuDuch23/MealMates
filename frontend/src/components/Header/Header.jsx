@@ -80,47 +80,49 @@ export default function Header({ onProfileClick }) {
 
     return (
         <section className={styles.header}>
-            <div className={styles.header__left}>
-                <ul className={styles.header__leftMenu}>
-                    <li>
-                        <Link className={styles.logo} key="home" to="/">
-                            <img src={logo} alt="Logo MealMates" />
-                            <h1>MealMates</h1>
-                        </Link>
-                    </li>
-                    {
-                        userData && 
-                        <>
-                            <div className={styles.header__leftMenuUser}>
-                                <li>
-                                    <Link key="offer" to="/offer">
-                                        Offres
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link key="ChooseChat" to="/ChooseChat">
-                                        Messages
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link key="addOffer" to="/addOffer">
-                                        Ajouter une offre
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link key="logout" to="/" onClick={handleDeconnexion}>
-                                        Se déconnecter
-                                    </Link>
-                                </li>
-                            </div>
-                        </>
-                    }
-                </ul>
-            </div>
-            <div className={styles.header__right}>
-                <ul className={styles.header__rightInfo}>
-                    {infoUser()}
-                </ul>
+            <div className={styles.header__container}>
+                <div className={styles.header__left}>
+                    <ul className={styles.header__leftMenu}>
+                        <li>
+                            <Link className={styles.logo} key="home" to="/">
+                                <img src={logo} alt="Logo MealMates" />
+                                <h1>MealMates</h1>
+                            </Link>
+                        </li>
+                        {
+                            userData && 
+                            <>
+                                <div className={styles.header__leftMenuUser}>
+                                    <li>
+                                        <Link key="offer" to="/offer">
+                                            Offres
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link key="ChooseChat" to="/ChooseChat">
+                                            Messages
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link key="addOffer" to="/addOffer">
+                                            Ajouter une offre
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link key="logout" to="/" onClick={handleDeconnexion}>
+                                            Se déconnecter
+                                        </Link>
+                                    </li>
+                                </div>
+                            </>
+                        }
+                    </ul>
+                </div>
+                <div className={styles.header__right}>
+                    <ul className={styles.header__rightInfo}>
+                        {infoUser()}
+                    </ul>
+                </div>
             </div>
         </section>
     );
