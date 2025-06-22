@@ -21,14 +21,13 @@ function AddOffer() {
     latitude: null,
     longitude: null,
     categories: [],
-    availableSlots: [],
+    availableSlots: "",
   });
 
   const fileInputRef = useRef(null);
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [selectOption, setSelectOption] = useState(formData.option);
-  const [selectedCategories, setSelectedCategories] = useState([]);
   const [error, setError] = useState({});
   const [addressNotFound, setAddressNotFound] = useState(false);
 
@@ -44,7 +43,7 @@ function AddOffer() {
     if (!formData.pickupLocation) newError.pickupLocation = "Adresse requise";
     if (!formData.latitude || !formData.longitude) newError.pickupLocation = "Adresse introuvable";
     if (formData.categories.length === 0) newError.categories = "Sélectionner au moins une catégorie";
-    if (formData.availableSlots.length === 0) newError.availableSlots = "Ajouter au moins un créneau";
+    if (!formData.availableSlots) newError.availableSlots = "Ajouter au moins un créneau";
 
     setError(newError);
     return Object.keys(newError).length === 0;
@@ -58,8 +57,6 @@ function AddOffer() {
       Object.entries(formData).forEach(([key, value]) => {
         if (key === "categories") {
           value.forEach((id) => data.append("categories[]", id));
-        } else if (key === "availableSlots") {
-          data.append("availableSlots", JSON.stringify(value));
         } else {
           data.append(key, value);
         }
@@ -82,26 +79,6 @@ function AddOffer() {
     const previews = files.map((file) => URL.createObjectURL(file));
     setImages((prev) => [...prev, ...files]);
     setImagePreviews((prev) => [...prev, ...previews]);
-  };
-
-  const handleCategoryChange = (e) => {
-    const value = parseInt(e.target.value);
-    setFormData((prev) => ({
-      ...prev,
-      categories: prev.categories.includes(value)
-        ? prev.categories.filter((id) => id !== value)
-        : [...prev.categories, value],
-    }));
-  };
-
-  const handleAddSlot = () => {
-    const time = prompt("Ajouter un créneau horaire (ex: 10h-12h)");
-    if (time) {
-      setFormData((prev) => ({
-        ...prev,
-        availableSlots: [...prev.availableSlots, time],
-      }));
-    }
   };
 
   const handleAddressChange = async (e) => {
@@ -307,14 +284,15 @@ function AddOffer() {
             {error.categories && <p className={styles.error}>{error.categories}</p>}
 
             <div className={styles["container-inputs"]}>
-              <button type="button" onClick={handleAddSlot}>
-                Ajouter un créneau
-              </button>
-              <ul>
-                {formData.availableSlots.map((slot, idx) => (
-                  <li key={idx}>{slot}</li>
-                ))}
-              </ul>
+              <label htmlFor="availableSlots">Ajouter un créneau :</label>
+              <input
+                type="text"
+                name="availableSlots"
+                value={formData.availableSlots}
+                onChange={(e) => { 
+                  setFormData({ ...formData, availableSlots: e.target.value });
+                }} 
+              />
               {error.availableSlots && <p className={styles.error}>{error.availableSlots}</p>}
             </div>
 

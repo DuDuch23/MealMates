@@ -69,9 +69,9 @@ class Offer
     #[Groups(["public", "private"])]
     private ?string $pickupLocation = null;
 
-    #[ORM\Column(type: "json", nullable: true)]
-    #[Groups(["private", "public"])] 
-    private ?array $availableSlots = [];
+    #[ORM\Column(type: "string", length:255, nullable: true)]
+    #[Groups(["private", "public"])]
+    private ?string $availableSlots = null;
 
     #[ORM\Column(type: "boolean")]
     #[Groups(["private", "public"])] 
@@ -117,7 +117,6 @@ class Offer
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->availableSlots = [];
         $this->images = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->categories = new ArrayCollection();
@@ -206,12 +205,12 @@ class Offer
         $this->pickupLocation = $pickupLocation; return $this; 
     }
 
-    public function getAvailableSlots(): array 
+    public function getAvailableSlots(): string 
     { 
         return $this->availableSlots; 
     }
 
-    public function setAvailableSlots(array $availableSlots): static 
+    public function setAvailableSlots(string $availableSlots): static 
     { 
         $this->availableSlots = $availableSlots; return $this; 
     }
