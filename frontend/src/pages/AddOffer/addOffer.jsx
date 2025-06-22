@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import randomId from "../../service/randomKey";
+import { Link } from "react-router";
 import { useNavigate } from "react-router";
 import styles from "./addOffer.module.css";
-import { geocodeLocation, newOffer } from "../../service/requestApi"; // adapte le chemin si besoin
+import { geocodeLocation, newOffer } from "../../service/requestApi";
 import AllCategories from "../../components/AllCategory/AllCategory";
 
 
@@ -70,8 +71,13 @@ function AddOffer() {
             images.forEach((image) => 
             data.append("photos_offer[]", image));
             try{
-                await newOffer(data, true);
-                navigate("/offers");
+                const response =await newOffer(data);
+                if (response.status === 201){
+                    console.log("Offre ajoutée avec succès");
+                    navigate("/offer");
+                } else {
+                    console.error("Échec création :", res.body);
+                }
             } catch(error){
                 console.error("Erreur lors de la soumission de l'offre :", error);
             }
@@ -87,7 +93,16 @@ function AddOffer() {
         setImages((prev) => [...prev, ...files]);
         setImagePreviews((prev) => [...prev, ...previews]);
     };
-
+    
+    const handleOptionChange = (e) => {
+        const value = e.target.value;
+        setSelectOption(value);
+        setFormData((prev) => ({
+            ...prev,
+            option: value,
+            price: value === "don" ? "" : prev.price,
+        }));
+    };
     const handleAddressChange = async (e) => {
         const address = e.target.value;
         setFormData((prev) => ({ ...prev, pickupLocation: address }));
@@ -121,6 +136,7 @@ function AddOffer() {
     return (
         <div className={styles.add_offer}>
             <div className={styles.add_offer__container}>
+                <Link key="offer" to={'/offer'}>Retourner en arrière</Link>
                 <form onSubmit={handleSubmit}>
                     <div className={styles.add_offer__left}>
                         <div className={styles["container-inputs"]}>
@@ -209,30 +225,48 @@ function AddOffer() {
                         </div>
 
                         <div className={styles["container-inputs"]}>
-                            <label htmlFor="isRecurring">Récurrent :</label>
-                            <select
-                            value={selectOption}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                setSelectOption(value);
-                                setFormData({ ...formData, option: value });
-                            }}
-                            >
-                                <option value="prix">Prix</option>
-                                <option value="don">Don</option>
-                            </select>
+                        <label>Type d’offre :</label>
 
-                            {selectOption === "prix" && (
+                        {/* Radio PRIX */}
+                        <label className={styles.radioLabel}>
+                            <input
+                            type="radio"
+                            name="offerType"
+                            value="prix"
+                            checked={selectOption === "prix"}
+                            onChange={handleOptionChange}
+                            />
+                            Prix
+                        </label>
+
+                        {/* Radio DON */}
+                        <label className={styles.radioLabel}>
+                            <input
+                            type="radio"
+                            name="offerType"
+                            value="don"
+                            checked={selectOption === "don"}
+                            onChange={handleOptionChange}
+                            />
+                            Don
+                        </label>
+
+                        {/* Champ prix affiché seulement si “prix” */}
+                        {selectOption === "prix" && (
                             <>
-                                <input
+                            <input
                                 type="number"
+                                min="0"
+                                step="0.01"
                                 value={formData.price}
-                                placeholder="Prix"
-                                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                />
-                                {error.price && <p className={styles.error}>{error.price}</p>}
+                                placeholder="Montant en €"
+                                onChange={(e) =>
+                                setFormData({ ...formData, price: e.target.value })
+                                }
+                            />
+                            {error.price && <p className={styles.error}>{error.price}</p>}
                             </>
-                            )}
+                        )}
                         </div>
 
                         <div className={styles["container-inputs"]}>
@@ -259,13 +293,13 @@ function AddOffer() {
                             {error.availableSlots && <p className={styles.error}>{error.availableSlots}</p>}
                             </div>
                         </div>
-
-                          <button type="submit">Valider</button>
+                        <div className={styles["container-inputs"]}>
+                            <button type="submit">Valider</button>
                         </div>
-
                     </div>
                     <aside className={styles.add_offer__sidebar}>
-                        <div className={styles["photo-input"]}>
+                        <div className={`${styles["photo-input"]} ${styles["container-inputs"]}`}>
+
                             <label htmlFor="photo"></label>
 
                             <svg

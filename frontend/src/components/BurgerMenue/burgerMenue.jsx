@@ -13,18 +13,19 @@ export default function BurgerMenue({ onProfileClick }) {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userId = sessionStorage.getItem("user");
-      const id  = Number(userId);
-      if (id) {
-        try {
-          const data = await getUserIndexDB(id);
-          setUserData(data);
-        } catch (error) {
-          console.error("Erreur lors de la récupération de l'utilisateur :", error);
+      const storedUser = sessionStorage.getItem("user");
+      if(storedUser){
+        const {id} = JSON.parse(storedUser);
+        if(id){
+          try {
+            const data = await getUserIndexDB(id);
+            setUserData(data);
+          } catch (error) {
+            console.error("Erreur lors de la récupération de l'utilisateur :", error);
+          }
         }
       }
     };
-
     fetchUserData();
   }, []);
 
@@ -33,12 +34,13 @@ export default function BurgerMenue({ onProfileClick }) {
   };
 
   const profilUser = () => {
+    console.log("profilUser", userData);
     if (userData) {
       return (
         <li>
           <IconUser id={userData.iconUser || 4} />
           <p>
-            <Link to={`/userProfile/${userData.id || 4}`}>Mon Profil</Link>
+            <Link to={`/userProfile/${userData.id}`}>Mon profil</Link>
           </p>
         </li>
       );
@@ -76,11 +78,13 @@ export default function BurgerMenue({ onProfileClick }) {
                 </svg>
               </button>
             </ul>
-            {/* <svg onClick={onProfileClick} xmlns="http://www.w3.org/2000/svg" id={styles["delete-burger-menue"]} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg> */}
-            {profilUser()}
             <ul className={styles["menu-mobile__nav-bottom"]}>
+              {userData && (
+                <>
+                  {profilUser()}
+                  <li><Link to="/dashboard">Tableau de bord</Link></li>
+                </>
+              )}
               <li>
                 {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />

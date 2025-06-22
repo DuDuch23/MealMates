@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState,useEffect } from 'react';
-import { Routes, Route } from 'react-router';
+import { Routes, Route, useNavigate } from 'react-router';
 import { getUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 import logo from '../src/assets/logo-mealmates.png';
@@ -21,6 +21,7 @@ const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
 const Inscription = React.lazy(() => import('./pages/Inscription/Inscription'));
 const Deconnexion = React.lazy(() => import('./pages/Deconnexion/Deconnexion'));
 const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'));
+const UserDashboard = React.lazy(() => import('./pages/UserDashboard/UserDashboard'));
 
 // Chat
 const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
@@ -28,8 +29,19 @@ const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 
 function App() {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  
 
-    useEffect(() => {
+  useEffect(() => {
+    const expiration = sessionStorage.getItem("token_expiration");
+    if (expiration && Date.now() > Number(expiration)) {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("token_expiration");
+      sessionStorage.removeItem("user");
+      navigate("/connexion");
+      return;
+    }
+
     async function fetchUser() {
       try {
         const userSession = sessionStorage.getItem("user");
@@ -46,7 +58,7 @@ function App() {
     }
 
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   return (
     <Suspense fallback={
@@ -77,12 +89,13 @@ function App() {
           <Route path="/offer" element={<Offer />} />
           <Route path="/addOffer" element={<AddOffer />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
+          {/* user profile */}
+          <Route path="/userProfile/:id" element={<UserProfile />} />
+          <Route path="/userMealCard/:id" element={<UserMealCard />} />
+          <Route path="/userModify/:id" element={<UserModify />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
         </Route>
 
-        {/* user profile */}
-        <Route path="/userProfile/:id" element={<UserProfile />} />
-        <Route path="/userMealCard/:id" element={<UserMealCard />} />
-        <Route path="/userModify/:id" element={<UserModify />} />
 
         {/* auth */}
         <Route path="/connexion" element={<Connexion />} />

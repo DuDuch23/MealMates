@@ -317,4 +317,49 @@ class ApiUserController extends AbstractController
             'code' => 200,
         ], 200);
     }
+
+    #[Route('/{id}/dashboard', name: '_dashboard', methods: ['GET'])]
+    public function getUserDashboard(int $id, EntityManagerInterface $entityManagerInterface): JsonResponse
+    {
+        $user = $entityManagerInterface->getRepository(User::class)->find($id);
+        if (!$user) return $this->json(['message' => 'User not found'], 404);
+
+        $orders = $user->getOrders();
+        $offers = $user->getOffers();
+
+        $itemsBought = count($orders);
+        $itemsSold = 0;
+        $itemsDonated = 0;
+        $moneySaved = 0;
+        $moneyEarned = 0;
+        $quantitySaved = 0;
+
+        foreach ($offers as $offer) {
+            if ($offer->getIsDonation()) {
+                $itemsDonated++;
+            } else {
+                $itemsSold++;
+                $moneyEarned += $offer->getPrice() * $offer->getQuantity();
+            }
+            $quantitySaved += $offer->getQuantity();
+        }
+
+        foreach ($orders as $order) {
+            $offer = $order->getOffer();
+            if ($offer && !$offer->getIsDonation()) {
+                $moneySaved += $offer->getPrice() * $offer->getQuantity();
+                $quantitySaved += $offer->getQuantity();
+            }
+        }
+
+        return $this->json([
+            'totalTransactions' => $itemsBought + $itemsSold + $itemsDonated,
+            'itemsBought' => $itemsBought,
+            'itemsSold' => $itemsSold,
+            'itemsDonated' => $itemsDonated,
+            'moneySaved' => $moneySaved,
+            'moneyEarned' => $moneyEarned,
+            'quantitySaved' => $quantitySaved,
+        ]);
+    }
 }

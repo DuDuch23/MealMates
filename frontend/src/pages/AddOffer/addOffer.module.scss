@@ -49,6 +49,7 @@
                 border: none;
                 font-size: variables.$fontSize;
                 border-radius: 12px;
+                cursor: pointer;
             }
         }
         .container-image-offer{
@@ -200,20 +201,48 @@
     }
 }
 
+@media screen and (max-width: 1280px) {
+    .add_offer{
+        form{
+
+        }
+    }
+}
 
 @media screen and (max-width: 768px) {
-    form{
-        .container-inputs{
+    .add_offer{
+
+        &__container{
+        }
+        &__left{
             width: 100%;
         }
-        .part-1,.part-2{
+
+        &__sidebar{
             width: 100%;
         }
-        .container-image-offer{
-            flex-direction: column;
-            img{
-                width: 80%;
-                margin: 0 auto;
+        form{
+            flex-direction: column-reverse;
+            gap: 0;
+            margin: 20px 20px 60px;
+            .container-inputs{
+                width: 100%;
+                padding: 22px 0;
+
+                input{
+                    padding: 8px;
+                    font-size: 1rem;
+                }
+            }
+            .part-1,.part-2{
+                width: 100%;
+            }
+            .container-image-offer{
+                flex-direction: column;
+                img{
+                    width: 80%;
+                    margin: 0 auto;
+                }
             }
         }
     }
