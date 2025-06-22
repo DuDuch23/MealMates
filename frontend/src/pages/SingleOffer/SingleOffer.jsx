@@ -1,12 +1,13 @@
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { createOrder, getOfferSingle } from "../../service/requestApi";
-import "./SingleOffer.scss";
+import style from "./SingleOffer.module.css";
 
 export default function SingleOffer() {
     const { id } = useParams();
     const [offer, setOffer] = useState(null);
     const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchOffer = async () => {
@@ -15,9 +16,6 @@ export default function SingleOffer() {
                 console.log("Données de l'offre récupérées :", data.data);
                 if (data && data.data) {
                     setOffer(data.data);
-                    if (id !== data.data.slug) {
-                        navigate(`/offer/${data.data.slug}`, { replace: true });
-                    }
                 } else {
                     console.error("Aucune offre trouvée");
                 }
@@ -47,16 +45,16 @@ export default function SingleOffer() {
     }
 
     return (
-        <div className="single-offer">
-            <div className="single-offer__container">
-                <div className="single-offer__content">
-                    <div className="single-offer__images">
+        <div className={style.single_offer}>
+            <div className={style.single_offer__container}>
+                <div className={style.single_offer__content}>
+                    <div className={style.single_offer__images}>
                         {offer.images && offer.images.map((img) => (
-                            <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className="single-offer__image" />
+                            <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className={style.single_offer__image} />
                         ))}
                     </div>
-                    <h1 className="single-offer__title">{offer.product}</h1>
-                    <div className="single-offer__details">
+                    <h1 className={style.single_offer__title}>{offer.product}</h1>
+                    <div className={style.single_offer__details}>
                         <p><strong>Description :</strong> {offer.description || "Aucune description."}</p>
                         <p><strong>Prix :</strong> {offer.price ? `${offer.price} €` : "Gratuit"}</p>
                         <p><strong>Quantité :</strong> {offer.quantity}</p>
@@ -67,7 +65,7 @@ export default function SingleOffer() {
                         <p><strong>Créée le :</strong> {new Date(offer.createdAt).toLocaleString()}</p>
                     </div>
                 </div>
-                <aside className="single-offer__sidebar">
+                <aside className={style.single_offer__sidebar}>
                     {!offer.order && (
                     <button className="single-offer__reserve-btn" onClick={handleReservation}>
                         Réserver cette offre
