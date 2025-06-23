@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router"; 
+import { useNavigate } from "react-router-dom"; 
 import { getTokenSSo } from "./../service/requestApi"; // ← importe ta fonction d'auth SSO ici
 
 const CLIENT_ID = "947326609144-oed76j74qvdqh2ie1e4cdfobrtmpiq66.apps.googleusercontent.com";

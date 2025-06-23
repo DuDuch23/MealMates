@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import randomId from "../../service/randomKey";
-import { Link } from "react-router";
-import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./addOffer.module.css";
 import { geocodeLocation, newOffer } from "../../service/requestApi";
 import AllCategories from "../../components/AllCategory/AllCategory";

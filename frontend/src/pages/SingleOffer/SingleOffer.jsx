@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createOrder, getOfferSingle } from "../../service/requestApi";
 import style from "./SingleOffer.module.css";

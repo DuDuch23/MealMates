@@ -1,6 +1,6 @@
 import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
 import { AiFillStar } from "react-icons/ai";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";

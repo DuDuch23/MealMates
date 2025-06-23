@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import {Link} from "react-router";
+import {Link} from "react-router-dom";
 import styles from "./SliderOffers.module.scss";
 import React from 'react';
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useId } from "react";
-import { useParams,Link } from 'react-router';
+import { useParams,Link } from 'react-router-dom';
 import { getUser,getOfferBySeller } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
