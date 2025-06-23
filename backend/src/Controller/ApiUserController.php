@@ -333,7 +333,16 @@ class ApiUserController extends AbstractController
         $moneySaved = 0;
         $moneyEarned = 0;
         $quantitySaved = 0;
+        $transactionsByType = [
+            'Ventes' => $itemsSold,
+            'Dons' => $itemsDonated,
+            'Achats' => $itemsBought,
+        ];
 
+        $byMonth = [
+            ['month' => '2024-01', 'kg' => 10],
+            ['month' => '2024-02', 'kg' => 5],
+        ];
         foreach ($offers as $offer) {
             if ($offer->getIsDonation()) {
                 $itemsDonated++;
@@ -353,13 +362,15 @@ class ApiUserController extends AbstractController
         }
 
         return $this->json([
-            'totalTransactions' => $itemsBought + $itemsSold + $itemsDonated,
+            'transactionsCount' => $itemsBought + $itemsSold + $itemsDonated,
             'itemsBought' => $itemsBought,
             'itemsSold' => $itemsSold,
             'itemsDonated' => $itemsDonated,
             'moneySaved' => $moneySaved,
             'moneyEarned' => $moneyEarned,
             'quantitySaved' => $quantitySaved,
+            'transactionsByType' => $transactionsByType,
+            'byMonth' => $byMonth,
         ]);
     }
 }
