@@ -66,7 +66,10 @@
                 }
             }
         }
-        .button-user-info{
+        .button-user-info-mobile{
+            display: none;
+        }
+        .button-user-info-desktop{
             display: flex;
             background-color: variables.$colorDarkGreen;
             border-radius: 10px;
@@ -170,6 +173,18 @@
                 a{
                     padding: 10px 14px;
                 }
+            }
+            .button-user-info-mobile{
+                display: flex;
+                background-color: variables.$colorDarkGreen;
+                border-radius: 10px;
+                cursor: pointer;
+                justify-content: center;
+                align-items: center;
+                padding: 2px 26px;
+            }
+            .button-user-info-desktop{
+                display: none;
             }
         }
         img{
