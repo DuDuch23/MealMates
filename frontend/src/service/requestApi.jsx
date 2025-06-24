@@ -151,6 +151,7 @@ export async function getTokenSSo({token}){
     }
 }
 
+// connexion sso avec google
 export async function getSSO() {
   const token = sessionStorage.getItem("token");
   if (!token) return null;
@@ -271,6 +272,30 @@ export async function logOut({id}) {
 }
 
 // Chat
+export async function createChat({client, offer, seller}){
+    console.log(client.id, offer, seller);
+    const token = sessionStorage.getItem("token");
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/create`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    "seller": seller,
+                    "client": client.id,
+                    "offer": offer
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    } 
+}
+
 export async function getAllChat(id) {
     const token = sessionStorage.getItem("token");
     try{

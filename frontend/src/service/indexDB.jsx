@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 
-const SECRET_KEY = import.meta.env.VITE_CRYPTO_KEY || "default-key";
+const SECRET_KEY = import.meta.env.VITE_CRYPTO_KEY;
 
 // Ouvre (ou crée) la base de données
 export const getDatabase = () => {
@@ -16,12 +16,21 @@ export const getDatabase = () => {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
+
+      //  Table user
       if (!db.objectStoreNames.contains("utilisateurs")) {
-        const store = db.createObjectStore("utilisateurs", { keyPath: "id" });
-        store.createIndex("nom", "nom", { unique: false });
-        store.createIndex("prenom", "prenom", { unique: false });
-        store.createIndex("email", "email", { unique: true });
-        store.createIndex("iconUser", "iconUser", { unique: false });
+        const userStore = db.createObjectStore("utilisateurs", { keyPath: "id" });
+        userStore.createIndex("nom", "nom", { unique: false });
+        userStore.createIndex("prenom", "prenom", { unique: false });
+        userStore.createIndex("email", "email", { unique: true });
+        userStore.createIndex("iconUser", "iconUser", { unique: false });
+      }
+
+      // Table search
+      if (!db.objectStoreNames.contains("search")) {
+        const searchStore = db.createObjectStore("search", { keyPath: "id" });
+        searchStore.createIndex("userId", "userId", { unique: false });
+        searchStore.createIndex("timestamp", "timestamp", { unique: false });
       }
     };
   });
@@ -98,41 +107,59 @@ export const updateUserIndexDB = async (userId, newUserData) => {
 
       if (!existing) return reject("Utilisateur introuvable");
 
-      const decrypted = JSON.parse(CryptoJS.AES.decrypt(result.encrypted, SECRET_KEY).toString(CryptoJS.enc.Utf8));
-      resolve(decrypted);
+      try {
+        const decrypted = JSON.parse(
+          CryptoJS.AES.decrypt(existing.encrypted, SECRET_KEY).toString(CryptoJS.enc.Utf8)
+        );
+
+        const updated = { ...decrypted, ...newUserData };
+        const encrypted = CryptoJS.AES.encrypt(JSON.stringify(updated), SECRET_KEY).toString();
+
+        const putRequest = store.put({ id: userId, encrypted });
+
+        putRequest.onsuccess = () => resolve("Utilisateur mis à jour avec succès");
+        putRequest.onerror = (event) => reject(`Erreur mise à jour utilisateur : ${event.target.error}`);
+      } catch (e) {
+        reject("Erreur lors du déchiffrement des données existantes");
+      }
     };
-    request.onerror = (event) => reject(`Erreur récupération utilisateur : ${event.target.error}`);
+
+    getRequest.onerror = (event) => reject(`Erreur récupération utilisateur : ${event.target.error}`);
   });
 };
 
+
 // ajouter une recherche
-export const addSearchIndexDB = async (rechereche,user) => {
+export const addSearchIndexDB = async (search,storedUser) => {
+  const allSearch = await getAllSearch();
 
-    if (!user?.id) {
-      throw new Error("L'utilisateur doit avoir un ID valide");
-    }
+  const id = allSearch.length + 1;
 
-    const db = await getDatabase();
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(rechereche), SECRET_KEY).toString();
+  if (!storedUser.id) {
+    throw new Error("L'utilisateur doit avoir un ID valide");
+  }
 
-    return new Promise((resolve, reject) => {
-      const dbRequest = db.transaction("rechereche", "readwrite");
-      const store = dbRequest.objectStore("rechereche");
+  const db = await getDatabase();
+  const encrypted = CryptoJS.AES.encrypt(JSON.stringify(search), SECRET_KEY).toString();
 
-      const request = store.put({ id: rechereche.id, encrypted });
+  console.log(allSearch);
 
-      request.onsuccess = () => resolve("Recherche sauvegarder avec succès");
-      request.onerror = (event) => reject(`Erreur lors de la sauvegarde de la recherche : ${event.target.error}`);
+  return new Promise((resolve, reject) => {
+    const dbRequest = db.transaction("search", "readwrite");
+    const store = dbRequest.objectStore("search");
+    const request = store.put({ id: id, encrypted });
+    request.onsuccess = () => resolve("Recherche sauvegarder avec succès");
+    request.onerror = (event) => reject(`Erreur lors de la sauvegarde de la recherche : ${event.target.error}`);
   });
-
 }
 
+// tout l'historique des recherches
 export const getAllSearch = async () => {
   const db = await getDatabase();
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction("rechereche", "readonly");
-    const store = transaction.objectStore("rechereche");
+    const transaction = db.transaction("search", "readonly");
+    const store = transaction.objectStore("search");
 
     const request = store.getAll();
 
@@ -153,7 +180,6 @@ export const getAllSearch = async () => {
     request.onerror = (event) => reject(`Erreur lecture : ${event.target.error}`);
   });
 };
-
 
 // Supprimer la base de données
 export const deleteUserIndexDB = async () => {

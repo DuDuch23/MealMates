@@ -9,13 +9,14 @@ function App() {
     const token = sessionStorage.getItem("token");
     const user = sessionStorage.getItem("user");
     const navigate = useNavigate();
-    // if(token && user){
-    //     navigate("/offer");
-    //     console.log("Vous êtes connecté, redirection vers la page d'accueil.");
-    // }
-    // else{
-    //     console.log("Vous n'êtes pas connecté, redirection vers la page de connexion.");
-    // }
+    
+    if(token && user){
+        navigate("/offer");
+        console.log("Vous êtes connecté, redirection vers la page d'accueil.");
+    }
+    else{
+        console.log("Vous n'êtes pas connecté, redirection vers la page de connexion.");
+    }
 
     useEffect(() => {
         const watchId = navigator.geolocation.watchPosition(
