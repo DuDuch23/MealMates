@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
-<<<<<<< HEAD
-=======
 *, ::before, ::after {
   padding: 0;
   margin: 0;
@@ -21,7 +19,6 @@ a {
   text-decoration: none;
 }
 
->>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
 *, ::before, ::after {
   margin: 0;
   padding: 0;
@@ -31,18 +28,12 @@ a {
 }
 
 body {
-<<<<<<< HEAD
-  background-color: #333333;
-=======
   background-color: #262626;
->>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
   overflow-x: hidden;
 }
 
 .mobile {
   width: 480px;
-<<<<<<< HEAD
-=======
 }
 
 .swiper-wrapper {
@@ -52,5 +43,4 @@ body {
 #icon-user svg {
   height: 50px;
   width: 50px;
->>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
 }/*# sourceMappingURL=main.css.map */

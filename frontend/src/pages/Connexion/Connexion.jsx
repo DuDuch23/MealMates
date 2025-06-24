@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-<<<<<<< HEAD
-import { logIn } from "../../service/requestApi";
-import Header from "../../components/Header/Header";
-import GoogleLoginButton from "../../components/SsoGoogle.jsx";
-=======
 import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
 import CryptoJS from "crypto-js";
@@ -12,7 +7,6 @@ import logo from '../../assets/logo-mealmates.png';
 import GoogleLoginButton from "../../components/SsoGoogle";
 import styles from "./Connexion.module.css";
 const SECRET_KEY = import.meta.env.VITE_CRYPTO_KEY || "default-key";
->>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
 
 
 function Connexion() {
@@ -37,35 +31,8 @@ function Connexion() {
     }
   }, [navigate]);
 
-<<<<<<< HEAD
-                        {/* <GoogleLoginButton setUser={setUser} /> */}
-    return (
-        <div className="mobile">
-            <Header />
-            <div className="action">
-                <h1>MealMates</h1>
-                {/* <form onSubmit={handleSubmit}>
-                    <div className="content-element-form">
-                        <label htmlFor="email">Email</label>
-                        <input type="email" name="email" placeholder="Test@email.com" onChange={handleEmail} />
-                    </div>
-                    <div className="content-element-form">
-                        <label htmlFor="password">Mot de Passe:</label>
-                        <input type="password" name="password" placeholder="password" onChange={handlePassword} />
-                    </div>
-                    <div className="content-element-form two-input">
-                        <div className="two-input" id="password">
-                            <label htmlFor="#">Se souvenir de moi</label>
-                            <input type="checkbox" name="" />
-                        </div>
-                        <a href="#">Mot de passe oublié ?</a>
-                    </div>
-                    <button type="submit">Connexion</button>
-                </form> */}
-=======
   // Gestion des inputs de manière générique
   const handleInputChange = (setter) => (event) => setter(event.target.value);
->>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
 
   // Gérer la soumission du formulaire de connexion
   const handleSubmit = async (event) => {
@@ -121,10 +88,6 @@ function Connexion() {
                 required
               />
             </div>
-<<<<<<< HEAD
-        </div>
-    );
-=======
 
             <div className={styles.contentElementForm}>
               <label htmlFor="password">Mot de Passe</label>
@@ -154,7 +117,6 @@ function Connexion() {
       </div>
     </div>
   );
->>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
 }
 
 export default Connexion;

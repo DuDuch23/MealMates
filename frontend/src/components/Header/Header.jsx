@@ -3,14 +3,8 @@ import { Link } from 'react-router';
 import { jwtDecode } from 'jwt-decode';
 import { IconUser } from '../IconUser/iconUser';
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import { Link } from 'react-router-dom';
-import Logo from '../../assets/logo-mealmates.png';
-import './Header.css';
-=======
 import logo from '../../assets/logo-mealmates.png';
 import { getProfile, refreshToken, logOut } from '../../service/requestApi';
->>>>>>> e94a387a0300ad288eb176126e4eb6e535013fd8
 
 export default function Header({ onProfileClick }) {
     const token = sessionStorage.getItem("token");

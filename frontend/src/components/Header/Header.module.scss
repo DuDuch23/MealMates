@@ -1,202 +1,188 @@
 @use '../../styles/variables.scss';
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid;
+  width: 100%;
+  z-index: 99;
+  background: hsl(0 0% 15% / 50%);
+
+  &__container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    position: sticky;
-    top: 0;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid;
     width: 100%;
-    z-index: 99;
-    background: hsl(0deg 0% 15% / 50%);
-    &__container{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
-    }
-    a{
-        display: flex;
-        font-size: variables.$fontSize;
-        gap: 12px;
-        justify-content: center;
-        align-items: center;
-    }
-    &__rightInfo{
-        display: flex;
-        list-style: none;
-        justify-content: end;
-        gap: 24px;
-        li{
-            list-style-type: none;
-        }
-        .button-sign-in{
-            a{
-                background-color: variables.$colorDarkGreen;
-                color: white;
-                padding: 16px 28px;
-                border-radius: 10px;
-                font-weight: 600;
-                transition: all 0.3s ease-in-out;
-                &:hover{
-                    transition: all 0.3s ease-in-out;
-                    background-color: white;
-                    color: variables.$colorDarkGreen;
-                }
-            }
-        }
-        .button-login{
-            a{
-                background-color: white;
-                color: variables.$colorDarkGreen;
-                padding: 16px 28px;
-                border-radius: 10px;
-                font-weight: 600;
-                transition: all 0.3s ease-in-out;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
 
-                &:hover{
-                    transition: all 0.3s ease-in-out;
-                    background-color: variables.$colorDarkGreen;
-                    color: white;
-                }
-            }
-        }
-        .button-user-info{
-            display: flex;
-            background-color: variables.$colorDarkGreen;
-            border-radius: 10px;
-            cursor: pointer;
-            justify-content: center;
-            align-items: center;
-            padding: 2px 26px;
-        }
+  a {
+    display: flex;
+    font-size: variables.$fontSize;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  &__rightInfo {
+    display: flex;
+    list-style: none;
+    justify-content: flex-end;
+    gap: 24px;
+
+    li {
+      list-style: none;
     }
-    &__sign-in{
+
+    .button-sign-in a,
+    .button-login a {
+      padding: 16px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .button-sign-in a {
+      background-color: variables.$colorDarkGreen;
+      color: white;
+
+      &:hover {
+        background-color: white;
+        color: variables.$colorDarkGreen;
+      }
+    }
+
+    .button-login a {
+      background-color: white;
+      color: variables.$colorDarkGreen;
+
+      &:hover {
         background-color: variables.$colorDarkGreen;
+        color: white;
+      }
     }
-    
-    &__left{
-        display: flex;
-        align-items: center;
-        height: 100%;
 
-        ul{
-            display: flex;
-            list-style: none;
-            gap: 20px;
-            margin-left: 10px;
-            padding: 0;
-            margin: 0;
-            align-items: center;
-            justify-self: center;
-            li{
-                list-style-type: none;
-                a:not(.logo){
-                    text-decoration: none;
-                    padding: 20px 8px;
-                }
-            }
+    .button-user-info {
+      display: flex;
+      background-color: variables.$colorDarkGreen;
+      border-radius: 10px;
+      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+      padding: 2px 26px;
+    }
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    ul {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+
+      li {
+        a:not(.logo) {
+          text-decoration: none;
+          padding: 20px 8px;
         }
-
-        h1 {
-            font-size: 2.5rem;
-        }
+      }
     }
 
-    &__leftMenu{
-        
+    h1 {
+      font-size: 2.5rem;
     }
+  }
 
-    &__leftMenuUser{
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        svg{
-            width: 30px;
-            height: 30px;
-        }
+  &__leftMenuUser {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+
+    svg {
+      width: 30px;
+      height: 30px;
     }
-    &__right {
-        justify-content: right;
-        height: 100%;
-        display: flex;
-        align-items: center;
-    }
-    #icon-user{
-    }
-    .button-user{
-        width: 30%;
-        display: flex;
-        cursor: pointer;
-        justify-content: space-around;
-    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+  }
+
+  .button-user {
+    width: 30%;
+    display: flex;
+    cursor: pointer;
+    justify-content: space-around;
+  }
 }
 
 @media screen and (max-width: 1280px) {
-    .header{
-        &__leftMenuUser{
-            display: none;
-        }
-    }
+  .header__leftMenuUser {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 768px) {
-    .header{
-        padding: 20px 10px;
-        gap: 10px;
-        flex-wrap: wrap;
-        a{
-            justify-content: unset;
-        }
+  .header {
+    padding: 20px 10px;
+    gap: 10px;
+    flex-wrap: wrap;
 
-        &__rightInfo{
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-            .button-login{
-                a{
-                    padding: 10px 14px;
+    a {
+      justify-content: unset;
+    }
 
-                }
-            }
+    &__rightInfo {
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
 
-            .button-sign-in{
-                a{
-                    padding: 10px 14px;
-                }
-            }
-        }
-        img{
-            width: 30%;
-        }
-        div{
-            width: unset;
-            h1{
-                font-size: 1.5rem;
-            }
-        }
-        .menu-mobile{
-            display: block;
-        }
-        .header-left{
-            img{
-                width: 30%;
-            }
-        }
-        .header-right{
-            display: none;
-            .button-log-in {
-                display: none;
-            }
-            .button-sign-in {
-                display: none;
-            }
-        }
-    } 
+      .button-login a,
+      .button-sign-in a {
+        padding: 10px 14px;
+      }
+    }
+
+    img {
+      width: 30%;
+    }
+
+    div {
+      width: unset;
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+
+    .menu-mobile {
+      display: block;
+    }
+
+    .header-right {
+      display: none;
+
+      .button-log-in,
+      .button-sign-in {
+        display: none;
+      }
+    }
+  }
 }
