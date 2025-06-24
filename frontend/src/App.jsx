@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useState,useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { getUserIndexDB } from './service/indexDB';
+import { getUserIndexDB, deleteUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 import logo from '../src/assets/logo-mealmates.png';
 
@@ -35,9 +35,8 @@ function App() {
   useEffect(() => {
     const expiration = sessionStorage.getItem("token_expiration");
     if (expiration && Date.now() > Number(expiration)) {
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("token_expiration");
-      sessionStorage.removeItem("user");
+      deleteUserIndexDB();
+      sessionStorage.clear();
       navigate("/connexion");
       return;
     }

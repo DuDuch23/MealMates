@@ -17,9 +17,9 @@ function AddOffer() {
         expirationDate: "",
         option: "prix",
         price: "",
+        isDonation: false,
         pickupLocation: "",
         isRecurring: false,
-        isVegan: false,
         latitude: null,
         longitude: null,
         categories: [],
@@ -76,7 +76,7 @@ function AddOffer() {
                     console.log("Offre ajoutée avec succès");
                     navigate("/offer");
                 } else {
-                    console.error("Échec création :", res.body);
+                    console.error("Échec création :", response.body);
                 }
             } catch(error){
                 console.error("Erreur lors de la soumission de l'offre :", error);
@@ -93,6 +93,10 @@ function AddOffer() {
         setImages((prev) => [...prev, ...files]);
         setImagePreviews((prev) => [...prev, ...previews]);
     };
+
+    // useEffect(() => {
+    //     setFormData((prev) => ({ ...prev, option: selectOption }));
+    // }, [selectOption]);
     
     const handleOptionChange = (e) => {
         const value = e.target.value;
@@ -100,7 +104,8 @@ function AddOffer() {
         setFormData((prev) => ({
             ...prev,
             option: value,
-            price: value === "don" ? "" : prev.price,
+            isDonation: value === "don",
+            price: value === "don" ? "0" : ""
         }));
     };
     const handleAddressChange = async (e) => {
@@ -225,48 +230,45 @@ function AddOffer() {
                         </div>
 
                         <div className={styles["container-inputs"]}>
-                        <label>Type d’offre :</label>
+                            <label>Type d'offre :</label>
 
-                        {/* Radio PRIX */}
-                        <label className={styles.radioLabel}>
-                            <input
-                            type="radio"
-                            name="offerType"
-                            value="prix"
-                            checked={selectOption === "prix"}
-                            onChange={handleOptionChange}
-                            />
-                            Prix
-                        </label>
+                            <label className={styles.radioLabel}>
+                                <input
+                                type="radio"
+                                name="offerType"
+                                value="prix"
+                                checked={selectOption === "prix"}
+                                onChange={handleOptionChange}
+                                />
+                                Prix
+                            </label>
 
-                        {/* Radio DON */}
-                        <label className={styles.radioLabel}>
-                            <input
-                            type="radio"
-                            name="offerType"
-                            value="don"
-                            checked={selectOption === "don"}
-                            onChange={handleOptionChange}
-                            />
-                            Don
-                        </label>
+                            <label className={styles.radioLabel}>
+                                <input
+                                type="radio"
+                                name="offerType"
+                                value="don"
+                                checked={selectOption === "don"}
+                                onChange={handleOptionChange}
+                                />
+                                Don
+                            </label>
 
-                        {/* Champ prix affiché seulement si “prix” */}
-                        {selectOption === "prix" && (
-                            <>
-                            <input
-                                type="number"
-                                min="0"
-                                step="0.01"
-                                value={formData.price}
-                                placeholder="Montant en €"
-                                onChange={(e) =>
-                                setFormData({ ...formData, price: e.target.value })
-                                }
-                            />
-                            {error.price && <p className={styles.error}>{error.price}</p>}
-                            </>
-                        )}
+                            {selectOption === "prix" && (
+                                <>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    value={formData.price}
+                                    placeholder="Montant en €"
+                                    onChange={(e) =>
+                                    setFormData({ ...formData, price: e.target.value })
+                                    }
+                                />
+                                {error.price && <p className={styles.error}>{error.price}</p>}
+                                </>
+                            )}
                         </div>
 
                         <div className={styles["container-inputs"]}>

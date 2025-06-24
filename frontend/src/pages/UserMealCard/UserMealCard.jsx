@@ -4,6 +4,7 @@ import { getUser, getOfferBySeller, fetchStats } from "../../service/requestApi"
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
 import StatCard from "../../components/StatCard/StatCard";
+import CardOffer from "../../components/CardOffer/CardOffer";
 import { format } from "date-fns";
 import {
   BarChart, Bar, XAxis, PieChart, Pie, Tooltip, ResponsiveContainer
@@ -11,16 +12,21 @@ import {
 import styles from './UserMealCard.module.css';
 
 function UserMealCard() {
-  const params = useParams();
-  const userId = params.id ? parseInt(params.id) : null;
+    const params = useParams();
+    const userId = params.id ? parseInt(params.id) : null;
 
-  const [user, setUser] = useState(null);
-  const [userOffer, setOfferUser] = useState(null);
-  const [dashboardData, setDashboardData] = useState(null);
-  const [dashboardStats, setDashboardStats] = useState(null);
-  const [filter, setFilter] = useState("year");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const [user, setUser] = useState(null);
+    const [userOffer, setOfferUser] = useState(null);
+    const [dashboardData, setDashboardData] = useState(null);
+    const [dashboardStats, setDashboardStats] = useState(null);
+    const [filter, setFilter] = useState("year");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [visibleCount, setVisibleCount] = useState(10);
+
+    const showMoreOffers = () => {
+        setVisibleCount((prev) => prev + 5);
+    };
 
   useEffect(() => {
     async function fetchAllData() {
@@ -69,19 +75,23 @@ function UserMealCard() {
 
     const userPreference =  () => {
         if (userOffer) {
-            console.log(userOffer);
             return (
                 <div className={styles[`offer-container`]}>
                     <h3>Mes offres :</h3>
                     <ul>
-                        {userOffer.map((offer) => (
-                            <li key={offer.id}>{offer.product}</li>
+                        {userOffer.slice(0, visibleCount).map((offer) => (
+                            <CardOffer key={offer.id} offer={offer} />
                         ))}
                     </ul>
+                    {userOffer.length > visibleCount && (
+                        <button onClick={showMoreOffers} className={styles["show-more-button"]}>
+                            Voir plus d'offres...
+                        </button>
+                    )}
                 </div>
             );
         } else {
-            return <p>Aucune préférence disponible.</p>;
+            return <p>Cette utilisateur n'a toujours pas mis d'offre en ligne.</p>;
         }
     };
 
@@ -101,7 +111,7 @@ function UserMealCard() {
                 <h2>Tableau de bord</h2>
                 <div className={styles.statGrid}>
                     <StatCard title="Transactions" value={dashboardStats.transactionsCount} />
-                    <StatCard title="Kg sauvés" value={dashboardStats.quantitySaved} />
+                    <StatCard title="Nombre d'aliments sauvés" value={dashboardStats.quantitySaved} />
                     <StatCard title="€ gagnés" value={`${dashboardStats.moneyEarned.toFixed(2)} €`} />
                     <StatCard title="€ économisés" value={`${dashboardStats.moneySaved.toFixed(2)} €`} />
                 </div>
@@ -127,13 +137,6 @@ function UserMealCard() {
 
     return (
         <div className={styles.cardUser}>
-            <nav>
-                <Link to={"/"}>
-                <img src="/img/logo-mealmates.png" alt="logo mealmates" />
-                <h2>MealMates</h2>
-                </Link>
-            </nav>
-
             <IconUser id={user?.iconUser} />
 
             <div className={styles.contentUser}>
@@ -155,16 +158,8 @@ function UserMealCard() {
                         </div>
                     </div>
 
-                    <div className={styles.offerContainer}>
-                        <h3>Mes offres :</h3>
-                        <ul>
-                        {userOffer && userOffer.map((offer) => (
-                            <li key={offer.id}>{offer.product}</li>
-                        ))}
-                        </ul>
-                    </div>
-                {userPreference()}
-                {renderDashboard()}
+                    {userPreference()}
+                    {renderDashboard()}
                 </div>
             </div>
         </div>
