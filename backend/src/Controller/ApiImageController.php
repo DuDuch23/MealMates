@@ -8,17 +8,19 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiImageController extends AbstractController
 {
-    #[Route('/api/images', name: 'api_images', methods: ['POST'])]
+    #[Route('/api/images', name: 'api_images', methods: ['GET'])]
     public function list(ImageRepository $imageRepository): JsonResponse
     {
         $images = $imageRepository->findAll();
-        $res = [];
 
-        foreach($images as $element){
-            array_push($res,$element->getImageFile());
+        $res = [];
+        foreach ($images as $element) {
+            $res[] = [
+                'id' => $element->getId(),
+                'url' => $element->getUrl()
+            ];
         }
 
         return $this->json($res);
     }
-
 }
