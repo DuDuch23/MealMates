@@ -1,0 +1,105 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss';
+@use "../../styles/variables.scss";
+
+
+.footer {
+  padding: 2rem 5%;
+  background: #000;
+  color: white;
+}
+
+.footer__content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.footer__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.footer__logo img {
+  height: 10rem;
+  object-fit: contain;
+}
+
+.footer__logo p {
+  font-weight: bold;
+  font-size: 2.2rem;
+}
+
+.footer__links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer__links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.4rem;
+  transition: color 0.2s ease;
+}
+
+.footer__links a:hover {
+  color: variables.$colorDarkGreen;
+}
+
+.footer__socials {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer__socials a {
+  color: white;
+  font-size: 2rem;
+  transition: color 0.2s ease;
+}
+
+.footer__socials a:hover {
+  color: #15803d;
+}
+
+.footer__credits {
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+}
+
+.footer__credits p {
+  color: #ccc;
+  font-size: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.footer__credits p:hover {
+  color: #15803d;
+}
+
+@media screen and (max-width: 768px) {
+  .footer__content {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .footer__logo {
+    flex-direction: column;
+  }
+
+  .footer__links,
+  .footer__socials {
+    justify-content: center;
+  }
+}

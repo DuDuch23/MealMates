@@ -2,73 +2,129 @@
 @use '../../styles/mixins.scss' as mixins;
 @use "../../styles/variables.scss" as variables;
 
-
 .container-offer {
-    padding: 12px;
-    gap: 48px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  &__filter {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  }
+
+  &__new-offer-show-map {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__new-offer,
+  &__show-map {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: #f3f3f3;
+    background-color: variables.$colorDarkGreen;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background-color: darken(variables.$colorDarkGreen, 5%);
+      box-shadow: inset 0 0 0 2px black;
+      cursor: pointer;
+    }
+
+    p {
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
+  &__slider {
     display: flex;
     flex-direction: column;
-    &__type{
-        img{
-            width: 100px;
-        }
+    gap: 48px;
+  }
+
+  &__map {
+    position: relative;
+    height: 60vh;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Type section (if you use images or icons)
+  &__type {
+    img {
+      width: 80px;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+}
+
+// RESPONSIVE DESIGN
+@media (max-width: 768px) {
+  .container-offer {
+    padding: 12px;
+    gap: 24px;
+
+    &__new-offer-show-map {
+      flex-direction: column;
+      align-items: stretch;
     }
 
-    &__type-list{
-
+    &__new-offer,
+    &__show-map {
+      justify-content: center;
+      width: 100%;
     }
 
-    &__filter{
-
+    &__slider {
+      gap: 32px;
     }
 
-    &__filter-reference-list{
+    &__map {
+      height: 50vh;
+    }
+  }
+}
 
+@media (max-width: 480px) {
+  .container-offer {
+    padding: 8px;
+
+    &__new-offer,
+    &__show-map {
+      padding: 8px 12px;
+      font-size: 14px;
     }
 
-    &__new-offer-show-map{
-        display: flex;
-        justify-content: space-between;
+    &__map {
+      height: 40vh;
     }
-
-    &__new-offer{
-        color: #888;
-        width: fit-content;
-        border-radius: 5px;
-        padding: 10px 8px;
-        gap: 8px;
-        display: flex;
-        align-items: center;
-        background-color: variables.$colorDarkGreen;
-        box-shadow: inset 1px -1px 0 1px black;
-
-        &:hover{
-            box-shadow: inset 0 0 0 1px black;
-        }
-    }
-
-    &__show-map{
-        color: #888;
-        width: fit-content;
-        border-radius: 5px;
-        padding: 10px 8px;
-        display: flex;
-        align-items: center;
-        background-color: variables.$colorDarkGreen;
-    }
-
-    &__slider{
-        display: flex;
-        flex-direction: column;
-        gap: 64px;
-    }
-    .swiper-slide{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    ul {
-        list-style: none;
-    }
+  }
 }

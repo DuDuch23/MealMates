@@ -74,7 +74,7 @@ class Image
     }
 
     #[Groups(["public","private"])]
-  public function getUrl(): ?string
+    public function getUrl(): ?string
     {
         // Forcer l'extension si elle n'est pas présente (solution temporaire)
         if ($this->name && !str_contains($this->name, '.')) {
