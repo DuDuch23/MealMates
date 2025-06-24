@@ -168,7 +168,11 @@ class Offer
     public function setExpirationDate(\DateTimeInterface $expirationDate): static { $this->expirationDate = $expirationDate; return $this; }
 
     public function getPrice(): ?float { return $this->price; }
-    public function setPrice(?float $price): static { $this->price = $price; return $this; }
+    public function setPrice(?float $price): static
+    {
+        $this->price = $price ?? null;
+        return $this;
+    }
 
     public function getIsDonation(): bool { return $this->isDonation; }
     public function setIsDonation(bool $isDonation): static { $this->isDonation = $isDonation; return $this; }
