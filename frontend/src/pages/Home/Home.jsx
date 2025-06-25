@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
 import { AiFillStar } from "react-icons/ai";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import logo from '../../assets/logo-mealmates.png';
 import AutoCarousel from "../../components/AutoCarousel/AutoCarousel";
 
@@ -100,31 +99,7 @@ function Home() {
             </div>
           ))}
         </div>
-    </section>
-
-    <footer className={styles.footer}>
-        <div className={styles.footer__content}>
-            <div className={styles.footer__logo}>
-                <img src={logo} alt="Mealmates Logo" />
-                <p>Mealmates.</p>
-            </div>
-
-            <div className={styles.footer__links}>
-            <a href="#">Mentions légales</a>
-            <a href="#">Politique de confidentialité</a>
-            <a href="#">Contact</a>
-            </div>
-
-            <div className={styles.footer__socials}>
-            <a href="#"><FaFacebookF /></a>
-            <a href="#"><FaTwitter /></a>
-            <a href="#"><FaInstagram /></a>
-            </div>
-            <div className={styles.footer__credits}>
-                <p>© Mealmates 2025 - Mangeons mieux, ensemble.</p>
-            </div>
-        </div>
-    </footer>
+      </section>
     </section>
   );
 }

@@ -31,16 +31,25 @@ function App() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   
+  useEffect(() => {
+    const logout = async () => {
+      const expiration = sessionStorage.getItem("token_expiration");
+      try{
+        if (expiration && Date.now() > Number(expiration)) {
+          deleteUserIndexDB();
+          sessionStorage.clear();
+          navigate("/connexion");
+          return;
+        }
+      } catch( err){
+        console.error("Erreur pendant la déconnexion :", err);
+        navigate("/connexion");
+      }
+    }
+    logout()
+  }, [navigate]);
 
   useEffect(() => {
-    const expiration = sessionStorage.getItem("token_expiration");
-    if (expiration && Date.now() > Number(expiration)) {
-      deleteUserIndexDB();
-      sessionStorage.clear();
-      navigate("/connexion");
-      return;
-    }
-
     async function fetchUser() {
       try {
         const userSession = sessionStorage.getItem("user");

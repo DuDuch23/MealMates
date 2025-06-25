@@ -339,28 +339,71 @@ class ApiUserController extends AbstractController
             'Achats' => $itemsBought,
         ];
 
-        $byMonth = [
-            ['month' => '2024-01', 'kg' => 10],
-            ['month' => '2024-02', 'kg' => 5],
-        ];
+        $byMonth = [];
+        $byWeek = [];
+        $byYear = [];
+
         foreach ($offers as $offer) {
-            if ($offer->getIsDonation()) {
-                $itemsDonated++;
-            } else {
-                $itemsSold++;
-                $moneyEarned += $offer->getPrice() * $offer->getQuantity();
+            $date = $offer->getCreatedAt();
+            $month = $date->format('Y-m');
+            $week = $date->format('o-W');
+            $year = $date->format('Y');
+
+            foreach (['byMonth' => $month, 'byWeek' => $week, 'byYear' => $year] as $key => $timeKey) {
+                ${$key}[$timeKey] ??= [
+                    'month' => $month,
+                    'week' => $week,
+                    'year' => $year,
+                    'kg' => 0,
+                    'transactions' => 0,
+                    'earned' => 0,
+                    'saved' => 0,
+                ];
+                ${$key}[$timeKey]['kg'] += $offer->getQuantity();
+                ${$key}[$timeKey]['transactions'] += 1;
+
+                if (!$offer->getIsDonation()) {
+                    ${$key}[$timeKey]['earned'] += $offer->getPrice() * $offer->getQuantity();
+                }
             }
-            $quantitySaved += $offer->getQuantity();
         }
+
 
         foreach ($orders as $order) {
             $offer = $order->getOffer();
-            if ($offer && !$offer->getIsDonation()) {
-                $moneySaved += $offer->getPrice() * $offer->getQuantity();
-                $quantitySaved += $offer->getQuantity();
+            if (!$offer) continue;
+
+            $date = $order->getPurchasedAt();
+            $month = $date->format('Y-m');
+            $week = $date->format('o-W');
+            $year = $date->format('Y');
+
+            foreach (['byMonth' => $month, 'byWeek' => $week, 'byYear' => $year] as $key => $timeKey) {
+                ${$key}[$timeKey] ??= [
+                    'month' => $month,
+                    'week' => $week,
+                    'year' => $year,
+                    'kg' => 0,
+                    'transactions' => 0,
+                    'earned' => 0,
+                    'saved' => 0,
+                ];
+                ${$key}[$timeKey]['transactions'] += 1;
+
+                if (!$offer->getIsDonation()) {
+                    ${$key}[$timeKey]['saved'] += $offer->getPrice() * $offer->getQuantity();
+                    ${$key}[$timeKey]['kg'] += $offer->getQuantity();
+                }
             }
         }
 
+        $byMonth = array_values($byMonth);
+        $byWeek = array_values($byWeek);
+        $byYear = array_values($byYear);
+
+        usort($byMonth, fn($a, $b) => strcmp($a['month'], $b['month']));
+        usort($byWeek, fn($a, $b) => strcmp($a['week'], $b['week']));
+        usort($byYear, fn($a, $b) => strcmp($a['year'], $b['year']));
         return $this->json([
             'transactionsCount' => $itemsBought + $itemsSold + $itemsDonated,
             'itemsBought' => $itemsBought,
@@ -371,6 +414,8 @@ class ApiUserController extends AbstractController
             'quantitySaved' => $quantitySaved,
             'transactionsByType' => $transactionsByType,
             'byMonth' => $byMonth,
+            'byYear' => $byYear,
+            'byWeek' => $byWeek,
         ]);
     }
 }

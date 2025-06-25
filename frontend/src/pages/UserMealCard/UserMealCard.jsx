@@ -7,7 +7,7 @@ import StatCard from "../../components/StatCard/StatCard";
 import CardOffer from "../../components/CardOffer/CardOffer";
 import { format } from "date-fns";
 import {
-  BarChart, Bar, XAxis, PieChart, Pie, Tooltip, ResponsiveContainer
+  BarChart, Bar, XAxis, YAxis, PieChart, Pie, Tooltip, ResponsiveContainer, CartesianGrid, Legend
 } from "recharts";
 import styles from './UserMealCard.module.css';
 
@@ -17,7 +17,6 @@ function UserMealCard() {
 
     const [user, setUser] = useState(null);
     const [userOffer, setOfferUser] = useState(null);
-    const [dashboardData, setDashboardData] = useState(null);
     const [dashboardStats, setDashboardStats] = useState(null);
     const [filter, setFilter] = useState("year");
     const [loading, setLoading] = useState(true);
@@ -55,16 +54,13 @@ function UserMealCard() {
             console.warn("Token ou userId manquant pour fetchStats");
         }
 
-        // Récupération stats
-        const statsData = await fetchStats();
-        setDashboardData(statsData);
 
-      } catch (err) {
-        console.error("Erreur lors de la récupération des données :", err);
-        setError("Une erreur est survenue.");
-      } finally {
-        setLoading(false);
-      }
+        } catch (err) {
+            console.error("Erreur lors de la récupération des données :", err);
+            setError("Une erreur est survenue.");
+        } finally {
+            setLoading(false);
+        }
     }
 
     fetchAllData();
@@ -102,33 +98,86 @@ function UserMealCard() {
             ? Object.entries(dashboardStats.transactionsByType).map(([k, v]) => ({ name: k, value: v }))
             : [];
 
-        const barData = dashboardStats.byMonth
-            ? dashboardStats.byMonth.map((m) => ({ month: format(new Date(m.month + "-01"), "MMM yy"), kg: m.kg }))
-            : [];
+        const weekData = dashboardStats.byWeek.map((m) => ({
+            week: m.week,
+            kg: m.kg || 0,
+            transactions: m.transactions || 0,
+            earned: m.earned || 0,
+            saved: m.saved || 0
+        }));
+
+        const monthData = dashboardStats.byMonth.map((m) => ({
+            month: format(new Date(m.month + "-01"), "MMM yy"),
+            kg: m.kg || 0,
+            transactions: m.transactions || 0,
+            earned: m.earned || 0,
+            saved: m.saved || 0
+        }));
+
+        const yearData = dashboardStats.byYear.map((m) => ({
+            year: m.year,
+            kg: m.kg || 0,
+            transactions: m.transactions || 0,
+            earned: m.earned || 0,
+            saved: m.saved || 0
+        }));
 
         return (
             <div className={styles.user_dashboard}>
                 <h2>Tableau de bord</h2>
-                <div className={styles.statGrid}>
+                {/* <div className={styles.statGrid}>
                     <StatCard title="Transactions" value={dashboardStats.transactionsCount} />
                     <StatCard title="Nombre d'aliments sauvés" value={dashboardStats.quantitySaved} />
                     <StatCard title="€ gagnés" value={`${dashboardStats.moneyEarned.toFixed(2)} €`} />
                     <StatCard title="€ économisés" value={`${dashboardStats.moneySaved.toFixed(2)} €`} />
-                </div>
+                </div> */}
                 <div className={styles.chartsWrapper}>
-                    <ResponsiveContainer width="49%" height={300}>
-                        <BarChart data={barData}>
-                            <XAxis dataKey="month" />
+                    <p>Cette semaine</p>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={weekData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="week" />
+                            <YAxis />
                             <Tooltip />
-                            <Bar dataKey="kg" />
+                            <Legend />
+                            <Bar dataKey="transactions" fill="#8884d8" name="Transactions" />
+                            <Bar dataKey="kg" fill="#82ca9d" name="Aliments sauvés (kg)" />
+                            <Bar dataKey="earned" fill="#ffc658" name="€ gagnés" />
+                            <Bar dataKey="saved" fill="#ff8042" name="€ économisés" />
                         </BarChart>
                     </ResponsiveContainer>
-                    <ResponsiveContainer width="49%" height={300}>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={monthData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="month" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="transactions" fill="#8884d8" name="Transactions" />
+                            <Bar dataKey="kg" fill="#82ca9d" name="Aliments sauvés (kg)" />
+                            <Bar dataKey="earned" fill="#ffc658" name="€ gagnés" />
+                            <Bar dataKey="saved" fill="#ff8042" name="€ économisés" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={yearData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="year" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="transactions" fill="#8884d8" name="Transactions" />
+                            <Bar dataKey="kg" fill="#82ca9d" name="Aliments sauvés (kg)" />
+                            <Bar dataKey="earned" fill="#ffc658" name="€ gagnés" />
+                            <Bar dataKey="saved" fill="#ff8042" name="€ économisés" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                    {/* <ResponsiveContainer width="49%" height={300}>
                         <PieChart>
                             <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={110} label />
                             <Tooltip />
                         </PieChart>
-                    </ResponsiveContainer>
+                    </ResponsiveContainer> */}
                 </div>
             </div>
         );
