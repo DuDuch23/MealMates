@@ -2,29 +2,18 @@ import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
-import { AiFillStar } from "react-icons/ai";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
+// import { AiFillStar } from "react-icons/ai";
+// import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import logo from '../../assets/logo-mealmates.png';
 import AutoCarousel from '../../components/AutoCarousel/AutoCarousel';
 
-function App() {
+function Home () {
     const [pos, setPos] = useState(null);
     const token = sessionStorage.getItem("token");
     const user = sessionStorage.getItem("user");
     const navigate = useNavigate();
-    
-    if(token && user){
-        navigate("/offer");
-        console.log("Vous êtes connecté, redirection vers la page d'accueil.");
-    }
-    else{
-        console.log("Vous n'êtes pas connecté, redirection vers la page de connexion.");
-    }
-
+  
   useEffect(() => {
-    if (token && user) {
-      navigate("/offer");
-    }
 
     const watchId = navigator.geolocation.watchPosition(
       (position) =>
@@ -115,9 +104,9 @@ function App() {
                 </div>
               </div>
               <p>{review.text}</p>
-              <div className={styles.review__stars}>
+              {/* <div className={styles.review__stars}>
                 {[...Array(review.stars)].map((_, i) => <AiFillStar key={i} />)}
-              </div>
+              </div> */}
             </div>
           ))}
         </div>
@@ -135,9 +124,9 @@ function App() {
             <a href="#">Contact</a>
           </div>
           <div className={styles.footer__socials}>
-            <a href="#"><FaFacebookF /></a>
+            {/* <a href="#"><FaFacebookF /></a>
             <a href="#"><FaTwitter /></a>
-            <a href="#"><FaInstagram /></a>
+            <a href="#"><FaInstagram /></a> */}
           </div>
           <div className={styles.footer__credits}>
             <p>© Mealmates 2025 - Mangeons mieux, ensemble.</p>

@@ -384,6 +384,31 @@ export async function sendMessage({userId,chat,message}){
     }
 }
 
+export async function generateStripeLink({chat}){
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/chat/${chat}/create-stripe`, {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        const stripeUrl = data.url;
+
+        console.log('Lien Stripe généré :', stripeUrl);
+        const res = {
+            data : data,
+            url : stripeUrl
+        };
+        return res;
+
+    } catch (error) {
+      console.error('Erreur lors de la création du lien Stripe :', error);
+    }
+}
+
 // Offer
 
 
@@ -438,7 +463,8 @@ export async function getLocalOffers(lat, lng, radius = 5) {
         const token = sessionStorage.getItem("token");
         const response = await fetch(`${API_BASE_URL}/api/offers/local?lat=${lat}&lng=${lng}&radius=${radius}`, {
             method: 'GET',
-            headers: { accept: 'application/json',
+            headers: { 
+                accept: 'application/json',
                 Authorization: `Bearer ${token}`,
             },
         });

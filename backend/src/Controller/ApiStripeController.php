@@ -3,46 +3,47 @@
 namespace App\Controller;
 
 use Stripe\Stripe;
+use App\Entity\Chat;
 use Stripe\Checkout\Session;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Endroid\QrCode\Builder\Builder;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiStripeController extends AbstractController
 {
-    #[Route('/api/stripe/create-checkout-session', name: 'create_checkout_session', methods: ['POST'])]
-    public function createCheckoutSession(Request $request): JsonResponse
+    #[Route('/api/chat/{id}/create-payment', name: 'chat_create_payment', methods: ['POST'])]
+    public function createPayment(int $id, EntityManagerInterface $em): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
-        if (!isset($data['offerTitle']) || !isset($data['price'])) {
-            return new JsonResponse(['error' => 'Invalid data'], 400);
+        $chat = $em->getRepository(Chat::class)->find($id);
+        if (!$chat || !$chat->getOffer()) {
+            return new JsonResponse(['error' => 'Chat ou offre non trouvée'], 404);
         }
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
-        try {
-            $session = Session::create([
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'eur',
-                        'product_data' => [
-                            'name' => $data['offerTitle'],
-                        ],
-                        'unit_amount' => $data['price'] * 100,
+        $session = Session::create([
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => [
+                        'name' => $chat->getOffer()->getProduct(),
                     ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'success_url' => $_ENV['CLIENT_URL'] . '/paiement/succes?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => $_ENV['CLIENT_URL'] . '/paiement/annule',
-            ]);
+                    'unit_amount' => (int)($chat->getOffer()->getPrice() * 100),
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => 'https://mealmates/success',
+            'cancel_url' => 'https://mealmates/cancel',
+        ]);
 
-            return new JsonResponse(['id' => $session->id]);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 500);
-        }
+        return new JsonResponse([
+            'stripe_url' => $session->url,
+            'qr_code_url' => '/api/qr-code?url=' . urlencode($session->url),
+        ]);
     }
 }

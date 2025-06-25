@@ -8,6 +8,7 @@ use App\Entity\Offer;
 use App\Entity\Message;
 use App\Service\ErrorService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;

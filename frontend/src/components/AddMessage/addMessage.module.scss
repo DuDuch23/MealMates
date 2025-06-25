@@ -2,27 +2,53 @@
 @use '../../styles/mixins';
 @use '../../styles/variables' as variables;
 
-#addMessage{
-    width: 50%;
-    height: 10%;
-    margin: 0 auto;
+.container {
+  width: 50%;
+  height: 10%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  input,
+  button {
+    color: black;
+  }
+}
+
+.container svg {
+  height: 5vh;
+}
+
+.container input {
+  width: 40vw;
+  height: 4vh;
+  outline: none;
+  border: 1px solid variables.$colorDarkGreen;
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+.form {
+  display: flex;
+}
+
+.sendLink {
+  display: none;
+
+  &.visible {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
-    input,button{
-        color: black;
+    justify-content: center;
+    margin-bottom: 10px;
+
+    button {
+      background-color: variables.$colorDarkGreen;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
     }
-}
-
-#addMessage svg{
-    height: 5vh;
-}
-
-#addMessage input{
-    width: 40vw;
-    height: 4vh;
-    outline: none;
-    border: 1px solid variables.$colorDarkGreen;
-    border-radius: 5px;
-    background-color: none;
+  }
 }
