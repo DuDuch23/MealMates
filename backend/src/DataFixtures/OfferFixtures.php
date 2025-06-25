@@ -18,7 +18,7 @@ use Cocur\Slugify\Slugify;
 
 class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const NB_OFFERS = 500;
+    public const NB_OFFERS = 100;
     public const OFFER_REF_PREFIX = 'offer_';
     public $publicPath;
 
