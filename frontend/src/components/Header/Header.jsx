@@ -1,5 +1,5 @@
 import styles from './Header.module.scss';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { IconUser } from '../IconUser/iconUser';
 import React, { useEffect, useState } from 'react';
@@ -59,10 +59,16 @@ export default function Header({ onProfileClick }) {
     const infoUser = () => {
         if (userData) {
             return (
-                <li className={styles['button-user-info']} key="inscription" onClick={onProfileClick}>
-                    <IconUser id={userData.user.iconUser}/>
-                   <p>{userData.user.firstName}</p>
-                </li>
+                <>
+                    <Link className={styles['button-user-info-desktop']} key="profil" to={`/userProfile/${userData.user.id}`}>
+                        <IconUser id={userData.user.iconUser}/>
+                        <p>{userData.user.firstName}</p>
+                    </Link>
+                    <li className={styles['button-user-info-mobile']} key="inscription" onClick={onProfileClick}>
+                        <IconUser id={userData.user.iconUser}/>
+                        <p>{userData.user.firstName}</p>
+                    </li>
+                </>
             );
         } else {
             return (

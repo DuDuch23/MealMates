@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AddMessage from '../../components/AddMessage/AddMessage';
 import ChatContainer from '../../components/ChatContainer/ChatContainer';

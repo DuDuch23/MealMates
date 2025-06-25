@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useState,useEffect } from 'react';
-import { Routes, Route } from 'react-router';
-import { getUserIndexDB } from './service/indexDB';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { getUserIndexDB, deleteUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 import logo from '../src/assets/logo-mealmates.png';
 
@@ -21,6 +21,7 @@ const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
 const Inscription = React.lazy(() => import('./pages/Inscription/Inscription'));
 const Deconnexion = React.lazy(() => import('./pages/Deconnexion/Deconnexion'));
 const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'));
+const UserDashboard = React.lazy(() => import('./pages/UserDashboard/UserDashboard'));
 
 // Chat
 const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
@@ -28,8 +29,27 @@ const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 
 function App() {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const logout = async () => {
+      const expiration = sessionStorage.getItem("token_expiration");
+      try{
+        if (expiration && Date.now() > Number(expiration)) {
+          deleteUserIndexDB();
+          sessionStorage.clear();
+          navigate("/connexion");
+          return;
+        }
+      } catch( err){
+        console.error("Erreur pendant la déconnexion :", err);
+        navigate("/connexion");
+      }
+    }
+    logout()
+  }, [navigate]);
 
-    useEffect(() => {
+  useEffect(() => {
     async function fetchUser() {
       try {
         const userSession = sessionStorage.getItem("user");
@@ -46,7 +66,7 @@ function App() {
     }
 
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   return (
     <Suspense fallback={
@@ -77,12 +97,13 @@ function App() {
           <Route path="/offer" element={<Offer />} />
           <Route path="/addOffer" element={<AddOffer />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
+          {/* user profile */}
+          <Route path="/userProfile/:id" element={<UserProfile />} />
+          <Route path="/userMealCard/:id" element={<UserMealCard />} />
+          <Route path="/userModify/:id" element={<UserModify />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
         </Route>
 
-        {/* user profile */}
-        <Route path="/userProfile/:id" element={<UserProfile />} />
-        <Route path="/userMealCard/:id" element={<UserMealCard />} />
-        <Route path="/userModify/:id" element={<UserModify />} />
 
         {/* auth */}
         <Route path="/connexion" element={<Connexion />} />

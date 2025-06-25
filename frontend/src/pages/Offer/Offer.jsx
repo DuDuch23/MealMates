@@ -5,7 +5,7 @@ import { searchOfferByTitle,
         getLastChanceOffers,
         getAgainOffers,
         getLocalOffers } from "../../service/requestApi";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import styles from "./Offer.module.css";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import AllCategory from "../../components/AllCategory/AllCategory";
@@ -215,13 +215,6 @@ function Offer(){
 
     return(
     <section className={styles["container-offer"]}>
-        <SearchBar onSearch={handleSearch} />
-
-        <nav className={styles["container-offer__filter"]}>
-            <ul className={styles["container-offer__filter-reference-list"]}>
-                {/* <AllCategory /> */}
-            </ul>
-        </nav>
         <div className={styles["container-offer__new-offer-show-map"]}>
             <Link className={styles["container-offer__new-offer"]} key="new-offer" to={'/addOffer'}>
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -233,6 +226,13 @@ function Offer(){
                 <p>Afficher la carte des offres</p>
             </button>
         </div>
+        <SearchBar onSearch={handleSearch} />
+
+        <nav className={styles["container-offer__filter"]}>
+            <ul className={styles["container-offer__filter-reference-list"]}>
+                <AllCategory />
+            </ul>
+        </nav>
         {showMap && (
             <div className={styles["container-offer__map"]} style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 98 }}>
                 <OffersMap userPos={pos} offers={offers} setUserPos={setUserPos} />

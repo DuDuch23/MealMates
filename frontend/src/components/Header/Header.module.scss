@@ -66,7 +66,10 @@
                 }
             }
         }
-        .button-user-info{
+        .button-user-info-mobile{
+            display: none;
+        }
+        .button-user-info-desktop{
             display: flex;
             background-color: variables.$colorDarkGreen;
             border-radius: 10px;
@@ -171,12 +174,26 @@
                     padding: 10px 14px;
                 }
             }
+            .button-user-info-mobile{
+                display: flex;
+                background-color: variables.$colorDarkGreen;
+                border-radius: 10px;
+                cursor: pointer;
+                justify-content: center;
+                align-items: center;
+                padding: 2px 26px;
+            }
+            .button-user-info-desktop{
+                display: none;
+            }
         }
         img{
             width: 30%;
         }
         div{
-            width: unset;
+            width: 100%;
+            max-width: unset;
+            margin: 0;
             h1{
                 font-size: 1.5rem;
             }

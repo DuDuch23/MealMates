@@ -225,9 +225,7 @@ class ApiOfferController extends AbstractController
         $offer->setIsRecurring(filter_var($request->request->get('isRecurring'), FILTER_VALIDATE_BOOLEAN));
         $offer->setLatitude($request->request->get('latitude'));
         $offer->setLongitude($request->request->get('longitude'));
-
-        $availableSlots = json_decode($request->request->get('availableSlots'), true);
-        $offer->setAvailableSlots($availableSlots ?? []);
+        $offer->setAvailableSlots($request->request->get('availableSlots'));
 
         $categoryIds = $request->request->all('categories');
         foreach ($categoryIds as $id) {
