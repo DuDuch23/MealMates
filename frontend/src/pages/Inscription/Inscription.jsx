@@ -87,6 +87,9 @@ function Inscription(){
                             <input type="password" name="confirmPassword" placeholder="Vérification de votre mot de passe" value={confirmPassword} onChange={handleConfirmPassword}/>
                         </div>
                         <button type="submit">Inscription</button>
+                        <p className={styles.linkText} onClick={() => navigate("/")}>
+                            Retour au menu
+                        </p>
                     </form>
                 </div>
             </div>
