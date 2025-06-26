@@ -105,7 +105,8 @@ export const updateUserIndexDB = async (userId, newUserData) => {
   });
 };
 
-// Supprimer la base de données
+export const getUserIndexDB = () => {};
+export const addUserIndexDB = () => {};
 export const deleteUserIndexDB = async () => {
   return new Promise((resolve, reject) => {
     const deleteRequest = indexedDB.deleteDatabase("mealmates");
