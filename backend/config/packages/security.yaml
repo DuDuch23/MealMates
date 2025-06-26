@@ -20,7 +20,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         api:
-            pattern: /api
+            pattern: ^/api
             stateless: true
             jwt: ~
 
@@ -37,4 +37,5 @@ security:
         - { path: ^/api/offers, roles: PUBLIC_ACCESS }  
         - { path: ^/api/images, roles: PUBLIC_ACCESS }
         - { path: ^/api/category, roles: PUBLIC_ACCESS }
+        - { path: ^/api/images, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
