@@ -87,8 +87,8 @@ class ApiUserController extends AbstractController
             $user = new User();
             $user->setEmail($email);
             $user->setFirstName($firstName);
+            $user->setIsVerified(false);
 
-            // Génère un mot de passe aléatoire (jamais utilisé ici)
             $randomPassword = bin2hex(random_bytes(16));
             $user->setPassword($passwordHasher->hashPassword($user, $randomPassword));
 

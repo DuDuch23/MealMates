@@ -29,13 +29,12 @@ const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
 function App() {
   const [user, setUser] = useState(null);
 
-    useEffect(() => {
+  useEffect(() => {
     async function fetchUser() {
       try {
         const userSession = sessionStorage.getItem("user");
         if (userSession) {
           const parsedUser = JSON.parse(userSession);
-          console.log(parsedUser);
           const id = parseInt(parsedUser.id, 10);
           const userData = await getUserIndexDB(id);
           setUser(userData);

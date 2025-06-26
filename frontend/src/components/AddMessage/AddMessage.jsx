@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react';
-import styles from './addMessage.module.css';
-import { sendMessage } from '../../service/requestApi';
+import { useEffect, useState } from 'react';
+import styles from './addMessage.module.scss'; // Assure-toi que c'est un .scss, pas .css
+import { sendMessage, generateStripeLink } from '../../service/requestApi';
 
 export default function AddMessage({ user, chat }) {
     const [query, setQuery] = useState('');
-
+    const [showLinkButton, setShowLinkButton] = useState(false);
     const userId = user.id;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         if (query.trim() === '') return;
 
-        console.log('Message envoyé :', query);
-
         try {
+            console.log(chat);
             await sendMessage({ userId, chat, message: query });
-            setQuery('');
         } catch (error) {
             console.error("Erreur lors de l'envoi du message", error);
         }
@@ -27,33 +26,66 @@ export default function AddMessage({ user, chat }) {
         }
     };
 
+    const handleOption = () => {
+        setShowLinkButton((prev) => !prev);
+    };
+
+    const handleSendStripeLink = async () => {
+
+        try {
+            const response = await generateStripeLink({chat});
+            const stripeUrl = response?.data?.url;
+
+            if (stripeUrl) {
+                await sendMessage({
+                    userId,
+                    chat,
+                    message:`Voici le lien de paiement : <a href="${stripeUrl}" target="_blank" rel="noopener noreferrer">Clique ici</a>`,
+                });
+            }
+
+            setShowLinkButton(false);
+        } catch (error) {
+            console.error('Erreur en générant le lien Stripe', error);
+        }
+    };
+
     return (
-        <form id={styles['addMessage']} onSubmit={handleSubmit}>
-            <svg
-                onClick={handleSubmit}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-                style={{ cursor: 'pointer' }}
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-            </svg>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Message"
-                    value={query}
-                    name="message"
-                    onChange={(e) => setQuery(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                />
+        <form className={styles.container} onSubmit={handleSubmit}>
+            <div className={`${styles.sendLink} ${showLinkButton ? styles.visible : ''}`}>
+                <button type="button" onClick={handleSendStripeLink}>
+                    Envoyer le lien de paiement
+                </button>
+            </div>
+
+            <div className={styles.form}>
+                <svg
+                    onClick={handleOption}
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                    style={{ cursor: 'pointer' }}
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                </svg>
+
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Message"
+                        value={query}
+                        name="message"
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                    />
+                </div>
             </div>
         </form>
     );

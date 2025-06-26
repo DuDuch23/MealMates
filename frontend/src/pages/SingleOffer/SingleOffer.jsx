@@ -1,11 +1,15 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { createOrder, getOfferSingle } from "../../service/requestApi";
+import { createOrder, getOfferSingle, createChat, sendMessage} from "../../service/requestApi";
 import "./SingleOffer.scss";
 
 export default function SingleOffer() {
+
+    const navigate = useNavigate();
     const { id } = useParams();
+    const [user,setUser] = useState([]);
     const [offer, setOffer] = useState(null);
+
     const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL;
 
     useEffect(() => {
@@ -15,9 +19,6 @@ export default function SingleOffer() {
                 console.log("Données de l'offre récupérées :", data.data);
                 if (data && data.data) {
                     setOffer(data.data);
-                    if (id !== data.data.slug) {
-                        navigate(`/offer/${data.data.slug}`, { replace: true });
-                    }
                 } else {
                     console.error("Aucune offre trouvée");
                 }
@@ -25,20 +26,52 @@ export default function SingleOffer() {
                 console.error("Erreur lors de la récupération de l'offre :", err);
             }
         };
-
         fetchOffer();
     }, [id]);
 
     const handleReservation = async () => {
         console.log("Réservation en cours pour l'offre ID :", id);
-        try{
+        try {
             const response = await createOrder(offer.id);
             setOffer(prev => ({
-            ...prev,
-            order: response.order
-        }));
+                ...prev,
+                order: response.order
+            }));
         } catch (error) {
             console.error("Erreur lors de la création de la réservation :", error);
+        }
+    };
+
+    const handleInput = async () => {
+        const clientId = JSON.parse(sessionStorage.getItem("user")); 
+
+        const sellerId = offer.seller?.id;
+
+        const offerId = offer.id;
+
+        if (!clientId || !sellerId || !offerId) {
+            console.error("Paramètres manquants pour créer le chat.");
+            return;
+        }
+
+        try {
+            const response = await createChat({
+                client: clientId,
+                seller: sellerId,
+                offer: offerId
+            });
+
+            console.log("Chat créé avec succès :", response);
+
+            const chatId = response.chatId;
+
+            const content = "Bonjour";
+
+            const request = await sendMessage({userId : clientId.id ,chat : chatId,message : content});
+
+            navigate(`/chooseChat`);
+        } catch (error) {
+            console.error("Erreur lors de la création du chat :", error);
         }
     };
 
@@ -52,7 +85,12 @@ export default function SingleOffer() {
                 <div className="single-offer__content">
                     <div className="single-offer__images">
                         {offer.images && offer.images.map((img) => (
-                            <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className="single-offer__image" />
+                            <img
+                                key={img.id}
+                                src={`${uploadsBaseUrl}/${img.name}`}
+                                alt={img.name}
+                                className="single-offer__image"
+                            />
                         ))}
                     </div>
                     <h1 className="single-offer__title">{offer.product}</h1>
@@ -69,24 +107,25 @@ export default function SingleOffer() {
                 </div>
                 <aside className="single-offer__sidebar">
                     {!offer.order && (
-                    <button className="single-offer__reserve-btn" onClick={handleReservation}>
-                        Réserver cette offre
-                    </button>
+                        <button className="single-offer__reserve-btn" onClick={handleReservation}>
+                            Réserver cette offre
+                        </button>
                     )}
 
                     {offer.order && !offer.order.isConfirmed && (
-                    <p className="single-offer__status">
-                        Réservation en attente de confirmation<br />
-                        (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
-                    </p>
+                        <p className="single-offer__status">
+                            Réservation en attente de confirmation<br />
+                            (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
+                        </p>
                     )}
 
                     {offer.order && offer.order.isConfirmed && (
-                    <p className="single-offer__status confirmed">
-                        Réservation confirmée
-                    </p>
+                        <p className="single-offer__status confirmed">
+                            Réservation confirmée
+                        </p>
                     )}
-                    <button>
+
+                    <button className="single-offer__chat-btn" onClick={handleInput}>
                         <p>Envoyer un message</p>
                     </button>
                 </aside>

@@ -4,20 +4,30 @@ import styles from './message.module.css';
 
 export function Messages({ content, iconUser, id }) {
   const [userStorage, setUserStorage] = useState(null);
-  const [isSender,setIsSender] = useState(null);
+  const [isSender, setIsSender] = useState(false);
 
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     setUserStorage(user);
-    setIsSender(id == userStorage);
-  }, []);
+    setIsSender(user?.id === id);
+  }, [id]);
+
+  // Extract the URL from the content string
+  const urlMatch = content.match(/https?:\/\/\S+/);
+  const url = urlMatch ? urlMatch[0] : null;
 
   return (
     <div className={styles["container-message"]}>
       <IconUser id={iconUser} />
-      <div className={isSender ? styles["content-message"] : styles["content-message white"]}>
-        {content}
-      </div>
+      {url ? (
+        <a className={styles["link"]} href={url} target="_blank" rel="noopener noreferrer">
+          Voici le lien vers le paiement
+        </a>
+      ) : (
+        <div className={`${styles["content-message"]} ${!isSender ? styles.white : ''}`}>
+          {content}
+        </div>
+      )}
     </div>
   );
 }

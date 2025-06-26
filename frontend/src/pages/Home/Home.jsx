@@ -2,22 +2,19 @@ import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
-import { AiFillStar } from "react-icons/ai";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
+// import { AiFillStar } from "react-icons/ai";
+// import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import logo from '../../assets/logo-mealmates.png';
 import Footer from "../../components/Footer/Footer";
 import AutoCarousel from '../../components/AutoCarousel/AutoCarousel';
 
-function Home() {
-  const [pos, setPos] = useState(null);
-  const token = sessionStorage.getItem("token");
-  const user = sessionStorage.getItem("user");
-  const navigate = useNavigate();
-
+function Home () {
+    const [pos, setPos] = useState(null);
+    const token = sessionStorage.getItem("token");
+    const user = sessionStorage.getItem("user");
+    const navigate = useNavigate();
+  
   useEffect(() => {
-    if (token && user) {
-      navigate("/offer");
-    }
 
     const watchId = navigator.geolocation.watchPosition(
       (position) =>
@@ -108,9 +105,9 @@ function Home() {
                 </div>
               </div>
               <p>{review.text}</p>
-              <div className={styles.review__stars}>
+              {/* <div className={styles.review__stars}>
                 {[...Array(review.stars)].map((_, i) => <AiFillStar key={i} />)}
-              </div>
+              </div> */}
             </div>
           ))}
         </div>

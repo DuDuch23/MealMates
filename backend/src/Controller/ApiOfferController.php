@@ -10,6 +10,7 @@ use App\Repository\OfferRepository;
 use App\Repository\OrderRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Serializer;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -244,10 +245,9 @@ class ApiOfferController extends AbstractController
             // assure qu'on boucle toujours sur un tableau
             foreach ((array) $files as $file) {
                 $image = new Image();
-                $image->setImageFile($file);     // Vich déplacera le fichier
+                $image->setImageFile($file); 
 
                 $offer->addImage($image);
-                // Pas besoin de $em->persist($image); cascade={"persist"} suffit
             }
         }
 

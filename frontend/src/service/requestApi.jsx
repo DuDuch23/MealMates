@@ -1,4 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from "react-router";
 import API_BASE_URL from "./api";
 import { deleteUserIndexDB } from './indexDB';
 
@@ -45,6 +46,7 @@ export async function getValidToken() {
 
 // Mettre à jour le token depuis sessionStorage
 export async function refreshToken() {
+    const navigate = useNavigate();
     const infoToken = jwtDecode(token);
     const now = Date.now() / 1000;
 
@@ -149,6 +151,7 @@ export async function getTokenSSo({token}){
     }
 }
 
+// connexion sso avec google
 export async function getSSO() {
   const token = sessionStorage.getItem("token");
   if (!token) return null;
@@ -269,6 +272,30 @@ export async function logOut({id}) {
 }
 
 // Chat
+export async function createChat({client, offer, seller}){
+    console.log(client.id, offer, seller);
+    const token = sessionStorage.getItem("token");
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/create`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    "seller": seller,
+                    "client": client.id,
+                    "offer": offer
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    } 
+}
+
 export async function getAllChat(id) {
     const token = sessionStorage.getItem("token");
     try{
@@ -357,6 +384,31 @@ export async function sendMessage({userId,chat,message}){
     }
 }
 
+export async function generateStripeLink({chat}){
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/chat/${chat}/create-stripe`, {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        const stripeUrl = data.url;
+
+        console.log('Lien Stripe généré :', stripeUrl);
+        const res = {
+            data : data,
+            url : stripeUrl
+        };
+        return res;
+
+    } catch (error) {
+      console.error('Erreur lors de la création du lien Stripe :', error);
+    }
+}
+
 // Offer
 
 
@@ -411,7 +463,8 @@ export async function getLocalOffers(lat, lng, radius = 5) {
         const token = sessionStorage.getItem("token");
         const response = await fetch(`${API_BASE_URL}/api/offers/local?lat=${lat}&lng=${lng}&radius=${radius}`, {
             method: 'GET',
-            headers: { accept: 'application/json',
+            headers: { 
+                accept: 'application/json',
                 Authorization: `Bearer ${token}`,
             },
         });
