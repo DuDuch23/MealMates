@@ -16,10 +16,10 @@ class TestController extends AbstractController
     {
         $this->sendMail(
             'mealmates.g5@gmail.com',
-            'aquasword60@gmail.com',
+            'dimitrigranit22@gmail.com',
             'Test Email from Trait',
             'This is a plain text version.',
-            '<p>This is an <strong>HTML</strong> version.</p>',
+            'emails/signup.html.twig',
             $mailer
         );
 

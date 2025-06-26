@@ -13,17 +13,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use Google\Client as GoogleClient;
+use App\Trait\MailerTrait;
+use Symfony\Component\Mailer\MailerInterface;
 
 
 #[Route('/api/user', name: 'api_user')]
 class ApiUserController extends AbstractController
 {
+    use MailerTrait;
+
     private $hasher;
+    private $mailer;
     private $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W_]{8,}$/";
     
-    public function __construct(UserPasswordHasherInterface $hasher) 
+    public function __construct(UserPasswordHasherInterface $hasher, MailerInterface $mailer) 
     {
         $this->hasher = $hasher;
+        $this->mailer = $mailer;
     }
     
     #[Route('/get', methods: ['POST'])]
@@ -153,6 +159,15 @@ class ApiUserController extends AbstractController
 
         $entityManager->persist($user);
         $entityManager->flush();
+
+        $this->sendMail(
+            'mealmates.g5@gmail.com',
+            $data['email'],
+            'Confirmation d\'inscription mealmates',
+            '',
+            'emails/signup.html.twig',
+            $this->mailer
+        );
 
         return new JsonResponse([
             'status' => "Created",

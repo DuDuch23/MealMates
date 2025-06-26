@@ -58,7 +58,7 @@ export async function refreshToken() {
 
 export async function logIn({ email, password }) {
     try {
-        const url = `${API_BASE_URL}/api/login_check`; // <- Slash ajouté
+        const url = `${API_BASE_URL}/api/login`; // <- Slash ajouté
         const response = await fetch(url, {
             method: "POST",
             headers: {

@@ -3,7 +3,7 @@
 namespace App\Trait;
 
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 trait MailerTrait
 {
@@ -12,15 +12,15 @@ trait MailerTrait
         string $recipient,
         string $subject,
         string $message,
-        string $html,
+        string $htmlTemplate,
         MailerInterface $mailer
     ): void {
-        $email = (new Email())
+        $email = (new TemplatedEmail())
             ->from($sender)
             ->to($recipient)
             ->subject($subject)
             ->text($message)
-            ->html($html);
+            ->htmlTemplate($htmlTemplate);
 
         $mailer->send($email);
     }
