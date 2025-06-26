@@ -122,14 +122,8 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $offer->setIsRecurring($faker->boolean(30));
             $offer->setLatitude($cityCoords[$city]['lat']);
             $offer->setLongitude($cityCoords[$city]['lon']);
-
-            // Création de 1 à 3 créneaux horaires
-            $slots = [];
-            for ($j = 0; $j < rand(1, 3); $j++) {
-                $slots[] = $faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s');
-            }
+            $slots = $faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s');
             $offer->setAvailableSlots($slots);
-
             $photosDirectory = $this->publicPath . '/public/uploads/offers-photos';
             $availablePhotos = glob($photosDirectory . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE);
 
