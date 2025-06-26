@@ -46,16 +46,19 @@ export async function getValidToken() {
 
 // Mettre à jour le token depuis sessionStorage
 export async function refreshToken() {
-    const navigate = useNavigate();
+    const token = sessionStorage.getItem("token");
+    if (!token) return false;
+
     const infoToken = jwtDecode(token);
     const now = Date.now() / 1000;
 
     if (infoToken.exp < now) {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("user");
-        navigate("/connexion");
+        return false; 
     }
-    return true;
+
+    return true; 
 }
 
 export async function logIn({ email, password }) {
