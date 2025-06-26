@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import Header from '../components/Header/Header';
 import BurgerMenue from '../components/BurgerMenue/burgerMenue';
 

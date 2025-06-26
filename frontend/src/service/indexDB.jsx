@@ -181,7 +181,7 @@ export const getAllSearch = async () => {
   });
 };
 
-// Supprimer la base de données
+
 export const deleteUserIndexDB = async () => {
   return new Promise((resolve, reject) => {
     const deleteRequest = indexedDB.deleteDatabase("mealmates");

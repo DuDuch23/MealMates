@@ -579,24 +579,36 @@ export async function searchOffersByCriteria(criteria) {
     }
 }
 
-export async function newOffer(data, isFormData = false) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/offers/new`, {
-      method: "POST",
-      body: data,
-      headers: {
-        "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
-      },
-      credentials: "include",
-    });
+export async function newOffer(formData) {
+  const res = await fetch(`${API_BASE_URL}/api/offers/new`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+    body: formData,
+    credentials: "include",
+  });
 
-    const raw = await response.text();
-    console.log("Réponse brute :", raw);
-  } catch (error) {
-    console.error("Erreur API :", error);
-    return { result: [] };
+  // Essayons d'obtenir le JSON s'il y en a, sinon un texte
+  let payload;
+  const contentType = res.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    payload = await res.json();
+  } else {
+    payload = await res.text();
   }
+
+  // On retourne un objet qui contient :
+  // - le code HTTP
+  // - le body déjà parsé
+  return {
+    status: res.status,
+    ok: res.ok,
+    body: payload,
+    headers: res.headers,
+  };
 }
+
 
 export async function geocodeLocation(location) {
     try{
@@ -660,6 +672,24 @@ export async function createOrder(offerId){
 
         return await response.json();
     } catch (error) {
+        console.error("Erreur API :", error);
+        return { result: [] };
+    }
+}
+
+export async function fetchStats(userId, token){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/user/${userId}/dashboard`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+        });
+
+        return await response.json();
+    } catch(error){
         console.error("Erreur API :", error);
         return { result: [] };
     }

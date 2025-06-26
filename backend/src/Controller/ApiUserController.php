@@ -15,17 +15,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use Google\Client as GoogleClient;
+use App\Trait\MailerTrait;
+use Symfony\Component\Mailer\MailerInterface;
 
 
 #[Route('/api/user', name: 'api_user')]
 class ApiUserController extends AbstractController
 {
+    use MailerTrait;
+
     private $hasher;
+    private $mailer;
     private $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W_]{8,}$/";
     
-    public function __construct(UserPasswordHasherInterface $hasher) 
+    public function __construct(UserPasswordHasherInterface $hasher, MailerInterface $mailer) 
     {
         $this->hasher = $hasher;
+        $this->mailer = $mailer;
     }
     
     #[Route('/get', methods: ['POST'])]
@@ -190,6 +196,15 @@ class ApiUserController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
+        $this->sendMail(
+            'mealmates.g5@gmail.com',
+            $data['email'],
+            'Confirmation d\'inscription mealmates',
+            '',
+            'emails/signup.html.twig',
+            $this->mailer
+        );
+
         return new JsonResponse([
             'status' => "Created",
             'code' => 201,
@@ -316,5 +331,106 @@ class ApiUserController extends AbstractController
             'status' => "OK",
             'code' => 200,
         ], 200);
+    }
+
+    #[Route('/{id}/dashboard', name: '_dashboard', methods: ['GET'])]
+    public function getUserDashboard(int $id, EntityManagerInterface $entityManagerInterface): JsonResponse
+    {
+        $user = $entityManagerInterface->getRepository(User::class)->find($id);
+        if (!$user) return $this->json(['message' => 'User not found'], 404);
+
+        $orders = $user->getOrders();
+        $offers = $user->getOffers();
+
+        $itemsBought = count($orders);
+        $itemsSold = 0;
+        $itemsDonated = 0;
+        $moneySaved = 0;
+        $moneyEarned = 0;
+        $quantitySaved = 0;
+        $transactionsByType = [
+            'Ventes' => $itemsSold,
+            'Dons' => $itemsDonated,
+            'Achats' => $itemsBought,
+        ];
+
+        $byMonth = [];
+        $byWeek = [];
+        $byYear = [];
+
+        foreach ($offers as $offer) {
+            $date = $offer->getCreatedAt();
+            $month = $date->format('Y-m');
+            $week = $date->format('o-W');
+            $year = $date->format('Y');
+
+            foreach (['byMonth' => $month, 'byWeek' => $week, 'byYear' => $year] as $key => $timeKey) {
+                ${$key}[$timeKey] ??= [
+                    'month' => $month,
+                    'week' => $week,
+                    'year' => $year,
+                    'kg' => 0,
+                    'transactions' => 0,
+                    'earned' => 0,
+                    'saved' => 0,
+                ];
+                ${$key}[$timeKey]['kg'] += $offer->getQuantity();
+                ${$key}[$timeKey]['transactions'] += 1;
+
+                if (!$offer->getIsDonation()) {
+                    ${$key}[$timeKey]['earned'] += $offer->getPrice() * $offer->getQuantity();
+                }
+            }
+        }
+
+
+        foreach ($orders as $order) {
+            $offer = $order->getOffer();
+            if (!$offer) continue;
+
+            $date = $order->getPurchasedAt();
+            $month = $date->format('Y-m');
+            $week = $date->format('o-W');
+            $year = $date->format('Y');
+
+            foreach (['byMonth' => $month, 'byWeek' => $week, 'byYear' => $year] as $key => $timeKey) {
+                ${$key}[$timeKey] ??= [
+                    'month' => $month,
+                    'week' => $week,
+                    'year' => $year,
+                    'kg' => 0,
+                    'transactions' => 0,
+                    'earned' => 0,
+                    'saved' => 0,
+                ];
+                ${$key}[$timeKey]['transactions'] += 1;
+
+                if (!$offer->getIsDonation()) {
+                    ${$key}[$timeKey]['saved'] += $offer->getPrice() * $offer->getQuantity();
+                    ${$key}[$timeKey]['kg'] += $offer->getQuantity();
+                }
+            }
+        }
+
+        $byMonth = array_values($byMonth);
+        $byWeek = array_values($byWeek);
+        $byYear = array_values($byYear);
+
+        usort($byMonth, fn($a, $b) => strcmp($a['month'], $b['month']));
+        usort($byWeek, fn($a, $b) => strcmp($a['week'], $b['week']));
+        usort($byYear, fn($a, $b) => strcmp($a['year'], $b['year']));
+        return $this->json([
+            'transactionsCount' => $itemsBought + $itemsSold + $itemsDonated,
+            'itemsBought' => $itemsBought,
+            'itemsSold' => $itemsSold,
+            'itemsDonated' => $itemsDonated,
+            'moneySaved' => $moneySaved,
+            'moneyEarned' => $moneyEarned,
+            'quantitySaved' => $quantitySaved,
+            'transactionsByType' => $transactionsByType,
+            'byMonth' => $byMonth,
+            'byYear' => $byYear,
+            'byWeek' => $byWeek,
+        ]);
     }
 }
