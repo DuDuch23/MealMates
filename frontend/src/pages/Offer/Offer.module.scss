@@ -3,29 +3,35 @@
 @use "../../styles/variables.scss" as variables;
 
 .container-offer {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-
-  &__filter {
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-  }
-
-  &__new-offer-show-map {
+    padding: 12px;
+    gap: 48px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: space-between;
-    align-items: center;
-  }
+    flex-direction: column;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    &__type{
+        img{
+            width: 100px;
+        }
+    }
+
+    &__type-list{
+
+    }
+
+    &__filter{
+
+    }
+
+    &__filter-reference-list{
+
+    }
+
+    &__new-offer-show-map{
+        display: flex;
+        justify-content: space-between;
+    }
 
   &__new-offer,
   &__show-map {

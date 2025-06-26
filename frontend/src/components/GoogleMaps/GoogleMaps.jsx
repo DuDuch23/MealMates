@@ -128,7 +128,7 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
     return (
         <>
             <LoadScript className="map" googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
-                <form className={styles.searchForm} onSubmit={handleSearch}>
+                {/* <form className={styles.searchForm} onSubmit={handleSearch}>
                     <input
                         type="text"
                         value={address}
@@ -136,15 +136,15 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                         placeholder="Entrez une adresse"
                     />
                     <button type="submit">Rechercher</button>
-                </form>
-                <FilterMap
+                </form> */}
+                {/* <FilterMap
                     categories={categories}
                     onFilterChange={(newFilters) => {
                         setFilters(newFilters);
                         fetchOffers(newFilters);
                         drawCircle(newFilters.distance);
                     }}
-                />
+                /> */}
                 <GoogleMap className="map"
                     mapContainerStyle={containerStyle}
                     center={initialCenter}

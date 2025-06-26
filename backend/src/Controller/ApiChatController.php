@@ -127,6 +127,7 @@ class ApiChatController extends AbstractController
         return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
     }
 
+    // message
     #[Route('/get', methods: ['POST'])]
     public function getToChat(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -164,7 +165,7 @@ class ApiChatController extends AbstractController
         $res = [];
         $res[] = ["chat_id" => $results->getId()];
 
-       foreach ($results->getMessages() as $message) {
+        foreach ($results->getMessages() as $message) {
             $sender = $message->getSender();
 
             $res[] = [
@@ -179,6 +180,39 @@ class ApiChatController extends AbstractController
                 ]
             ];
         }
+
+        return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
+    }
+
+    #[Route('/get/{id}', methods:  ['POST'])]
+    public function getInfoForChat(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(),true);
+
+        if(!isset($data['id'])){
+            return new JsonResponse([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'id' parameter."
+            ], 400);
+        }
+
+        $chatId = (int)$data['chat'];
+
+        $results = $entityManager->getRepository(Chat::class)->find($chatId);
+
+        $client = $results->getClient();
+
+        $seller = $results->getSeller();
+
+        $res = [
+            "client" => [
+                "id" => $client->getId(),
+            ],
+            "seller" => [
+                "id" => $seller->getId(),
+            ]
+        ];
 
         return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
     }

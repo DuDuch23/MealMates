@@ -1,35 +1,43 @@
 import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
+import { getOfferSingle } from '../../service/requestApi';
 import AddMessage from '../../components/AddMessage/AddMessage';
 import ChatContainer from '../../components/ChatContainer/ChatContainer';
 
 function Chat() {
-  const location = useLocation();
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState(null);
   const [chat, setChat] = useState(null);
+  const [offer, setOffer] = useState(null);
 
   useEffect(() => {
-    try {
-      const userSession = sessionStorage.getItem("user");
-      const chatId = sessionStorage.getItem("chat");
+    const userSession = sessionStorage.getItem("user");
+    const chatId = sessionStorage.getItem("chat");
 
-      if (userSession && chatId) {
-        const parsedUser = JSON.parse(userSession);
-        setUser(parsedUser);
-        setChat(parseInt(chatId, 10));
-      }
-    } catch (err) {
-      console.error("Erreur lors de la lecture du sessionStorage :", err);
+    if (userSession && chatId) {
+      const parsedUser = JSON.parse(userSession);
+      setUser(parsedUser);
+      setChat(parseInt(chatId, 10));
+      // const id = userSession.id;
+
+      const fetchChat = async () => {
+        try {
+          const res = await getInfoForChat(chatId);
+          setOffer(res);
+        } catch (err) {
+          console.error("Failed to fetch chat data:", err);
+        }
+      };
+
+      fetchChat();
     }
   }, []);
 
-  // Ne rend rien tant que les données ne sont pas prêtes
-  if (!user || !chat) return null;
+  if (!user || !chat) return <div>Loading chat...</div>;
 
   return (
     <>
-      <ChatContainer user={user} chat={chat} />
+      <ChatContainer user={user} offer={offer} chat={chat} messages={messages} />
       <AddMessage user={user} chat={chat} />
     </>
   );

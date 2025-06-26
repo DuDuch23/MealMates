@@ -45,8 +45,8 @@ class ApiPaymentController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => 'https://ton-site.com/success',
-            'cancel_url' => 'https://ton-site.com/cancel',
+            'success_url' => 'https://localhost:5173/success',
+            'cancel_url' => 'http://localhost:5173/cancel',
         ]);
 
         $chat->setStripeUrl($session->url);

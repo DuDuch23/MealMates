@@ -1,16 +1,16 @@
 import { useNavigate, useParams } from "react-router";
+import { getUserIndexDB } from "../../service/indexDB";
 import { useEffect, useState } from "react";
 import { createOrder, getOfferSingle, createChat, sendMessage} from "../../service/requestApi";
 import "./SingleOffer.scss";
 
 export default function SingleOffer() {
 
-    const navigate = useNavigate();
     const { id } = useParams();
     const [user,setUser] = useState([]);
     const [offer, setOffer] = useState(null);
-
     const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchOffer = async () => {
@@ -28,6 +28,25 @@ export default function SingleOffer() {
         };
         fetchOffer();
     }, [id]);
+
+    useEffect(() => {
+        async function fetchUser() {
+          try {
+            const userSession = sessionStorage.getItem("user");
+            if (userSession) {
+              const parsedUser = JSON.parse(userSession);
+              console.log(parsedUser);
+              const id = parseInt(parsedUser.id, 10);
+              const userData = await getUserIndexDB(id);
+              setUser(userData);
+            }
+          } catch (err) {
+            console.error("Erreur lors de la récupération de l'utilisateur :", err);
+          }
+        }
+    
+        fetchUser();
+    }, [navigate]);
 
     const handleReservation = async () => {
         console.log("Réservation en cours pour l'offre ID :", id);
@@ -80,21 +99,16 @@ export default function SingleOffer() {
     }
 
     return (
-        <div className="single-offer">
-            <div className="single-offer__container">
-                <div className="single-offer__content">
-                    <div className="single-offer__images">
+        <div className={style.single_offer}>
+            <div className={style.single_offer__container}>
+                <div className={style.single_offer__content}>
+                    <div className={style.single_offer__images}>
                         {offer.images && offer.images.map((img) => (
-                            <img
-                                key={img.id}
-                                src={`${uploadsBaseUrl}/${img.name}`}
-                                alt={img.name}
-                                className="single-offer__image"
-                            />
+                            <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className={style.single_offer__image} />
                         ))}
                     </div>
-                    <h1 className="single-offer__title">{offer.product}</h1>
-                    <div className="single-offer__details">
+                    <h1 className={style.single_offer__title}>{offer.product}</h1>
+                    <div className={style.single_offer__details}>
                         <p><strong>Description :</strong> {offer.description || "Aucune description."}</p>
                         <p><strong>Prix :</strong> {offer.price ? `${offer.price} €` : "Gratuit"}</p>
                         <p><strong>Quantité :</strong> {offer.quantity}</p>
@@ -105,29 +119,40 @@ export default function SingleOffer() {
                         <p><strong>Créée le :</strong> {new Date(offer.createdAt).toLocaleString()}</p>
                     </div>
                 </div>
-                <aside className="single-offer__sidebar">
-                    {!offer.order && (
-                        <button className="single-offer__reserve-btn" onClick={handleReservation}>
-                            Réserver cette offre
-                        </button>
-                    )}
+                <aside className={style.single_offer__sidebar}>
+                    {user && offer.seller.id == user.id ? (
+                        <>
+                            <p>Vous êtes le propriétaire de cette offre</p>
+                            <button onClick={() => console.log("Bientot rediriger vers une page de modification")}>
+                                Modifier l'offre
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            {!offer.order && (
+                                <button className="single-offer__reserve-btn" onClick={handleReservation}>
+                                    Réserver cette offre
+                                </button>
+                            )}
 
-                    {offer.order && !offer.order.isConfirmed && (
-                        <p className="single-offer__status">
-                            Réservation en attente de confirmation<br />
-                            (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
-                        </p>
-                    )}
+                            {offer.order && !offer.order.isConfirmed && (
+                                <p className="single-offer__status">
+                                    Réservation en attente de confirmation<br />
+                                    (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
+                                </p>
+                            )}
 
-                    {offer.order && offer.order.isConfirmed && (
-                        <p className="single-offer__status confirmed">
-                            Réservation confirmée
-                        </p>
-                    )}
+                            {offer.order && offer.order.isConfirmed && (
+                                <p className="single-offer__status confirmed">
+                                    Réservation confirmée
+                                </p>
+                            )}
 
-                    <button className="single-offer__chat-btn" onClick={handleInput}>
-                        <p>Envoyer un message</p>
-                    </button>
+                            <button>
+                                <p>Envoyer un message</p>
+                            </button>
+                        </>
+                    )}
                 </aside>
             </div>
         </div>

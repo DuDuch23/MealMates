@@ -2,23 +2,16 @@ import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
-import { AiFillStar } from "react-icons/ai";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
+// import { AiFillStar } from "react-icons/ai";
 import logo from '../../assets/logo-mealmates.png';
 import Footer from "../../components/Footer/Footer";
 import AutoCarousel from '../../components/AutoCarousel/AutoCarousel';
 
 function Home() {
   const [pos, setPos] = useState(null);
-  const token = sessionStorage.getItem("token");
-  const user = sessionStorage.getItem("user");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token && user) {
-      navigate("/offer");
-    }
-
     const watchId = navigator.geolocation.watchPosition(
       (position) =>
         setPos({ lat: position.coords.latitude, lng: position.coords.longitude }),
@@ -31,7 +24,7 @@ function Home() {
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, [token, user, navigate]);
+  }, []);
 
   const reviews = [
     {
@@ -61,37 +54,24 @@ function Home() {
     <section className={styles.landing}>
       <section className={styles.top}>
         <h1>Et si on mangeait moins cher, plus respectueux de la planète ?</h1>
+        <div className={styles.inbetween}>
+          <p>Luttez contre le gaspillage en achetant à d'autres particuliers, et proposez vos propres surplus alimentaires.</p>
+        </div>
       </section>
 
       <section className={styles.bottom}>
         <div className={styles.bottom__maps}>
+          <OffersMap position={pos} />
         </div>
         <div className={styles.bottom__right}>
-          <h2>Obtenez des offres locales, proches de chez vous</h2>
+          <h2>Obtenez des offres locales, qui suivent vos offres alimentaires</h2>
           <button onClick={() => navigate("/inscription")}>M'inscrire maintenant</button>
         </div>
       </section>
 
-      <section className={styles.products}>
-        <h2>Une vaste gamme de produits</h2>
-        <AutoCarousel />
-      </section>
-
-      <section className={styles.features}>
-        <h2>Pourquoi choisir Mealmates ?</h2>
-        <div className={styles.features__grid}>
-          <div className={styles.feature}>
-            <h3>Anti-gaspillage</h3>
-            <p>Réduisez le gaspillage alimentaire en vendant ou achetant des surplus locaux.</p>
-          </div>
-          <div className={styles.feature}>
-            <h3>Communautaire</h3>
-            <p>Rencontrez vos voisins et renforcez le lien social autour d'une bonne cause.</p>
-          </div>
-          <div className={styles.feature}>
-            <h3>Économique</h3>
-            <p>Faites des économies en achetant des aliments de qualité à petit prix.</p>
-          </div>
+      <section className={styles.bottom}>
+        <div className={styles.bottom__maps}>
+          <AutoCarousel />
         </div>
       </section>
 
@@ -109,14 +89,12 @@ function Home() {
               </div>
               <p>{review.text}</p>
               <div className={styles.review__stars}>
-                {[...Array(review.stars)].map((_, i) => <AiFillStar key={i} />)}
+                {/* {[...Array(review.stars)].map((_, i) => <AiFillStar key={i} />)} */}
               </div>
             </div>
           ))}
         </div>
       </section>
-
-      <Footer />
     </section>
   );
 }

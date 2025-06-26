@@ -28,10 +28,6 @@ const NavLayout = () => {
       );
     }
   };
-
-  // const handleSearch = (query) => {
-  //   console.log("Rechercher :", query);
-  // };
   
   return (
     <>
