@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { getUserIndexDB } from "../../service/indexDB";
 import { useEffect, useState } from "react";
 import { createOrder, getOfferSingle } from "../../service/requestApi";
 import style from "./SingleOffer.module.css";
@@ -6,6 +7,7 @@ import style from "./SingleOffer.module.css";
 export default function SingleOffer() {
     const { id } = useParams();
     const [offer, setOffer] = useState(null);
+    const [user, setUser] = useState(null);
     const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL;
     const navigate = useNavigate();
 
@@ -26,6 +28,25 @@ export default function SingleOffer() {
 
         fetchOffer();
     }, [id]);
+
+    useEffect(() => {
+        async function fetchUser() {
+          try {
+            const userSession = sessionStorage.getItem("user");
+            if (userSession) {
+              const parsedUser = JSON.parse(userSession);
+              console.log(parsedUser);
+              const id = parseInt(parsedUser.id, 10);
+              const userData = await getUserIndexDB(id);
+              setUser(userData);
+            }
+          } catch (err) {
+            console.error("Erreur lors de la récupération de l'utilisateur :", err);
+          }
+        }
+    
+        fetchUser();
+    }, [navigate]);
 
     const handleReservation = async () => {
         console.log("Réservation en cours pour l'offre ID :", id);
@@ -66,27 +87,39 @@ export default function SingleOffer() {
                     </div>
                 </div>
                 <aside className={style.single_offer__sidebar}>
-                    {!offer.order && (
-                    <button className="single-offer__reserve-btn" onClick={handleReservation}>
-                        Réserver cette offre
-                    </button>
-                    )}
+                    {user && offer.seller.id == user.id ? (
+                        <>
+                            <p>Vous êtes le propriétaire de cette offre</p>
+                            <button onClick={() => console.log("Bientot rediriger vers une page de modification")}>
+                                Modifier l'offre
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            {!offer.order && (
+                                <button className="single-offer__reserve-btn" onClick={handleReservation}>
+                                    Réserver cette offre
+                                </button>
+                            )}
 
-                    {offer.order && !offer.order.isConfirmed && (
-                    <p className="single-offer__status">
-                        Réservation en attente de confirmation<br />
-                        (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
-                    </p>
-                    )}
+                            {offer.order && !offer.order.isConfirmed && (
+                                <p className="single-offer__status">
+                                    Réservation en attente de confirmation<br />
+                                    (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
+                                </p>
+                            )}
 
-                    {offer.order && offer.order.isConfirmed && (
-                    <p className="single-offer__status confirmed">
-                        Réservation confirmée
-                    </p>
+                            {offer.order && offer.order.isConfirmed && (
+                                <p className="single-offer__status confirmed">
+                                    Réservation confirmée
+                                </p>
+                            )}
+
+                            <button>
+                                <p>Envoyer un message</p>
+                            </button>
+                        </>
                     )}
-                    <button>
-                        <p>Envoyer un message</p>
-                    </button>
                 </aside>
             </div>
         </div>
