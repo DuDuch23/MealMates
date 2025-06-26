@@ -1,5 +1,12 @@
 @use '../../styles/variables.scss';
 
+%button-base {
+  padding: 16px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -14,6 +21,7 @@
   background: hsl(0 0% 15% / 50%);
 
   &__container {
+    color: black;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -22,13 +30,51 @@
     margin: 0 auto;
   }
 
-  a {
+  &__left {
     display: flex;
-    font-size: variables.$fontSize;
-    gap: 12px;
-    justify-content: center;
     align-items: center;
-    text-decoration: none;
+    height: 100%;
+    color: black;
+
+    ul {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+
+      li {
+        a:not(.logo) {
+          text-decoration: none;
+          padding: 20px 8px;
+        }
+      }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: white;
+    }
+  }
+
+  &__leftMenuUser {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
   }
 
   &__rightInfo {
@@ -43,10 +89,8 @@
 
     .button-sign-in a,
     .button-login a {
-      padding: 16px 28px;
-      border-radius: 10px;
-      font-weight: 600;
-      transition: all 0.3s ease-in-out;
+      @extend %button-base;
+      color: white;
     }
 
     .button-sign-in a {
@@ -70,6 +114,7 @@
     }
 
     .button-user-info {
+      height: 12vh;
       display: flex;
       background-color: variables.$colorDarkGreen;
       border-radius: 10px;
@@ -77,52 +122,14 @@
       justify-content: center;
       align-items: center;
       padding: 2px 26px;
-    }
-  }
-
-  &__left {
-    display: flex;
-    align-items: center;
-    height: 100%;
-
-    ul {
-      display: flex;
-      list-style: none;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-      align-items: center;
-
-      li {
-        a:not(.logo) {
-          text-decoration: none;
-          padding: 20px 8px;
+      #icon-user {
+        height: 100px;
+        svg {
+          width: 30px;
+          height: 30px;
         }
       }
     }
-
-    h1 {
-      font-size: 2.5rem;
-    }
-  }
-
-  &__leftMenuUser {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-
-    svg {
-      width: 30px;
-      height: 30px;
-    }
-  }
-
-  &__right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    height: 100%;
   }
 
   .button-user {
@@ -130,6 +137,15 @@
     display: flex;
     cursor: pointer;
     justify-content: space-around;
+  }
+
+  a {
+    display: flex;
+    font-size: variables.$fontSize;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
   }
 }
 
@@ -176,10 +192,10 @@
       display: block;
     }
 
-    .header-right {
+    &__right {
       display: none;
 
-      .button-log-in,
+      .button-login,
       .button-sign-in {
         display: none;
       }

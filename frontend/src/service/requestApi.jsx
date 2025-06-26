@@ -296,6 +296,28 @@ export async function createChat({client, offer, seller}){
     } 
 }
 
+export async function getInfoChat({id}){
+    try{
+        const response = await fetch(`${API_BASE_URL}/api/chat/get/${id}`,{
+            method: 'POST',
+            headers:{
+                accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(
+                { 
+                    "seller": seller,
+                    "client": client.id,
+                    "offer": offer
+                }
+            ),
+        });
+        return await response.json();
+    }catch(error){
+        return console.error(error);
+    } 
+}
+
 export async function getAllChat(id) {
     const token = sessionStorage.getItem("token");
     try{
@@ -410,8 +432,6 @@ export async function generateStripeLink({chat}){
 }
 
 // Offer
-
-
 export async function getOfferSingle(id){
     try{
         const response = await fetch(`${API_BASE_URL}/api/offers/get/${id}`,{
@@ -610,7 +630,6 @@ export async function fetchFilteredOffers(filters) {
         return { result: [] };
     }
 };
-
 
 export async function getCategory() {
     try {
