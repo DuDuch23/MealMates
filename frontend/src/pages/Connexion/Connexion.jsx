@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
 import CryptoJS from "crypto-js";

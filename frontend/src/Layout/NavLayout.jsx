@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import Header from '../components/Header/Header';
 import BurgerMenue from '../components/BurgerMenue/burgerMenue';
 
@@ -28,10 +28,6 @@ const NavLayout = () => {
       );
     }
   };
-
-  // const handleSearch = (query) => {
-  //   console.log("Rechercher :", query);
-  // };
   
   return (
     <>

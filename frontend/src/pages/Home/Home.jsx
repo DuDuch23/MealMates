@@ -2,7 +2,7 @@ import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
-import { AiFillStar } from "react-icons/ai";
+// import { AiFillStar } from "react-icons/ai";
 import logo from '../../assets/logo-mealmates.png';
 import AutoCarousel from "../../components/AutoCarousel/AutoCarousel";
 
@@ -88,7 +88,7 @@ function Home() {
               </div>
               <p>{review.text}</p>
               <div className={styles.review__stars}>
-                {[...Array(review.stars)].map((_, i) => <AiFillStar key={i} />)}
+                {/* {[...Array(review.stars)].map((_, i) => <AiFillStar key={i} />)} */}
               </div>
             </div>
           ))}
