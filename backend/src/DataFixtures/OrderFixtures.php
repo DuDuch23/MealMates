@@ -58,7 +58,12 @@ class OrderFixtures extends Fixture implements DependentFixtureInterface
                     \DateTimeImmutable::createFromMutable(
                         $faker->dateTimeBetween('-30 days', 'now')
                     )
-                );
+                )
+                ->setExpiresAt(
+                    \DateTimeImmutable::createFromMutable(
+                        $faker->dateTimeBetween('now', '+30 days')
+                    )
+                    );
 
             $manager->persist($order);
         }

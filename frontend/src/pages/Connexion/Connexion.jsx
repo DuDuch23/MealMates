@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
 import CryptoJS from "crypto-js";
 import logo from '../../assets/logo-mealmates.png';
 import GoogleLoginButton from "../../components/SsoGoogle";
 import styles from "./Connexion.module.css";
+const SECRET_KEY = import.meta.env.VITE_CRYPTO_KEY || "default-key";
 
 
 function Connexion() {
@@ -17,7 +18,7 @@ function Connexion() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
@@ -25,7 +26,7 @@ function Connexion() {
         navigate("/");
       } catch (error) {
         console.error("Erreur de parsing JSON :", error);
-        localStorage.removeItem("user"); // Nettoyer pour éviter d'autres erreurs
+        sessionStorage.removeItem("user");
       }
     }
   }, [navigate]);
@@ -36,26 +37,27 @@ function Connexion() {
   // Gérer la soumission du formulaire de connexion
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError(null); 
     try {
       const response = await logIn({ email, password });
-      console.log("Réponse du serveur :", response);
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({email});
-        console.log()
+        const fullUser = await getProfile({email, token});
+        const { user: profileUser } = await getProfile({ email, token });
 
-        // Stocker dans localStorage
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(fullUser.user.id));
+        // Stocker dans sessionStorage
+        const expiration = Date.now() + 60 * 60 * 1000;
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("token_expiration", expiration.toString());
+        sessionStorage.setItem("user", JSON.stringify(profileUser.id));
 
-        const profile = await getProfile({ email, token });
-        sessionStorage.setItem("user",profile.user.id);
-        console.log(profile.user);
-        const encryptedUser = CryptoJS.AES.encrypt(JSON.stringify(profile.user), SECRET_KEY).toString();
+        const encrypted = CryptoJS.AES.encrypt(
+          JSON.stringify(profileUser),
+          SECRET_KEY
+        ).toString();
+        await addUserIndexDB({ ...profileUser, encrypted });
 
-        // Ajouter l'utilisateur à IndexedDB
-        await addUserIndexDB(fullUser.user);
-        navigate("/");
+        navigate("/offer");
       } else {
         setError("Email ou mot de passe incorrect.");
       }
@@ -66,50 +68,52 @@ function Connexion() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.titleLogo}>
-        <img src={logo} alt="logo" className={styles.logo} />
-        <h1>MealMates</h1>
-      </div>
+    <div className={styles.block}>
+      <div className={styles.container}>
+        <div className={styles.titleLogo}>
+          <img src={logo} alt="logo" className={styles.logo} />
+          <h1>MealMates</h1>
+        </div>
 
-      <div className={styles.action}>
-        {error && <p className={styles.error}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className={styles.contentElementForm}>
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        <div className={styles.action}>
+          {error && <p className={styles.error}>{error}</p>}
+          <form onSubmit={handleSubmit}>
+            <div className={styles.contentElementForm}>
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-          <div className={styles.contentElementForm}>
-            <label htmlFor="password">Mot de Passe</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div className={styles.contentElementForm}>
+              <label htmlFor="password">Mot de Passe</label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-          <button type="submit">Connexion</button>
+            <button type="submit">Connexion</button>
 
-          <div className={styles.otherAction}>
-            <p>Ou connexion avec</p>
-            <GoogleLoginButton />
-          </div>
+            <div className={styles.otherAction}>
+              <p>OU</p>
+              <GoogleLoginButton />
+            </div>
 
-          <div className={styles.contentElementForm}>
-          <p className={styles.linkText} onClick={() => navigate("/")}>
-            Retour au menu
-          </p>
-          </div>
-        </form>
+            <div className={styles.contentElementForm}>
+            <p className={styles.linkText} onClick={() => navigate("/")}>
+              Retour au menu
+            </p>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

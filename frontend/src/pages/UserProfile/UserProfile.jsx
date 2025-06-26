@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router";
+import { useParams, Link } from "react-router-dom";
 import { getUser } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
@@ -76,12 +76,6 @@ const UserProfile = () => {
     return (
         <>
             <div className={styles.cardUser}>
-                <nav>
-                    <Link to={"/"}>
-                        <img src="/img/logo-mealmates.png" alt="logo mealmates" />
-                        <h2>MealMates</h2>
-                    </Link>
-                </nav>
                 <IconUser className={styles.iconUser} id={user.iconUser}/>
                 <div className={styles.contentUser}>
                     <div className={styles.containerLink}>
@@ -97,6 +91,7 @@ const UserProfile = () => {
                             <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
                           </svg>
                         </span>
+                        <Link to={`/dashboard`}>Mon tableau de bord</Link>
                         <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                     </div>
                     <div className={styles.containerInfoUser}>

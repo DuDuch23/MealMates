@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -214,7 +215,7 @@ class ApiOfferController extends AbstractController
 
         $offer->setProduct($request->request->get('product'));
         $slug = $slugService->generateUniqueSlug($request->request->get('product'));
-        $offer->generateSlug($slug);
+        $offer->setSlug($slug);
         $offer->setDescription($request->request->get('description'));
         $offer->setQuantity($request->request->get('quantity'));
         $offer->setExpirationDate(new \DateTime($request->request->get('expirationDate')));
@@ -224,9 +225,7 @@ class ApiOfferController extends AbstractController
         $offer->setIsRecurring(filter_var($request->request->get('isRecurring'), FILTER_VALIDATE_BOOLEAN));
         $offer->setLatitude($request->request->get('latitude'));
         $offer->setLongitude($request->request->get('longitude'));
-
-        $availableSlots = json_decode($request->request->get('availableSlots'), true);
-        $offer->setAvailableSlots($availableSlots ?? []);
+        $offer->setAvailableSlots($request->request->get('availableSlots'));
 
         $categoryIds = $request->request->all('categories');
         foreach ($categoryIds as $id) {
@@ -236,17 +235,17 @@ class ApiOfferController extends AbstractController
             }
         }
 
+        /** @var UploadedFile[]|UploadedFile|null $files */
         $files = $request->files->get('photos_offer');
 
         if ($files) {
-            if (!is_array($files)) {
-                $files = [$files];
-            }
-
-            foreach ($files as $file) {
+            // assure qu'on boucle toujours sur un tableau
+            foreach ((array) $files as $file) {
                 $image = new Image();
-                $image->setImageFile($file);
+                $image->setImageFile($file);     // Vich déplacera le fichier
+
                 $offer->addImage($image);
+                // Pas besoin de $em->persist($image); cascade={"persist"} suffit
             }
         }
 

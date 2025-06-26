@@ -1,44 +1,59 @@
-import React, { use } from 'react';
-import { getCategory } from '../../service/requestApi';
-import { useState, useEffect } from 'react';
-import styles from './AllCategory.module.css';
+import { useEffect, useState } from "react";
+import { getCategory } from "../../service/requestApi";
+import styles from "./AllCategory.module.scss";
 
-export default function AllCategory({ selectedCategories, onCategoryChange }) {
-    const [categories, setCategories] = useState([]);
+export default function AllCategory({
+  value = [],
+  onChange = () => {},
+}) {
+  const [categories, setCategories] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const data = await getCategory();
-                if (data && data.data) {
-                    setCategories(data.data);
-                } else {
-                    console.error("Erreur lors de la récupération des catégories");
-                }
-            } catch (error) {
-                console.error("Erreur lors de la récupération des catégories", error);
-            }
-        };
-        fetchCategories();
-    }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getCategory();
+        setCategories(res?.data || []);
+      } catch (e) {
+        console.error("Catégories introuvables", e);
+      }
+    })();
+  }, []);
 
-    const handleChange = (e) => {
-        const selectedOptions = Array.from(e.target.selectedOptions).map(option => parseInt(option.value));
-        onCategoryChange(selectedOptions);
-    };
+  const toggleCat = (id) => {
+    const next = value.includes(id)
+      ? value.filter((v) => v !== id)
+      : [...value, id];
+    onChange(next);
+  };
 
-    return (
-        <div className={styles["category-select"]}>
-            <select
-            multiple 
-            className={styles["category-select__dropdown"]}
-            onChange={handleChange}
-            value={selectedCategories}>
-            
-                {categories.map((category) => (
-                    <option key={category.id} value={category.id}>{category.name}</option>
-                ))}
-            </select>
-        </div>
-    );
+  return (
+    <div className={styles.wrapper}>
+      <button
+        type="button"
+        className={styles.button}
+        onClick={() => setIsOpen((o) => !o)}
+      >
+        {value.length
+          ? `${value.length} catégorie${value.length > 1 ? "s" : ""} sélectionnée${value.length > 1 ? "s" : ""}`
+          : "Choisir des catégories"}
+        <span className={styles.caret}>{isOpen ? "▲" : "▼"}</span>
+      </button>
+
+      {isOpen && (
+        <ul className={styles.dropdown}>
+          {categories.map((cat) => (
+            <li key={cat.id}>
+                <input
+                    type="checkbox"
+                    checked={value.includes(cat.id)}
+                    onChange={() => toggleCat(cat.id)}
+                />
+                {cat.name}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }

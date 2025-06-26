@@ -1,11 +1,13 @@
 <?php
 namespace App\Controller;
 
+use Google_Client;
 use App\Entity\User;
 use App\Enum\PreferenceEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -61,6 +63,48 @@ class ApiUserController extends AbstractController
             'code' => 200,
             'data' => $data
         ], 200);
+    }
+
+    #[Route('/ssoUser', methods:['POST'])]
+    public function ssoUsers(    Request $request, JWTTokenManagerInterface $JWTManager, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $tokenFromGoogle = $data['token'] ?? null;
+
+        if (!$tokenFromGoogle) {
+            return new JsonResponse(['error' => 'No token provided'], 400);
+        }
+
+        $client = new Google_Client(['client_id' =>  $_ENV['CLIENT_ID_GOOGLE']]);
+
+        $payload = $client->verifyIdToken($tokenFromGoogle);
+
+        if (!$payload) {
+            return new JsonResponse(['error' => 'Invalid Google token'], 401);
+        }
+
+        $email = $payload['email'];
+        $firstName = $payload['given_name'] ?? '';
+
+        // Recherche ou création utilisateur
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
+        if (!$user) {
+            $user = new User();
+            $user->setEmail($email);
+            $user->setFirstName($firstName);
+
+            // Génère un mot de passe aléatoire (jamais utilisé ici)
+            $randomPassword = bin2hex(random_bytes(16));
+            $user->setPassword($passwordHasher->hashPassword($user, $randomPassword));
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        $token = $JWTManager->create($user);
+
+        return new JsonResponse(['token' => $token]);
     }
 
     #[Route('/profile', methods: ['POST'])]
@@ -138,14 +182,6 @@ class ApiUserController extends AbstractController
                 'status' => "Forbidden",
                 'code' => 403,
                 'message' => "Password and password confirmation don't match"
-            ], 403);
-        }
-        if (isset($data["role"]) && $data["role"]!= "ROLE_USER" && !in_array("ROLE_ADMIN",$this->getUser()->getRoles()))
-        {
-            return new JsonResponse([
-                'status' => "Unauthorized",
-                'code' => 401,
-                'message' => "You are not abilitated to perform this action."
             ], 403);
         }
 
@@ -295,5 +331,106 @@ class ApiUserController extends AbstractController
             'status' => "OK",
             'code' => 200,
         ], 200);
+    }
+
+    #[Route('/{id}/dashboard', name: '_dashboard', methods: ['GET'])]
+    public function getUserDashboard(int $id, EntityManagerInterface $entityManagerInterface): JsonResponse
+    {
+        $user = $entityManagerInterface->getRepository(User::class)->find($id);
+        if (!$user) return $this->json(['message' => 'User not found'], 404);
+
+        $orders = $user->getOrders();
+        $offers = $user->getOffers();
+
+        $itemsBought = count($orders);
+        $itemsSold = 0;
+        $itemsDonated = 0;
+        $moneySaved = 0;
+        $moneyEarned = 0;
+        $quantitySaved = 0;
+        $transactionsByType = [
+            'Ventes' => $itemsSold,
+            'Dons' => $itemsDonated,
+            'Achats' => $itemsBought,
+        ];
+
+        $byMonth = [];
+        $byWeek = [];
+        $byYear = [];
+
+        foreach ($offers as $offer) {
+            $date = $offer->getCreatedAt();
+            $month = $date->format('Y-m');
+            $week = $date->format('o-W');
+            $year = $date->format('Y');
+
+            foreach (['byMonth' => $month, 'byWeek' => $week, 'byYear' => $year] as $key => $timeKey) {
+                ${$key}[$timeKey] ??= [
+                    'month' => $month,
+                    'week' => $week,
+                    'year' => $year,
+                    'kg' => 0,
+                    'transactions' => 0,
+                    'earned' => 0,
+                    'saved' => 0,
+                ];
+                ${$key}[$timeKey]['kg'] += $offer->getQuantity();
+                ${$key}[$timeKey]['transactions'] += 1;
+
+                if (!$offer->getIsDonation()) {
+                    ${$key}[$timeKey]['earned'] += $offer->getPrice() * $offer->getQuantity();
+                }
+            }
+        }
+
+
+        foreach ($orders as $order) {
+            $offer = $order->getOffer();
+            if (!$offer) continue;
+
+            $date = $order->getPurchasedAt();
+            $month = $date->format('Y-m');
+            $week = $date->format('o-W');
+            $year = $date->format('Y');
+
+            foreach (['byMonth' => $month, 'byWeek' => $week, 'byYear' => $year] as $key => $timeKey) {
+                ${$key}[$timeKey] ??= [
+                    'month' => $month,
+                    'week' => $week,
+                    'year' => $year,
+                    'kg' => 0,
+                    'transactions' => 0,
+                    'earned' => 0,
+                    'saved' => 0,
+                ];
+                ${$key}[$timeKey]['transactions'] += 1;
+
+                if (!$offer->getIsDonation()) {
+                    ${$key}[$timeKey]['saved'] += $offer->getPrice() * $offer->getQuantity();
+                    ${$key}[$timeKey]['kg'] += $offer->getQuantity();
+                }
+            }
+        }
+
+        $byMonth = array_values($byMonth);
+        $byWeek = array_values($byWeek);
+        $byYear = array_values($byYear);
+
+        usort($byMonth, fn($a, $b) => strcmp($a['month'], $b['month']));
+        usort($byWeek, fn($a, $b) => strcmp($a['week'], $b['week']));
+        usort($byYear, fn($a, $b) => strcmp($a['year'], $b['year']));
+        return $this->json([
+            'transactionsCount' => $itemsBought + $itemsSold + $itemsDonated,
+            'itemsBought' => $itemsBought,
+            'itemsSold' => $itemsSold,
+            'itemsDonated' => $itemsDonated,
+            'moneySaved' => $moneySaved,
+            'moneyEarned' => $moneyEarned,
+            'quantitySaved' => $quantitySaved,
+            'transactionsByType' => $transactionsByType,
+            'byMonth' => $byMonth,
+            'byYear' => $byYear,
+            'byWeek' => $byWeek,
+        ]);
     }
 }

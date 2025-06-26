@@ -5,7 +5,7 @@ import { searchOfferByTitle,
         getLastChanceOffers,
         getAgainOffers,
         getLocalOffers } from "../../service/requestApi";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import styles from "./Offer.module.css";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import AllCategory from "../../components/AllCategory/AllCategory";
@@ -88,7 +88,7 @@ function Offer(){
             try {
                 const data = await getOffers();
                 if (data && data.data) {
-                    console.log("offers",data);
+                    // console.log("offers",data);
                     setOffers(data.data);
                 } else {
                     console.log("Erreur ou offres vides");
@@ -107,7 +107,7 @@ function Offer(){
                     // console.log("vegan",data);
                     setVeganOffers(data.data);
                 } else {
-                    // console.log("Erreur ou offres vegans vides");
+                    console.log("Erreur ou offres vegans vides");
                 }
             } catch (err) {
                 console.error('Erreur lors de la récupération des offres vegan:', err);
@@ -137,13 +137,12 @@ function Offer(){
         const fetchAgainOffers = async () => {
             try {
                 setLoadingAgain(true);
-                const token = sessionStorage.getItem('token'); // Ou autre méthode pour récupérer le JWT
+                const token = sessionStorage.getItem('token');
                 if (!token) {
                     console.error("Aucun token trouvé");
                     return;
                 }
                 const data = await getAgainOffers(token);
-                console.log("again", data);
                 if(data && data.data){
                     // console.log("again", data);
                     setAgainOffers(data.data);
@@ -216,39 +215,6 @@ function Offer(){
 
     return(
     <section className={styles["container-offer"]}>
-        {/* <nav className={styles["container-offer__type"]}>
-            <div className={styles["container__type-list"]}>
-                <Swiper className={styles["type-offer-swiper"]} slidesPerView={4} spaceBetween={10}>
-                    <SwiperSlide>
-                        <img src="/img/offre/sushi.png" alt="icon de sushi" />
-                        <p>Sushi</p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/img/offre/burger.png" alt="" />
-                        <p>Burger</p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/img/offre/tarte.png" alt="" />
-                        <p>Tarte</p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/img/offre/produits-frais.png" alt="" />
-                        <p>Produit Frais</p>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/img/offre/derniere-chance.png" alt="" />
-                        <p>Derniére Chance</p>
-                    </SwiperSlide>
-                </Swiper>
-            </div>
-        </nav> */}
-        <SearchBar onSearch={handleSearch} />
-
-        <nav className={styles["container-offer__filter"]}>
-            <ul className={styles["container-offer__filter-reference-list"]}>
-                {/* <AllCategory /> */}
-            </ul>
-        </nav>
         <div className={styles["container-offer__new-offer-show-map"]}>
             <Link className={styles["container-offer__new-offer"]} key="new-offer" to={'/addOffer'}>
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -260,8 +226,15 @@ function Offer(){
                 <p>Afficher la carte des offres</p>
             </button>
         </div>
+        <SearchBar onSearch={handleSearch} />
+
+        <nav className={styles["container-offer__filter"]}>
+            <ul className={styles["container-offer__filter-reference-list"]}>
+                <AllCategory />
+            </ul>
+        </nav>
         {showMap && (
-            <div className={styles["container-offer__map"]} style={{ height: "100vh", width: "100%", top: 0, left: 0, zIndex: 1000 }}>
+            <div className={styles["container-offer__map"]} style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 98 }}>
                 <OffersMap userPos={pos} offers={offers} setUserPos={setUserPos} />
             </div>
         )}

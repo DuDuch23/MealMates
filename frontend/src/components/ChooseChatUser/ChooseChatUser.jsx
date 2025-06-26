@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import "./ChooseChatUser.scss"
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import { IconUser } from "../IconUser/iconUser";
 
 
 function ChooseChatUser({user,chat,lastMessage}) {
-    sessionStorage.setItem("user",user.id);
+    sessionStorage.setItem("otherUser",user.id);
     sessionStorage.setItem("chat",chat);
     const navigate = useNavigate();
 

@@ -81,9 +81,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ['default' => false])]
     private ?bool $isVerified = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $verificationToken = null;
-
     /**
      * @var Collection<int, Order>
      */
@@ -332,7 +329,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->offers->contains($offer)) {
             $this->offers->add($offer);
-            $offer->setUser($this);
+            $offer->setSeller($this);
         }
 
         return $this;
@@ -343,7 +340,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->offers->removeElement($offer)) {
             // set the owning side to null (unless already changed)
             if ($offer->getSeller() === $this) {
-                $offer->setUser(null);
+                $offer->setSeller(null);
             }
         }
 
@@ -368,18 +365,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
-    public function getVerificationToken(): ?string
-    {
-        return $this->verificationToken;
-    }
-
-    public function setVerificationToken(?string $verificationToken): static
-    {
-        $this->verificationToken = $verificationToken;
 
         return $this;
     }
