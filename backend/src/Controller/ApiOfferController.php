@@ -10,6 +10,7 @@ use App\Repository\OfferRepository;
 use App\Repository\OrderRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Serializer;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -65,11 +66,11 @@ class ApiOfferController extends AbstractController
 
         $data = json_decode($serializer->serialize($offer, 'json', ['groups' => 'public']), true);
 
-        $data['order'] = $activeOrder ? [
-            'id'          => $activeOrder->getId(),
-            'isConfirmed' => $activeOrder->isConfirmed(),
-            'expiresAt'   => $activeOrder->getExpiresAt()?->format('Y-m-d H:i:s'),
-        ] : null;
+        // $data['order'] = $activeOrder ? [
+        //     'id'          => $activeOrder->getId(),
+        //     'isConfirmed' => $activeOrder->isConfirmed(),
+        //     'expiresAt'   => $activeOrder->getExpiresAt()?->format('Y-m-d H:i:s'),
+        // ] : null;
 
         return $this->json([
             'status' => "OK",
@@ -175,8 +176,7 @@ class ApiOfferController extends AbstractController
     }
 
     #[Route('/again', name: 'api_offers_again', methods: ['GET'])]
-    public function getAgainOffers(Request $request, SerializerInterface $serializer, 
-    Security $security, OfferRepository $offerRepository): JsonResponse
+    public function getAgainOffers(Request $request, SerializerInterface $serializer, Security $security, OfferRepository $offerRepository): JsonResponse
     {
         $limit = $request->query->getInt('limit', 10);
         $offset = $request->query->getInt('offset', 0);
@@ -242,10 +242,9 @@ class ApiOfferController extends AbstractController
             // assure qu'on boucle toujours sur un tableau
             foreach ((array) $files as $file) {
                 $image = new Image();
-                $image->setImageFile($file);     // Vich déplacera le fichier
+                $image->setImageFile($file); 
 
                 $offer->addImage($image);
-                // Pas besoin de $em->persist($image); cascade={"persist"} suffit
             }
         }
 
@@ -257,7 +256,6 @@ class ApiOfferController extends AbstractController
 
         return $this->json(['status' => "Created", 'code' => 201], 201);
     }
-
 
     #[Route('/edit', methods: ['PUT'])]
     public function edit(Request $request, EntityManagerInterface $entityManager): JsonResponse

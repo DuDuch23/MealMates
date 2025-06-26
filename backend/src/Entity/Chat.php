@@ -22,6 +22,9 @@ class Chat
     #[Groups(["public", "private"])]
     private User $client;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $stripeUrl = null;
+
     #[ORM\ManyToOne(targetEntity: Offer::class)]
     #[Groups("public","private")]
     private Offer $offer;
@@ -40,7 +43,6 @@ class Chat
     #[Groups(["public","private"])]
     private Collection $images;
 
-
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -55,6 +57,17 @@ class Chat
     public function getClient(): User
     {
         return $this->client;
+    }
+
+    public function getStripeUrl(): ?string
+    {
+        return $this->stripeUrl;
+    }
+
+    public function setStripeUrl(?string $stripeUrl): self
+    {
+        $this->stripeUrl = $stripeUrl;
+        return $this;
     }
 
     public function setClient(User $client): self

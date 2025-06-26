@@ -28,18 +28,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["public", "private"])]
     private ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(["public", "private"])]
     private array $roles = [];
 
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
     #[Groups(["public", "private"])]
+    #[ORM\Column(nullable: true,length:255)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true,length:255)]
     #[Groups(["public", "private"])]
     private ?string $lastName = null;
 
