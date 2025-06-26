@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState,useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { getUserIndexDB, deleteUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 import logo from '../src/assets/logo-mealmates.png';

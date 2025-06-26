@@ -31,12 +31,12 @@ p,li{
 .contentUser{
     height: 61%;
     .containerLink{
-        height: 10%;
         display: flex;
         align-items: center;
         justify-content: space-around;
         a{
             text-decoration: none;
+            color: white;
         }
     }
     .containerInfoUser{
