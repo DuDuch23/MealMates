@@ -5,7 +5,7 @@ import { searchOfferByTitle,
         getLastChanceOffers,
         getAgainOffers,
         getLocalOffers } from "../../service/requestApi";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import styles from "./Offer.module.css";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import AllCategory from "../../components/AllCategory/AllCategory";

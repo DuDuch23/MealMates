@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router";
 import { getUserIndexDB } from "../../service/indexDB";
 import { useEffect, useState } from "react";
 import { createOrder, getOfferSingle, createChat, sendMessage} from "../../service/requestApi";
-import "./SingleOffer.scss";
+import style from "./SingleOffer.module.css";
 
 export default function SingleOffer() {
 
@@ -95,7 +95,7 @@ export default function SingleOffer() {
     };
 
     if (!offer) {
-        return <div className="single-offer"><p>Chargement...</p></div>;
+        return <div className={style["single-offer"]}><p>Chargement...</p></div>;
     }
 
     return (

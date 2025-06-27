@@ -12,13 +12,13 @@ export function Messages({ content, iconUser, id }) {
     setIsSender(user?.id === id);
   }, [id]);
 
-  // Extract the URL from the content string
+  // on extrait l'url
   const urlMatch = content.match(/https?:\/\/\S+/);
   const url = urlMatch ? urlMatch[0] : null;
 
   return (
     <div className={styles["container-message"]}>
-      <IconUser id={iconUser} />
+      <IconUser iconId={iconUser} />
       {url ? (
         <a className={styles["link"]} href={url} target="_blank" rel="noopener noreferrer">
           Voici le lien vers le paiement

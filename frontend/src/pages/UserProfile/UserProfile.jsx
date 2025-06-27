@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import { getUser } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
+import { ContainerLinkUserPage } from "../../components/ContainerLinkUserPage/ContainerLinkUserPage";
 import styles from './UserProfile.module.css'
 
 const UserProfile = () => {
@@ -76,8 +77,11 @@ const UserProfile = () => {
     return (
         <>
             <div className={styles.cardUser}>
-                <IconUser className={styles.iconUser} id={user.iconUser}/>
+                <div className={styles.iconUser} >
+                    <IconUser iconId={user.iconUser}/>
+                </div>
                 <div className={styles.contentUser}>
+                    <ContainerLinkUserPage />
                     <div className={styles.containerLink}>
                         <Link to={`/userProfile/${userId}`}>Mes informations</Link>
                         <span>
