@@ -1,4 +1,4 @@
-import styles from "./burgerMenue.module.css";
+import styles from "./burgerMenue.module.scss";
 import {getUserIndexDB} from "../../service/indexDB"
 import { logOut } from "../../service/requestApi";
 import { useNavigate, Link } from "react-router";
