@@ -55,20 +55,20 @@ class ApiOrderController extends AbstractController
         $em->persist($order);
         $em->flush();
 
-        $notification = (new Notification())
-            ->setUser($offer->getSeller())
-            ->setTitle('Nouvelle réservation')
-            ->setMessage(sprintf(
-                'L’offre « %s » a été réservée par %s %s.',
-                $offer->getProduct(),
-                $user->getFirstName(),
-                $user->getLastName()
-            ))
-            ->setType('reservation_request')
-            ->setTargetId($order->getId());
+        // $notification = (new Notification())
+        //     ->setUser($offer->getSeller())
+        //     ->setTitle('Nouvelle réservation')
+        //     ->setMessage(sprintf(
+        //         'L’offre « %s » a été réservée par %s %s.',
+        //         $offer->getProduct(),
+        //         $user->getFirstName(),
+        //         $user->getLastName()
+        //     ))
+        //     ->setType('reservation_request')
+        //     ->setTargetId($order->getId());
 
-        $em->persist($notification);
-        $em->flush();
+        // $em->persist($notification);
+        // $em->flush();
 
         return $this->json([
             'order' => [
