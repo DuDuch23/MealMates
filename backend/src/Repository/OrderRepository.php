@@ -32,6 +32,17 @@ class OrderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findExpiredOrders(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.expiresAt < :now')
+            ->andWhere('o.isConfirmed = false')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return Order[] Returns an array of Order objects
 //     */

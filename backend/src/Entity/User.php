@@ -89,21 +89,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     // Dashboard
 
-    // #[ORM\Column(length:255, nullable:true)]
-    // #[Groups(["public","private"])]
-    // private int $totalTransactions = 0;
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private int $totalTransactions = 0;
 
-    // #[ORM\Column(length:255, nullable:true)]
-    // #[Groups(["public","private"])]
-    // private int $itemsSaved = 0;
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private int $itemsSaved = 0;
 
-    // #[ORM\Column(length:255, nullable:true)]
-    // #[Groups(["public","private"])]
-    // private float $moneySaved = 0.0;
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private float $moneySaved = 0.0;
 
-    // #[ORM\Column(length:255, nullable:true)]
-    // #[Groups(["public","private"])]
-    // private float $moneyEarned = 0.0;
+    #[ORM\Column(length:255, nullable:true)]
+    #[Groups(["public","private"])]
+    private float $moneyEarned = 0.0;
 
 
     public function __construct()
@@ -387,6 +387,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getTotalTransactions(): int
+    {
+        return $this->totalTransactions;
+    }
+    public function setTotalTransactions(int $totalTransactions): static
+    {
+        $this->totalTransactions = $totalTransactions;
+
+        return $this;
+    }
+    public function getItemsSaved(): int
+    {
+        return $this->itemsSaved;
+    }
+    public function setItemsSaved(int $itemsSaved): static
+    {
+        $this->itemsSaved = $itemsSaved;
+
+        return $this;
+    }
+    public function getMoneySaved(): float
+    {
+        return $this->moneySaved;
+    }
+    public function setMoneySaved(float $moneySaved): static
+    {
+        $this->moneySaved = $moneySaved;
+
+        return $this;
+    }
+    public function getMoneyEarned(): float
+    {
+        return $this->moneyEarned;
+    }
+    public function setMoneyEarned(float $moneyEarned): static
+    {
+        $this->moneyEarned = $moneyEarned;
+
+        return $this;
+    }
+    
 
     /**
      * @return Collection<int, Order>
