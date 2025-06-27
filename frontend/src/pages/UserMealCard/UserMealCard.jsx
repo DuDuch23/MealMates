@@ -27,34 +27,32 @@ function UserMealCard() {
         setVisibleCount((prev) => prev + 5);
     };
 
-  useEffect(() => {
-    async function fetchAllData() {
-      if (!userId) return;
+    useEffect(() => {
+        async function fetchAllData() {
+        if (!userId) return;
 
-      try {
-        const token = sessionStorage.getItem("token");
-        const localData = await getUserIndexDB(userId);
-        if (localData) {
-          setUser(localData);
-          console.log("Utilisateur depuis IndexedDB :", localData);
-        } else {
-          const remoteData = await getUser({ user: userId });
-          setUser(remoteData.data);
-          console.log("Utilisateur depuis API :", remoteData.data);
-        }
+        try {
+            const token = sessionStorage.getItem("token");
+            const localData = await getUserIndexDB(userId);
+            if (localData) {
+                setUser(localData);
+                console.log("Utilisateur depuis IndexedDB :", localData);
+            } else {
+                const remoteData = await getUser({ user: userId });
+                setUser(remoteData.data);
+                console.log("Utilisateur depuis API :", remoteData.data);
+            }
 
-        // Récupération offres
-        const offerData = await getOfferBySeller(userId);
-        setOfferUser(offerData.data);
+            // Récupération offres
+            const offerData = await getOfferBySeller(userId);
+            setOfferUser(offerData.data);
 
-        if (token && userId) {
-            const dashboardData = await fetchStats(userId, token);
-            setDashboardStats(dashboardData);
-        } else {
-            console.warn("Token ou userId manquant pour fetchStats");
-        }
-
-
+            if (token && userId) {
+                const dashboardData = await fetchStats(userId, token);
+                setDashboardStats(dashboardData);
+            } else {
+                console.warn("Token ou userId manquant pour fetchStats");
+            }
         } catch (err) {
             console.error("Erreur lors de la récupération des données :", err);
             setError("Une erreur est survenue.");
@@ -64,7 +62,7 @@ function UserMealCard() {
     }
 
     fetchAllData();
-  }, [userId]);
+    }, [userId]);
 
     if (loading) return <p>Chargement…</p>;
     if (error) return <p>{error}</p>;
