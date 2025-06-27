@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router';
 import { getUser, getOfferBySeller, fetchStats } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
@@ -64,7 +64,7 @@ function UserMealCard() {
     fetchAllData();
     }, [userId]);
 
-    if (loading) return <p>Chargement…</p>;
+    if (loading) return <p style={{ height: "100vh" }}>Chargement…</p>;
     if (error) return <p>{error}</p>;
 
     const userPreference =  () => {

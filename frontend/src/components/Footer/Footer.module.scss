@@ -4,7 +4,6 @@
 
 
 .footer {
-  padding: 2rem 5%;
   background: #000;
   color: white;
 }
@@ -16,6 +15,9 @@
   justify-content: space-between;
   align-items: center;
   text-align: center;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 12px;
 }
 
 .footer__logo {

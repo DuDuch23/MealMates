@@ -1,7 +1,8 @@
 import React, { Suspense, lazy, useState,useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router';
 import { getUserIndexDB, deleteUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
+import Footer from './components/Footer/Footer';
 import logo from '../src/assets/logo-mealmates.png';
 
 // Chargement différé des composants

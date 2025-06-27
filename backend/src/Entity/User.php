@@ -89,21 +89,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     // Dashboard
 
-    #[ORM\Column(length:255, nullable:true)]
-    #[Groups(["public","private"])]
-    private int $totalTransactions = 0;
+    // #[ORM\Column(length:255, nullable:true)]
+    // #[Groups(["public","private"])]
+    // private int $totalTransactions = 0;
 
-    #[ORM\Column(length:255, nullable:true)]
-    #[Groups(["public","private"])]
-    private int $itemsSaved = 0;
+    // #[ORM\Column(length:255, nullable:true)]
+    // #[Groups(["public","private"])]
+    // private int $itemsSaved = 0;
 
-    #[ORM\Column(length:255, nullable:true)]
-    #[Groups(["public","private"])]
-    private float $moneySaved = 0.0;
+    // #[ORM\Column(length:255, nullable:true)]
+    // #[Groups(["public","private"])]
+    // private float $moneySaved = 0.0;
 
-    #[ORM\Column(length:255, nullable:true)]
-    #[Groups(["public","private"])]
-    private float $moneyEarned = 0.0;
+    // #[ORM\Column(length:255, nullable:true)]
+    // #[Groups(["public","private"])]
+    // private float $moneyEarned = 0.0;
 
 
     public function __construct()
