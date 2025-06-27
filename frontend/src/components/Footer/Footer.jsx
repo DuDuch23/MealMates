@@ -16,11 +16,6 @@ const Footer = () => {
           <a href="#">Politique de confidentialité</a>
           <a href="#">Contact</a>
         </div>
-        <div className={styles.footer__socials}>
-          <a href="#"><FaFacebookF /></a>
-          <a href="#"><FaTwitter /></a>
-          <a href="#"><FaInstagram /></a>
-        </div>
         <div className={styles.footer__credits}>
           <p>© Mealmates 2025 - Mangeons mieux, ensemble.</p>
         </div>

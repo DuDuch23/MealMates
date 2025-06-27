@@ -57,7 +57,7 @@ const GoogleLoginButton = ({ setUser }) => {
 };
 
 const App = () => {
-  const [setUser] = useState(null);
+  const [ setUser] = useState(null);
 
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>

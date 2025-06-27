@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./ChooseChatUser.scss"
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { IconUser } from "../IconUser/iconUser";
 
 

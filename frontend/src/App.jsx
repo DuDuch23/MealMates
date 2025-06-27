@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState,useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router';
 import { getUserIndexDB, deleteUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
 import logo from '../src/assets/logo-mealmates.png';
@@ -26,6 +26,9 @@ const UserDashboard = React.lazy(() => import('./pages/UserDashboard/UserDashboa
 // Chat
 const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
 const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
+
+// Erreur 404 (redirection)
+const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
 
 function App() {
   const [user, setUser] = useState(null);
@@ -108,6 +111,9 @@ function App() {
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription />} />
         <Route path="/deconnexion" element={<Deconnexion />} />
+
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

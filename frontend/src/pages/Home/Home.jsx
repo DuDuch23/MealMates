@@ -2,7 +2,7 @@ import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
-// import { AiFillStar } from "react-icons/ai";
+import { AiFillStar } from "react-icons/ai"; // ⭐️ Import décommenté
 import logo from '../../assets/logo-mealmates.png';
 import Footer from "../../components/Footer/Footer";
 import AutoCarousel from '../../components/AutoCarousel/AutoCarousel';
@@ -61,7 +61,6 @@ function Home() {
 
       <section className={styles.bottom}>
         <div className={styles.bottom__maps}>
-          <OffersMap position={pos} />
         </div>
         <div className={styles.bottom__right}>
           <h2>Obtenez des offres locales, qui suivent vos offres alimentaires</h2>
@@ -70,6 +69,7 @@ function Home() {
       </section>
 
       <section className={styles.bottom}>
+        <h2>Une vaste sélection de produits</h2>
         <div className={styles.bottom__maps}>
           <AutoCarousel />
         </div>
@@ -89,12 +89,17 @@ function Home() {
               </div>
               <p>{review.text}</p>
               <div className={styles.review__stars}>
-                {/* {[...Array(review.stars)].map((_, i) => <AiFillStar key={i} />)} */}
+                {[...Array(review.stars)].map((_, i) => (
+                  <AiFillStar key={i} color="#ffc107" size={20} />
+                ))}
               </div>
             </div>
           ))}
         </div>
       </section>
+
+      <Footer />
+      
     </section>
   );
 }
