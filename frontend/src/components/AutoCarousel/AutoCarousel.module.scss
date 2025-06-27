@@ -42,44 +42,4 @@
     height: 120px;
   }
 }
-
-$carousel-max-width: 1000px;
-$image-max-width: 250px;
-$carousel-border-radius: 20px;
-$image-border-radius: 10px;
-$carousel-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-$scroll-duration: 20s;
-
-.carousel {
-  position: relative;
-  width: 100%;
-  max-width: $carousel-max-width;
-  margin: 2rem auto;
-  overflow: hidden;
-  border-radius: $carousel-border-radius;
-  box-shadow: $carousel-shadow;
-
-  .track {
-    display: flex;
-    width: 200%; // Parce qu'on a doublé les images
-    animation: scroll $scroll-duration linear infinite;
-  }
-
-  .image {
-    width: 100%;
-    max-width: $image-max-width;
-    flex-shrink: 0;
-    object-fit: cover;
-    border-radius: $image-border-radius;
-    margin-right: 10px;
-  }
-}
-
-@keyframes scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
+>>>>>>>>> Temporary merge branch 2

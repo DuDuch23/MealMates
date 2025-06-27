@@ -53,9 +53,10 @@ export async function refreshToken(navigate) {
     if (infoToken.exp < now) {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("user");
-        navigate("/connexion");
+        return false; 
     }
-    return true;
+
+    return true; 
 }
 
 

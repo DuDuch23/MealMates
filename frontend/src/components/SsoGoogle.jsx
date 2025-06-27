@@ -57,18 +57,12 @@ const GoogleLoginButton = ({ setUser }) => {
 };
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [setUser] = useState(null);
 
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <div>
         <GoogleLoginButton setUser={setUser} />
-        {user && (
-          <div>
-            <h2>Bienvenue, {user.firstName}</h2>
-            <p>Email: {user.email}</p>
-          </div>
-        )}
       </div>
     </GoogleOAuthProvider>
   );
