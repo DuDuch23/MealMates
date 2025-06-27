@@ -1,0 +1,93 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss' as mixins;
+@use "../../styles/variables.scss" as variables;
+
+.advanced-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    flex: 1 1 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    legend {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: green
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: #333;
+
+      input[type="checkbox"] {
+        accent-color: green;
+        width: 1rem;
+        height: 1rem;
+      }
+
+      input[type="number"] {
+        padding: 0.4rem 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        width: 100px;
+        font-size: 0.95rem;
+
+        &:focus {
+          outline: none;
+          border-color: white;
+        }
+      }
+    }
+
+    select {
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+
+      &:focus {
+        border-color: white;
+        outline: none;
+      }
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin-top: 0.5rem;
+      accent-color: white;
+    }
+
+    span {
+      font-size: 0.9rem;
+      color: #555;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .advanced-filters {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1.25rem;
+
+    fieldset {
+      flex: 1 1 auto;
+    }
+  }
+}
