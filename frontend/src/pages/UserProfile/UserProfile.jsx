@@ -76,7 +76,9 @@ const UserProfile = () => {
     return (
         <>
             <div className={styles.cardUser}>
-                <IconUser className={styles.iconUser} id={user.iconUser}/>
+                <div className={styles.iconUser} >
+                    <IconUser iconId={user.iconUser}/>
+                </div>
                 <div className={styles.contentUser}>
                     <div className={styles.containerLink}>
                         <Link to={`/userProfile/${userId}`}>Mes informations</Link>
@@ -91,7 +93,6 @@ const UserProfile = () => {
                             <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
                           </svg>
                         </span>
-                        <Link to={`/dashboard`}>Mon tableau de bord</Link>
                         <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                     </div>
                     <div className={styles.containerInfoUser}>

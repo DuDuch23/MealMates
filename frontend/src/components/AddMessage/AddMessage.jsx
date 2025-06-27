@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import styles from './addMessage.module.scss'; // Assure-toi que c'est un .scss, pas .css
+import styles from './addMessage.module.css';
 import { sendMessage, generateStripeLink } from '../../service/requestApi';
 
-export default function AddMessage({ user, chat }) {
+export default function AddMessage({ user, offer, chat }) {
     const [query, setQuery] = useState('');
     const [showLinkButton, setShowLinkButton] = useState(false);
     const userId = user.id;
@@ -50,43 +50,57 @@ export default function AddMessage({ user, chat }) {
         }
     };
 
+    const stripeButton = () => {
+        if (!offer || !offer.data.seller.id) return null;
+
+        if (user.id != offer.data.seller.id) {
+            return (
+                <div className={`${styles.sendLink} ${showLinkButton ? styles.visible : ''}`}>
+                    <button type="button" onClick={handleSendStripeLink}>
+                        Envoyer le lien de paiement
+                    </button>
+                </div>
+            );
+        }
+      
+        return null;
+    };
+
     return (
         <form className={styles.container} onSubmit={handleSubmit}>
-            <div className={`${styles.sendLink} ${showLinkButton ? styles.visible : ''}`}>
-                <button type="button" onClick={handleSendStripeLink}>
-                    Envoyer le lien de paiement
-                </button>
-            </div>
+        
+          {stripeButton()}
 
-            <div className={styles.form}>
-                <svg
-                    onClick={handleOption}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6"
-                    style={{ cursor: 'pointer' }}
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                </svg>
-
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Message"
-                        value={query}
-                        name="message"
-                        onChange={(e) => setQuery(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                    />
-                </div>
+          <div className={styles.form}>
+            <svg
+              onClick={handleOption}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+              style={{ cursor: 'pointer' }}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+      
+            <div>
+              <input
+                type="text"
+                placeholder="Message"
+                value={query}
+                name="message"
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
             </div>
+          </div>
         </form>
     );
+
 }

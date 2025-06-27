@@ -30,7 +30,9 @@ const GoogleLoginButton = ({ setUser }) => {
       // Appel SSO (asynchrone)
       try {
         const ggtto = credentialResponse.credential;
+        // console.log(ggtto);
         const token = await getTokenSSo({ token:ggtto });
+        console.log(token);
 
         console.log("Token reçu du SSO :", token);
         sessionStorage.setItem("token",token.token);
@@ -57,7 +59,7 @@ const GoogleLoginButton = ({ setUser }) => {
 };
 
 const App = () => {
-  const [setUser] = useState(null);
+  const [user,setUser] = useState(null);
 
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>

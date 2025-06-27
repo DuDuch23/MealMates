@@ -198,11 +198,9 @@ function UserMealCard() {
                 <div className={styles.containerInfoUser}>
                     <div className={`${styles.basicsElements} ${styles.card}`}>
                         <ul className={styles.listUser}>
-                        <li><p>{user.firstName}</p></li>
+                            <li><p>{user.firstName}</p></li>
                         </ul>
-                        <div>
-                        <p>Ou me trouver : <br />{user.location}</p>
-                        </div>
+                        {renderLocation()}
                     </div>
 
                     {userPreference()}

@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./Footer.module.css";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import logo from "../../assets/logo-mealmates.png";
 
 const Footer = () => {
@@ -17,9 +16,6 @@ const Footer = () => {
           <a href="#">Contact</a>
         </div>
         <div className={styles.footer__socials}>
-          <a href="#"><FaFacebookF /></a>
-          <a href="#"><FaTwitter /></a>
-          <a href="#"><FaInstagram /></a>
         </div>
         <div className={styles.footer__credits}>
           <p>© Mealmates 2025 - Mangeons mieux, ensemble.</p>
