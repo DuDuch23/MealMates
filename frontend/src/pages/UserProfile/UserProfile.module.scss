@@ -23,8 +23,13 @@ p,li{
             text-decoration: none;
         }
     }
-    .iconUser{
-        margin: 0 auto;
+}
+
+.iconUser{
+    width: 15%;
+    margin: 0 auto;
+    .icon-user svg{
+        width: 10%;
     }
 }
 

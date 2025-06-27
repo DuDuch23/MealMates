@@ -20,7 +20,8 @@ function Chat() {
 
       const fetchChat = async () => {
         try {
-          const res = await getInfoForChat(chatId); // Fonction bien importée
+          const res = await getOfferSingle(chatId);
+          console.log(res);
           setOffer(res);
         } catch (err) {
           console.error("Failed to fetch chat data:", err);
@@ -36,7 +37,7 @@ function Chat() {
   return (
     <>
       <ChatContainer user={user} offer={offer} chat={chat} messages={messages} />
-      <AddMessage user={user} chat={chat} />
+      <AddMessage user={user} offer={offer} chat={chat} />
     </>
   );
 }

@@ -1410,18 +1410,17 @@ const icons = [
         }
 ];
 
-export function IconUser({id}){
-    
-    const getIconById = (id) => {
-      const icon = icons.find((icon) => icon.id === id);
-      return icon ? icon.img : null;
-    };
+export function IconUser({ iconId }) {
+  const getIconById = (id) => {
+    const icon = icons.find((icon) => icon.id === id);
+    return icon ? icon.img : null;
+  };
 
-    return <>
-        <div id='icon-user'>
-            {getIconById(id)}
-        </div>
-    </>;
+  return (
+    <div className="icon-user">
+      {getIconById(iconId)}
+    </div>
+  );
 }
 
 export function ChooseYourIcon({ onValueChange }) {
