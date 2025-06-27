@@ -88,7 +88,6 @@ function Offer(){
             try {
                 const data = await getOffers();
                 if (data && data.data) {
-                    // console.log("offers",data);
                     setOffers(data.data);
                 } else {
                     console.log("Erreur ou offres vides");

@@ -1,7 +1,7 @@
 import styles from "./burgerMenue.module.css";
 import {getUserIndexDB} from "../../service/indexDB"
 import { logOut } from "../../service/requestApi";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router";
 import { useEffect, useState } from 'react';
 import { IconUser } from '../IconUser/iconUser';
 import logo from '../../assets/logo-mealmates.png';

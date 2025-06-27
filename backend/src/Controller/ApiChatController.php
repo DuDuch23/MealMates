@@ -4,8 +4,11 @@ namespace App\Controller;
 use DateTimeImmutable;
 use App\Entity\Chat;
 use App\Entity\User;
+use App\Entity\Offer;
 use App\Entity\Message;
+use App\Service\ErrorService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,6 +18,74 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/api/chat', name: 'api_category')]
 class ApiChatController extends AbstractController
 {
+    #[Route('/create', methods: ['POST'])]
+    public function createOffer(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $error = new ErrorService();
+
+        // Validation des champs requis
+        if (!isset($data['client'])) {
+            return new JsonResponse(['status' => "Bad Request", 'code' => 400, 'message' => "Missing 'client' parameter."], 400);
+        }
+        if (!isset($data['offer'])) {
+            return new JsonResponse(['status' => "Bad Request", 'code' => 400, 'message' => "Missing 'offer' parameter."], 400);
+        }
+        if (!isset($data['seller'])) {
+            return new JsonResponse(['status' => "Bad Request", 'code' => 400, 'message' => "Missing 'seller' parameter."], 400);
+        }
+
+        // Récupération des entités
+        $client = $entityManager->getRepository(User::class)->find($data['client']);
+        $seller = $entityManager->getRepository(User::class)->find($data['seller']);
+        $offer = $entityManager->getRepository(Offer::class)->find($data['offer']);
+
+        // Vérification de l'existence
+        if (!$client) {
+            $error->addError(['status' => "Bad Request", 'code' => 400, 'message' => "Le compte client n'existe pas."]);
+        }
+        if (!$seller) {
+            $error->addError(['status' => "Bad Request", 'code' => 400, 'message' => "Le vendeur n'existe pas."]);
+        }
+        if (!$offer) {
+            $error->addError(['status' => "Bad Request", 'code' => 400, 'message' => "L'offre n'existe pas."]);
+        }
+        if ($error->hasErrors()) {
+            return new JsonResponse(['status' => "Bad Request", 'code' => 400, 'errors' => $error->getErrors()], 400);
+        }
+
+        // Vérification si un chat existe déjà
+        $existingChat = $entityManager->getRepository(Chat::class)->findOneBy([
+            'client' => $client,
+            'seller' => $seller,
+            'offer'  => $offer
+        ]);
+
+        if ($existingChat) {
+            return new JsonResponse([
+                'status' => 'Conflict',
+                'code' => 409,
+                'message' => 'Une conversation existe déjà.',
+                'chatId' => $existingChat->getId()
+            ], 409);
+        }
+
+        // Création du chat
+        $chat = new Chat();
+        $chat->setClient($client);
+        $chat->setSeller($seller);
+        $chat->setOffer($offer);
+
+        $entityManager->persist($chat);
+        $entityManager->flush();
+
+        return $this->json([
+            'status' => "Created",
+            'code' => 201,
+            'chatId' => $chat->getId()
+        ], 201);
+    }
+
     #[Route('/get/all', methods: ['POST'])]
     public function getAllChat(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -56,6 +127,7 @@ class ApiChatController extends AbstractController
         return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
     }
 
+    // message
     #[Route('/get', methods: ['POST'])]
     public function getToChat(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -78,7 +150,8 @@ class ApiChatController extends AbstractController
         }
 
         $userId = (int) $data['id'];
-        $results = $entityManager->getRepository(Chat::class)->find($userId);
+        $chatId = (int) $data['chat'];
+        $results = $entityManager->getRepository(Chat::class)->find($chatId);
 
         if ($results->getClient()->getId() !== $userId && $results->getSeller()->getId() !== $userId) 
         {
@@ -92,7 +165,7 @@ class ApiChatController extends AbstractController
         $res = [];
         $res[] = ["chat_id" => $results->getId()];
 
-       foreach ($results->getMessages() as $message) {
+        foreach ($results->getMessages() as $message) {
             $sender = $message->getSender();
 
             $res[] = [
@@ -107,6 +180,39 @@ class ApiChatController extends AbstractController
                 ]
             ];
         }
+
+        return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
+    }
+
+    #[Route('/get/{id}', methods:  ['POST'])]
+    public function getInfoForChat(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(),true);
+
+        if(!isset($data['id'])){
+            return new JsonResponse([
+                'status' => "Bad Request",
+                'code' => 400,
+                'message' => "Missing 'id' parameter."
+            ], 400);
+        }
+
+        $chatId = (int)$data['chat'];
+
+        $results = $entityManager->getRepository(Chat::class)->find($chatId);
+
+        $client = $results->getClient();
+
+        $seller = $results->getSeller();
+
+        $res = [
+            "client" => [
+                "id" => $client->getId(),
+            ],
+            "seller" => [
+                "id" => $seller->getId(),
+            ]
+        ];
 
         return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
     }

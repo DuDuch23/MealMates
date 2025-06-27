@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router";
 import { addUserIndexDB } from "../../service/indexDB";
 import { newUser,logIn , getProfile } from "../../service/requestApi";
 import logo from '../../assets/logo-mealmates.png';
 import backgroundForm from '../../assets/background-form.png';
-import { Link } from "react-router-dom";
 
 
 
@@ -87,6 +86,9 @@ function Inscription(){
                             <input type="password" name="confirmPassword" placeholder="Vérification de votre mot de passe" value={confirmPassword} onChange={handleConfirmPassword}/>
                         </div>
                         <button type="submit">Inscription</button>
+                        <p className={styles.linkText} onClick={() => navigate("/")}>
+                            Retour au menu
+                        </p>
                     </form>
                 </div>
             </div>

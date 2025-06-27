@@ -1,40 +1,45 @@
-$carousel-max-width: 1000px;
-$image-max-width: 250px;
-$carousel-border-radius: 20px;
-$image-border-radius: 10px;
-$carousel-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-$scroll-duration: 20s;
-
 .carousel {
-  position: relative;
-  width: 100%;
-  max-width: $carousel-max-width;
-  margin: 2rem auto;
   overflow: hidden;
-  border-radius: $carousel-border-radius;
-  box-shadow: $carousel-shadow;
+  width: 100%; /* on prend toute la largeur dispo */
+  padding: 10px 0;
 
-  .track {
-    display: flex;
-    width: 200%; // Parce qu'on a doublé les images
-    animation: scroll $scroll-duration linear infinite;
-  }
-
-  .image {
-    width: 100%;
-    max-width: $image-max-width;
-    flex-shrink: 0;
-    object-fit: cover;
-    border-radius: $image-border-radius;
-    margin-right: 10px;
-  }
 }
 
+.track {
+  display: flex;
+  width: calc(200%);
+  animation: scroll 10s linear infinite; /* un peu plus rapide pour plus d'énergie */
+}
+
+.image {
+  flex: 0 0 calc(15% - 12px); /* 4 images visibles + espace entre elles */
+  height: 160px;
+  object-fit: cover;
+  margin-right: 12px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.image:hover {
+  transform: scale(1.05);
+}
+
+/* Animation défilement horizontal */
 @keyframes scroll {
-  from {
+  0% {
     transform: translateX(0);
   }
-  to {
+  100% {
     transform: translateX(-50%);
   }
 }
+
+/* Responsive ajustement pour petit écran */
+@media (max-width: 768px) {
+  .image {
+    flex: 0 0 calc(50% - 10px); /* 2 images visibles sur mobile */
+    height: 120px;
+  }
+}
+>>>>>>>>> Temporary merge branch 2

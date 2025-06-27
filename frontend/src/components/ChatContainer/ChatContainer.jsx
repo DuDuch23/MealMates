@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Messages } from "../Message/Messages";
 import { getChat } from "../../service/requestApi";
-import "./container-message.css";
+import styles from "./container-message.module.css";
 
-function ChatContainer({ user, chat }) {
+function ChatContainer({ user, chat, offer }) {
   const [messages, setMessages] = useState([]);
   const containerRef = useRef(null);
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -23,6 +23,9 @@ function ChatContainer({ user, chat }) {
   // Initialisation
   useEffect(() => {
     if (!user || !chat) return;
+
+
+    console.log(chat);
 
     if(user.id){
         const init = async () => {
@@ -63,7 +66,7 @@ function ChatContainer({ user, chat }) {
   }, [messages]);
 
   return (
-    <div className="container-message" ref={containerRef}>
+    <div className={styles["container-message"]} ref={containerRef}>
       {messages.length > 1 ? (
         messages.slice(1).map((messageWrapper, index) => (
           <Messages

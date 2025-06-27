@@ -3,25 +3,31 @@
 @use '../../styles/variables' as variables;
 
 .container-message {
+  display: flex;
+  align-items: center;
+
+  .content-message {
+    min-height: 4vh;
+    border-radius: 5px;
+    padding: 0 5px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    background-color: variables.$colorDarkGreen;
+  }
 
-    .content-message {
-        min-height: 4vh;
-        border-radius: 5px;
-        padding: 0 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: variables.$colorDarkGreen;
-    }
-    .content-message &.white {
-        min-height: 4vh;
-        border-radius: 5px;
-        padding: 0 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: variables.$colorDarkGreen;
-    }
+  // Modifier for white variant (you can change bg color here)
+  .content-message.white {
+    background-color: white; // or whatever you want for the "white" variant
+    color: variables.$colorDarkGreen; // example text color override
+  }
+
+  .link {
+    border: 1px solid white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+  }
 }

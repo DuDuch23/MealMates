@@ -44,7 +44,6 @@ class Image
         $this->chats = new ArrayCollection();
     }
 
-    // Getters and Setters
 
     public function getId(): ?int
     {
@@ -76,6 +75,11 @@ class Image
     #[Groups(["public","private"])]
     public function getUrl(): ?string
     {
+        // forcer récupération image en jpg
+        if ($this->name && !str_contains($this->name, '.')) {
+            return '/uploads/offers-photos/' . $this->name . '.jpg';
+        }
+
         return $this->name
             ? '/uploads/offers-photos/' . $this->name
             : null;
@@ -92,7 +96,7 @@ class Image
         return $this;
     }
 
-    // offre
+
     public function getOffres(): Collection
     {
         return $this->offers;
@@ -108,7 +112,7 @@ class Image
         $this->offers->removeElement($offer);
     }
 
-    // chat
+
     public function getChats(): Collection
     {
         return $this->chats;

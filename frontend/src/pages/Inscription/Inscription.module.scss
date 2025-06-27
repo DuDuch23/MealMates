@@ -1,162 +1,149 @@
 @use "../../styles/globals";
-@use '../../styles/mixins.scss';
+@use "../../styles/mixins.scss";
 @use "../../styles/variables.scss";
 
-h1{
-    text-align: center;
-    height: 30%;
+.container {
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../../assets/landing-background.png') center center / cover no-repeat;
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.title-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  img {
+    width: 50px;
+    height: 50px;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
     color: variables.$colorWhite;
+    font-weight: bold;
+  }
 }
 
-#root{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+.action {
+  width: 100%;
+  max-width: 400px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
 
-.background-form{
-    position: absolute;
+  form {
     display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
 
-    img{
-        width: 100%;
-        object-fit: contain;
-        margin: auto 0;
+    .content-element {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+
+      @media (max-width: 480px) {
+        flex-direction: column;
+      }
     }
-}
 
-.title-logo{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 14px 0;
-}
-.container{
-    .action{
-        height: 98vh;
-        form{
-            background-image: url(../../assets/background-form.png);
-            width: 50%;
-            height: 56vh;
-            margin: 0 auto;
-            padding: 16px 68px;
-            background-repeat: round;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-direction: column;
-            .content-element-form{
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-            }
-            label{
-                color: white;
-                font-size: 20px;
-            }
-            input{
-                outline: none;
-                padding: 8px;
-                font-size: 20px;
-                width: 100%;
-                border: 1px solid variables.$colorWhite;
-                border-radius: 5px;
-                color: rgba(255, 255, 255, 0.7);
-                background-color: transparent;
-            }
-            input::placeholder{
-                color: rgba(255, 255, 255, 0.7);
-            }
-            button{
-                height: 10%;
-                width: 100%;
-                outline: none;
-                border: none;
-                border-radius: 5px;
-                color: black;
-                font-size: 28px;
-                font-weight: 700;
-                cursor: pointer;
-                transition: all 0.3s ease-in-out;
-                &:hover{
-                    background-color: variables.$colorWhite;
-                    color: variables.$colorBlack;
-                    transition: all 0.3s ease-in-out;
-                }
-            }
-            .two-input{
-                display: flex;
-                align-items: center;
-                justify-content: space-around;
-                flex-direction: row;
-            }
-            #password{
-                width: 50%;
-            }
+    .content-element-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        color: variables.$colorWhite;
+        font-size: 1rem;
+      }
+
+      input {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 0.5rem;
+        background-color: transparent;
+        color: variables.$colorWhite;
+        outline: none;
+        transition: border 0.2s;
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.6);
         }
-        .button-log-in{
-            list-style-type: none;
-            padding: 48px 0 0 48px;
-            a{
-                text-decoration: none;
-            }
+
+        &:focus {
+          border-color: variables.$colorWhite;
         }
-        .otherAction{
-            height: 40%;
-            position: relative;
-            .fill{
-                height: 100%;
-                background: linear-gradient(0%, #2D2E32, 100%, #111110);
-            } 
-            p{
-                text-align: center;
-            }
-            ul{
-                list-style: none;
-                width: 90%;
-                height: 40%;
-                margin: 1% auto;
-                display: flex;
-                align-items: center;
-                justify-content: space-around;
-                li{
-                    width: 33%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    svg{
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-            }
-        }
+      }
     }
-}
 
-.content-element{
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    gap: 10px;
-}
+    button {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: variables.$colorBlack;
+      background-color: variables.$colorWhite;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
 
-@media screen and (max-width: 742px) {
-    .container{
-        width: 100%;
-        .action{
-             form{
-                padding: 20px 20px;
-                .content-element{
-                    flex-direction: column;
-                }
-            }
-        }         
+      &:hover {
+        background-color: lighten(variables.$colorWhite, 5%);
+        transform: translateY(-2px);
+      }
     }
+
+    .linkText {
+      color: variables.$colorWhite;
+      text-decoration: underline;
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+
+      &:hover {
+        color: lighten(variables.$colorWhite, 15%);
+      }
+    }
+  }
+
+  .error {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+
+@media screen and (max-width: 428px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .title-logo {
+    flex-direction: column;
+    gap: 0.5rem;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
+
+  .action {
+    padding: 1.5rem;
+  }
 }

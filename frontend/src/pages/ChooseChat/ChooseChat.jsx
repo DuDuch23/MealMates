@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getAllChat } from "../../service/requestApi";
 import ChooseChatUser from "../../components/ChooseChatUser/ChooseChatUser";
-import "./ChooseChat.scss";
+import styles from "./ChooseChat.module.scss";
 
 function ChooseChat() {
     const [chat, setChat] = useState([]);
@@ -12,7 +12,6 @@ function ChooseChat() {
         
         async function executeRequest() {
             try {
-
                 const data = await getAllChat(parseInt(user.id));
                 setChat(data.data);
             } catch (error) {
@@ -24,7 +23,7 @@ function ChooseChat() {
     }, []);
 
     return (
-        <div className="choose-chat-container">
+        <div className={styles["choose-chat-container"]}>
             {chat.map(chat => (
                 <ChooseChatUser key={chat.chat_id} user={chat.user} lastMessage={chat.last_message} chat={chat.chat_id} />
             ))}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router"; 
 import { getTokenSSo } from "./../service/requestApi"; // ← importe ta fonction d'auth SSO ici
 
 const CLIENT_ID = "947326609144-oed76j74qvdqh2ie1e4cdfobrtmpiq66.apps.googleusercontent.com";
@@ -57,18 +57,12 @@ const GoogleLoginButton = ({ setUser }) => {
 };
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [setUser] = useState(null);
 
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <div>
         <GoogleLoginButton setUser={setUser} />
-        {user && (
-          <div>
-            <h2>Bienvenue, {user.firstName}</h2>
-            <p>Email: {user.email}</p>
-          </div>
-        )}
       </div>
     </GoogleOAuthProvider>
   );
