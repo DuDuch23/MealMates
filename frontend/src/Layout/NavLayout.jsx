@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router";
 import Header from '../components/Header/Header';
 import BurgerMenue from '../components/BurgerMenue/burgerMenue';
+import Footer from '../components/Footer/Footer';
 
 const NavLayout = () => {
   const storedUser = sessionStorage.getItem("user");
@@ -36,6 +37,7 @@ const NavLayout = () => {
       <div className="container">
         <Outlet />
       </div>
+      <Footer />
     </>
   );
 };

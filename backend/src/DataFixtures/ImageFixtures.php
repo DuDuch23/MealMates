@@ -122,16 +122,16 @@ class ImageFixtures extends Fixture
             'link' => 'jus4.jpg',
         ],
         [
-            'name' => 'lasagnes',
-            'link' => 'lasagnes.jpg',
+            'name' => 'lasagne',
+            'link' => 'lasagne.jpg',
         ],
         [
-            'name' => 'lasagnes2',
-            'link' => 'lasagnes2.jpg',
+            'name' => 'lasagne2',
+            'link' => 'lasagne2.jpg',
         ],
         [
-            'name' => 'lasagnes3',
-            'link' => 'lasagnes3.jpg',
+            'name' => 'lasagne3',
+            'link' => 'lasagne3.jpg',
         ],
         [
             'name' => 'legumes',

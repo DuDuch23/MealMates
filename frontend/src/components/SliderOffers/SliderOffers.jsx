@@ -10,11 +10,11 @@ export default function SliderSection({ title, offers = [], type, children }) {
     <section className={styles['slider-offer']}>
       <div className={styles['slider-offer__header']}>
         <h2>{title}</h2>
-        {type && (
+        {/* {type && (
           <Link to={`/offers/${type}`} className={styles["slider-section__link"]}>
             Voir toutes les offres {type}
           </Link>
-        )}
+        )} */}
       </div>
 
       <Swiper

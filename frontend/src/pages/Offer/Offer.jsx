@@ -202,15 +202,22 @@ function Offer(){
         }
     };
 
-    const renderSlider = (loading, title, offers, type) => (
-        loading ? (
-            <SliderSection title={title}>
-            {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-            </SliderSection>
-        ) : (
-            <SliderSection title={title} offers={offers} type={type} />
-        )
-    );
+    const renderSlider = (loading, title, offers, type) => {
+        if (loading) {
+            return (
+                <SliderSection title={title}>
+                    {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                </SliderSection>
+            );
+        }
+        
+        if (offers.length === 0) {
+            return <p>Aucune offre pour {title.toLowerCase()} pour le moment.</p>;
+        }
+
+        return <SliderSection title={title} offers={offers} type={type} />;
+    };
+
 
     return(
     <section className={styles["container-offer"]}>
@@ -240,21 +247,44 @@ function Offer(){
         <div className={styles["container-offer__slider"]}>
             {searchResults.length > 0 ? (
                 <>
-                    <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery} />
-                    {renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")}
-                    {renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")}
-                    {renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")}
-                    {renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")}
+                    <SliderSection
+                    title={`Résultats pour "${searchQuery}"`}
+                    offers={searchResults}
+                    type={searchQuery}
+                    />
                 </>
             ) : (
-                <>
-                    {renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")}
-                    {renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")}
-                    {renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")}
-                    {renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")}
-                </>
+                searchResults.code === 404 && (
+                    <p>Aucune offre trouvée pour "{searchQuery}".</p>
+                )
+            )}
+
+            
+            {againOffers.length > 0 ? (
+                renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")
+            ) : (
+                <p>Il n'y a pas d'offres à vous recommander à nouveau.</p>
+            )}
+
+            {lastChanceOffers.length > 0 ? (
+                renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")
+            ) : (
+                <p>Il n'y a pas d'offres en dernière chance pour le moment.</p>
+            )}
+
+            {veganOffers.length > 0 ? (
+                renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")
+            ) : (
+                <p>Aucune offre vegan pour le moment.</p>
+            )}
+
+            {localOffers.length > 0 ? (
+                renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")
+            ) : (
+                <p>Aucune tendance locale disponible actuellement.</p>
             )}
         </div>
+
     </section>
     );
 }

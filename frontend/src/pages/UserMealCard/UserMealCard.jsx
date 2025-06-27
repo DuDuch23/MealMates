@@ -27,56 +27,44 @@ function UserMealCard() {
         setVisibleCount((prev) => prev + 5);
     };
 
-    const renderLocation = () => {
-        if(user.location){
-            return(
-                <div>
-                  <p>Ou me trouver : <br />{user.location}</p>
-                </div>
-            );
-        }
-    }
-
     useEffect(() => {
-      async function fetchAllData() {
+        async function fetchAllData() {
         if (!userId) return;
 
         try {
-          const token = sessionStorage.getItem("token");
-          const localData = await getUserIndexDB(userId);
-          if (localData) {
-            setUser(localData);
-            console.log("Utilisateur depuis IndexedDB :", localData);
-          } else {
-            const remoteData = await getUser({ user: userId });
-            setUser(remoteData.data);
-            console.log("Utilisateur depuis API :", remoteData.data);
-          }
+            const token = sessionStorage.getItem("token");
+            const localData = await getUserIndexDB(userId);
+            if (localData) {
+                setUser(localData);
+                console.log("Utilisateur depuis IndexedDB :", localData);
+            } else {
+                const remoteData = await getUser({ user: userId });
+                setUser(remoteData.data);
+                console.log("Utilisateur depuis API :", remoteData.data);
+            }
 
-          // Récupération offres
-          const offerData = await getOfferBySeller(userId);
-          setOfferUser(offerData.data);
+            // Récupération offres
+            const offerData = await getOfferBySeller(userId);
+            setOfferUser(offerData.data);
 
-          if (token && userId) {
-              const dashboardData = await fetchStats(userId, token);
-              setDashboardStats(dashboardData);
-          } else {
-              console.warn("Token ou userId manquant pour fetchStats");
-          }
+            if (token && userId) {
+                const dashboardData = await fetchStats(userId, token);
+                setDashboardStats(dashboardData);
+            } else {
+                console.warn("Token ou userId manquant pour fetchStats");
+            }
+        } catch (err) {
+            console.error("Erreur lors de la récupération des données :", err);
+            setError("Une erreur est survenue.");
+        } finally {
+            setLoading(false);
+        }
+    }
 
-
-          } catch (err) {
-              console.error("Erreur lors de la récupération des données :", err);
-              setError("Une erreur est survenue.");
-          } finally {
-              setLoading(false);
-          }
-      }
-
-      fetchAllData();
+    fetchAllData();
     }, [userId]);
 
-    if (loading) return <p>Chargement…</p>;
+    if (loading) return <p style={{ height: "100vh" }}>Chargement…</p>;
     if (error) return <p>{error}</p>;
 
     const userPreference =  () => {

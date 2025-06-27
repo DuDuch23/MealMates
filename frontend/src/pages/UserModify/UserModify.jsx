@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router";
+import { useParams, Link } from "react-router";
 import { getUser, editUser } from "../../service/requestApi";
 import { getUserIndexDB, updateUserIndexDB } from "../../service/indexDB";
 import { IconUser, ChooseYourIcon } from "../../components/IconUser/iconUser";
