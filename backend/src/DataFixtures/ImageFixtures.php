@@ -175,7 +175,7 @@ class ImageFixtures extends Fixture
     {
         foreach (self::IMAGES as $code => $attributes) {
             $image = new Image();
-            $image->setName($attributes['name']);
+            $image->setName($attributes['link']);
             $image->setUpdatedAt(new \DateTimeImmutable());
             
             $manager->persist($image);
