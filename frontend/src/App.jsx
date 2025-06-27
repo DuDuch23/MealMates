@@ -96,6 +96,7 @@ function App() {
           <Route path="/offer" element={<Offer />} />
           <Route path="/addOffer" element={<AddOffer />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
+          
           {/* user profile */}
           <Route path="/userProfile/:id" element={<UserProfile />} />
           <Route path="/userMealCard/:id" element={<UserMealCard />} />

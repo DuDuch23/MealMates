@@ -3,7 +3,6 @@ import { useParams, Link } from "react-router";
 import { getUser } from "../../service/requestApi";
 import { getUserIndexDB } from "../../service/indexDB";
 import { IconUser } from "../../components/IconUser/iconUser";
-import { ContainerLinkUserPage } from "../../components/ContainerLinkUserPage/ContainerLinkUserPage";
 import styles from './UserProfile.module.css'
 
 const UserProfile = () => {
@@ -81,7 +80,6 @@ const UserProfile = () => {
                     <IconUser iconId={user.iconUser}/>
                 </div>
                 <div className={styles.contentUser}>
-                    <ContainerLinkUserPage />
                     <div className={styles.containerLink}>
                         <Link to={`/userProfile/${userId}`}>Mes informations</Link>
                         <span>
@@ -95,7 +93,6 @@ const UserProfile = () => {
                             <line x1="1.26283" y1="2.70695e-08" x2="1.26283" y2="35.9182" stroke="#EFF1F5" strokeWidth="1.23856"/>
                           </svg>
                         </span>
-                        <Link to={`/dashboard`}>Mon tableau de bord</Link>
                         <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                     </div>
                     <div className={styles.containerInfoUser}>

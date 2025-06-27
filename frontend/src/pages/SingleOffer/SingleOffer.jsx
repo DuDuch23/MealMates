@@ -148,7 +148,7 @@ export default function SingleOffer() {
                                 </p>
                             )}
 
-                            <button>
+                            <button onClick={handleInput}>
                                 <p>Envoyer un message</p>
                             </button>
                         </>

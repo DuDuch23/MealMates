@@ -51,21 +51,25 @@ export default function AddMessage({ user, offer, chat }) {
     };
 
     const stripeButton = () => {
-        if (user.id === offer.seller.id){
-            return(
+        if (!offer || !offer.data.seller.id) return null;
+
+        if (user.id != offer.data.seller.id) {
+            return (
                 <div className={`${styles.sendLink} ${showLinkButton ? styles.visible : ''}`}>
-                  <button type="button" onClick={handleSendStripeLink}>
-                    Envoyer le lien de paiement
-                  </button>
+                    <button type="button" onClick={handleSendStripeLink}>
+                        Envoyer le lien de paiement
+                    </button>
                 </div>
             );
         }
+      
+        return null;
     };
 
     return (
         <form className={styles.container} onSubmit={handleSubmit}>
         
-          {stripeButton}
+          {stripeButton()}
 
           <div className={styles.form}>
             <svg
