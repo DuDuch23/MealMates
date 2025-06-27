@@ -5,14 +5,18 @@ export default function AutoCarousel() {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
+
     fetch("/api/images")
+
       .then((res) => {
         if (!res.ok) throw new Error("Erreur réseau");
         return res.json();
       })
       .then((data) => {
+
         const urls = data.map((img) => img.url);
         setImages([...urls, ...urls]);
+
       })
       .catch((err) => console.error("Erreur chargement des images :", err));
   }, []);

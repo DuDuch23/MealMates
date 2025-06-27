@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
 // import { AiFillStar } from "react-icons/ai";
 import logo from '../../assets/logo-mealmates.png';
-import AutoCarousel from "../../components/AutoCarousel/AutoCarousel";
+import Footer from "../../components/Footer/Footer";
+import AutoCarousel from '../../components/AutoCarousel/AutoCarousel';
 
 function Home() {
   const [pos, setPos] = useState(null);
@@ -28,7 +29,7 @@ function Home() {
   const reviews = [
     {
       name: "Louis Dupont",
-      avatar: "https://i.pravatar.cc/150?img=3",
+      avatar: "https://i.pravatar.cc/150?img=8",
       date: "12 juin 2025",
       text: "Super concept, j’ai réduit mes déchets et rencontré des voisins sympas.",
       stars: 5
