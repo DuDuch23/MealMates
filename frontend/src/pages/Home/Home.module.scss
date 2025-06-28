@@ -250,7 +250,7 @@ a {
         width: 60%;
 
         &:hover {
-          background: darken(variables.$colorDarkGreen, 10%);
+          background: color.adjust($color, $lightness: -5%);
         }
       }
     }
