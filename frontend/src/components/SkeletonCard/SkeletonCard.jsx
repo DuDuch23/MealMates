@@ -5,6 +5,9 @@ function SkeletonCard() {
     <div className={styles.skeletonCard}>
       <div className={styles.image}></div>
       <div className={styles.text}></div>
+      <div className={styles.category}>
+        <div className={styles.category__container}></div>
+      </div>
     </div>
   );
 }
