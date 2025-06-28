@@ -36,7 +36,7 @@ function App() {
     const logout = async () => {
       const expiration = sessionStorage.getItem("token_expiration");
       try{
-        if (expiration && Date.now() > Number(expiration)) {
+        if (!expiration && Date.now() > Number(expiration)) {
           deleteUserIndexDB();
           sessionStorage.clear();
           navigate("/connexion");

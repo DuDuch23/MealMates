@@ -211,9 +211,9 @@ function Offer(){
             );
         }
         
-        if (offers.length === 0) {
-            return <p>Aucune offre pour {title.toLowerCase()} pour le moment.</p>;
-        }
+        // if (offers.length === 0) {
+        //     return <p>Aucune offre pour {title.toLowerCase()} pour le moment.</p>;
+        // }
 
         return <SliderSection title={title} offers={offers} type={type} />;
     };
@@ -260,25 +260,25 @@ function Offer(){
             )}
 
             
-            {againOffers.length > 0 ? (
+            {loadingAgain ? (
                 renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")
             ) : (
                 <p>Il n'y a pas d'offres à vous recommander à nouveau.</p>
             )}
 
-            {lastChanceOffers.length > 0 ? (
+            {loadingLastChance ? (
                 renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")
             ) : (
                 <p>Il n'y a pas d'offres en dernière chance pour le moment.</p>
             )}
 
-            {veganOffers.length > 0 ? (
+            {loadingVegan ? (
                 renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")
             ) : (
                 <p>Aucune offre vegan pour le moment.</p>
             )}
 
-            {localOffers.length > 0 ? (
+            {loadingLocal ? (
                 renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")
             ) : (
                 <p>Aucune tendance locale disponible actuellement.</p>
