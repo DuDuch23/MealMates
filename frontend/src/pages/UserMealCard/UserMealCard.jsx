@@ -200,7 +200,7 @@ function UserMealCard() {
                         <ul className={styles.listUser}>
                             <li><p>{user.firstName}</p></li>
                         </ul>
-                        {renderLocation()}
+                        {/* {renderLocation()} */}
                     </div>
 
                     {userPreference()}
