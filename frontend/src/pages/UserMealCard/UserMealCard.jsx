@@ -132,7 +132,7 @@ function UserMealCard() {
                 <div className={styles.chartsWrapper}>
                     <p>Cette semaine</p>
                     <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={weekData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <BarChart data={weekData}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="week" />
                             <YAxis />
@@ -145,7 +145,7 @@ function UserMealCard() {
                         </BarChart>
                     </ResponsiveContainer>
                     <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={monthData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <BarChart data={monthData}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="month" />
                             <YAxis />
@@ -158,7 +158,7 @@ function UserMealCard() {
                         </BarChart>
                     </ResponsiveContainer>
                     <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={yearData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <BarChart data={yearData}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="year" />
                             <YAxis />

@@ -284,11 +284,11 @@
     }
 
     &__right {
-      display: none;
+      display: flex;
 
       .button-login,
       .button-sign-in {
-        display: none;
+        display: flex;
       }
     }
   }

@@ -85,9 +85,26 @@
 }
 
 @media screen and (max-width: 1280px) {
-    .slider-offer{
-        &__link{
+    .slider-offer {
+        &__image {
+            height: 200px;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .slider-offer {
             
+        h3 {
+            font-size: 12px;
+        }
+    
+        p {
+            font-size: 12px;
+        }
+    
+        &__image {
+            height: 150px;
         }
     }
 }
