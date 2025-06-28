@@ -64,10 +64,10 @@ export default function Header({ onProfileClick }) {
                         <IconUser iconId={userData.user.iconUser}/>
                         <p>{userData.user.firstName}</p>
                     </Link>
-                    {/* <li className={styles['button-user-info-mobile']} key="inscription" onClick={onProfileClick}>
+                    <li className={styles['button-user-info-mobile']} key="inscription" onClick={onProfileClick}>
                         <IconUser id={userData.user.iconUser}/>
                         <p>{userData.user.firstName}</p>
-                    </li> */}
+                    </li>
                 </>
             );
         } else {
