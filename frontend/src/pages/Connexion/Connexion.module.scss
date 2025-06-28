@@ -117,7 +117,8 @@
       transition: color 0.2s;
 
       &:hover {
-        color: lighten(variables.$colorWhite, 20%);
+        color: color.adjust(variables.$colorWhite, $lightness: 20%);
+
       }
     }
   }
