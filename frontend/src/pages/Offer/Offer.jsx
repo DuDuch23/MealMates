@@ -202,7 +202,7 @@ function Offer(){
         }
     };
 
-    const renderSlider = (loading, title, offers, type) => {
+    const renderSlider = (loading, title, offers, type, emptyMessage) => {
         if (loading) {
             return (
                 <SliderSection title={title}>
@@ -210,10 +210,10 @@ function Offer(){
                 </SliderSection>
             );
         }
-        
-        // if (offers.length === 0) {
-        //     return <p>Aucune offre pour {title.toLowerCase()} pour le moment.</p>;
-        // }
+
+        if (!offers || offers.length === 0) {
+            return <p>{emptyMessage}</p>;
+        }
 
         return <SliderSection title={title} offers={offers} type={type} />;
     };
@@ -260,28 +260,36 @@ function Offer(){
             )}
 
             
-            {loadingAgain ? (
-                renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")
-            ) : (
-                <p>Il n'y a pas d'offres à vous recommander à nouveau.</p>
+            {renderSlider(
+                loadingAgain,
+                "Recommander à nouveau",
+                againOffers,
+                "again",
+                "Il n'y a pas d'offres à vous recommander à nouveau."
             )}
 
-            {loadingLastChance ? (
-                renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")
-            ) : (
-                <p>Il n'y a pas d'offres en dernière chance pour le moment.</p>
+            {renderSlider(
+                loadingLastChance,
+                "Dernière chance",
+                lastChanceOffers,
+                "dernière chance",
+                "Il n'y a pas d'offres en dernière chance pour le moment."
             )}
 
-            {loadingVegan ? (
-                renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")
-            ) : (
-                <p>Aucune offre vegan pour le moment.</p>
+            {renderSlider(
+                loadingVegan,
+                "Ce soir je mange vegan",
+                veganOffers,
+                "vegans",
+                "Aucune offre vegan pour le moment."
             )}
 
-            {loadingLocal ? (
-                renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")
-            ) : (
-                <p>Aucune tendance locale disponible actuellement.</p>
+            {renderSlider(
+                loadingLocal,
+                "Tendances locales",
+                localOffers,
+                "locals",
+                "Aucune tendance locale disponible actuellement."
             )}
         </div>
 
