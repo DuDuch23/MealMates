@@ -252,7 +252,7 @@ a {
         width: 60%;
 
         &:hover {
-          background: color.adjust($color, $lightness: -5%);
+          background: color.adjust(variables.$colorWhite, $lightness: -5%);
         }
       }
     }
