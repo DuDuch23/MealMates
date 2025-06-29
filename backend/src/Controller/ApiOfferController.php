@@ -66,11 +66,11 @@ class ApiOfferController extends AbstractController
 
         $data = json_decode($serializer->serialize($offer, 'json', ['groups' => 'public']), true);
 
-        // $data['order'] = $activeOrder ? [
-        //     'id'          => $activeOrder->getId(),
-        //     'isConfirmed' => $activeOrder->isConfirmed(),
-        //     'expiresAt'   => $activeOrder->getExpiresAt()?->format('Y-m-d H:i:s'),
-        // ] : null;
+        $data['order'] = $activeOrder ? [
+            'id'          => $activeOrder->getId(),
+            'isConfirmed' => $activeOrder->isConfirmed(),
+            'expiresAt'   => $activeOrder->getExpiresAt()?->format('Y-m-d H:i:s'),
+        ] : null;
 
         return $this->json([
             'status' => "OK",
