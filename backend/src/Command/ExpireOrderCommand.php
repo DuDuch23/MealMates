@@ -13,7 +13,7 @@ use Symfony\Component\Scheduler\Attribute\AsCronTask;
     name: 'app:expire-order',
     description: 'Expire et supprime les réservations non confirmées qui sont expirées.'
 )]
-#[AsCronTask('0 0 * * *')]
+#[AsCronTask('* * * * *')]
 class ExpireOrderCommand extends Command
 {
     public function __construct(

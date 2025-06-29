@@ -14,7 +14,7 @@ use Symfony\Component\Scheduler\Attribute\AsCronTask;
     name: 'app:expire-offer',
     description: 'Expire et supprime les offres qui sont expirées.'
 )]
-#[AsCronTask('0 0 * * *')]
+#[AsCronTask('* * * * *')]
 class ExpireOfferCommand extends Command
 {
     public function __construct(
