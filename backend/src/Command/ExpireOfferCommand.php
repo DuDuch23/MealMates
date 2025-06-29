@@ -1,6 +1,7 @@
 <?php
 namespace App\Command;
 
+use App\Entity\Chat;
 use App\Entity\Order;
 use App\Repository\OfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,8 +32,13 @@ class ExpireOfferCommand extends Command
 
         foreach ($expiredOffers as $offer) {
             $orders = $this->entityManager->getRepository(Order::class)->findBy(['offer' => $offer]);
+            $chats = $this->entityManager->getRepository(Chat::class)->findBy(['offer' => $offer]);
             foreach ($orders as $order) {
                 $this->entityManager->remove($order);
+            }
+
+            foreach ($chats as $chat) {
+                $this->entityManager->remove($chat);
             }
             
             $this->entityManager->remove($offer);
