@@ -461,6 +461,38 @@ export async function getOffers() {
     }
 }
 
+export const getFilteredOffers = async (filters, pos) => {
+  const query = new URLSearchParams();
+
+  if (filters.categories && filters.categories.length > 0) {
+    filters.categories.forEach(category => {
+      query.append("category", category);
+    });
+  }
+
+  if (filters.diets) {
+    if (filters.diets.includes("vegan")) query.append("vegan", true);
+    if (filters.diets.includes("sans gluten")) query.append("glutenFree", true);
+  }
+
+  if (filters.price?.min) query.append("priceMin", filters.price.min);
+  if (filters.price?.max) query.append("priceMax", filters.price.max);
+  if (filters.minRating) query.append("ratingMin", filters.minRating);
+
+  if (filters.maxDistance && pos) {
+    query.append("lat", pos.lat);
+    query.append("lng", pos.lng);
+    query.append("maxDistance", filters.maxDistance);
+  }
+
+  if (filters.expiryDate?.max) {
+    query.append("expiryBefore", filters.expiryDate.max);
+  }
+
+  const res = await fetch(`/offers?${query.toString()}`);
+  return res.json();
+};
+
 export async function getVeganOffers() {
     try {
         const token = sessionStorage.getItem('token');

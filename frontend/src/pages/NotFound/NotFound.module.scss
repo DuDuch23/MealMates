@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  padding: 5rem 2rem;
+  background-color: #1a1a1a;
+  color: white;
+  font-family: "Inter", sans-serif;
+
+  h1 {
+    font-size: 6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ff5e57;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #ccc;
+  }
+
+  a {
+    display: inline-block;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #1d8915;
+    padding: 0.8rem 1.6rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #176d11;
+    }
+  }
+}

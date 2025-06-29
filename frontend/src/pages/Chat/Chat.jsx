@@ -1,6 +1,5 @@
-import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
-import { getOfferSingle } from '../../service/requestApi';
+import { getOfferSingle, getInfoForChat } from '../../service/requestApi';
 import AddMessage from '../../components/AddMessage/AddMessage';
 import ChatContainer from '../../components/ChatContainer/ChatContainer';
 
@@ -18,7 +17,6 @@ function Chat() {
       const parsedUser = JSON.parse(userSession);
       setUser(parsedUser);
       setChat(parseInt(chatId, 10));
-      // const id = userSession.id;
 
       const fetchChat = async () => {
         try {
