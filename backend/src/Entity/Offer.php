@@ -103,7 +103,7 @@ class Offer
     /**
      * @var Collection<int, Order>
      */
-    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'offer')]
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'offer', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $orders;
 
     /**

@@ -48,39 +48,60 @@
         align-items: center;
     }
     &__rightInfo{
-        display: flex;
-        list-style: none;
-        justify-content: end;
-        gap: 24px;
-        li{
-            list-style-type: none;
-        }
-        .button-sign-in{
-            a{
-                background-color: variables.$colorDarkGreen;
-                color: white;
-                padding: 16px 28px;
-                border-radius: 10px;
-                font-weight: 600;
-                transition: all 0.3s ease-in-out;
-                &:hover{
-                    transition: all 0.3s ease-in-out;
-                    background-color: white;
-                    color: variables.$colorDarkGreen;
-                }
-            }
-        }
-        .button-login{
-            a{
-                background-color: white;
-                color: variables.$colorDarkGreen;
-                padding: 16px 28px;
-                border-radius: 10px;
-                font-weight: 600;
-                transition: all 0.3s ease-in-out;
-              }
-        }
+      display: flex;
+      list-style: none;
+      justify-content: end;
+      gap: 24px;
+      li{
+          list-style-type: none;
       }
+      .button-sign-in{
+          a{
+              background-color: variables.$colorDarkGreen;
+              color: white;
+              padding: 16px 28px;
+              border-radius: 10px;
+              font-weight: 600;
+              transition: all 0.3s ease-in-out;
+              &:hover{
+                  transition: all 0.3s ease-in-out;
+                  background-color: white;
+                  color: variables.$colorDarkGreen;
+              }
+          }
+      }
+      .button-login{
+          a{
+              background-color: white;
+              color: variables.$colorDarkGreen;
+              padding: 16px 28px;
+              border-radius: 10px;
+              font-weight: 600;
+              transition: all 0.3s ease-in-out;
+
+              &:hover{
+                  transition: all 0.3s ease-in-out;
+                  background-color: variables.$colorDarkGreen;
+                  color: white;
+              }
+          }
+      }
+      .button-user-info-mobile{
+          display: none;
+      }
+      .button-user-info-desktop{
+          display: flex;
+          background-color: variables.$colorDarkGreen;
+          border-radius: 10px;
+          cursor: pointer;
+          justify-content: center;
+          align-items: center;
+          padding: 2px 26px;
+      }
+    }
+    &__sign-in{
+        background-color: variables.$colorDarkGreen;
+    }
 
   &__left {
     display: flex;
@@ -205,6 +226,24 @@
   .header__leftMenuUser {
     display: none;
   }
+
+  .header{
+    &__rightInfo{
+      .button-user-info-desktop{
+        display: none;
+      }
+
+      .button-user-info-mobile{
+        display: flex;
+        background-color: variables.$colorDarkGreen;
+        border-radius: 10px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        padding: 2px 26px;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -245,11 +284,11 @@
     }
 
     &__right {
-      display: none;
+      display: flex;
 
       .button-login,
       .button-sign-in {
-        display: none;
+        display: flex;
       }
     }
   }

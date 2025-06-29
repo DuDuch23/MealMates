@@ -421,7 +421,6 @@ export async function generateStripeLink({chat}){
         const data = await response.json();
         const stripeUrl = data.url;
 
-        console.log('Lien Stripe généré :', stripeUrl);
         const res = {
             data : data,
             url : stripeUrl

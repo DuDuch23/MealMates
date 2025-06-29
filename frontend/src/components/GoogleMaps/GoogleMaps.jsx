@@ -28,7 +28,7 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                 position={{ lat: Number(offer.latitude), lng: Number(offer.longitude) }}
                 title={offer.title}
                 label="📦"
-                clusterer={clusterer}
+                clusterer={clusterer || null}
                 onClick={() => handleMarkerClick(offer)}
             />
     ));
@@ -128,15 +128,17 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
     return (
         <>
             <LoadScript className="map" googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP}>
-                {/* <form className={styles.searchForm} onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        placeholder="Entrez une adresse"
-                    />
-                    <button type="submit">Rechercher</button>
-                </form> */}
+                <div className={styles.mapContainer}>
+                    <form className={styles.searchForm} onSubmit={handleSearch}>
+                        <input
+                            type="text"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            placeholder="Entrez une adresse"
+                        />
+                        <button type="submit">Rechercher</button>
+                    </form>
+                </div>
                 {/* <FilterMap
                     categories={categories}
                     onFilterChange={(newFilters) => {
@@ -170,9 +172,10 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                             }}
                         />
                         )}
-                    <MarkerClusterer>
+                    {/* <MarkerClusterer>
                         {(clusterer) => renderMarkers(clusterer)}
-                    </MarkerClusterer>
+                    </MarkerClusterer> */}
+                    {renderMarkers(null)}
                     {selectedOffer && (
                         <InfoWindow
                         position={{

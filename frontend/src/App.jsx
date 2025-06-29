@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useState,useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router';
 import { getUserIndexDB, deleteUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
+import Footer from './components/Footer/Footer';
 import logo from '../src/assets/logo-mealmates.png';
 
 // Chargement différé des composants
@@ -38,7 +39,7 @@ function App() {
     const logout = async () => {
       const expiration = sessionStorage.getItem("token_expiration");
       try{
-        if (expiration && Date.now() > Number(expiration)) {
+        if (!expiration && Date.now() > Number(expiration)) {
           deleteUserIndexDB();
           sessionStorage.clear();
           navigate("/connexion");
@@ -99,6 +100,7 @@ function App() {
           <Route path="/offer" element={<Offer />} />
           <Route path="/addOffer" element={<AddOffer />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
+          
           {/* user profile */}
           <Route path="/userProfile/:id" element={<UserProfile />} />
           <Route path="/userMealCard/:id" element={<UserMealCard />} />

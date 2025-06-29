@@ -14,6 +14,7 @@ import SliderSection from "../../components/SliderOffers/SliderOffers";
 import OffersMap from "../../components/GoogleMaps/GoogleMaps";
 import SkeletonCard from "../../components/SkeletonCard/SkeletonCard";
 import AdvancedFilters from "../../components/AdvanceFilters/AdvanceFilters";
+import AllCategory from "../../components/AllCategory/AllCategory";
 
 import "swiper/css";
 
@@ -217,16 +218,23 @@ function Offer() {
     return R * c;
   }
 
-  const renderSlider = (loading, title, offersList, type) =>
-    loading ? (
-      <SliderSection title={title}>
-        {[...Array(5)].map((_, idx) => (
-          <SkeletonCard key={idx} />
-        ))}
-      </SliderSection>
-    ) : (
-      <SliderSection title={title} offers={offersList} type={type} />
-    );
+  
+    const renderSlider = (loading, title, offers, type, emptyMessage) => {
+        if (loading) {
+            return (
+                <SliderSection title={title}>
+                    {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
+                </SliderSection>
+            );
+        }
+
+        if (!offers || offers.length === 0) {
+            return <p>{emptyMessage}</p>;
+        }
+
+        return <SliderSection title={title} offers={offers} type={type} />;
+    };
+
 
   return (
     <section className={styles["container-offer"]}>
@@ -276,29 +284,65 @@ function Offer() {
         </div>
       )}
 
-      <div className={styles["container-offer__slider"]}>
-        {searchResults.length > 0 ? (
-          <>
-            <SliderSection
-              title={`Résultats pour "${searchQuery}"`}
-              offers={searchResults}
-              type={searchQuery}
-            />
-            {renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")}
-            {renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")}
-            {renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")}
-            {renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")}
-          </>
-        ) : (
-          <>
-            {renderSlider(loadingOffers, "Toutes les offres", filteredOffers, "all")}
-            {renderSlider(loadingAgain, "Recommander à nouveau", againOffers, "again")}
-            {renderSlider(loadingLastChance, "Dernière chance", lastChanceOffers, "dernière chance")}
-            {renderSlider(loadingVegan, "Ce soir je mange vegan", veganOffers, "vegans")}
-            {renderSlider(loadingLocal, "Tendances locales", localOffers, "locals")}
-          </>
+        <nav className={styles["container-offer__filter"]}>
+            <ul className={styles["container-offer__filter-reference-list"]}>
+                <AllCategory />
+            </ul>
+        </nav>
+        {showMap && (
+            <div className={styles["container-offer__map"]} style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 98 }}>
+                <OffersMap userPos={pos} offers={offers} setUserPos={setUserPos} />
+            </div>
         )}
-      </div>
+        <div className={styles["container-offer__slider"]}>
+            {searchResults.length > 0 ? (
+                <>
+                    <SliderSection
+                    title={`Résultats pour "${searchQuery}"`}
+                    offers={searchResults}
+                    type={searchQuery}
+                    />
+                </>
+            ) : (
+                searchResults.code === 404 && (
+                    <p>Aucune offre trouvée pour "{searchQuery}".</p>
+                )
+            )}
+
+            
+            {renderSlider(
+                loadingAgain,
+                "Recommander à nouveau",
+                againOffers,
+                "again",
+                "Il n'y a pas d'offres à vous recommander à nouveau."
+            )}
+
+            {renderSlider(
+                loadingLastChance,
+                "Dernière chance",
+                lastChanceOffers,
+                "dernière chance",
+                "Il n'y a pas d'offres en dernière chance pour le moment."
+            )}
+
+            {renderSlider(
+                loadingVegan,
+                "Ce soir je mange vegan",
+                veganOffers,
+                "vegans",
+                "Aucune offre vegan pour le moment."
+            )}
+
+            {renderSlider(
+                loadingLocal,
+                "Tendances locales",
+                localOffers,
+                "locals",
+                "Aucune tendance locale disponible actuellement."
+            )}
+        </div>
+
     </section>
   );
 }

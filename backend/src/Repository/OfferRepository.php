@@ -77,15 +77,15 @@ class OfferRepository extends ServiceEntityRepository
     }
 
     public function findOffersBoughtByUser(int $userId): array
-{
-    return $this->createQueryBuilder('o')
-        ->join('o.orders', 'ord')
-        ->join('ord.buyer', 'b')
-        ->where('b.id = :userId')
-        ->setParameter('userId', $userId)
-        ->getQuery()
-        ->getResult();
-}
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.orders', 'ord')
+            ->join('ord.buyer', 'b')
+            ->where('b.id = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
 
     public function findByFilters(array $criteria)
     {
@@ -143,6 +143,15 @@ class OfferRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findExpiredOffers(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.expirationDate < :now')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

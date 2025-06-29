@@ -1,6 +1,8 @@
 @use "../../styles/globals";
 @use '../../styles/mixins.scss' as mixins;
 @use "../../styles/variables.scss" as variables;
+@use "sass:color";
+
 
 .container-offer {
     padding: 12px;
@@ -50,7 +52,7 @@
     }
 
     &:hover {
-      background-color: darken(variables.$colorDarkGreen, 5%);
+      background-color: color.adjust(variables.$colorDarkGreen, $lightness: -5%);
       box-shadow: inset 0 0 0 2px black;
       cursor: pointer;
     }

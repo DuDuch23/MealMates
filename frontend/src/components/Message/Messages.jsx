@@ -14,13 +14,17 @@ export function Messages({ content, iconUser, id }) {
 
   // on extrait l'url
   const urlMatch = content.match(/https?:\/\/\S+/);
-  const url = urlMatch ? urlMatch[0] : null;
+  let url = urlMatch ? urlMatch[0] : null;
+  if (url) {
+    url = url.replace(/"$/, ''); // supprime le " final s'il existe
+  }
 
   return (
     <div className={styles["container-message"]}>
+      {id}
       <IconUser iconId={iconUser} />
       {url ? (
-        <a className={styles["link"]} href={url} target="_blank" rel="noopener noreferrer">
+        <a className={styles["link"]} href={url} target="_blank">
           Voici le lien vers le paiement
         </a>
       ) : (

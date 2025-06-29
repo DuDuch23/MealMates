@@ -1,6 +1,8 @@
 @use "../../styles/globals";
-@use "../../styles/mixins.scss";
-@use "../../styles/variables.scss";
+@use "../../styles/mixins";
+@use "../../styles/variables";
+@use "sass:color";
+
 
 .container {
   min-height: 100vh;
@@ -98,7 +100,7 @@
       transition: background-color 0.3s ease, transform 0.2s ease;
 
       &:hover {
-        background-color: lighten(variables.$colorWhite, 5%);
+        background-color: color.adjust(variables.$colorWhite, $lightness: 10%);
         transform: translateY(-2px);
       }
     }
@@ -111,7 +113,7 @@
       font-size: 0.95rem;
 
       &:hover {
-        color: lighten(variables.$colorWhite, 15%);
+        color: color.adjust(variables.$colorWhite, $lightness: 15%);
       }
     }
   }

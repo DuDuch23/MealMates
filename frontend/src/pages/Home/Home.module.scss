@@ -1,6 +1,10 @@
+@use "../../styles/globals";
+@use '../../styles/mixins.scss' as mixins;
+@use "../../styles/variables.scss" as variables;
+@use "sass:color";
+
 @import url("https://fonts.googleapis.com/css2?family=Delius&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
-
 *,
 *::before,
 *::after {
@@ -248,7 +252,7 @@ a {
         width: 60%;
 
         &:hover {
-          background: darken(variables.$colorDarkGreen, 10%);
+          background: color.adjust(variables.$colorWhite, $lightness: -5%);
         }
       }
     }

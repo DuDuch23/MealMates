@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router";
 import { getUserIndexDB } from "../../service/indexDB";
 import { useEffect, useState } from "react";
 import { createOrder, getOfferSingle, createChat, sendMessage} from "../../service/requestApi";
-import style from "./SingleOffer.module.css";
+import styles from "./SingleOffer.module.scss";
 
 export default function SingleOffer() {
 
@@ -95,20 +95,20 @@ export default function SingleOffer() {
     };
 
     if (!offer) {
-        return <div className={style["single-offer"]}><p>Chargement...</p></div>;
+        return <div className="single-offer" style={{height: "100vh"}}><p>Chargement...</p></div>;
     }
 
     return (
-        <div className={style.single_offer}>
-            <div className={style.single_offer__container}>
-                <div className={style.single_offer__content}>
-                    <div className={style.single_offer__images}>
+        <div className={styles.single_offer}>
+            <div className={styles.single_offer__container}>
+                <div className={styles.single_offer__content}>
+                    <div className={styles.single_offer__images}>
                         {offer.images && offer.images.map((img) => (
-                            <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className={style.single_offer__image} />
+                            <img key={img.id} src={`${uploadsBaseUrl}/${img.name}`} alt={img.name} className={styles.single_offer__image} />
                         ))}
                     </div>
-                    <h1 className={style.single_offer__title}>{offer.product}</h1>
-                    <div className={style.single_offer__details}>
+                    <h1 className={styles.single_offer__title}>{offer.product}</h1>
+                    <div className={styles.single_offer__details}>
                         <p><strong>Description :</strong> {offer.description || "Aucune description."}</p>
                         <p><strong>Prix :</strong> {offer.price ? `${offer.price} €` : "Gratuit"}</p>
                         <p><strong>Quantité :</strong> {offer.quantity}</p>
@@ -119,7 +119,7 @@ export default function SingleOffer() {
                         <p><strong>Créée le :</strong> {new Date(offer.createdAt).toLocaleString()}</p>
                     </div>
                 </div>
-                <aside className={style.single_offer__sidebar}>
+                <aside className={styles.single_offer__sidebar}>
                     {user && offer.seller.id == user.id ? (
                         <>
                             <p>Vous êtes le propriétaire de cette offre</p>
@@ -148,7 +148,7 @@ export default function SingleOffer() {
                                 </p>
                             )}
 
-                            <button>
+                            <button onClick={handleInput}>
                                 <p>Envoyer un message</p>
                             </button>
                         </>

@@ -1,46 +1,39 @@
 <?php
-
 namespace App\Command;
 
-use App\Entity\Order;
 use App\Repository\OrderRepository;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Scheduler\Attribute\AsCronTask;
 
 #[AsCommand(
     name: 'app:expire-order',
-    description: 'Expire orders that are past their expiration date.'
+    description: 'Expire et supprime les réservations non confirmées qui sont expirées.'
 )]
-
-#[AsCronTask('0 0 * * *')] // Toutes les minutes
+#[AsCronTask('* * * * *')]
 class ExpireOrderCommand extends Command
 {
-    private OrderRepository $orderRepository;
-
-    public function __construct(OrderRepository $orderRepository)
-    {
+    public function __construct(
+        private readonly OrderRepository $orderRepository,
+        private readonly EntityManagerInterface $entityManager
+    ) {
         parent::__construct();
-        $this->orderRepository = $orderRepository;
-    }
-
-    protected function configure(): void
-    {
-        $this->setName('app:expire-order')
-            ->setDescription('Expires orders that are past their expiration date.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $expiredOrders = $this->orderRepository->findExpiredOrders();
 
+
         foreach ($expiredOrders as $order) {
-            $order->setIsConfirmed(false);
-            $this->orderRepository->save($order);
-            $output->writeln(sprintf('Order %d has been expired.', $order->getId()));
+            $this->entityManager->remove($order);
+            $output->writeln(sprintf('La réservation a bien été supprimé.', $order->getId()));
         }
+
+        $this->entityManager->flush();
 
         return Command::SUCCESS;
     }
