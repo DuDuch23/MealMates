@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-import { useState, useEffect } from "react";
-import "./ChooseChatUser.scss"
-import { Link, useNavigate } from 'react-router';
-=======
 import { useNavigate } from "react-router";
 import style from "./ChooseChatUser.module.css";
->>>>>>> 70a77c2f07461c8909f9c59a5adfa6ce5579ebc4
 import { IconUser } from "../IconUser/iconUser";
 
 function ChooseChatUser({ user, chat, lastMessage }) {
