@@ -66,17 +66,12 @@ export default function BurgerMenue({ onProfileClick }) {
         !isOpen &&(
           <nav className={styles["menu-mobile"]}>
             <ul className={styles["menu-mobile__nav-top"]}>
-              <li>
-                  <Link className={styles.logo} key="home" to="/">
-                      <img src={logo} alt="Logo MealMates" />
-                      <h1>MealMates</h1>
-                  </Link>
-              </li>
-              <button type="button" onClick={toggleMenu}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">
-                <path d="M 0 2 L 0 4 L 24 4 L 24 2 Z M 0 11 L 0 13 L 24 13 L 24 11 Z M 0 20 L 0 22 L 24 22 L 24 20 Z"></path>
+              {/* <button type="button" onClick={toggleMenu}> */}
+                <svg id={styles["delete-cross"]} onClick={toggleMenu} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
-              </button>
+
+              {/* </button> */}
             </ul>
             <ul className={styles["menu-mobile__nav-bottom"]}>
               {userData && (

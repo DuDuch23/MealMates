@@ -2,17 +2,15 @@ import { useEffect, useState } from "react";
 import { getCategory } from "../../service/requestApi";
 import styles from "./AllCategory.module.scss";
 
-export default function AllCategory({
-  value = [],
-  onChange = () => {},
-}) {
-  const [categories, setCategories] = useState([]);
+export default function AllCategory({ value = [], onChange = () => {}, setCategories = () => {} }) {
+  const [categories, setLocalCategories] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         const res = await getCategory();
+        setLocalCategories(res?.data || []);
         setCategories(res?.data || []);
       } catch (e) {
         console.error("Catégories introuvables", e);
@@ -44,12 +42,15 @@ export default function AllCategory({
         <ul className={styles.dropdown}>
           {categories.map((cat) => (
             <li key={cat.id}>
+              <label className="custom-checkbox">
                 <input
-                    type="checkbox"
-                    checked={value.includes(cat.id)}
-                    onChange={() => toggleCat(cat.id)}
+                  type="checkbox"
+                  checked={value.includes(cat.id)}
+                  onChange={() => toggleCat(cat.id)}
                 />
+                <span className="checkmark"></span>
                 {cat.name}
+              </label>
             </li>
           ))}
         </ul>

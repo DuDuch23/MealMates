@@ -9,15 +9,27 @@ use App\Entity\Message;
 use App\Service\ErrorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use App\Trait\MailerTrait;
+
 #[Route('/api/chat', name: 'api_category')]
 class ApiChatController extends AbstractController
 {
+    use MailerTrait;
+
+    private $mailer;
+
+    public function __construct(MailerInterface $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
     #[Route('/create', methods: ['POST'])]
     public function createOffer(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -78,6 +90,37 @@ class ApiChatController extends AbstractController
 
         $entityManager->persist($chat);
         $entityManager->flush();
+
+        // envoie du mail vers le vendeur
+        $this->sendMail(
+            'mealmates.g5@gmail.com',
+            $data['email'],
+            'Confirmation de la réservation de l\'offre',
+            '',
+            'emails/createConversationSeller.html.twig',
+            [
+                "offer" => $offer,
+                "client" => $client,
+                "seller" => $seller,
+            ],
+            $this->mailer,
+        );
+
+        // envoie du mail vers le client
+        $this->sendMail(
+            'mealmates.g5@gmail.com',
+            $data['email'],
+            'Confirmation de la réservation de l\'offre',
+            '',
+            'emails/createConversationClient.html.twig',
+            [
+                "offer" => $offer,
+                "client" => $client,
+                "seller" => $seller,
+            ],
+            $this->mailer,
+        );
+
 
         return $this->json([
             'status' => "Created",
