@@ -32,9 +32,7 @@ const GoogleLoginButton = ({ setUser }) => {
         const ggtto = credentialResponse.credential;
         // console.log(ggtto);
         const token = await getTokenSSo({ token:ggtto });
-        console.log(token);
 
-        console.log("Token reçu du SSO :", token);
         sessionStorage.setItem("token",token.token);
       } catch (error) {
         console.error("Erreur lors de la récupération du token SSO :", error);

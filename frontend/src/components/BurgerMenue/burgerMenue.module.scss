@@ -73,6 +73,13 @@
     left: 50%;
     top: 0%;
     background-color: #000;
+    &__nav-top{
+      display: none;
+    }
+
+    &__nav-bottom{
+      padding-top: 150px;
+    }
   }
 }
 @media screen and (max-width: 768px) {
@@ -85,6 +92,11 @@
     padding-top: 120px;
     background-color: #000;
     padding: 120px 10px 0 10px;
+
+    &__nav-bottom{
+      padding-top: 0;
+      padding-bottom: 20px;
+    }
     li {
       display: flex;
       align-items: center;

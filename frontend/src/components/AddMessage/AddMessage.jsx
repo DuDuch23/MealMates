@@ -13,7 +13,6 @@ export default function AddMessage({ user, offer, chat }) {
         if (query.trim() === '') return;
 
         try {
-            console.log(chat);
             await sendMessage({ userId, chat, message: query });
         } catch (error) {
             console.error("Erreur lors de l'envoi du message", error);

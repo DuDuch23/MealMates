@@ -74,7 +74,7 @@ export async function logIn({ email, password }) {
             }),
         });
 
-        console.log(response);
+        // console.log(response);
 
         return await response.json();
     } catch (error) {
@@ -275,7 +275,7 @@ export async function logOut({id}) {
 
 // Chat
 export async function createChat({client, offer, seller}){
-    console.log(client.id, offer, seller);
+    // console.log(client.id, offer, seller);
     const token = sessionStorage.getItem("token");
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/create`,{
@@ -622,7 +622,6 @@ export async function newOffer(formData) {
     credentials: "include",
   });
 
-  // Essayons d'obtenir le JSON s'il y en a, sinon un texte
   let payload;
   const contentType = res.headers.get("content-type") || "";
   if (contentType.includes("application/json")) {
@@ -631,9 +630,6 @@ export async function newOffer(formData) {
     payload = await res.text();
   }
 
-  // On retourne un objet qui contient :
-  // - le code HTTP
-  // - le body déjà parsé
   return {
     status: res.status,
     ok: res.ok,
@@ -641,6 +637,33 @@ export async function newOffer(formData) {
     headers: res.headers,
   };
 }
+
+export async function editOffer(formData, idOffer) {
+    const res = await fetch(`${API_BASE_URL}/api/offers/edit/${idOffer}`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: formData,
+        credentials: "include",
+    });
+
+    let payload;
+    const contentType = res.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+        payload = await res.json();
+    } else {
+        payload = await res.text();
+    }
+
+    return {
+        status: res.status,
+        ok: res.ok,
+        body: payload,
+        headers: res.headers,
+    };
+}
+
 
 
 export async function geocodeLocation(location) {
