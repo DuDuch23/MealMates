@@ -31,7 +31,9 @@ function Offer() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showMap, setShowMap] = useState(false);
-  const [filterCategories, setCategories] = useState([]);
+
+  // Catégories sélectionnées pour filtrer
+  const [filterCategories, setFilterCategories] = useState([]);
 
   // Loading states
   const [loadingOffers, setLoadingOffers] = useState(true);
@@ -183,31 +185,6 @@ function Offer() {
     }
   };
 
-  // Filtrage local des offres en fonction des filtres
-  const filteredOffers = offers.filter((offer) => {
-    // if (filters.types.length > 0 && !filters.types.includes(offer.type)) return false;
-
-    // if (
-      // (filters.price.min && offer.price < Number(filters.price.min)) ||
-      // (filters.price.max && offer.price > Number(filters.price.max))
-    // )
-    // return false;
-
-    // if (filters.minRating && offer.rating < filters.minRating) return false;
-
-    if (
-      filters.maxDistance &&
-      pos && // vérifier que pos est défini
-      offer.location && // vérifier que l'offre a une position
-      getDistanceFromLatLng(pos, offer.location) > filters.maxDistance
-    )
-    
-    // console.log(1);
-    // return false;
-
-    return true;
-  });
-
   // Fonction de calcul de distance entre deux points (en km)
   function getDistanceFromLatLng(pos1, pos2) {
     const toRad = (value) => (value * Math.PI) / 180;
@@ -221,21 +198,54 @@ function Offer() {
     return R * c;
   }
 
-  
-  const renderSlider = (loading, title, offers, type, emptyMessage) => {
-      if (loading) {
-          return (
-              <SliderSection title={title}>
-                  {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-              </SliderSection>
-          );
-      }
-      if (!offers || offers.length === 0) {
-          return <p>{emptyMessage}</p>;
-      }
-      return <SliderSection title={title} offers={offers} type={type} />;
-  };
+  // Filtrage local des offres en fonction des filtres et catégories
+  const filteredOffers = offers.filter((offer) => {
+    // 1. Filtrage par catégories
+    if (filterCategories.length > 0) {
+      // Assure-toi que l'offre a une propriété categoryId (ou catId selon ton API)
+      // Adaptation : ici on prend offer.categoryId (à ajuster si c'est différent)
+      if (!filterCategories.includes(offer.categoryId)) return false;
+    }
 
+    // 2. Filtrage par prix
+    const minPrice = filters.price.min.trim() === "" ? null : Number(filters.price.min);
+    const maxPrice = filters.price.max.trim() === "" ? null : Number(filters.price.max);
+    if (minPrice !== null && offer.price < minPrice) return false;
+    if (maxPrice !== null && offer.price > maxPrice) return false;
+
+    // 3. Filtrage par distance
+    if (
+      filters.maxDistance &&
+      pos &&
+      offer.location &&
+      getDistanceFromLatLng(pos, offer.location) > filters.maxDistance
+    )
+      return false;
+
+    // 4. Filtrage par rating
+    if (filters.minRating && offer.rating < filters.minRating) return false;
+
+    // 5. Filtrage par type (si utilisé)
+    if (filters.types.length > 0 && !filters.types.includes(offer.type)) return false;
+
+    return true;
+  });
+
+  const renderSlider = (loading, title, offers, type, emptyMessage) => {
+    if (loading) {
+      return (
+        <SliderSection title={title}>
+          {[...Array(5)].map((_, idx) => (
+            <SkeletonCard key={idx} />
+          ))}
+        </SliderSection>
+      );
+    }
+    if (!offers || offers.length === 0) {
+      return <p>{emptyMessage}</p>;
+    }
+    return <SliderSection title={title} offers={offers} type={type} />;
+  };
 
   return (
     <section className={styles["container-offer"]}>
@@ -243,7 +253,8 @@ function Offer() {
 
       <nav className={styles["container-offer__filter"]}>
         <ul className={styles["container-offer__filter-reference-list"]}>
-          {/* <AllCategory /> */}
+          {/* On passe setFilterCategories ici pour récupérer la sélection */}
+          <AllCategory value={filterCategories} onChange={setFilterCategories} />
         </ul>
       </nav>
 
@@ -277,7 +288,6 @@ function Offer() {
       </div>
 
       {showMap && (
-        
         <div
           className={styles["container-offer__map"]}
           style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 98 }}
@@ -286,60 +296,54 @@ function Offer() {
         </div>
       )}
 
-      <nav className={styles["container-offer__filter"]}>
-          <ul className={styles["container-offer__filter-reference-list"]}>
-              <AllCategory onFilter={setCategories}/>
-          </ul>
-      </nav>
-
       <div className={styles["container-offer__slider"]}>
-          {searchResults.length > 0 ? (
-              <>
-                  <SliderSection
-                  title={`Résultats pour "${searchQuery}"`}
-                  offers={searchResults}
-                  type={searchQuery}
-                  />
-              </>
-          ) : (
-              searchResults.code === 404 && (
-                  <p>Aucune offre trouvée pour "{searchQuery}".</p>
-              )
-          )}
-          
-          {renderSlider(
-              loadingAgain,
-              "Recommander à nouveau",
-              againOffers,
-              "again",
-              "Il n'y a pas d'offres à vous recommander à nouveau."
-          )}
-          
-          {renderSlider(
-              loadingLastChance,
-              "Dernière chance",
-              lastChanceOffers,
-              "dernière chance",
-              "Il n'y a pas d'offres en dernière chance pour le moment."
-          )}
+        {searchResults.length > 0 ? (
+          <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery} />
+        ) : (
+          searchResults.code === 404 && <p>Aucune offre trouvée pour "{searchQuery}".</p>
+        )}
 
-          {renderSlider(
-              loadingVegan,
-              "Ce soir je mange vegan",
-              veganOffers,
-              "vegans",
-              "Aucune offre vegan pour le moment."
-          )}
-          
-          {renderSlider(
-              loadingLocal,
-              "Tendances locales",
-              localOffers,
-              "locals",
-              "Aucune tendance locale disponible actuellement."
-          )}
+        {renderSlider(
+          loadingAgain,
+          "Recommander à nouveau",
+          againOffers,
+          "again",
+          "Il n'y a pas d'offres à vous recommander à nouveau."
+        )}
+
+        {renderSlider(
+          loadingLastChance,
+          "Dernière chance",
+          lastChanceOffers,
+          "dernière chance",
+          "Il n'y a pas d'offres en dernière chance pour le moment."
+        )}
+
+        {renderSlider(
+          loadingVegan,
+          "Ce soir je mange vegan",
+          veganOffers,
+          "vegans",
+          "Aucune offre vegan pour le moment."
+        )}
+
+        {renderSlider(
+          loadingLocal,
+          "Tendances locales",
+          localOffers,
+          "locals",
+          "Aucune tendance locale disponible actuellement."
+        )}
+
+        {/* Slider des offres filtrées (par catégorie, prix, etc.) */}
+        {renderSlider(
+          loadingOffers,
+          "Toutes les offres filtrées",
+          filteredOffers,
+          "filtered",
+          "Aucune offre ne correspond aux filtres appliqués."
+        )}
       </div>
-
     </section>
   );
 }

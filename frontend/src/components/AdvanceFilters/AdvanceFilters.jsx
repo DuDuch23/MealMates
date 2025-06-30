@@ -1,19 +1,8 @@
-import React from "react"
-import styles from "./AdvanceFilters.module.css"; // Utilisation correcte du SCSS module
+import React from "react";
+import styles from "./AdvanceFilters.module.css";
+import AllCategory from "../AllCategory/AllCategory";
 
-function AdvanceFilters({ filters, setFilters }) {
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-    let newTypes = filters.types || [];
-
-    if (checked) {
-      newTypes = [...newTypes, value];
-    } else {
-      newTypes = newTypes.filter((type) => type !== value);
-    }
-    setFilters({ ...filters, types: newTypes });
-  };
-
+function AdvanceFilters({ filters = {}, setFilters }) {
   const handlePriceChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, price: { ...filters.price, [name]: value } });
@@ -30,25 +19,11 @@ function AdvanceFilters({ filters, setFilters }) {
   return (
     <form className={styles["advanced-filters"]} onSubmit={(e) => e.preventDefault()}>
       <fieldset>
-        <legend>Type de produit :</legend>
-        <label>
-          <input
-            type="checkbox"
-            value="fruits"
-            checked={filters.types?.includes("fruits") || false}
-            onChange={handleCheckboxChange}
-          />
-          Fruits
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="légumes"
-            checked={filters.types?.includes("légumes") || false}
-            onChange={handleCheckboxChange}
-          />
-          Légumes
-        </label>
+        <legend>Catégories :</legend>
+        <AllCategory
+          value={filters.types || []}
+          onChange={(newTypes) => setFilters({ ...filters, types: newTypes })}
+        />
       </fieldset>
 
       <fieldset>
