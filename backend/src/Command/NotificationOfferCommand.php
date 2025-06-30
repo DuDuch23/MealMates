@@ -13,7 +13,7 @@ use App\Trait\MailerTrait;
 use Symfony\Component\Mailer\MailerInterface;
 
 #[AsCommand(
-    name: 'app:expire-order',
+    name: 'app:notification-end-offer',
     description: 'Envoie un mail aux vendeurs dont la date de péremption arrive dans j-7.'
 )]
 #[AsCronTask('* * * * *')]
