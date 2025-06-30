@@ -8,7 +8,15 @@
   top: 0%;
   list-style: none;
   background-color: #000;
+  
+  #delete-cross{
+    width: 10%;
+    margin-left: auto;
+    cursor: pointer;
+  }
+  
   &__nav-top{
+    list-style: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -22,6 +30,7 @@
   }
 
   &__nav-bottom{
+    list-style: none;
     display: flex;
     flex-direction: column;
     gap: 18px;

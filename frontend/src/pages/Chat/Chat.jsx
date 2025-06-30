@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getOfferSingle, getInfoForChat } from '../../service/requestApi';
+import { getOfferSingle } from '../../service/requestApi';
 import AddMessage from '../../components/AddMessage/AddMessage';
 import ChatContainer from '../../components/ChatContainer/ChatContainer';
 

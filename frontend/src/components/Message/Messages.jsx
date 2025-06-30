@@ -16,12 +16,11 @@ export function Messages({ content, iconUser, id }) {
   const urlMatch = content.match(/https?:\/\/\S+/);
   let url = urlMatch ? urlMatch[0] : null;
   if (url) {
-    url = url.replace(/"$/, ''); // supprime le " final s'il existe
+    url = url.replace(/"$/, '');
   }
 
   return (
     <div className={styles["container-message"]}>
-      {id}
       <IconUser iconId={iconUser} />
       {url ? (
         <a className={styles["link"]} href={url} target="_blank">

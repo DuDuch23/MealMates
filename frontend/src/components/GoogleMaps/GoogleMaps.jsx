@@ -33,6 +33,8 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
             />
     ));
 
+    console.log(renderMarkers);
+
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {

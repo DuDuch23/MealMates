@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { logIn, getProfile } from "../../service/requestApi";
 import { addUserIndexDB } from "../../service/indexDB";
@@ -6,17 +6,19 @@ import CryptoJS from "crypto-js";
 import logo from '../../assets/logo-mealmates.png';
 import GoogleLoginButton from "../../components/SsoGoogle";
 import styles from "./Connexion.module.css";
-const SECRET_KEY = import.meta.env.VITE_CRYPTO_KEY || "default-key";
 
+const SECRET_KEY = import.meta.env.VITE_CRYPTO_KEY || "MyBackupSecret123!";
 
 function Connexion() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
 
+  // Vérifie si l'utilisateur est déjà connecté
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
@@ -31,32 +33,41 @@ function Connexion() {
     }
   }, [navigate]);
 
-  // Gestion des inputs de manière générique
-  const handleInputChange = (setter) => (event) => setter(event.target.value);
+  // Gestion générique des inputs
+  const handleInputChange = useCallback(
+    (setter) => (event) => setter(event.target.value),
+    []
+  );
 
-  // Gérer la soumission du formulaire de connexion
+  // Soumission du formulaire
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null); 
+    setError(null);
+    setLoading(true);
+
     try {
       const response = await logIn({ email, password });
+
       if (response.token) {
         const token = response.token;
-        const fullUser = await getProfile({email, token});
+
         const { user: profileUser } = await getProfile({ email, token });
 
-        // Stocker dans sessionStorage
         const expiration = Date.now() + 60 * 60 * 1000;
+
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("token_expiration", expiration.toString());
-        sessionStorage.setItem("user", JSON.stringify(profileUser.id));
+        sessionStorage.setItem("user", JSON.stringify(profileUser)); // stocke tout l'objet
 
+        // Chiffre et stocke dans IndexDB
         const encrypted = CryptoJS.AES.encrypt(
           JSON.stringify(profileUser),
           SECRET_KEY
         ).toString();
+
         await addUserIndexDB({ ...profileUser, encrypted });
 
+        console.log("Navigation vers /offer...");
         navigate("/offer");
       } else {
         setError("Email ou mot de passe incorrect.");
@@ -64,6 +75,8 @@ function Connexion() {
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
       setError("Une erreur s'est produite. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +84,7 @@ function Connexion() {
     <div className={styles.block}>
       <div className={styles.container}>
         <div className={styles.titleLogo}>
-          <img src={logo} alt="logo" className={styles.logo} />
+          <img src={logo} alt="logo MealMates" className={styles.logo} />
           <h1>MealMates</h1>
         </div>
 
@@ -83,8 +96,9 @@ function Connexion() {
               <input
                 id="email"
                 type="email"
+                aria-label="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleInputChange(setEmail)}
                 required
               />
             </div>
@@ -94,13 +108,16 @@ function Connexion() {
               <input
                 id="password"
                 type="password"
+                aria-label="Mot de Passe"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleInputChange(setPassword)}
                 required
               />
             </div>
 
-            <button type="submit">Connexion</button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Connexion..." : "Connexion"}
+            </button>
 
             <div className={styles.otherAction}>
               <p>OU</p>
@@ -108,9 +125,9 @@ function Connexion() {
             </div>
 
             <div className={styles.contentElementForm}>
-            <p className={styles.linkText} onClick={() => navigate("/")}>
-              Retour au menu
-            </p>
+              <p className={styles.linkText} onClick={() => navigate("/")}>
+                Retour au menu
+              </p>
             </div>
           </form>
         </div>

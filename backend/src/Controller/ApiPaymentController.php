@@ -13,6 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -60,13 +61,39 @@ class ApiPaymentController extends AbstractController
                 'quantity' => (int)($chat->getOffer()->getQuantity()),
             ]],
             'mode' => 'payment',
-            'success_url' => 'http://localhost:5173/success',
-            'cancel_url' => 'http://localhost:5173/cancel',
+            'success_url' => '/sucess',
+            'cancel_url' => '/cancel',
         ]);
 
         $chat->setStripeUrl($session->url);
         $em->flush();
 
         return new JsonResponse(['url' => $session->url,"stripe" => $session]);
+    }
+
+    #[Route('/sucess', name: 'api_sucess', methods: ['POST'])]
+    public function sucessStripe( int $id,EntityManagerInterface $em,Security $security,SerializerInterface $serializer): JsonResponse 
+    {
+        $chat = $em->getRepository(Chat::class)->find($id);
+
+        if (!$chat || !$chat->getOffer()) {
+            return new JsonResponse(['error' => 'Chat ou offre introuvable'], 404);
+        }
+
+        return new JsonResponse(['url' => "1"]);
+    }
+
+    #[Route('/confirm/qrcode/{code}', name: 'qr_code_confirm', methods: ['GET'])]
+    public function qrCodeConfirm(int $id ,EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    {
+        $chat = $entityManager->getRepository(Chat::class)->find($id);
+
+        $offer = $chat->getOffer();
+
+        // on retire l'offre de la bdd
+
+        // on envoie un message pour préciser que l'envoie est bien confirmer
+
+        return new JsonResponse(["code"=>200]);
     }
 }
