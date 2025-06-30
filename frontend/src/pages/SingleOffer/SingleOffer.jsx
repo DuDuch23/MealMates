@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, Link } from "react-router";
 import { getUserIndexDB } from "../../service/indexDB";
 import { useEffect, useState } from "react";
 import { createOrder, getOfferSingle, createChat, sendMessage} from "../../service/requestApi";
@@ -49,7 +49,7 @@ export default function SingleOffer() {
     }, [navigate]);
 
     const handleReservation = async () => {
-        console.log("Réservation en cours pour l'offre ID :", id);
+        // console.log("Réservation en cours pour l'offre ID :", id);
         try {
             const response = await createOrder(offer.id);
             setOffer(prev => ({
@@ -80,7 +80,7 @@ export default function SingleOffer() {
                 offer: offerId
             });
 
-            console.log("Chat créé avec succès :", response);
+            // console.log("Chat créé avec succès :", response);
 
             const chatId = response.chatId;
 
@@ -123,9 +123,9 @@ export default function SingleOffer() {
                     {user && offer.seller.id == user.id ? (
                         <>
                             <p>Vous êtes le propriétaire de cette offre</p>
-                            <button onClick={() => console.log("Bientot rediriger vers une page de modification")}>
+                            <Link key="modifyOffer" to={`/modifyOffer/${offer.id}`} className="single-offer__modify-link">
                                 Modifier l'offre
-                            </button>
+                            </Link>
                         </>
                     ) : (
                         <>

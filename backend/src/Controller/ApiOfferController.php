@@ -239,7 +239,6 @@ class ApiOfferController extends AbstractController
         $files = $request->files->get('photos_offer');
 
         if ($files) {
-            // assure qu'on boucle toujours sur un tableau
             foreach ((array) $files as $file) {
                 $image = new Image();
                 $image->setImageFile($file); 
@@ -257,46 +256,66 @@ class ApiOfferController extends AbstractController
         return $this->json(['status' => "Created", 'code' => 201], 201);
     }
 
-    #[Route('/edit', methods: ['PUT'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        if (!isset($data['id']) || !isset($data['name'])) {
-            return $this->json([
-                'status' => "Bad Request",
-                'code' => 400,
-                'message' => "Missing 'id' or 'name' parameter."
-            ], 400);
+    #[Route('/edit/{id}', methods: ['POST'])] // ou PUT, mais FormData fonctionne mieux avec POST
+    public function edit(
+        int $id,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        CategoryRepository $categoryRepository,
+        SlugService $slugService
+    ): JsonResponse {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
         }
 
-        $offer = $entityManager->getRepository(Offer::class)->find($data['id']);
+        $offer = $entityManager->getRepository(Offer::class)->find($id);
         if (!$offer) {
-            return $this->json([
-                'status' => "Not Found",
-                'code' => 404,
-                'message' => "Offer doesn't exist."
-            ], 404);
+            return $this->json(['error' => 'Offer not found'], 404);
         }
 
-        // Vérification des permissions (seul un admin ou le propriétaire peut éditer)
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            return $this->json([
-                'status' => "Unauthorized",
-                'code' => 401,
-                'message' => "You are not authorized to perform this action."
-            ], 401);
+        if (!$this->isGranted('ROLE_ADMIN') && $offer->getSeller() !== $user) {
+            return $this->json(['error' => 'Unauthorized'], 403);
         }
 
-        $offer->setName($data['name']);
+        $offer->setProduct($request->request->get('product'));
+        $offer->setSlug($slugService->generateUniqueSlug($request->request->get('product')));
+        $offer->setDescription($request->request->get('description'));
+        $offer->setQuantity($request->request->get('quantity'));
+        $offer->setExpirationDate(new \DateTime($request->request->get('expirationDate')));
+        $offer->setPrice($request->request->get('price'));
+        $offer->setIsDonation(filter_var($request->request->get('isDonation'), FILTER_VALIDATE_BOOLEAN));
+        $offer->setPickupLocation($request->request->get('pickupLocation'));
+        $offer->setIsRecurring(filter_var($request->request->get('isRecurring'), FILTER_VALIDATE_BOOLEAN));
+        $offer->setLatitude($request->request->get('latitude'));
+        $offer->setLongitude($request->request->get('longitude'));
+        $offer->setAvailableSlots($request->request->get('availableSlots'));
+        $offer->setUpdatedAt(new \DateTimeImmutable());
+
+        $offer->clearCategories();
+        $categoryIds = $request->request->all('categories');
+        foreach ($categoryIds as $id) {
+            $category = $categoryRepository->find($id);
+            if ($category) {
+                $offer->addCategory($category);
+            }
+        }
+
+        /** @var UploadedFile[]|UploadedFile|null $files */
+        $files = $request->files->get('photos_offer');
+        if ($files) {
+            foreach ((array) $files as $file) {
+                $image = new Image();
+                $image->setImageFile($file);
+                $offer->addImage($image);
+            }
+        }
 
         $entityManager->flush();
 
-        return $this->json([
-            'status' => "OK",
-            'code' => 200,
-        ], 200);
+        return $this->json(['status' => "Updated", 'code' => 200], 200);
     }
+
 
     #[Route('/delete', methods: ['DELETE'])]
     public function delete(Request $request, EntityManagerInterface $entityManager): JsonResponse

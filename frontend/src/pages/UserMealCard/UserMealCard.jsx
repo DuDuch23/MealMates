@@ -36,11 +36,11 @@ function UserMealCard() {
             const localData = await getUserIndexDB(userId);
             if (localData) {
                 setUser(localData);
-                console.log("Utilisateur depuis IndexedDB :", localData);
+                // console.log("Utilisateur depuis IndexedDB :", localData);
             } else {
                 const remoteData = await getUser({ user: userId });
                 setUser(remoteData.data);
-                console.log("Utilisateur depuis API :", remoteData.data);
+                // console.log("Utilisateur depuis API :", remoteData.data);
             }
 
             // Récupération offres
