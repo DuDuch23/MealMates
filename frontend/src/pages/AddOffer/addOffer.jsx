@@ -81,6 +81,7 @@ function AddOffer() {
         }
         else{
             console.error("Formulaire invalide :", validateForm());
+            console.log(formData.expirationDate);
         }
     };
     
@@ -172,7 +173,7 @@ function AddOffer() {
                                 <input
                                     type="date"
                                     name="expirationDate" 
-                                    value={formData.expirationDate}
+                                    value={formData.expirationDate || 0}
                                     onChange={(e) => { 
                                     setFormData({ ...formData, expirationDate: e.target.value });
                                     }} />
