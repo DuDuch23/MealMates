@@ -43,7 +43,6 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                 const data = await getCategory();
                 if (data && data.data) {
                     setCategories(data.data);
-                    console.log("Catégories chargées :", data.data);
                 } else {
                     console.error("Erreur de récupération des catégories");
                 }
@@ -93,7 +92,7 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
         e.preventDefault();
     
         const location = await geocodeLocation(address);
-        console.log("résultat de recherche de geocoding: ", location);
+        // console.log("résultat de recherche de geocoding: ", location);
     
         if (location && location.lat && location.lng) {
             setUserPos({ lat: location.lat, lng: location.lng });

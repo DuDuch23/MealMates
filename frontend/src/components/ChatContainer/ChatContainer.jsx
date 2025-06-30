@@ -25,7 +25,7 @@ function ChatContainer({ user, chat, offer }) {
     if (!user || !chat) return;
 
 
-    console.log(chat);
+    // console.log(chat);
 
     if(user.id){
         const init = async () => {
