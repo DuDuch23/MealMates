@@ -43,6 +43,23 @@ export async function getValidToken() {
     }
 }
 
+export async function getImageHomePage(){
+    try {
+        const url = `${API_BASE_URL}/api/images`;
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API logIn :", error);
+        throw error;
+    }
+}
+
 
 // Mettre à jour le token depuis sessionStorage
 export async function refreshToken(navigate) {
