@@ -61,7 +61,7 @@ class ApiPaymentController extends AbstractController
                 'quantity' => (int)($chat->getOffer()->getQuantity()),
             ]],
             'mode' => 'payment',
-            'success_url' => $this->redirectToRoute('api_get_user',[]),
+            'success_url' => '/sucess',
             'cancel_url' => '/cancel',
         ]);
 
@@ -69,5 +69,17 @@ class ApiPaymentController extends AbstractController
         $em->flush();
 
         return new JsonResponse(['url' => $session->url,"stripe" => $session]);
+    }
+
+    #[Route('/api/sucess', name: 'api_sucess', methods: ['POST'])]
+    public function sucessStripe( int $id,EntityManagerInterface $em,Security $security,SerializerInterface $serializer): JsonResponse 
+    {
+        $chat = $em->getRepository(Chat::class)->find($id);
+
+        if (!$chat || !$chat->getOffer()) {
+            return new JsonResponse(['error' => 'Chat ou offre introuvable'], 404);
+        }
+
+        return new JsonResponse(['url' => "1"]);
     }
 }
