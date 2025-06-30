@@ -32,8 +32,8 @@ function Offer() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showMap, setShowMap] = useState(false);
 
-  // Catégories sélectionnées pour filtrer
-  const [filterCategories, setFilterCategories] = useState([]);
+  // ** Suppression de filterCategories **
+  // const [filterCategories, setFilterCategories] = useState([]);
 
   // Loading states
   const [loadingOffers, setLoadingOffers] = useState(true);
@@ -44,7 +44,7 @@ function Offer() {
 
   // Filtrage
   const [filters, setFilters] = useState({
-    types: [],
+    types: [], // categories sélectionnées
     price: { min: "", max: "" },
     minRating: 0,
     maxDistance: 10,
@@ -198,13 +198,11 @@ function Offer() {
     return R * c;
   }
 
-  // Filtrage local des offres en fonction des filtres et catégories
+  // Filtrage local des offres en fonction des filtres et catégories (types)
   const filteredOffers = offers.filter((offer) => {
-    // 1. Filtrage par catégories
-    if (filterCategories.length > 0) {
-      // Assure-toi que l'offre a une propriété categoryId (ou catId selon ton API)
-      // Adaptation : ici on prend offer.categoryId (à ajuster si c'est différent)
-      if (!filterCategories.includes(offer.categoryId)) return false;
+    // 1. Filtrage par catégories (types)
+    if (filters.types.length > 0) {
+      if (!filters.types.includes(offer.categoryId)) return false;
     }
 
     // 2. Filtrage par prix
@@ -253,8 +251,11 @@ function Offer() {
 
       <nav className={styles["container-offer__filter"]}>
         <ul className={styles["container-offer__filter-reference-list"]}>
-          {/* On passe setFilterCategories ici pour récupérer la sélection */}
-          <AllCategory value={filterCategories} onChange={setFilterCategories} />
+          {/* On passe directement filters.types et setFilters ici */}
+          <AllCategory
+            value={filters.types}
+            onChange={(newTypes) => setFilters({ ...filters, types: newTypes })}
+          />
         </ul>
       </nav>
 
@@ -298,7 +299,11 @@ function Offer() {
 
       <div className={styles["container-offer__slider"]}>
         {searchResults.length > 0 ? (
-          <SliderSection title={`Résultats pour "${searchQuery}"`} offers={searchResults} type={searchQuery} />
+          <SliderSection
+            title={`Résultats pour "${searchQuery}"`}
+            offers={searchResults}
+            type={searchQuery}
+          />
         ) : (
           searchResults.code === 404 && <p>Aucune offre trouvée pour "{searchQuery}".</p>
         )}
