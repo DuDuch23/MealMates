@@ -11,8 +11,6 @@ function AddOffer() {
         product: "",
         description: "",
         quantity: 1,
-        startDate: "",
-        endDate: "",
         expirationDate: "",
         option: "prix",
         price: "",
@@ -93,6 +91,10 @@ function AddOffer() {
         setImagePreviews((prev) => [...prev, ...previews]);
     };
 
+    const removeImage = (index) => {
+        setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+    };
+
     // useEffect(() => {
     //     setFormData((prev) => ({ ...prev, option: selectOption }));
     // }, [selectOption]);
@@ -164,56 +166,30 @@ function AddOffer() {
                                 }} />
                             {error.description && <p className={styles.error}>{error.description}</p>}
                         </div>
-
-
-                        <div>
-                            <div className={styles.disponibilite}>
-                                <div className={styles["container-inputs"]}>
-                                <label>Début :</label>
+                        <div className={styles["container-two-inputs"]}>
+                            <div className={`${styles["expiration-input"]} ${styles["container-inputs"]}`}>
+                                <label htmlFor="expirationDate">Date limite de consommation :</label>
                                 <input
                                     type="date"
-                                    name="startDate"
-                                    value={formData.startDate}
+                                    name="expirationDate" 
+                                    value={formData.expirationDate}
                                     onChange={(e) => { 
-                                        setFormData({ ...formData, startDate: e.target.value });
+                                    setFormData({ ...formData, expirationDate: e.target.value });
                                     }} />
-                                {error.startDate && <p className={styles.error}>{error.startDate}</p>}
+                                {error.expirationDate && <p className={styles.error}>{error.expirationDate}</p>}
                             </div>
-                            <div className={styles["container-inputs"]}>
-                                <label>Fin :</label>
+
+                            <div className={`${styles["quantite-input"]} ${styles["container-inputs"]}`}>
+                                <label htmlFor="quantite">Quantité :</label>
                                 <input
-                                    type="date"
-                                    name="endDate"
-                                    value={formData.endDate}
+                                    type="text"
+                                    name="quantite"
+                                    value={formData.quantity}
                                     onChange={(e) => { 
-                                        setFormData({ ...formData, endDate: e.target.value });
+                                    setFormData({ ...formData, quantity: e.target.value });
                                     }} />
-                                {error.endDate && <p className={styles.error}>{error.endDate}</p>}
+                                {error.quantity && <p className={styles.error}>{error.quantity}</p>}
                             </div>
-                        </div>
-
-                        <div className={styles["container-inputs"]}>
-                            <label htmlFor="expirationDate">Date limite de consommation :</label>
-                            <input
-                                type="date"
-                                name="expirationDate" 
-                                value={formData.expirationDate}
-                                onChange={(e) => { 
-                                setFormData({ ...formData, expirationDate: e.target.value });
-                                }} />
-                            {error.expirationDate && <p className={styles.error}>{error.expirationDate}</p>}
-                        </div>
-
-                        <div className={styles["container-inputs"]}>
-                            <label htmlFor="quantite">Quantité disponible :</label>
-                            <input
-                                type="text"
-                                name="quantite"
-                                value={formData.quantity}
-                                onChange={(e) => { 
-                                setFormData({ ...formData, quantity: e.target.value });
-                                }} />
-                            {error.quantity && <p className={styles.error}>{error.quantity}</p>}
                         </div>
 
                         <div className={styles["container-inputs"]}>
@@ -278,10 +254,10 @@ function AddOffer() {
                                 setFormData((prev) => ({ ...prev, categories: cats }))
                                 }
                             />
-                            </div>
-                            {error.categories && <p className={styles.error}>{error.categories}</p>}
+                        </div>
+                        {error.categories && <p className={styles.error}>{error.categories}</p>}
 
-                            <div className={styles["container-inputs"]}>
+                        <div className={styles["container-inputs"]}>
                             <label htmlFor="availableSlots">Ajouter un créneau :</label>
                             <input
                                 type="text"
@@ -292,7 +268,6 @@ function AddOffer() {
                                 }} 
                             />
                             {error.availableSlots && <p className={styles.error}>{error.availableSlots}</p>}
-                            </div>
                         </div>
                         <div className={styles["container-inputs"]}>
                             <button type="submit">Valider</button>
@@ -303,27 +278,6 @@ function AddOffer() {
 
                             <label htmlFor="photo"></label>
 
-                            <svg
-                                onClick={() => fileInputRef.current.click()}
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-6"
-                                style={{ cursor: "pointer" }}
-                            >
-                                <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"
-                                />
-                                <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
-                                />
-                            </svg>
 
                             <input
                                 ref={fileInputRef}
@@ -336,9 +290,57 @@ function AddOffer() {
                             />
 
                             <div className={styles["photo-slider"]}>
+                                <div className={styles["photo-slider__container"]}>
+                                    <svg
+                                        onClick={() => fileInputRef.current.click()}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className={styles["container-image-offer"]}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"
+                                        />
+                                        <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
+                                        />
+                                    </svg>
+                                    <p>Ajouter des photos</p>
+                                </div>
                                 {imagePreviews.length > 0 && (
-                                    imagePreviews.map((preview) => (
-                                        <div className={styles["container-image-offer"]} key={randomId()}>
+                                    imagePreviews.map((preview, i) => (
+                                        <div className={styles["container-image-offer"]} key={i}>
+                                            <div className={styles["container-delete-image"]}>
+                                                <button
+                                                    className={styles["container-delete-image__btn"]}
+                                                    onClick={() => removeImage(i)}
+                                                    style={{
+                                                        position: "absolute",
+                                                        zIndex: 99,
+                                                        background: "rgba(0,0,0,0.6)",
+                                                        border: "none",
+                                                        borderRadius: "50%",
+                                                        color: "white",
+                                                        width: 24,
+                                                        height: 24,
+                                                        cursor: "pointer",
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        fontWeight: "bold",
+                                                    }}
+                                                    aria-label="Supprimer l'image"
+                                                >
+                                                    x
+                                                </button>
+                                            </div>
                                             <img src={preview} alt="Aperçu" />
                                         </div>
                                     ))
