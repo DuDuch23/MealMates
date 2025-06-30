@@ -34,25 +34,27 @@ const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
 function App() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-      
-     useEffect(() => {
-      const logout = async () => {
-        try {
-          const expiration = sessionStorage.getItem("token_expiration");
-        
-          if (!expiration || Date.now() > Number(expiration)) {
-            await deleteUserIndexDB();
-            sessionStorage.clear();
+  const expiration = sessionStorage.getItem("token_expiration");
+
+  if(expiration){
+      useEffect(() => {
+        const logout = async () => {
+          try {
+          
+            if (!expiration || Date.now() > Number(expiration)) {
+              await deleteUserIndexDB();
+              sessionStorage.clear();
+              navigate("/connexion");
+            }
+          } catch (err) {
+            console.error("Erreur pendant la déconnexion :", err);
             navigate("/connexion");
           }
-        } catch (err) {
-          console.error("Erreur pendant la déconnexion :", err);
-          navigate("/connexion");
-        }
-      };
+        };
     
-      logout();
-    }, [navigate]);
+        logout();
+    }, [navigate,expiration]);
+  }
 
 
     useEffect(() => {

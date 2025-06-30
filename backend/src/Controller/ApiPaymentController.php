@@ -71,7 +71,7 @@ class ApiPaymentController extends AbstractController
         return new JsonResponse(['url' => $session->url,"stripe" => $session]);
     }
 
-    #[Route('/api/sucess', name: 'api_sucess', methods: ['POST'])]
+    #[Route('/sucess', name: 'api_sucess', methods: ['POST'])]
     public function sucessStripe( int $id,EntityManagerInterface $em,Security $security,SerializerInterface $serializer): JsonResponse 
     {
         $chat = $em->getRepository(Chat::class)->find($id);
@@ -81,5 +81,19 @@ class ApiPaymentController extends AbstractController
         }
 
         return new JsonResponse(['url' => "1"]);
+    }
+
+    #[Route('/confirm/qrcode/{code}', name: 'qr_code_confirm', methods: ['GET'])]
+    public function qrCodeConfirm(int $id ,EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    {
+        $chat = $entityManager->getRepository(Chat::class)->find($id);
+
+        $offer = $chat->getOffer();
+
+        // on retire l'offre de la bdd
+
+        // on envoie un message pour préciser que l'envoie est bien confirmer
+
+        return new JsonResponse(["code"=>200]);
     }
 }

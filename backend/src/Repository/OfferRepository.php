@@ -154,6 +154,18 @@ class OfferRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findExpiringOffersIn7Days(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.expirationDate BETWEEN :today AND :nextWeek')
+            ->orderBy('o.expirationDate', 'DESC')
+            ->setParameter('today', new \DateTime())
+            ->setParameter('nextWeek', (new \DateTime())->modify('+7 days'))
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */
