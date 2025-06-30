@@ -255,19 +255,7 @@ export async function getProfile({ email, token }) {
 }
 
 export async function logOut({id}) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/logout`, {
-            method: "GET",
-            credentials: "include",
-        });
-
-        if (response.ok) {
-            console.log("Déconnexion réussie");
-        }
-    } catch (error) {
-        console.error("Erreur lors de la déconnexion :", error);
-    }
-
+    sessionStorage.removeItem("token_expiration");
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
     deleteUserIndexDB(id);
