@@ -276,24 +276,20 @@ function Offer() {
       </div>
 
       {showMap && (
+        
         <div
           className={styles["container-offer__map"]}
           style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 98 }}
         >
+           <nav className={styles["container-offer__filter"]}>
+            <ul className={styles["container-offer__filter-reference-list"]}>
+                <AllCategory />
+            </ul>
+          </nav>
           <OffersMap userPos={pos} offers={filteredOffers} setUserPos={setUserPos} />
         </div>
       )}
 
-        <nav className={styles["container-offer__filter"]}>
-            <ul className={styles["container-offer__filter-reference-list"]}>
-                <AllCategory />
-            </ul>
-        </nav>
-        {showMap && (
-            <div className={styles["container-offer__map"]} style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 98 }}>
-                <OffersMap userPos={pos} offers={offers} setUserPos={setUserPos} />
-            </div>
-        )}
         <div className={styles["container-offer__slider"]}>
             {searchResults.length > 0 ? (
                 <>

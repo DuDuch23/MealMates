@@ -13,6 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -60,8 +61,8 @@ class ApiPaymentController extends AbstractController
                 'quantity' => (int)($chat->getOffer()->getQuantity()),
             ]],
             'mode' => 'payment',
-            'success_url' => 'http://localhost:5173/success',
-            'cancel_url' => 'http://localhost:5173/cancel',
+            'success_url' => $this->redirectToRoute('api_get_user',[]),
+            'cancel_url' => '/cancel',
         ]);
 
         $chat->setStripeUrl($session->url);
