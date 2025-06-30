@@ -1,7 +1,7 @@
 <?php
 namespace App\Command;
 
-use App\Repository\OrderRepository;
+use App\Repository\OfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -25,7 +25,7 @@ class NotificationOfferCommand extends Command
 
     public function __construct(
         MailerInterface $mailer,
-        private readonly OrderRepository $orderRepository,
+        private readonly OfferRepository $offerRepository,
         private readonly EntityManagerInterface $entityManager
     ) {
         $this->mailer = $mailer;
@@ -34,12 +34,12 @@ class NotificationOfferCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $orders = $this->orderRepository->findExpiringOffersIn7Days();
+        $offers = $this->offerRepository->findExpiringOffersIn7Days();
 
-        foreach ($orders as $order) {
-            $user = $order->getSeller();
+        foreach ($offers as $offer) {
+            $user = $offer->getSeller();
 
-            $offerUrl = sprintf('http://localhost:5173/offer/%d', $order->getId());
+            $offerUrl = sprintf('http://localhost:5173/offer/%d', $offer->getId());
 
             $this->sendMail(
                 'mealmates.g5@gmail.com',
@@ -54,8 +54,8 @@ class NotificationOfferCommand extends Command
                 $this->mailer
             );
 
-            $this->entityManager->remove($order);
-            $output->writeln('Le mail a bien été envoyée. ID: ' . $order->getId(). 'User '. $user->getId());
+            $this->entityManager->remove($offer);
+            $output->writeln('Le mail a bien été envoyée. ID: ' . $offer->getId(). 'User '. $user->getId());
         }
 
         $this->entityManager->flush();
