@@ -74,7 +74,7 @@ class ApiOrderController extends AbstractController
             $offer->getSeller()->getEmail(),
             'Nouvelle réservation',
             '',
-            'emails/createConversationClient.html.twig',
+            'emails/orderReservation.html.twig',
             [
                 "offer" => $offer,
                 "seller" => $offer->getSeller(),

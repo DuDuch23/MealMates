@@ -13,6 +13,7 @@ export default function QrCode() {
     useEffect(() => {
         if (!randomString || !chatId || !userId || !id ) {
             navigate("/404");
+            return;
         }
 
         const handleRequest = async() => {
