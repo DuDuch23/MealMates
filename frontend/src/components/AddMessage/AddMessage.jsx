@@ -50,6 +50,7 @@ export default function AddMessage({ user, offer, chat }) {
     };
 
     const stripeButton = () => {
+      
         if (!offer || !offer.data) return null;
 
         if (userId == offer.data.seller.id) {
