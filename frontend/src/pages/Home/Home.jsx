@@ -70,9 +70,8 @@ function Home() {
 
       <section className={styles.bottom}>
         <h2>Une vaste sélection de produits</h2>
-        <div className={styles.bottom__maps}>
-          <AutoCarousel />
-        </div>
+  
+        <AutoCarousel />
       </section>
 
       <section className={styles.reviews}>

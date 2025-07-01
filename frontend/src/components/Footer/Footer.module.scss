@@ -16,7 +16,7 @@
   align-items: center;
   text-align: center;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1280px;
   padding: 12px;
 }
 
@@ -90,14 +90,29 @@
   color: #15803d;
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .footer__content {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: .5rem;
+    p {
+      font-size: 120%;
+    }
   }
 
   .footer__logo {
     flex-direction: column;
+    width: 50%;
+    img {
+      width: 30%;
+      height: auto;
+    }
+  }
+
+  .footer__credits p {
+    font-size: .65rem;
+  }
+  .footer__links a {
+    font-size: 80%;
   }
 
   .footer__links,

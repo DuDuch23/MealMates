@@ -1,8 +1,7 @@
-import React, { Suspense, lazy, useState,useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router';
 import { getUserIndexDB, deleteUserIndexDB } from './service/indexDB';
 import NavLayout from './Layout/NavLayout';
-import Footer from './components/Footer/Footer';
 import logo from '../src/assets/logo-mealmates.png';
 
 // Chargement différé des composants
@@ -14,7 +13,6 @@ const Home = React.lazy(() => import('./pages/Home/Home'));
 const Offer = React.lazy(() => import('./pages/Offer/Offer'));
 const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
 const SingleOffer = React.lazy(() => import('./pages/SingleOffer/SingleOffer'));
-const ModifyOffer = React.lazy(() => import('./pages/ModifyOffer/ModifyOffer'));
 
 // User
 const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
@@ -37,46 +35,44 @@ const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
 function App() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const expiration = sessionStorage.getItem("token_expiration");
 
-  if(expiration){
-      useEffect(() => {
-        const logout = async () => {
-          try {
-          
-            if (!expiration || Date.now() > Number(expiration)) {
-              await deleteUserIndexDB();
-              sessionStorage.clear();
-              navigate("/connexion");
-            }
-          } catch (err) {
-            console.error("Erreur pendant la déconnexion :", err);
-            navigate("/connexion");
-          }
-        };
-    
-        logout();
-    }, [navigate,expiration]);
-  }
+  useEffect(() => {
+    const logout = async () => {
+      try {
+        const expiration = sessionStorage.getItem("token_expiration");
 
-
-    useEffect(() => {
-      async function fetchUser() {
-        try {
-          const userSession = sessionStorage.getItem("user");
-          if (userSession) {
-            const parsedUser = JSON.parse(userSession);
-            const id = parseInt(parsedUser.id, 10);
-            const userData = await getUserIndexDB(id);
-            setUser(userData);
-          }
-        } catch (err) {
-          console.error("Erreur lors de la récupération de l'utilisateur :", err);
+        if (!expiration || Date.now() > Number(expiration)) {
+          await deleteUserIndexDB();
+          sessionStorage.clear();
+          console.warn("Session expirée, mais redirection désactivée.");
+          // Redirection désactivée ici
         }
+      } catch (err) {
+        console.error("Erreur pendant la déconnexion :", err);
+        // Pas de redirection non plus en cas d'erreur
       }
+    };
 
-      fetchUser();
-    }, [navigate]);  
+    logout();
+  }, []); // Retrait de [navigate] pour éviter ré-exécution inutile
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const userSession = sessionStorage.getItem("user");
+        if (userSession) {
+          const parsedUser = JSON.parse(userSession);
+          const id = parseInt(parsedUser.id, 10);
+          const userData = await getUserIndexDB(id);
+          setUser(userData);
+        }
+      } catch (err) {
+        console.error("Erreur lors de la récupération de l'utilisateur :", err);
+      }
+    }
+
+    fetchUser();
+  }, []);
 
   return (
     <Suspense fallback={
@@ -107,15 +103,13 @@ function App() {
           <Route path="/offer" element={<Offer />} />
           <Route path="/addOffer" element={<AddOffer />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
-          <Route path="/modifyOffer/:id" element={<ModifyOffer />} />
-          
+
           {/* user profile */}
           <Route path="/userProfile/:id" element={<UserProfile />} />
           <Route path="/userMealCard/:id" element={<UserMealCard />} />
           <Route path="/userModify/:id" element={<UserModify />} />
           <Route path="/dashboard" element={<UserDashboard />} />
         </Route>
-
 
         {/* auth */}
         <Route path="/connexion" element={<Connexion />} />

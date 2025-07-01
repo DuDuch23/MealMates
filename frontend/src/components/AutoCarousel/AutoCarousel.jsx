@@ -17,7 +17,6 @@ export default function AutoCarousel() {
 
   const carouselImage = () => {
     return images.map((src, index) => {
-      console.log("Image URL:", src);
       return (
         <img
           key={index}

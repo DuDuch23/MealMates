@@ -15,7 +15,7 @@
                 Bonjour {{ seller.firstName }},
               </h1>
               <p style="color: #555; font-size: 16px;">
-                Nous souhaitons vous informer que votre offre "<strong>{{ offer.product }}</strong>" va bientôt expirer.<br><br>
+                Nous souhaitons vous informer que votre offre "<strong>{{ offer.product }}</strong>" expirera <strong>{{ offer.expirationDate|date('d/m/Y') }}</strong>. <br><br>
                 Pour maximiser vos chances de vente, nous vous encourageons à modifier votre offre afin de la rendre plus attrayante.<br><br>
                 Vous pouvez gérer votre offre en cliquant sur le lien ci-dessous :
               </p>

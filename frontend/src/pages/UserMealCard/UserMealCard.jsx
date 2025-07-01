@@ -184,7 +184,6 @@ function UserMealCard() {
 
     return (
         <div className={styles.cardUser}>
-            <IconUser id={user?.iconUser} />
 
             <div className={styles.contentUser}>
                 <div className={styles.containerLink}>
@@ -196,12 +195,6 @@ function UserMealCard() {
                 </div>
 
                 <div className={styles.containerInfoUser}>
-                    <div className={`${styles.basicsElements} ${styles.card}`}>
-                        <ul className={styles.listUser}>
-                            <li><p>{user.firstName}</p></li>
-                        </ul>
-                        {/* {renderLocation()} */}
-                    </div>
 
                     {userPreference()}
                     {renderDashboard()}

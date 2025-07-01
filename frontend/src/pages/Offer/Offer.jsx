@@ -31,18 +31,15 @@ function Offer() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showMap, setShowMap] = useState(false);
-  const [filterCategories, setCategories] = useState([]);
 
-  // Loading states
   const [loadingOffers, setLoadingOffers] = useState(true);
   const [loadingVegan, setLoadingVegan] = useState(true);
   const [loadingAgain, setLoadingAgain] = useState(true);
   const [loadingLastChance, setLoadingLastChance] = useState(true);
   const [loadingLocal, setLoadingLocal] = useState(true);
 
-  // Filtrage
   const [filters, setFilters] = useState({
-    types: [],
+    types: [], 
     price: { min: "", max: "" },
     minRating: 0,
     maxDistance: 10,
@@ -54,7 +51,6 @@ function Offer() {
     }
   }, [userData]);
 
-  // Géolocalisation
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
       (position) =>
@@ -78,7 +74,6 @@ function Offer() {
     };
   }, []);
 
-  // Chargement des offres
   useEffect(() => {
     const fetchOffers = async () => {
       try {
@@ -167,7 +162,6 @@ function Offer() {
     fetchLocalOffers();
   }, [token]);
 
-  // Recherche
   const handleSearch = async (query) => {
     try {
       setSearchQuery(query);
@@ -183,35 +177,9 @@ function Offer() {
     }
   };
 
-  // Filtrage local des offres en fonction des filtres
-  const filteredOffers = offers.filter((offer) => {
-    // if (filters.types.length > 0 && !filters.types.includes(offer.type)) return false;
-
-    // if (
-      // (filters.price.min && offer.price < Number(filters.price.min)) ||
-      // (filters.price.max && offer.price > Number(filters.price.max))
-    // )
-    // return false;
-
-    // if (filters.minRating && offer.rating < filters.minRating) return false;
-
-    if (
-      filters.maxDistance &&
-      pos && // vérifier que pos est défini
-      offer.location && // vérifier que l'offre a une position
-      getDistanceFromLatLng(pos, offer.location) > filters.maxDistance
-    )
-    
-    // console.log(1);
-    // return false;
-
-    return true;
-  });
-
-  // Fonction de calcul de distance entre deux points (en km)
   function getDistanceFromLatLng(pos1, pos2) {
     const toRad = (value) => (value * Math.PI) / 180;
-    const R = 6371; // Rayon de la Terre en km
+    const R = 6371; 
     const dLat = toRad(pos2.lat - pos1.lat);
     const dLng = toRad(pos2.lng - pos1.lng);
     const a =
@@ -221,43 +189,72 @@ function Offer() {
     return R * c;
   }
 
-  
-  const renderSlider = (loading, title, offers, type, emptyMessage) => {
-      if (loading) {
-          return (
-              <SliderSection title={title}>
-                  {[...Array(5)].map((_, idx) => <SkeletonCard key={idx} />)}
-              </SliderSection>
-          );
+  const filterOffers = (offersList) => {
+    return offersList.filter((offer) => {
+      if (!offer) return false;
+
+      const categoryIds = (offer.categories || []).map((cat) =>
+        typeof cat === "object" ? cat.id : cat
+      ).map(String);
+
+      if (filters.types.length > 0) {
+        const selectedTypes = filters.types.map(String);
+        if (!categoryIds.some((catId) => selectedTypes.includes(catId))) {
+          return false;
+        }
       }
-      if (!offers || offers.length === 0) {
-          return <p>{emptyMessage}</p>;
+
+      const minPrice = filters.price?.min?.trim() === "" ? null : Number(filters.price.min);
+      const maxPrice = filters.price?.max?.trim() === "" ? null : Number(filters.price.max);
+      if (minPrice !== null && offer.price < minPrice) return false;
+      if (maxPrice !== null && offer.price > maxPrice) return false;
+
+      if (
+        filters.maxDistance &&
+        pos &&
+        offer.location &&
+        getDistanceFromLatLng(pos, offer.location) > filters.maxDistance
+      ) {
+        return false;
       }
-      return <SliderSection title={title} offers={offers} type={type} />;
+
+      if (filters.minRating && offer.rating < filters.minRating) return false;
+
+      return true;
+    });
   };
 
+  const filteredOffers = filterOffers(offers);
+  const filteredVeganOffers = filterOffers(veganOffers);
+  const filteredLastChanceOffers = filterOffers(lastChanceOffers);
+  const filteredAgainOffers = filterOffers(againOffers);
+  const filteredLocalOffers = filterOffers(localOffers);
+
+  const renderSlider = (loading, title, offers, type, emptyMessage) => {
+    if (loading) {
+      return (
+        <SliderSection title={title}>
+          {[...Array(5)].map((_, idx) => (
+            <SkeletonCard key={idx} />
+          ))}
+        </SliderSection>
+      );
+    }
+    if (!offers || offers.length === 0) {
+      return <p>{emptyMessage}</p>;
+    }
+    return <SliderSection title={title} offers={offers} type={type} />;
+  };
 
   return (
     <section className={styles["container-offer"]}>
       <SearchBar onSearch={handleSearch} />
 
-      <nav className={styles["container-offer__filter"]}>
-        <ul className={styles["container-offer__filter-reference-list"]}>
-          {/* <AllCategory /> */}
-        </ul>
-      </nav>
-
       <AdvancedFilters filters={filters} setFilters={setFilters} />
 
       <div className={styles["container-offer__new-offer-show-map"]}>
-        <Link className={styles["container-offer__new-offer"]} to={"/addOffer"}>
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 28 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+        <Link to="/addOffer" className={styles["container-offer__new-offer"]}>
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
             <path
               d="M14 9V19M9 14H19M26.5 14C26.5 20.9036 20.9036 26.5 14 26.5C7.09644 26.5 1.5 20.9036 1.5 14C1.5 7.09644 7.09644 1.5 14 1.5C20.9036 1.5 26.5 7.09644 26.5 14Z"
               stroke="#F3F3F3"
@@ -268,6 +265,7 @@ function Offer() {
           </svg>
           <p>Ajouter une nouvelle offre</p>
         </Link>
+
         <button
           className={styles["container-offer__show-map"]}
           onClick={() => setShowMap(!showMap)}
@@ -276,70 +274,63 @@ function Offer() {
         </button>
       </div>
 
-      {showMap && (
-        
-        <div
-          className={styles["container-offer__map"]}
-          style={{ height: "80vh", width: "100%", top: 0, left: 0, zIndex: 98 }}
-        >
+      {showMap && pos && (
+        <div className={styles["container-offer__map"]} style={{ height: "80vh" }}>
           <OffersMap userPos={pos} offers={filteredOffers} setUserPos={setUserPos} />
         </div>
       )}
 
-      <nav className={styles["container-offer__filter"]}>
-          <ul className={styles["container-offer__filter-reference-list"]}>
-              <AllCategory onFilter={setCategories}/>
-          </ul>
-      </nav>
-
       <div className={styles["container-offer__slider"]}>
-          {searchResults.length > 0 ? (
-              <>
-                  <SliderSection
-                  title={`Résultats pour "${searchQuery}"`}
-                  offers={searchResults}
-                  type={searchQuery}
-                  />
-              </>
-          ) : (
-              searchResults.code === 404 && (
-                  <p>Aucune offre trouvée pour "{searchQuery}".</p>
-              )
-          )}
-          
-          {renderSlider(
-              loadingAgain,
-              "Recommander à nouveau",
-              againOffers,
-              "again",
-              "Il n'y a pas d'offres à vous recommander à nouveau."
-          )}
-          
-          {renderSlider(
-              loadingLastChance,
-              "Dernière chance",
-              lastChanceOffers,
-              "dernière chance",
-              "Il n'y a pas d'offres en dernière chance pour le moment."
-          )}
+        {searchResults.length > 0 ? (
+          <SliderSection
+            title={`Résultats pour "${searchQuery}"`}
+            offers={searchResults}
+            type="search"
+          />
+        ) : (
+          searchQuery && <p>Aucune offre trouvée pour "{searchQuery}".</p>
+        )}
 
-          {renderSlider(
-              loadingVegan,
-              "Ce soir je mange vegan",
-              veganOffers,
-              "vegans",
-              "Aucune offre vegan pour le moment."
-          )}
-          
-          {renderSlider(
-              loadingLocal,
-              "Tendances locales",
-              localOffers,
-              "locals",
-              "Aucune tendance locale disponible actuellement."
-          )}
+        {renderSlider(
+          loadingAgain,
+          "Recommander à nouveau",
+          filteredAgainOffers,
+          "again",
+          "Aucune offre recommandée."
+        )}
+
+        {renderSlider(
+          loadingLastChance,
+          "Dernière chance",
+          filteredLastChanceOffers,
+          "lastChance",
+          "Aucune offre en dernière chance."
+        )}
+
+        {renderSlider(
+          loadingVegan,
+          "Ce soir je mange vegan",
+          filteredVeganOffers,
+          "vegan",
+          "Aucune offre vegan."
+        )}
+
+        {renderSlider(
+          loadingLocal,
+          "Tendances locales",
+          filteredLocalOffers,
+          "local",
+          "Aucune tendance locale."
+        )}
+
+        {renderSlider(
+          loadingOffers,
+          "Toutes les offres filtrées",
+          filteredOffers,
+          "filtered",
+          "Aucune offre ne correspond aux filtres."
+        )}
       </div>
-
     </section>
   );
 }

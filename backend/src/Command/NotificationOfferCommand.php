@@ -1,7 +1,7 @@
 <?php
 namespace App\Command;
 
-use App\Repository\OrderRepository;
+use App\Repository\OfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -13,7 +13,7 @@ use App\Trait\MailerTrait;
 use Symfony\Component\Mailer\MailerInterface;
 
 #[AsCommand(
-    name: 'app:expire-order',
+    name: 'app:notification-end-offer',
     description: 'Envoie un mail aux vendeurs dont la date de péremption arrive dans j-7.'
 )]
 #[AsCronTask('* * * * *')]
@@ -25,7 +25,7 @@ class NotificationOfferCommand extends Command
 
     public function __construct(
         MailerInterface $mailer,
-        private readonly OrderRepository $orderRepository,
+        private readonly OfferRepository $offerRepository,
         private readonly EntityManagerInterface $entityManager
     ) {
         $this->mailer = $mailer;
@@ -34,12 +34,12 @@ class NotificationOfferCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $orders = $this->orderRepository->findExpiringOffersIn7Days();
+        $offers = $this->offerRepository->findExpiringOffersIn7Days();
 
-        foreach ($orders as $order) {
-            $user = $order->getSeller();
+        foreach ($offers as $offer) {
+            $user = $offer->getSeller();
 
-            $offerUrl = sprintf('http://localhost:5173/offer/%d', $order->getId());
+            $offerUrl = sprintf('http://localhost:5173/offer/%d', $offer->getId());
 
             $this->sendMail(
                 'mealmates.g5@gmail.com',
@@ -50,12 +50,15 @@ class NotificationOfferCommand extends Command
                 [
                     'seller' => $user,
                     'offerUrl' => $offerUrl,
+                    'offer' => $offer,
+                    'expirationDate' => $offer->getExpirationDate()->format('Y-m-d'),
+
                 ],
                 $this->mailer
             );
 
-            $this->entityManager->remove($order);
-            $output->writeln('Le mail a bien été envoyée. ID: ' . $order->getId(). 'User '. $user->getId());
+            $this->entityManager->remove($offer);
+            $output->writeln('Le mail a bien été envoyée. ID: ' . $offer->getId(). 'User '. $user->getId());
         }
 
         $this->entityManager->flush();

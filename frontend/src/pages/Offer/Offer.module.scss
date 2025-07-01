@@ -6,7 +6,7 @@
 
 .container-offer {
     padding: 12px;
-    gap: 48px;
+    gap: 3rem;
     display: flex;
     flex-direction: column;
     max-width: 1280px;
@@ -84,7 +84,6 @@
     justify-content: center;
   }
 
-  // Type section (if you use images or icons)
   &__type {
     img {
       width: 80px;

@@ -26,29 +26,31 @@ export default function AllCategory({ value = [], onChange = () => {}, setCatego
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} ${isOpen ? styles.open : ""}`}>
       <button
         type="button"
         className={styles.button}
         onClick={() => setIsOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
       >
         {value.length
           ? `${value.length} catégorie${value.length > 1 ? "s" : ""} sélectionnée${value.length > 1 ? "s" : ""}`
           : "Choisir des catégories"}
-        <span className={styles.caret}>{isOpen ? "▲" : "▼"}</span>
+        <span className={styles.caret} aria-hidden="true">{isOpen ? "▲" : "▼"}</span>
       </button>
 
       {isOpen && (
-        <ul className={styles.dropdown}>
+        <ul className={styles.dropdown} role="listbox" tabIndex={-1}>
           {categories.map((cat) => (
             <li key={cat.id}>
-              <label className="custom-checkbox">
+              <label className={styles["custom-checkbox"]}>
                 <input
                   type="checkbox"
                   checked={value.includes(cat.id)}
                   onChange={() => toggleCat(cat.id)}
                 />
-                <span className="checkmark"></span>
+                <span className={styles.checkmark}></span>
                 {cat.name}
               </label>
             </li>
