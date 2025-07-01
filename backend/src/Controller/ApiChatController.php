@@ -164,6 +164,9 @@ class ApiChatController extends AbstractController
                     'icon' => $otherUser->getIconUser(),
                     'id' => $otherUser->getId(),
                 ],
+                'offer' => [
+                    $row['sentAt']
+                ]
             ];
         }
 
@@ -240,24 +243,14 @@ class ApiChatController extends AbstractController
             ], 400);
         }
 
-        $chatId = (int)$data['chat'];
+        $chatId = (int)$data['id'];
 
         $results = $entityManager->getRepository(Chat::class)->find($chatId);
 
-        $client = $results->getClient();
+        $client = $results->getOffer();
 
-        $seller = $results->getSeller();
 
-        $res = [
-            "client" => [
-                "id" => $client->getId(),
-            ],
-            "seller" => [
-                "id" => $seller->getId(),
-            ]
-        ];
-
-        return $this->json(['data' => $res], 200, [], ['groups' => ['public']]);
+        return $this->json(['data' => $client], 200, [], ['groups' => ['public']]);
     }
 
     #[Route('/send/message', methods:['POST'])]

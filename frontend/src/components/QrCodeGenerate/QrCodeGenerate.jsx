@@ -11,8 +11,6 @@ const QrCodeGenerate = ({ value }) => {
 
     const url = `${API_BASE_URL}/confirm/qrcode/${code2}?randomString=${code1}&chat=${chat}`;
 
-    console.log(url);
-
     return <QRCodeCanvas value={url} size={150} />;
 };
 
