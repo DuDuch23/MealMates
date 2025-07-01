@@ -494,7 +494,12 @@ export const getFilteredOffers = async (filters, pos) => {
     query.append("expiryBefore", filters.expiryDate.max);
   }
 
-  const res = await fetch(`/offers?${query.toString()}`);
+  const res = await fetch(`${API_BASE_URL}/api/offers/filter?${query.toString()}`, {
+    headers: {
+        Authorization: `Bearer ${token}`,
+        accept: 'application/json'
+    }
+    });
   return res.json();
 };
 
@@ -667,7 +672,7 @@ export async function geocodeLocation(location) {
 
 export async function fetchFilteredOffers(filters) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/offers/filter`, {
+        const response = await fetch(`${API_BASE_URL}/api/offers/search/filters`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(filters),
@@ -731,4 +736,15 @@ export async function fetchStats(userId, token){
         console.error("Erreur API :", error);
         return { result: [] };
     }
+}
+
+
+export async function sendRating(reviewData) {
+  const res = await fetch("/api/reviews", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(reviewData)
+  });
+  if (!res.ok) throw new Error("Erreur lors de l'envoi de l'évaluation");
+  return res.json();
 }
