@@ -250,13 +250,6 @@ function Offer() {
     <section className={styles["container-offer"]}>
       <SearchBar onSearch={handleSearch} />
 
-      <nav className={styles["container-offer__filter"]}>
-        <AllCategory
-          value={filters.types}
-          onChange={(newTypes) => setFilters({ ...filters, types: newTypes })}
-        />
-      </nav>
-
       <AdvancedFilters filters={filters} setFilters={setFilters} />
 
       <div className={styles["container-offer__new-offer-show-map"]}>

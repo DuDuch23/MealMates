@@ -2,7 +2,6 @@
   display: none;  // caché par défaut sur mobile
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 
@@ -33,7 +32,6 @@
       color: white;
 
       input[type="number"] {
-        padding: 0.4rem 0.6rem;
         border: 1px solid #cccccc;
         border-radius: 6px;
         width: 100px;
@@ -76,7 +74,6 @@
   background-color: #2e7d32;
   color: white;
   border: none;
-  padding: 0.6rem 1rem;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
@@ -94,7 +91,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-    padding: 1.5rem;
     height: 17vh;
   }
 

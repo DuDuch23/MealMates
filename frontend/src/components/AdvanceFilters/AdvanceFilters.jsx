@@ -20,14 +20,13 @@ function AdvanceFilters({ filters = {}, setFilters }) {
 
   return (
     <>
-      {/* Bouton toggle visible seulement sur mobile */}
       <button
         className={styles["toggle-button"]}
         onClick={() => setVisible(!visible)}
         aria-expanded={visible}
         aria-controls="advanced-filters-form"
       >
-        {visible ? "Cacher les filtres avancés" : "Afficher les filtres avancés"}
+        {visible ? "Cacher les filtres" : "Afficher les filtres"}
       </button>
 
       <form
