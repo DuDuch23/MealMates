@@ -37,44 +37,43 @@ function App() {
   const navigate = useNavigate();
   const expiration = sessionStorage.getItem("token_expiration");
 
-  if(expiration){
-      useEffect(() => {
-        const logout = async () => {
-          try {
-          
-            if (!expiration || Date.now() > Number(expiration)) {
-              await deleteUserIndexDB();
-              sessionStorage.clear();
-              navigate("/connexion");
-            }
-          } catch (err) {
-            console.error("Erreur pendant la déconnexion :", err);
-            navigate("/connexion");
+  useEffect(() => {
+    const logout = async () => {
+      try {
+        if (!expiration || Date.now() > Number(expiration)) {
+          await deleteUserIndexDB();
+          sessionStorage.clear();
+          navigate("/connexion");
           }
-        };
-    
-        logout();
-    }, [navigate,expiration]);
-  }
-
-
-    useEffect(() => {
-      async function fetchUser() {
-        try {
-          const userSession = sessionStorage.getItem("user");
-          if (userSession) {
-            const parsedUser = JSON.parse(userSession);
-            const id = parseInt(parsedUser.id, 10);
-            const userData = await getUserIndexDB(id);
-            setUser(userData);
-          }
-        } catch (err) {
-          console.error("Erreur lors de la récupération de l'utilisateur :", err);
-        }
+      } catch (err) {
+        console.error("Erreur pendant la déconnexion :", err);
+        navigate("/connexion");
       }
+    };
 
-      fetchUser();
-    }, [navigate]);  
+    if (expiration) {
+      logout();
+    }
+  }, [navigate, expiration]);
+
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const userSession = sessionStorage.getItem("user");
+        if (userSession) {
+          const parsedUser = JSON.parse(userSession);
+          const id = parseInt(parsedUser.id, 10);
+          const userData = await getUserIndexDB(id);
+          setUser(userData);
+        }
+      } catch (err) {
+        console.error("Erreur lors de la récupération de l'utilisateur :", err);
+      }
+    }
+
+    fetchUser();
+  }, [navigate]);  
 
   return (
     <Suspense fallback={
