@@ -41,15 +41,15 @@ function App() {
       try {
         const expiration = sessionStorage.getItem("token_expiration");
 
-        if (!expiration || Date.now() > Number(expiration)) {
+        if (expiration && Date.now() > Number(expiration)) {
           await deleteUserIndexDB();
           sessionStorage.clear();
           console.warn("Session expirée, mais redirection désactivée.");
-          // Redirection désactivée ici
+          navigate("/connexion");
         }
       } catch (err) {
         console.error("Erreur pendant la déconnexion :", err);
-        // Pas de redirection non plus en cas d'erreur
+        navigate("/connexion");
       }
     };
 
