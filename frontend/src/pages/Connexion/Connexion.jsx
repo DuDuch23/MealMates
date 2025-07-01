@@ -57,7 +57,7 @@ function Connexion() {
 
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("token_expiration", expiration.toString());
-        sessionStorage.setItem("user", JSON.stringify(profileUser)); // stocke tout l'objet
+        sessionStorage.setItem("user", JSON.stringify(profileUser));
 
         // Chiffre et stocke dans IndexDB
         const encrypted = CryptoJS.AES.encrypt(

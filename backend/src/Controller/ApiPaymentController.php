@@ -167,22 +167,22 @@ class ApiPaymentController extends AbstractController
         $chat = $request->query->get('chat');
 
         if(!$randomString){
-            return new JsonResponse(['code'=> 404]);
+            return new RedirectResponse("{$frontUrl}/404");
         }
 
         if(!$chat){
-            return new JsonResponse(['code'=> 404]);
+            return new RedirectResponse("{$frontUrl}/404");
         }
 
         $order = $entityManager->getRepository(Order::class)->find((int)$code);
         $chat = $entityManager->getRepository(Chat::class)->find((int)$chat);
 
         if (!$order || $order->getMdp() !== $randomString) {
-            return new JsonResponse(['code'=> 404]);
+            return new RedirectResponse("{$frontUrl}/404");
         }
 
         if (!$chat) {
-           return new JsonResponse(['code'=> 404]);
+           return new RedirectResponse("{$frontUrl}/404");
         }
 
         $chat->getOffer()->setStatus(OfferStatus::SOLD);
@@ -215,6 +215,6 @@ class ApiPaymentController extends AbstractController
             $this->mailer
         );
 
-         return new RedirectResponse("{$frontUrl}/confirmation");
+        return new RedirectResponse("{$frontUrl}/confirmation");
     }
 }

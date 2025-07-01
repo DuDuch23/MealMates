@@ -1,13 +1,31 @@
 import { useEffect, useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router"; 
-import { getTokenSSo } from "./../service/requestApi"; // ← importe ta fonction d'auth SSO ici
+import { useNavigate } from "react-router";
+import { getTokenSSo } from "./../service/requestApi";
 
-const CLIENT_ID = "947326609144-oed76j74qvdqh2ie1e4cdfobrtmpiq66.apps.googleusercontent.com";
+const CLIENT_ID = import.meta.env.VITE_APP_GOOGLE_CLIENT_ID;
 
 const GoogleLoginButton = ({ setUser }) => {
   const navigate = useNavigate();
+  const [googleTheme, setGoogleTheme] = useState("outline"); // default to light
+
+  // Détection du thème sombre
+  useEffect(() => {
+    const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const updateTheme = () => {
+      setGoogleTheme(darkModeQuery.matches ? "filled_black" : "outline");
+    };
+
+    updateTheme(); // initial check
+
+    darkModeQuery.addEventListener("change", updateTheme); // listen for theme changes
+
+    return () => {
+      darkModeQuery.removeEventListener("change", updateTheme);
+    };
+  }, []);
 
   const handleSuccess = async (credentialResponse) => {
     try {
@@ -23,25 +41,24 @@ const GoogleLoginButton = ({ setUser }) => {
         iconUser: decoded.picture,
       };
 
-      // Stockage + affichage
       sessionStorage.setItem("user", JSON.stringify(userInfo));
       setUser(userInfo);
 
-      // Appel SSO (asynchrone)
       try {
         const ggtto = credentialResponse.credential;
-        // console.log(ggtto);
-        const token = await getTokenSSo({ token:ggtto });
+        const token = await getTokenSSo({ token: ggtto });
+        sessionStorage.setItem("token", token.token);
+        
+        const expiration = Date.now() + 60 * 60 * 1000;
+        sessionStorage.setItem("token_expiration", expiration.toString());
 
-        sessionStorage.setItem("token",token.token);
+
       } catch (error) {
         console.error("Erreur lors de la récupération du token SSO :", error);
         sessionStorage.removeItem("user");
       }
 
-      // Redirection
       navigate("/offer");
-
     } catch (error) {
       console.error("Erreur lors du décodage du token Google :", error);
     }
@@ -52,12 +69,19 @@ const GoogleLoginButton = ({ setUser }) => {
   };
 
   return (
-    <GoogleLogin onSuccess={handleSuccess} onError={handleFailure} useOneTap />
+    <GoogleLogin
+      theme={googleTheme} // Change selon le thème système
+      size="large"
+      text="continue_with"
+      onSuccess={handleSuccess}
+      onError={handleFailure}
+      useOneTap
+    />
   );
 };
 
 const App = () => {
-  const [user,setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>
