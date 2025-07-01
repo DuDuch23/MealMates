@@ -52,7 +52,7 @@ export default function AddMessage({ user, offer, chat }) {
     const stripeButton = () => {
         if (!offer || !offer.data) return null;
 
-        if (user.id != offer.data.seller.id) {
+        if (userId == offer.data.seller.id) {
             return (
                 <div className={`${styles.sendLink} ${showLinkButton ? styles.visible : ''}`}>
                     <button type="button" onClick={handleSendStripeLink}>
