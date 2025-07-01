@@ -3,14 +3,9 @@
 .cardUser {
   display: flex;
   flex-direction: column;
-  background-color: #1e1e1e;
-  border-radius: 1.5rem;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  gap: 2rem;
   margin: 2rem auto;
-  width: 90%;
-  max-width: 1000px;
+  width: 100%;
+  max-width: 1280px;
   color: #f0f0f0;
 }
 
@@ -71,22 +66,15 @@
 }
 
 .offer-container {
-  background-color: #292929;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  color: #ddd;
-
   h3 {
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
-    color: #ccc;
   }
 
   ul {
     list-style: none;
     padding: 0;
-    max-height: 300px;
-    overflow-y: auto;
+    grid-template-columns: repeat(3, 1fr);
+    display: grid;
+    gap: 18px;
     margin-bottom: 1rem;
   }
 
@@ -108,8 +96,6 @@
 
 .user_dashboard {
   background-color: #292929;
-  border-radius: 1rem;
-  padding: 2rem;
   color: #ddd;
 
   h2 {
@@ -132,23 +118,29 @@
 }
 
 /* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .cardUser {
-    padding: 4%;
-    width: 95%;
+    width: 100%;
   }
 
   .containerLink {
     justify-content: center;
-    gap: 0.5rem;
+    gap: 2rem;
+    padding: 0 1rem;
 
     a {
-      font-size: 90%;
+      font-size: 14px;
     }
   }
 
   .containerInfoUser {
-    padding: 1.5rem;
+    padding: 0;
+  }
+
+  .offer-container {
+    ul{
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   .offer-container,

@@ -1,18 +1,9 @@
-import React from "react"
-import styles from "./AdvanceFilters.module.css"; // Utilisation correcte du SCSS module
+import React, { useState } from "react";
+import styles from "./AdvanceFilters.module.css";
+import AllCategory from "../AllCategory/AllCategory";
 
-function AdvanceFilters({ filters, setFilters }) {
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-    let newTypes = filters.types || [];
-
-    if (checked) {
-      newTypes = [...newTypes, value];
-    } else {
-      newTypes = newTypes.filter((type) => type !== value);
-    }
-    setFilters({ ...filters, types: newTypes });
-  };
+function AdvanceFilters({ filters = {}, setFilters }) {
+  const [visible, setVisible] = useState(false);
 
   const handlePriceChange = (e) => {
     const { name, value } = e.target;
@@ -28,76 +19,77 @@ function AdvanceFilters({ filters, setFilters }) {
   };
 
   return (
-    <form className={styles["advanced-filters"]} onSubmit={(e) => e.preventDefault()}>
-      <fieldset>
-        <legend>Type de produit :</legend>
-        <label>
-          <input
-            type="checkbox"
-            value="fruits"
-            checked={filters.types?.includes("fruits") || false}
-            onChange={handleCheckboxChange}
-          />
-          Fruits
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="légumes"
-            checked={filters.types?.includes("légumes") || false}
-            onChange={handleCheckboxChange}
-          />
-          Légumes
-        </label>
-      </fieldset>
+    <>
+      <button
+        className={styles["toggle-button"]}
+        onClick={() => setVisible(!visible)}
+        aria-expanded={visible}
+        aria-controls="advanced-filters-form"
+      >
+        {visible ? "Cacher les filtres" : "Afficher les filtres"}
+      </button>
 
-      <fieldset>
-        <legend>Prix :</legend>
-        <label>
-          Min :
-          <input
-            type="number"
-            name="min"
-            value={filters.price?.min || ""}
-            onChange={handlePriceChange}
-            placeholder="Min"
-            min="0"
+      <form
+        id="advanced-filters-form"
+        className={`${styles["advanced-filters"]} ${visible ? styles.visible : ""}`}
+        onSubmit={(e) => e.preventDefault()}
+      >
+        <fieldset>
+          <legend>Catégories :</legend>
+          <AllCategory
+            value={filters.types || []}
+            onChange={(newTypes) => setFilters({ ...filters, types: newTypes })}
           />
-        </label>
-        <label>
-          Max :
+        </fieldset>
+
+        <fieldset>
+          <legend>Prix :</legend>
+          <label>
+            Prix min :
+            <input
+              type="number"
+              name="min"
+              value={filters.price?.min || ""}
+              onChange={handlePriceChange}
+              placeholder="Min"
+              min="0"
+            />
+          </label>
+          <label>
+            Prix max :
+            <input
+              type="number"
+              name="max"
+              value={filters.price?.max || ""}
+              onChange={handlePriceChange}
+              placeholder="Max"
+              min="0"
+            />
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Note minimale :</legend>
+          <select value={filters.minRating || 0} onChange={handleRatingChange}>
+            <option value={0}>Toutes</option>
+            <option value={3}>3⭐ et plus</option>
+            <option value={4}>4⭐ et plus</option>
+          </select>
+        </fieldset>
+
+        <fieldset>
+          <legend>Distance max (km) :</legend>
           <input
-            type="number"
-            name="max"
-            value={filters.price?.max || ""}
-            onChange={handlePriceChange}
-            placeholder="Max"
-            min="0"
+            type="range"
+            min="1"
+            max="50"
+            value={filters.maxDistance || 10}
+            onChange={handleDistanceChange}
           />
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Note minimale :</legend>
-        <select value={filters.minRating || 0} onChange={handleRatingChange}>
-          <option value={0}>Toutes</option>
-          <option value={3}>3⭐ et plus</option>
-          <option value={4}>4⭐ et plus</option>
-        </select>
-      </fieldset>
-
-      <fieldset>
-        <legend>Distance max (km) :</legend>
-        <input
-          type="range"
-          min="1"
-          max="50"
-          value={filters.maxDistance || 10}
-          onChange={handleDistanceChange}
-        />
-        <span>{filters.maxDistance || 10} km</span>
-      </fieldset>
-    </form>
+          <span>{filters.maxDistance || 10} km</span>
+        </fieldset>
+      </form>
+    </>
   );
 }
 

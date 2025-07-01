@@ -2,14 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background-color: #1e1e1e;
-  border-radius: 1.5rem;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  gap: 2rem;
   margin: 2rem auto;
-  width: 90%;
-  max-width: 1000px;
+  width: 100%;
+  max-width: 1280px;
   color: #f0f0f0;
 }
 
@@ -32,6 +27,7 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
 
   a {
     color: #4eaaff;
@@ -55,6 +51,12 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+
+  form{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
 }
 
 .name-select {
@@ -120,12 +122,17 @@ label {
     margin: 2% 0;
 }
 
-@media (max-width: 480px) {
-    .container-link a {
-        font-size: 90%;
+@media (max-width: 768px) {
+    .container-link{
+      justify-content: center;
+        gap: 2rem;
+        padding: 0 1rem;
+      a {
+          font-size: 14px;
+      }
+
     }
     .cardUser {
-        padding: 4%;
     }
     .contentUser {
         gap: 1rem;

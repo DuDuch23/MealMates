@@ -16,7 +16,7 @@
   align-items: center;
   text-align: center;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1280px;
   padding: 12px;
 }
 
@@ -90,7 +90,7 @@
   color: #15803d;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .footer__content {
     flex-direction: column;
     gap: .5rem;

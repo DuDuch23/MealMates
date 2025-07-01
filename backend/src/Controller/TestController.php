@@ -21,7 +21,7 @@ class TestController extends AbstractController
             'This is a plain text version.',
             'emails/signup.html.twig',
             [],
-            $mailer,
+            $mailer
         );
 
         return $this->json(['message' => 'Email sent using trait!']);
