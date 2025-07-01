@@ -1,0 +1,19 @@
+!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle commande reçue</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px;">
+    <div style="max-width: 600px; margin: auto; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #2980b9;">Bonne nouvelle, {{ vendeur.firstname }} !</h2>
+        <p>Votre transaction pour le produit <strong>{{ vendeur.chat.offer.product }} a bien été effectué</strong>.</p>
+        <p>Pensez à remercier l'acheteur de votre commande.</p>
+
+        <hr style="margin: 30px 0;">
+
+        <p>Merci d’utiliser MealMates !</p>
+        <p>L'équipe MealMates 🍽️</p>
+    </div>
+</body>
+</html>

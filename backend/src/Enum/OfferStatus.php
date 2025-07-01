@@ -8,6 +8,7 @@ enum OfferStatus: string
     case RESERVED = 'reserved';
     case SOLD = 'sold';
     case EXPIRED = 'expired';
+    case EMPTY = '';
 
     public static function casesArray(): array
     {

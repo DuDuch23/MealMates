@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Service\SlugService;
+use App\Enum\OfferStatus;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\OfferRepository;
 use Doctrine\Common\Collections\Collection;
@@ -77,6 +78,10 @@ class Offer
     #[Groups(["private", "public"])] 
     private bool $isRecurring = false;
 
+    #[ORM\Column(type: "string", enumType: OfferStatus::class)]
+    #[Groups(["public", "private"])]
+    private OfferStatus $status = OfferStatus::AVAILABLE;
+
     #[ORM\Column(type: "datetime")]
     #[Groups(["private", "public"])]
     private \DateTimeInterface $createdAt;
@@ -133,6 +138,18 @@ class Offer
         $this->slug = $slug; 
         return $this;
     }
+
+    public function getStatus(): OfferStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(OfferStatus $status): static
+    {
+        $this->status = $status;
+        return $this;
+    }
+
 
     public function setUpdatedAt(): void
     {

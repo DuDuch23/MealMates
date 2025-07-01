@@ -24,8 +24,10 @@ const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'
 const UserDashboard = React.lazy(() => import('./pages/UserDashboard/UserDashboard'));
 
 // Chat
-const Chat = React.lazy(() => import('./pages/Chat/Chat'));
-const ChooseChat = React.lazy(() => import('./pages/ChooseChat/ChooseChat'));
+const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
+const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
+const Qrcode = React.lazy(()=>import('./pages/QrCode/QrCode'));
+const Confirmation = React.lazy(()=>import('./pages/Confirmation/Confirmation'));
 
 // Erreur 404 (redirection)
 const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
@@ -113,6 +115,10 @@ function App() {
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription />} />
         <Route path="/deconnexion" element={<Deconnexion />} />
+
+        {/* qrcode */}
+        <Route path="/qrcode/:id" element={< Qrcode />} />
+        <Route path="/confirmation" element={< Confirmation />} />
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />

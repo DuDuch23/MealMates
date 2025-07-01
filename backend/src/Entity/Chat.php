@@ -43,6 +43,11 @@ class Chat
     #[Groups(["public","private"])]
     private Collection $images;
 
+    #[ORM\Column(nullable: true,length:255)]
+    #[Groups(["public","private"])]
+    private bool $statusChat;
+
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -52,6 +57,26 @@ class Chat
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getStatus(): array
+    {
+        if (empty($this->statusChat) || $this->statusChat === false) {
+            return [
+                'message' => "La conversation n'est pas clôturée",
+                'value' => false,
+            ];
+        } else {
+            return [
+                'message' => "La conversation est clôturée",
+                'value' => true,
+            ];
+        }
+    } 
+
+    public function setStatus(bool $status): void
+    {
+        $this->statusChat = $status;
     }
 
     public function getClient(): User

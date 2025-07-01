@@ -305,6 +305,54 @@ class ApiChatController extends AbstractController
         return $this->json(['status' => $chat->getClient(),'user'=>$chat->getSeller()], 200, [], ['groups' => ['public']]);
     }
 
+    #[Route('/send/message/qr', methods:['POST'])]
+    public function sendMessageQR(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $date = new \DateTime();
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['chat'], $data['user'], $data['content'])) {
+            return new JsonResponse([
+                'status' => 'Bad Request',
+                'message' => 'chat_id, user_id et content sont requis.',
+            ], 400);
+        }
+
+        $chat = $entityManager->getRepository(Chat::class)->find($data['chat']);
+        $user = $entityManager->getRepository(User::class)->find($data['user']);
+
+        if (!$chat ||!$user) {
+            return new JsonResponse([
+                'status' => 'Not Found',
+                'message' => 'Chat ou User introuvable.',
+                'data' => $chat,
+            ], 404);
+        }
+
+        if($chat->getClient() !=$user && $chat->getSeller() != $user){
+            return new JsonResponse([
+                'status' => 'Not Found',
+                'message' => 'Chat ou User introuvable.',
+                'chat' =>  $entityManager->getRepository(Chat::class)->find($data['chat']),
+                'data' => $chat,
+            ], 404);
+        }
+
+        $content = 'qr code : ' . implode(',', $data['content']);
+
+
+        $message = new Message();
+        $message->setContent($content);
+        $message->setSender($user);
+        $message->setChat($chat);
+        $message->setSentAt($date);
+
+        $entityManager->persist($message);
+        $entityManager->flush();
+
+        return $this->json(['status' => $chat->getClient(),'user'=>$user], 200, [], ['groups' => ['public']]);
+    }
+
     #[Route('/polling/data', methods:['POST'])]
     public function getPolling(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {

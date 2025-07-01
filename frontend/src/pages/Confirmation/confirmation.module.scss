@@ -1,0 +1,55 @@
+$dark-bg: #121b17;
+$card-bg: #1e2a24;
+$green-light: #50ffb4;
+$green-light-hover: #3ecc94;
+$text-color: $green-light;
+
+.thankyou-container {
+  min-height: 100vh;
+  background-color: $dark-bg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.thankyou-card {
+  background-color: $card-bg;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(80, 255, 180, 0.5);
+  text-align: center;
+  max-width: 400px;
+}
+
+.thankyou-title {
+  color: $text-color;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.thankyou-message {
+  color: lighten($text-color, 10%);
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+.thankyou-button {
+  background-color: transparent;
+  border: 2px solid $green-light;
+  color: $text-color;
+  padding: 12px 30px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  
+  &:hover {
+    background-color: $green-light-hover;
+    color: #121b17;
+    border-color: $green-light-hover;
+  }
+}
+

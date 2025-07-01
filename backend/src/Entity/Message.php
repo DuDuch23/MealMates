@@ -26,7 +26,7 @@ class Message
 
     #[ORM\Column(type: 'text')]
     #[Groups(["private","public"])]
-    private string $content;
+    private string|array $content;
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(["private","public"])]
@@ -59,12 +59,12 @@ class Message
         return $this;
     }
 
-    public function getContent(): string
+    public function getContent(): string|array
     {
         return $this->content;
     }
 
-    public function setContent(string $content): self
+    public function setContent(string|array $content): self
     {
         $this->content = $content;
         return $this;
