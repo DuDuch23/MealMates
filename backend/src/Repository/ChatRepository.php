@@ -29,24 +29,25 @@ class ChatRepository extends ServiceEntityRepository
                 c.id AS idChat, 
                 m.sentAt,
                 CASE 
-                    WHEN client.id = :clientId THEN seller.id
+                    WHEN client.id = :userId THEN seller.id
                     ELSE client.id
                 END AS otherUserId
              FROM App\Entity\Message m
              JOIN m.chat c
              JOIN c.client client
              JOIN c.seller seller
-             WHERE (client.id = :clientId OR seller.id = :clientId)
+             WHERE (client.id = :userId OR seller.id = :userId)
                AND m.sentAt = (
                    SELECT MAX(m2.sentAt)
                    FROM App\Entity\Message m2
                    WHERE m2.chat = c
                )
-             ORDER BY c.id DESC'
-        )->setParameter('clientId', $userId);
-        
+             ORDER BY m.sentAt DESC'
+        )->setParameter('userId', $userId);
+            
         return $query->getResult();
     }
+
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */

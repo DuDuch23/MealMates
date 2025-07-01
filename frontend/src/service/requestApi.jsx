@@ -313,9 +313,7 @@ export async function getInfoChat({id}){
             },
             body: JSON.stringify(
                 { 
-                    "seller": seller,
-                    "client": client.id,
-                    "offer": offer
+                    "id": id,
                 }
             ),
         });

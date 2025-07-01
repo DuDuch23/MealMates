@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getOfferSingle } from '../../service/requestApi';
+import { getInfoChat, getChat } from '../../service/requestApi';
 import AddMessage from '../../components/AddMessage/AddMessage';
 import ChatContainer from '../../components/ChatContainer/ChatContainer';
 
@@ -12,7 +12,6 @@ function Chat() {
   useEffect(() => {
     const userSession = sessionStorage.getItem("user");
     const chatId = sessionStorage.getItem("chat");
-
     if (userSession && chatId) {
       const parsedUser = JSON.parse(userSession);
       setUser(parsedUser);
@@ -20,8 +19,8 @@ function Chat() {
 
       const fetchChat = async () => {
         try {
-          const res = await getOfferSingle(chatId);
-          // console.log(res);
+          const res = await getInfoChat({id:chatId});
+          console.log(res);
           setOffer(res);
         } catch (err) {
           console.error("Failed to fetch chat data:", err);
@@ -36,7 +35,7 @@ function Chat() {
 
   return (
     <>
-      <ChatContainer user={user} offer={offer} chat={chat} messages={messages} />
+      <ChatContainer user={user} chat={chat} messages={messages} />
       <AddMessage user={user} offer={offer} chat={chat} />
     </>
   );

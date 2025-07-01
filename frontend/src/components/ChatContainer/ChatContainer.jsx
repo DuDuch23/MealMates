@@ -3,7 +3,7 @@ import { Messages } from "../Message/Messages";
 import { getChat } from "../../service/requestApi";
 import styles from "./container-message.module.css";
 
-function ChatContainer({ user, chat, offer }) {
+function ChatContainer({ user, chat }) {
   const [messages, setMessages] = useState([]);
   const containerRef = useRef(null);
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
