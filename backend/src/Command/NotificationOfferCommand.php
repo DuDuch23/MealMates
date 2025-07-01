@@ -50,6 +50,9 @@ class NotificationOfferCommand extends Command
                 [
                     'seller' => $user,
                     'offerUrl' => $offerUrl,
+                    'offer' => $offer,
+                    'expirationDate' => $offer->getExpirationDate()->format('Y-m-d'),
+
                 ],
                 $this->mailer
             );
