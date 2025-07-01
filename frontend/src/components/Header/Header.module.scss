@@ -82,7 +82,7 @@
               &:hover{
                   transition: all 0.3s ease-in-out;
                   background-color: variables.$colorDarkGreen;
-                  color: white;
+                  color: black;
               }
           }
       }
@@ -97,6 +97,10 @@
           justify-content: center;
           align-items: center;
           padding: 2px 26px;
+          p{
+            color: black;
+            font-size: 22px;
+          }
       }
     }
     &__sign-in{
@@ -163,26 +167,26 @@
     .button-sign-in a,
     .button-login a {
       @extend %button-base;
-      color: white;
+      color: black;
     }
 
     .button-sign-in a {
       background-color: variables.$colorDarkGreen;
-      color: white;
+      color: black;
 
       &:hover {
         background-color: white;
-        color: variables.$colorDarkGreen;
+        color: black;
       }
     }
 
     .button-login a {
       background-color: white;
-      color: variables.$colorDarkGreen;
+      color: black;
 
       &:hover {
         background-color: variables.$colorDarkGreen;
-        color: white;
+        color: black;
       }
     }
 
@@ -241,6 +245,10 @@
         justify-content: center;
         align-items: center;
         padding: 2px 26px;
+        p{
+          color: black;
+          font-size: 22px;
+        }
       }
     }
   }
@@ -257,13 +265,13 @@
     }
 
     &__rightInfo {
-      gap: 8px;
+      gap: 16px;
       flex-wrap: wrap;
-      justify-content: center;
 
       .button-login a,
       .button-sign-in a {
         padding: 10px 14px;
+        font-size: 16px;
       }
     }
 
@@ -272,7 +280,6 @@
     }
 
     div {
-      width: unset;
 
       h1 {
         font-size: 1.5rem;
