@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de la transaction</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px;">
+    <div style="max-width: 600px; margin: auto; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #27ae60;">Merci pour votre achat, {{ client.firstname }} !</h2>
+        <p>Vous venez de récuperer <strong>{{ client.chat.offer.product }}</strong>.</p>
+        <p>Nous vous remercions pour avoir utilisée mealmates afin de faire cette échange.</p>
+
+        <hr style="margin: 30px 0;">
+
+        <p>En cas de question, n'hésitez pas à nous contacter à l'adresse suivante :</p>
+        <p><a href="mailto:support@mealmates.com">support@mealmates.com</a></p>
+
+        <p style="margin-top: 40px;">L'équipe MealMates 🍽️</p>
+    </div>
+</body>
+</html>

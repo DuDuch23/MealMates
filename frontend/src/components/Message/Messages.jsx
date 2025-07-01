@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { IconUser } from "../IconUser/iconUser";
+import  QrCodeGenerate  from "../QrCodeGenerate/QrCodeGenerate";
 import styles from './message.module.css';
 
 export function Messages({ content, iconUser, id }) {
@@ -12,20 +13,21 @@ export function Messages({ content, iconUser, id }) {
     setIsSender(user?.id === id);
   }, [id]);
 
-  // on extrait l'url
+  const isQr = content.startsWith("qr code :");
+
   const urlMatch = content.match(/https?:\/\/\S+/);
-  let url = urlMatch ? urlMatch[0] : null;
-  if (url) {
-    url = url.replace(/"$/, '');
-  }
+  let url = urlMatch ? urlMatch[0].replace(/"$/, '') : null;
 
   return (
     <div className={styles["container-message"]}>
       <IconUser iconId={iconUser} />
+
       {url ? (
-        <a className={styles["link"]} href={url} target="_blank">
+        <a className={styles["link"]} href={url} target="_blank" rel="noopener noreferrer">
           Voici le lien vers le paiement
         </a>
+      ) : isQr ? (
+        <QrCodeGenerate value={content} />
       ) : (
         <div className={`${styles["content-message"]} ${!isSender ? styles.white : ''}`}>
           {content}

@@ -2,7 +2,7 @@ import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import OffersMap from '../../components/GoogleMaps/GoogleMaps';
-import { AiFillStar } from "react-icons/ai"; // ⭐️ Import décommenté
+import { AiFillStar } from "react-icons/ai";
 import logo from '../../assets/logo-mealmates.png';
 import Footer from "../../components/Footer/Footer";
 import AutoCarousel from '../../components/AutoCarousel/AutoCarousel';
