@@ -157,9 +157,9 @@
 }
 
 button[type="submit"] {
-  background-color: #4eaaff;
+  background-color: #1D8915;
   color: #fff;
-  border: none;
+  border: 3px solid #1D8915;
   border-radius: 0.75rem;
   padding: 0.75rem 1.5rem;
   font-weight: 600;
@@ -168,7 +168,8 @@ button[type="submit"] {
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #3a8bd8;
+    background-color: white;
+    color: #1D8915;
   }
 }
 
