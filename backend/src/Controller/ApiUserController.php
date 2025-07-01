@@ -216,6 +216,7 @@ class ApiUserController extends AbstractController
     public function edit(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
         if (!isset($data['id'])) 
         {
             return new JsonResponse([

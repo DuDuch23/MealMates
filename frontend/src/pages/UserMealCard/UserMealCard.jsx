@@ -184,7 +184,6 @@ function UserMealCard() {
 
     return (
         <div className={styles.cardUser}>
-            <IconUser id={user?.iconUser} />
 
             <div className={styles.contentUser}>
                 <div className={styles.containerLink}>
