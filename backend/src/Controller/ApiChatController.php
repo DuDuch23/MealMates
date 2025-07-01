@@ -91,36 +91,44 @@ class ApiChatController extends AbstractController
         $entityManager->persist($chat);
         $entityManager->flush();
 
-        // envoie du mail vers le vendeur
-        $this->sendMail(
-            'mealmates.g5@gmail.com',
-            $data['email'],
-            'Confirmation de la réservation de l\'offre',
-            '',
-            'emails/createConversationSeller.html.twig',
-            [
-                "offer" => $offer,
-                "client" => $client,
-                "seller" => $seller,
-            ],
+        try{
+            // envoie du mail vers le vendeur
+            $this->sendMail(
+                'mealmates.g5@gmail.com',
+                $seller->getEmail(),
+                'Confirmation de la réservation de l\'offre',
+                '',
+                'emails/createConversationSeller.html.twig',
+                [
+                    "offer" => $offer,
+                    "client" => $client,
+                    "seller" => $seller,
+                ],
+                $this->mailer,
+            );
+        }catch(\Exception $e){
+            $error = "cotat de mail atteint";
+        }
+
+        try{
+            // envoie du mail vers le client
+            $this->sendMail(
+                'mealmates.g5@gmail.com',
+                $client->getEmail(),
+                'Confirmation de la réservation de l\'offre',
+                '',
+                'emails/createConversationClient.html.twig',
+                [
+                    "offer" => $offer,
+                    "client" => $client,
+                    "seller" => $seller,
+                ],
             $this->mailer,
         );
 
-        // envoie du mail vers le client
-        $this->sendMail(
-            'mealmates.g5@gmail.com',
-            $data['email'],
-            'Confirmation de la réservation de l\'offre',
-            '',
-            'emails/createConversationClient.html.twig',
-            [
-                "offer" => $offer,
-                "client" => $client,
-                "seller" => $seller,
-            ],
-            $this->mailer,
-        );
-
+        }catch(\Exception $e){
+            $error = "cotat de mail atteint";
+        }
 
         return $this->json([
             'status' => "Created",

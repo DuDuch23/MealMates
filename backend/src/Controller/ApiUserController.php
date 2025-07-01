@@ -195,16 +195,21 @@ class ApiUserController extends AbstractController
 
         $entityManager->persist($user);
         $entityManager->flush();
+        
 
-        $this->sendMail(
-            'mealmates.g5@gmail.com',
-            $data['email'],
-            'Confirmation d\'inscription mealmates',
-            '',
-            'emails/signup.html.twig',
-            [],
-            $this->mailer
-        );
+        try{
+            $this->sendMail(
+                'mealmates.g5@gmail.com',
+                $data['email'],
+                'Confirmation d\'inscription mealmates',
+                '',
+                'emails/signup.html.twig',
+                [],
+                $this->mailer
+            );
+        }catch(\Exception $e){
+             $error = "cotat de mail atteint";
+        }
 
         return new JsonResponse([
             'status' => "Created",

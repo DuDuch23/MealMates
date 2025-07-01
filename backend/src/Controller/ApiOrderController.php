@@ -69,18 +69,22 @@ class ApiOrderController extends AbstractController
         $em->flush();
         
         // on envoie le mail
-        $this->sendMail(
-            'mealmates.g5@gmail.com',
-            $offer->getSeller()->getEmail(),
-            'Nouvelle réservation',
-            '',
-            'emails/orderReservation.html.twig',
-            [
-                "offer" => $offer,
-                "seller" => $offer->getSeller(),
-            ],
-            $this->mailer,
-        );
+        try{
+            $this->sendMail(
+                'mealmates.g5@gmail.com',
+                $offer->getSeller()->getEmail(),
+                'Nouvelle réservation',
+                '',
+                'emails/orderReservation.html.twig',
+                [
+                    "offer" => $offer,
+                    "seller" => $offer->getSeller(),
+                ],
+                $this->mailer,
+            );
+        }catch(\Exception $e){
+             $error = "cotat de mail atteint";
+        }
 
         return $this->json([
             'order' => [

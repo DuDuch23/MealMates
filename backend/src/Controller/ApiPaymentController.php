@@ -143,15 +143,19 @@ class ApiPaymentController extends AbstractController
 
         // Envoi du mail de confirmation au client
         if ($client && $client->getEmail()) {
-            $this->sendMail(
-                'mealmates.g5@gmail.com',
-                $client->getEmail(),
-                'Confirmation de paiement',
-                '',
-                'emails/confirmationPayment.html.twig',
-                ['client' => $client],
-                $this->mailer
-            );
+            try{
+                $this->sendMail(
+                    'mealmates.g5@gmail.com',
+                    $client->getEmail(),
+                    'Confirmation de paiement',
+                    '',
+                    'emails/confirmationPayment.html.twig',
+                    ['client' => $client],
+                    $this->mailer
+                );
+            }catch(\Exception $e){
+                 $error = "cotat de mail atteint";
+            }
         }
 
         // Rediriger vers la page de confirmation avec code + mdp dans query string
@@ -195,25 +199,33 @@ class ApiPaymentController extends AbstractController
         $entityManager->flush();
 
         // Envoi d’un mail de félicitations au vendeur et au client (à compléter)
-        $this->sendMail(
-            'mealmates.g5@gmail.com',
-            $chat->getClient()->getEmail(),
-            'Notification de transaction',
-            '',
-            'emails/confirmationPayment.html.twig',
-            ['client' => $chat->getClient()],
-            $this->mailer
-        );
+        try{
+            $this->sendMail(
+                'mealmates.g5@gmail.com',
+                $chat->getClient()->getEmail(),
+                'Notification de transaction',
+                '',
+                'emails/confirmationPayment.html.twig',
+                ['client' => $chat->getClient()],
+                $this->mailer
+            );
+        }catch(\Exception $e){
+             $error = "cotat de mail atteint";
+        }
 
-        $this->sendMail(
-            'mealmates.g5@gmail.com',
-            $chat->getSeller()->getEmail(),
-            'Notification de transaction',
-            '',
-            'emails/confirmationPayment.html.twig',
-            ['client' => $chat->getSeller()],
-            $this->mailer
-        );
+        try{
+            $this->sendMail(
+                'mealmates.g5@gmail.com',
+                $chat->getSeller()->getEmail(),
+                'Notification de transaction',
+                '',
+                'emails/confirmationPayment.html.twig',
+                ['client' => $chat->getSeller()],
+                $this->mailer
+            );
+        }catch(\Exception $e){
+             $error = "cotat de mail atteint";
+        }
 
         return new RedirectResponse("{$frontUrl}/confirmation");
     }
