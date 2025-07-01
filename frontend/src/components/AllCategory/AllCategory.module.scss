@@ -1,97 +1,152 @@
-@use "../../styles/globals";
-@use '../../styles/mixins.scss' as mixins;
-@use "../../styles/variables.scss" as variables;
-
 .wrapper {
   position: relative;
   display: inline-block;
+  width: 100%;
+  max-width: 320px;
+  font-family: Arial, sans-serif;
+  z-index: 1;
+
+  &.open {
+    z-index: 30;
+  }
 }
 
 .button {
-  background: #d9d9d9;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 12px;
-  font-weight: bold;
+  width: 100%;
+  background: #2e7d32; /* vert foncé pour bouton */
+  border: 1.5px solid #4caf50; /* vert clair bordure */
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  color: #e0f2f1; /* texte clair */
   cursor: pointer;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
+  font-size: 1rem;
+  transition: background-color 0.25s ease, color 0.25s ease;
+
+  &:hover,
+  &:focus {
+    background-color: #4caf50;
+    color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 8px #4caf50aa;
+  }
 }
 
 .caret {
-  font-size: 12px;
+  font-size: 1.1rem;
+  line-height: 1;
+  user-select: none;
+  margin-left: 0.5rem;
+  color: #e0f2f1;
 }
 
 .dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   left: 0;
-  z-index: 20;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  max-height: 200px;
+  width: 100%;
+  max-height: 240px;
+  background: #121212; /* fond très sombre */
+  border: 1.5px solid #4caf50; /* vert clair bordure */
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
   overflow-y: auto;
-  margin: 4px 0 0;
-  padding: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  transition: opacity 0.25s ease;
+  z-index: 30;
 
   li {
     list-style: none;
-    color: black;
-    gap: 12px;
-    margin-bottom: 4px;
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+    color: #c8e6c9; /* texte clair vert pâle */
     display: flex;
     align-items: center;
-    font-size: variables.$fontSize;
 
-    label.custom-checkbox {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      position: relative;
-
-      input[type="checkbox"] {
-        opacity: 0;
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        cursor: pointer;
-        margin: 0;
-      }
-
-      .checkmark {
-        width: 16px;
-        height: 16px;
-        border: 2px solid #999;
-        border-radius: 4px;
-        background-color: white;
-        display: inline-block;
-        position: relative;
-        flex-shrink: 0;
-        transition: all 0.2s ease;
-      }
-
-      input[type="checkbox"]:checked + .checkmark {
-        background-color: black;
-        border-color: black;
-      }
-
-      input[type="checkbox"]:checked + .checkmark::after {
-        content: "";
-        position: absolute;
-        top: 2px;
-        left: 5px;
-        width: 4px;
-        height: 8px;
-        border: solid white;
-        border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
-      }
+    &:last-child {
+      margin-bottom: 0;
     }
+  }
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+
+  input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #a5d6a7; /* vert clair */
+    border-radius: 5px;
+    background-color: #212121; /* gris très foncé */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  input[type="checkbox"]:checked + .checkmark {
+    background-color: #4caf50; /* vert clair */
+    border-color: #4caf50;
+  }
+
+  input[type="checkbox"]:checked + .checkmark::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 7px;
+    width: 5px;
+    height: 10px;
+    border: solid #ffffff;
+    border-width: 0 2.5px 2.5px 0;
+    transform: rotate(45deg);
+  }
+}
+
+.dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdown::-webkit-scrollbar-thumb {
+  background-color: rgba(76, 175, 80, 0.5);
+  border-radius: 8px;
+}
+
+.dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    max-width: 100%;
+  }
+
+  .dropdown {
+    max-height: 180px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .button {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
   }
 }

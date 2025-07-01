@@ -13,7 +13,6 @@ const Home = React.lazy(() => import('./pages/Home/Home'));
 const Offer = React.lazy(() => import('./pages/Offer/Offer'));
 const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
 const SingleOffer = React.lazy(() => import('./pages/SingleOffer/SingleOffer'));
-const ModifyOffer = React.lazy(() => import('./pages/ModifyOffer/ModifyOffer'));
 
 // User
 const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
@@ -38,22 +37,22 @@ function App() {
   useEffect(() => {
     const logout = async () => {
       try {
+        const expiration = sessionStorage.getItem("token_expiration");
+
         if (!expiration || Date.now() > Number(expiration)) {
           await deleteUserIndexDB();
           sessionStorage.clear();
-          navigate("/connexion");
-          }
+          console.warn("Session expirée, mais redirection désactivée.");
+          // Redirection désactivée ici
+        }
       } catch (err) {
         console.error("Erreur pendant la déconnexion :", err);
-        navigate("/connexion");
+        // Pas de redirection non plus en cas d'erreur
       }
     };
 
-    if (expiration) {
-      logout();
-    }
-  }, [navigate, expiration]);
-
+    logout();
+  }, []); // Retrait de [navigate] pour éviter ré-exécution inutile
 
   useEffect(() => {
     async function fetchUser() {
@@ -71,7 +70,7 @@ function App() {
     }
 
     fetchUser();
-  }, [navigate]);  
+  }, []);
 
   return (
     <Suspense fallback={
@@ -102,8 +101,7 @@ function App() {
           <Route path="/offer" element={<Offer />} />
           <Route path="/addOffer" element={<AddOffer />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
-          <Route path="/modifyOffer/:id" element={<ModifyOffer />} />
-          
+
           {/* user profile */}
           <Route path="/userProfile/:id" element={<UserProfile />} />
           <Route path="/userMealCard/:id" element={<UserMealCard />} />
