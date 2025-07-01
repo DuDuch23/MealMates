@@ -48,11 +48,8 @@ const GoogleLoginButton = ({ setUser }) => {
         const ggtto = credentialResponse.credential;
         const token = await getTokenSSo({ token: ggtto });
         sessionStorage.setItem("token", token.token);
-        
         const expiration = Date.now() + 60 * 60 * 1000;
         sessionStorage.setItem("token_expiration", expiration.toString());
-
-
       } catch (error) {
         console.error("Erreur lors de la récupération du token SSO :", error);
         sessionStorage.removeItem("user");
