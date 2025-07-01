@@ -120,6 +120,7 @@ export default function SingleOffer() {
                     </div>
                 </div>
                 <aside className={styles.single_offer__sidebar}>
+                    <p>{ offer.seller.firstName }</p>
                     {user && offer.seller.id == user.id ? (
                         <>
                             <p>Vous êtes le propriétaire de cette offre</p>
@@ -136,10 +137,9 @@ export default function SingleOffer() {
                             )}
 
                             {offer.order && !offer.order.isConfirmed && (
-                                <p className="single-offer__status">
-                                    Réservation en attente de confirmation<br />
-                                    (expire à {new Date(offer.order.expiresAt).toLocaleTimeString()})
-                                </p>
+                                <button className="single-offer__status order">
+                                    Réservation en attente de confirmation
+                                 </button>
                             )}
 
                             {offer.order && offer.order.isConfirmed && (
@@ -149,7 +149,7 @@ export default function SingleOffer() {
                             )}
 
                             <button onClick={handleInput}>
-                                <p>Envoyer un message</p>
+                                Envoyer un message
                             </button>
                         </>
                     )}
