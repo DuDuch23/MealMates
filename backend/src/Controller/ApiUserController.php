@@ -202,6 +202,7 @@ class ApiUserController extends AbstractController
             'Confirmation d\'inscription mealmates',
             '',
             'emails/signup.html.twig',
+            [],
             $this->mailer
         );
 

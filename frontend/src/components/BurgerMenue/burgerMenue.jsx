@@ -34,7 +34,7 @@ export default function BurgerMenue({ onProfileClick }) {
   };
 
   const profilUser = () => {
-    console.log("profilUser", userData);
+    // console.log("profilUser", userData);
     if (userData) {
       return (
         <li>

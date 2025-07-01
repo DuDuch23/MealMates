@@ -21,7 +21,7 @@ function Chat() {
       const fetchChat = async () => {
         try {
           const res = await getOfferSingle(chatId);
-          console.log(res);
+          // console.log(res);
           setOffer(res);
         } catch (err) {
           console.error("Failed to fetch chat data:", err);

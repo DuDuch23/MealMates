@@ -142,7 +142,7 @@ export const addSearchIndexDB = async (search,storedUser) => {
   const db = await getDatabase();
   const encrypted = CryptoJS.AES.encrypt(JSON.stringify(search), SECRET_KEY).toString();
 
-  console.log(allSearch);
+  // console.log(allSearch);
 
   return new Promise((resolve, reject) => {
     const dbRequest = db.transaction("search", "readwrite");

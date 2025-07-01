@@ -1,27 +1,28 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import randomId from "../../service/randomKey";
-import { Link, useNavigate } from "react-router";
-import styles from "./addOffer.module.css";
-import { geocodeLocation, newOffer } from "../../service/requestApi";
+import { Link, useNavigate, useParams } from "react-router";
+import styles from "./ModifyOffer.module.css";
+import { geocodeLocation, getOfferSingle, editOffer } from "../../service/requestApi";
 import AllCategories from "../../components/AllCategory/AllCategory";
 
-function AddOffer() {
+function ModifyOffer() {
+    const { id } = useParams();
+    const [offer, setOffer] = useState(null);
     const [formData, setFormData] = useState({
         product: "",
         description: "",
-        quantity: 1,
+        startDate: "",
+        endDate: "",
         expirationDate: "",
+        quantity: 0,
+        price: 0,
         option: "prix",
-        price: "",
-        isDonation: false,
         pickupLocation: "",
-        isRecurring: false,
-        latitude: null,
-        longitude: null,
+        latitude: 0,
+        longitude: 0,
         categories: [],
-        availableSlots: "",
+        availableSlots: [],
     });
-
     const navigate = useNavigate();
 
     const fileInputRef = useRef(null);
@@ -66,22 +67,22 @@ function AddOffer() {
             images.forEach((image) => 
             data.append("photos_offer[]", image));
             try{
-                const response =await newOffer(data);
+                const response =await editOffer(data);
                 if (response.status === 201){
                     console.log("Offre ajoutée avec succès");
                     navigate("/offer");
                 } else {
-                    console.error("Échec création :", response.body);
+                    console.error("Échec modification :", response.body);
                 }
             } catch(error){
-                console.error("Erreur lors de la soumission de l'offre :", error);
+                console.error("Erreur lors de la modification de l'offre :", error);
             }
         }
         else{
             console.error("Formulaire invalide :", validateForm());
         }
     };
-    
+
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
         const previews = files.map((file) => URL.createObjectURL(file));
@@ -136,13 +137,42 @@ function AddOffer() {
             }));
         }
     };
-    
+
+    useEffect(() => {
+        const fetchOffer = async () => {
+            try{
+                const data = await getOfferSingle(id);
+                if (data && data.data) {
+                    const offerData = data.data;
+                    setFormData({
+                        product: offerData.product,
+                        description: offerData.description,
+                        expirationDate: offerData.expirationDate.split("T")[0],
+                        quantity: offerData.quantity,
+                        price: offerData.price || 0,
+                        pickupLocation: offerData.pickupLocation,
+                        latitude: offerData.latitude,
+                        longitude: offerData.longitude,
+                        categories: offerData.categories.map(cat => cat.id),
+                        availableSlots: offerData.availableSlots || [],
+                        option: offerData.isDonation ? "don" : "prix",
+                    });
+                    setImages(offerData.images);
+                    setImagePreviews(offerData.images.map(image => `${import.meta.env.VITE_UPLOADS_URL}/${image.url}`));
+                }
+            } catch(error){
+                console.error("Erreur lors de la récupération de l'offre :", error);
+            }
+        }
+        fetchOffer();
+    }, [id]);
+
     return (
-        <div className={styles.add_offer}>
-            <div className={styles.add_offer__container}>
+        <div className={styles.modify_offer}>
+            <div className={styles.modify_offer__container}>
                 <Link key="offer" to={'/offer'}>Retourner en arrière</Link>
                 <form onSubmit={handleSubmit}>
-                    <div className={styles.add_offer__left}>
+                    <div className={styles.modify_offer__left}>
                         <div className={styles["container-inputs"]}>
                             <label htmlFor="product">Produit</label>
                             <input type="text"
@@ -350,7 +380,8 @@ function AddOffer() {
                 </form>
             </div>
         </div>
+       
     );
 }
 
-export default AddOffer;
+export default ModifyOffer;
