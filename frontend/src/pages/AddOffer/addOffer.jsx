@@ -142,6 +142,82 @@ function AddOffer() {
             <div className={styles.add_offer__container}>
                 <Link key="offer" to={'/offer'}>Retourner en arrière</Link>
                 <form onSubmit={handleSubmit}>
+                    <aside className={styles.add_offer__sidebar}>
+                        <div className={`${styles["photo-input"]} ${styles["container-inputs"]}`}>
+
+                            <label htmlFor="photo"></label>
+
+
+                            <input
+                                ref={fileInputRef}
+                                name="photos_offer[]"
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleImageChange}
+                                style={{ display: "none" }}
+                            />
+
+                            <div className={styles["photo-slider"]}>
+                                <div className={styles["photo-slider__container"]}>
+                                    <svg
+                                        onClick={() => fileInputRef.current.click()}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className={styles["container-image-offer"]}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"
+                                        />
+                                        <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
+                                        />
+                                    </svg>
+                                    <p>Ajouter des photos</p>
+                                </div>
+                                {imagePreviews.length > 0 && (
+                                    imagePreviews.map((preview, i) => (
+                                        <div className={styles["container-image-offer"]} key={i}>
+                                            <div className={styles["container-delete-image"]}>
+                                                <button
+                                                    className={styles["container-delete-image__btn"]}
+                                                    onClick={() => removeImage(i)}
+                                                    style={{
+                                                        position: "absolute",
+                                                        zIndex: 99,
+                                                        background: "rgba(0,0,0,0.6)",
+                                                        border: "none",
+                                                        borderRadius: "50%",
+                                                        color: "white",
+                                                        width: 24,
+                                                        height: 24,
+                                                        cursor: "pointer",
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        fontWeight: "bold",
+                                                    }}
+                                                    aria-label="Supprimer l'image"
+                                                >
+                                                    x
+                                                </button>
+                                            </div>
+                                            <img src={preview} alt="Aperçu" />
+                                        </div>
+                                    ))
+                                )}
+                                {error.images && <p className={styles.error}>{error.images}</p>}
+                            </div>
+                        </div>
+                    </aside>
                     <div className={styles.add_offer__left}>
                         <div className={styles["container-inputs"]}>
                             <label htmlFor="product">Produit</label>
@@ -271,82 +347,7 @@ function AddOffer() {
                             <button type="submit">Valider</button>
                         </div>
                     </div>
-                    <aside className={styles.add_offer__sidebar}>
-                        <div className={`${styles["photo-input"]} ${styles["container-inputs"]}`}>
 
-                            <label htmlFor="photo"></label>
-
-
-                            <input
-                                ref={fileInputRef}
-                                name="photos_offer[]"
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={handleImageChange}
-                                style={{ display: "none" }}
-                            />
-
-                            <div className={styles["photo-slider"]}>
-                                <div className={styles["photo-slider__container"]}>
-                                    <svg
-                                        onClick={() => fileInputRef.current.click()}
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className={styles["container-image-offer"]}
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"
-                                        />
-                                        <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
-                                        />
-                                    </svg>
-                                    <p>Ajouter des photos</p>
-                                </div>
-                                {imagePreviews.length > 0 && (
-                                    imagePreviews.map((preview, i) => (
-                                        <div className={styles["container-image-offer"]} key={i}>
-                                            <div className={styles["container-delete-image"]}>
-                                                <button
-                                                    className={styles["container-delete-image__btn"]}
-                                                    onClick={() => removeImage(i)}
-                                                    style={{
-                                                        position: "absolute",
-                                                        zIndex: 99,
-                                                        background: "rgba(0,0,0,0.6)",
-                                                        border: "none",
-                                                        borderRadius: "50%",
-                                                        color: "white",
-                                                        width: 24,
-                                                        height: 24,
-                                                        cursor: "pointer",
-                                                        display: "flex",
-                                                        justifyContent: "center",
-                                                        alignItems: "center",
-                                                        fontWeight: "bold",
-                                                    }}
-                                                    aria-label="Supprimer l'image"
-                                                >
-                                                    x
-                                                </button>
-                                            </div>
-                                            <img src={preview} alt="Aperçu" />
-                                        </div>
-                                    ))
-                                )}
-                                {error.images && <p className={styles.error}>{error.images}</p>}
-                            </div>
-                        </div>
-                    </aside>
                 </form>
             </div>
         </div>
