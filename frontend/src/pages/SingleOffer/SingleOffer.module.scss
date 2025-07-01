@@ -83,22 +83,19 @@
   }
 
   button {
-    background-color: #4eaaff;
-    border: none;
+    background-color: #1D8915;
+    border: 3px solid #1D8915;
     border-radius: 0.75rem;
     padding: 0.75rem 1.5rem;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.2rem;
     cursor: pointer;
     color: #fff;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #3a8bd8;
-    }
-
-    p {
-      margin: 0;
+      background-color: white;
+      color: #1D8915;
     }
   }
 
