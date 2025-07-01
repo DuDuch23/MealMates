@@ -22,7 +22,7 @@ class Chat
     #[Groups(["public", "private"])]
     private User $client;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: 'string',length: 1020, nullable: true)]
     private ?string $stripeUrl = null;
 
     #[ORM\ManyToOne(targetEntity: Offer::class)]
