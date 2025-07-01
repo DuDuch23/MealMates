@@ -14,6 +14,7 @@ const Home = React.lazy(() => import('./pages/Home/Home'));
 const Offer = React.lazy(() => import('./pages/Offer/Offer'));
 const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
 const SingleOffer = React.lazy(() => import('./pages/SingleOffer/SingleOffer'));
+const ModifyOffer = React.lazy(() => import('./pages/ModifyOffer/ModifyOffer'));
 
 // User
 const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
@@ -106,6 +107,7 @@ function App() {
           <Route path="/offer" element={<Offer />} />
           <Route path="/addOffer" element={<AddOffer />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
+          <Route path="/modifyOffer/:id" element={<ModifyOffer />} />
           
           {/* user profile */}
           <Route path="/userProfile/:id" element={<UserProfile />} />

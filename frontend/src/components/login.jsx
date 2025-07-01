@@ -5,7 +5,6 @@ import jwtDecode from "jwt-decode";
 const Login = ({ setUser }) => {
   const handleSuccess = (response) => {
     const user = jwtDecode(response.credential);
-    console.log("Utilisateur connecté :", user);
 
     setUser(user);
     sessionStorage.setItem("user", JSON.stringify(user.id));
