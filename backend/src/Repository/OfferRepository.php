@@ -66,12 +66,17 @@ class OfferRepository extends ServiceEntityRepository
     return $qb->getQuery()->getResult();
 }
 
-    public function findLastChance(): array
+    public function findLastChance(int $limit = 10, int $offset = 0): array
     {
-        $today = new \DateTimeImmutable('today 23:59:59');
+        $now = new \DateTimeImmutable('now');
+        $inTwoDays = $now->modify('+2 days')->setTime(23, 59, 59);
+
         return $this->createQueryBuilder('o')
-            ->andWhere('o.expirationDate <= :today')
-            ->setParameter('today', $today)
+            ->andWhere('o.expirationDate BETWEEN :now AND :inTwoDays')
+            ->setParameter('now', $now)
+            ->setParameter('inTwoDays', $inTwoDays)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
