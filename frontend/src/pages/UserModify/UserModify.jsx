@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { getUser, editUser } from "../../service/requestApi";
 import { getUserIndexDB, updateUserIndexDB } from "../../service/indexDB";
 import { IconUser, ChooseYourIcon } from "../../components/IconUser/iconUser";
@@ -23,14 +23,13 @@ function UserModify() {
     const [address, setAdress] = useState("");
     const [option, setOption] = useState("");
 
-    // ✅ Redirection sécurisée si l'utilisateur veut modifier son propre profil
     useEffect(() => {
-        if (userId === userSession?.id) {
+        if (userId !== userSession?.id) {
             navigate("/offer");
         }
     }, [userId, userSession?.id, navigate]);
 
-    // ✅ Récupération de l'utilisateur depuis l'indexDB
+    // Récupération de l'utilisateur depuis l'indexDB
     useEffect(() => {
         async function fetchUserData() {
             if (userId) {
@@ -45,7 +44,7 @@ function UserModify() {
         fetchUserData();
     }, [userId]);
 
-    // ✅ Pré-remplissage des champs avec les données utilisateur
+    // Pré-remplissage des champs avec les données utilisateur
     useEffect(() => {
         if (user) {
             setIdIcon(user.idIcon || 1);
@@ -94,32 +93,13 @@ function UserModify() {
     return (
         <>
             <div className={styles.cardUser}>
-                <nav>
-                    <Link to={"/"}>
-                        <img src="/img/logo-mealmates.png" alt="logo mealmates" />
-                        <h2>MealMates</h2>
-                    </Link>
-                </nav>
-
-                <div className={styles["user-face"]}>
-                    <IconUser id={idIcon} />
-                    <ChooseYourIcon onValueChange={handleIconChange} />
-                </div>
 
                 <div className={styles["content-user"]}>
-                    <div className="container-link">
+                    <div className={styles["container-link"]}>
                         <Link to={`/userProfile/${userId}`}>Mes informations</Link>
-                        <span>
-                            <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <line x1="1.26" y1="0" x2="1.26" y2="35.92" stroke="#EFF1F5" strokeWidth="1.24" />
-                            </svg>
-                        </span>
+                        <span>|</span>
                         <Link to={`/userMealCard/${userId}`}>MealCard</Link>
-                        <span>
-                            <svg width="2" height="36" viewBox="0 0 2 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <line x1="1.26" y1="0" x2="1.26" y2="35.92" stroke="#EFF1F5" strokeWidth="1.24" />
-                            </svg>
-                        </span>
+                        <span>|</span>
                         <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
                     </div>
 

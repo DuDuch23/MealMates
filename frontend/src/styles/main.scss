@@ -3,7 +3,7 @@
 @use './variables';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-#root{
+#root, html, body {
     margin: 0 auto;
     width: 100%;
 }
