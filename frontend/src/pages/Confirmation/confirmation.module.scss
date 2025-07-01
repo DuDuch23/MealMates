@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $dark-bg: #121b17;
 $card-bg: #1e2a24;
 $green-light: #50C878;
@@ -30,7 +32,7 @@ $text-color: $green-light;
 }
 
 .thankyou-message {
-  color: lighten($text-color, 10%);
+  color: $green-light;
   font-size: 1.2rem;
   margin-bottom: 2rem;
   line-height: 1.4;
