@@ -14,7 +14,6 @@ import SliderSection from "../../components/SliderOffers/SliderOffers";
 import OffersMap from "../../components/GoogleMaps/GoogleMaps";
 import SkeletonCard from "../../components/SkeletonCard/SkeletonCard";
 import AdvancedFilters from "../../components/AdvanceFilters/AdvanceFilters";
-import AllCategory from "../../components/AllCategory/AllCategory";
 
 import "swiper/css";
 
@@ -80,6 +79,7 @@ function Offer() {
         setLoadingOffers(true);
         const data = await getOffers();
         setOffers(data?.data || []);
+        // console.log(data.data);
       } catch (err) {
         console.error(err);
         setOffers([]);
@@ -93,6 +93,8 @@ function Offer() {
         setLoadingVegan(true);
         const data = await getVeganOffers();
         setVeganOffers(data?.data || []);
+        console.log("vegan",data.data);
+
       } catch (err) {
         console.error(err);
         setVeganOffers([]);
@@ -106,6 +108,8 @@ function Offer() {
         setLoadingLastChance(true);
         const data = await getLastChanceOffers();
         setLastChanceOffers(data?.data || []);
+        console.log("last chance", data.data);
+
       } catch (err) {
         console.error(err);
         setLastChanceOffers([]);
@@ -124,6 +128,8 @@ function Offer() {
         }
         const data = await getAgainOffers(token);
         setAgainOffers(data?.data || []);
+        console.log("offre again",data.data);
+
       } catch (err) {
         console.error(err);
         setAgainOffers([]);
@@ -141,6 +147,8 @@ function Offer() {
             const data = await getLocalOffers(latitude, longitude);
             setLocalOffers(data?.data || []);
             setLoadingLocal(false);
+        console.log("local",data.data);
+
           },
           (err) => {
             console.error(err);
@@ -148,6 +156,7 @@ function Offer() {
             setLoadingLocal(false);
           }
         );
+
       } catch (err) {
         console.error(err);
         setLocalOffers([]);

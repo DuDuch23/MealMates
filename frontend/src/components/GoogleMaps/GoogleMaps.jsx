@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import {React, useState, useEffect } from 'react';
 import {
     GoogleMap,
     Marker,
@@ -8,6 +8,7 @@ import {
 } from '@react-google-maps/api';
 import { geocodeLocation } from "../../service/requestApi";
 import styles from './GoogleMaps.module.css';
+import { Link } from 'react-router';
 
 const containerStyle = {
     width: '100%',
@@ -140,15 +141,16 @@ const OffersMap = ({ offers = [], zoom = 13, userPos, setUserPos }) => {
                         onCloseClick={() => setSelectedOffer(null)}
                     >
                         <div className={styles['info-window']}>
-                            <p>{new Date(selectedOffer.createdAt).toLocaleDateString('fr-FR', {
+                            {/* <p>{new Date(selectedOffer.createdAt).toLocaleDateString('fr-FR', {
                                 day: '2-digit',
                                 month: 'long',
                                 year: 'numeric',
                                 hour: '2-digit',
                                 minute: '2-digit'
-                            })}</p>
+                            })}</p> */}
                             <h2>{selectedOffer.product}</h2>
                             <p>{selectedOffer.description}</p>
+                            <Link to={`/offer/${selectedOffer.id}`}>En savoir plus</Link>
                         </div>
                     </InfoWindow>
                 )}
