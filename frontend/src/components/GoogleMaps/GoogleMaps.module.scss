@@ -1,7 +1,11 @@
+@use '../../styles/variables.scss';
+
+
 .mapContainer{
     position: absolute;
-    width: 100%;
-    z-index: 100;
+    width: auto;
+    left: 40%;
+    z-index: 97;
     display: flex;
     justify-content: center;
     margin-top: 14px;
@@ -21,16 +25,15 @@
     }
 
     button{
-        background-color: #1D8915;
+        background-color: variables.$colorDarkGreen;
         border-radius: 10px;
+        font-size: 22px;
+        color: black;
         cursor: pointer;
         justify-content: center;
         align-items: center;
-        padding: 12px 0;
-        margin: 0 auto;
-        color: white;
+        padding: 2px 22px;
         border: none;
-        width: 50%;
         &:hover{
             background-color: #1A7D14;
         }
@@ -39,8 +42,12 @@
 .info-window{
     h2{
         color: black !important;
+        font-size: 24px;
+        border-bottom: 1px solid black;
+        margin: 20px 0;
     }
     p{
         color: black !important;
+        font-size: 18px;
     }
 }
