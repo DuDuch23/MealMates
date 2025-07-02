@@ -100,7 +100,9 @@ function UserModify() {
                         <span>|</span>
                         <Link to={`/userMealCard/${userId}`}>MealCard</Link>
                         <span>|</span>
-                        <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                        {userId == userSession.id && (
+                          <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                        )}
                     </div>
 
                     <div className={styles["container-info-user"]}>

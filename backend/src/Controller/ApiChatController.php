@@ -156,8 +156,6 @@ class ApiChatController extends AbstractController
         $res = [];
 
         foreach ($results as $row) {
-            // $row est un tableau avec : content, idChat, sentAt, otherUserId
-
             // Récupérer l'autre utilisateur en base
             $otherUser = $entityManager->getRepository(User::class)->find($row['otherUserId']);
 
@@ -172,9 +170,8 @@ class ApiChatController extends AbstractController
                     'icon' => $otherUser->getIconUser(),
                     'id' => $otherUser->getId(),
                 ],
-                'offer' => [
-                    $row['sentAt']
-                ]
+                'offer' => 
+                    $row['offerName'],
             ];
         }
 

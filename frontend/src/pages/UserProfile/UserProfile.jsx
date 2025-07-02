@@ -8,6 +8,7 @@ import styles from './UserProfile.module.css'
 const UserProfile = () => {
     const params = useParams();
     const userId = params.id ? parseInt(params.id) : null;
+    const actualId = JSON.parse(sessionStorage.getItem("user"));
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -82,7 +83,9 @@ const UserProfile = () => {
                         <span>|</span>
                         <Link to={`/userMealCard/${userId}`}>MealCard</Link>
                         <span>|</span>
-                        <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                        {userId == actualId.id && (
+                          <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                        )}
                     </div>
                     <div className={styles.containerInfoUser}>
                         <div className={styles.basicsElements}>

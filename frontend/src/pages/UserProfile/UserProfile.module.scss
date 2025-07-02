@@ -1,4 +1,5 @@
 @use "../../styles/main.scss";
+@use '../../styles/variables.scss' as variables;
 
 .cardUser {
   display: flex;
@@ -32,12 +33,13 @@
   flex-wrap: wrap;
 
   a {
-    color: #4eaaff;
+    color: white;
     text-decoration: none;
     font-weight: 500;
 
     &:hover {
-      text-decoration: underline;
+      color: variables.$colorDarkGreen;
+      transition: 0.5s ease-in-out;
     }
   }
 
@@ -99,10 +101,9 @@
         gap: 2rem;
         padding: 0 1rem;
         a {
-            font-size: 14px;
+          text-decoration: none;
+          font-size: 14px;
         }
-    }
-    .cardUser {
     }
     .contentUser {
         gap: 1rem;

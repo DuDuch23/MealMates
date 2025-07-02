@@ -13,6 +13,7 @@ function ChooseChat() {
         async function executeRequest() {
             try {
                 const data = await getAllChat(parseInt(user.id));
+                console.log(data.data);
                 setChat(data.data);
             } catch (error) {
                 console.error("Failed to fetch chat data:", error);
@@ -25,7 +26,7 @@ function ChooseChat() {
     return (
         <div className={styles["choose-chat-container"]}>
             {chat.map(chat => (
-                <ChooseChatUser key={chat.chat_id} user={chat.user} lastMessage={chat.last_message} chat={chat.chat_id} />
+                <ChooseChatUser key={chat.chat_id} title={chat.offer} user={chat.user} lastMessage={chat.last_message} chat={chat.chat_id} />
             ))}
         </div>
     );

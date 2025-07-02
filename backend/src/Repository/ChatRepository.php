@@ -28,6 +28,7 @@ class ChatRepository extends ServiceEntityRepository
                 m.content, 
                 c.id AS idChat, 
                 m.sentAt,
+                offer.product AS offerName,
                 CASE 
                     WHEN client.id = :userId THEN seller.id
                     ELSE client.id
@@ -36,6 +37,7 @@ class ChatRepository extends ServiceEntityRepository
              JOIN m.chat c
              JOIN c.client client
              JOIN c.seller seller
+             JOIN c.offer offer
              WHERE (client.id = :userId OR seller.id = :userId)
                AND m.sentAt = (
                    SELECT MAX(m2.sentAt)

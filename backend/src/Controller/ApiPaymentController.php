@@ -40,17 +40,21 @@ class ApiPaymentController extends AbstractController
             return new JsonResponse(['error' => 'Chat ou offre introuvable'], 404);
         }
 
-        $order = $entityManager->getRepository(Order::class)->findOneBy(['offer' => $chat->getOffer()]);
-
-        if (!$order) {
-            // Redirige vers la création d'une commande si elle n'existe pas
-            return $this->redirectToRoute('/api/order/create', ['offerId' => $chat->getOffer()->getId()]);
-        }
-
         $user = $security->getUser();
 
         if (!$user instanceof User) {
             return new JsonResponse(['error' => 'Utilisateur non authentifié'], 401);
+        }
+
+        $order = $entityManager->getRepository(Order::class)->findOneBy(['offer' => $chat->getOffer()]);
+
+        if (!$order) {
+            // Redirige vers la création d'une commande si elle n'existe pas
+            $order = new Order();
+            $order->setBuyer($user);
+            $order->setOffer($chat->getOffer());
+            $order->setPurchasedAt(new \DateTimeImmutable());
+            $order->setIsConfirmed(false);
         }
 
         if ($chat->getSeller()->getId() !== $user->getId()) {

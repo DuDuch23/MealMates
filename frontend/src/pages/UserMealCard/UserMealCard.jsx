@@ -16,6 +16,7 @@ function UserMealCard() {
     const userId = params.id ? parseInt(params.id) : null;
 
     const [user, setUser] = useState(null);
+    const actualId = JSON.parse(sessionStorage.getItem("user"));
     const [userOffer, setOfferUser] = useState(null);
     const [dashboardStats, setDashboardStats] = useState(null);
     const [filter, setFilter] = useState("year");
@@ -191,11 +192,12 @@ function UserMealCard() {
                 <span>|</span>
                 <Link to={`/userMealCard/${userId}`}>MealCard</Link>
                 <span>|</span>
-                <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                {userId == actualId.id && (
+                  <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                )}
                 </div>
 
                 <div className={styles.containerInfoUser}>
-
                     {userPreference()}
                     {renderDashboard()}
                 </div>

@@ -392,6 +392,7 @@ export async function getChat({userId,chat}){
 }
 
 export async function sendMessageQr({userId,chat,message}){
+    console.log(userId,chat,message);
     try{
         const response = await fetch(`${API_BASE_URL}/api/chat/send/message/qr`,{
             method: 'POST',
