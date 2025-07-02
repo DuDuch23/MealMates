@@ -95,6 +95,7 @@ export const updateUserIndexDB = async (userId, newUserData) => {
   if (!userId) throw new Error("ID utilisateur requis");
 
   const db = await getDatabase();
+  console.log(userId,newUserData);
 
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("utilisateurs", "readwrite");

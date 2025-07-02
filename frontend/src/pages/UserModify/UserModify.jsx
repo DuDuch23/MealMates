@@ -78,7 +78,7 @@ function UserModify() {
         try {
             const res = await editUser({ userData });
             if (res.code === 200) {
-                await updateUserIndexDB({ userId, userData });
+                await updateUserIndexDB(userId, userData);
                 alert("Informations mises à jour avec succès !");
                 navigate(`/userProfile/${userId}`);
             } else {
@@ -100,7 +100,9 @@ function UserModify() {
                         <span>|</span>
                         <Link to={`/userMealCard/${userId}`}>MealCard</Link>
                         <span>|</span>
-                        <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                        {userId == userSession.id && (
+                          <Link to={`/userModify/${userId}`}>Modifier mon compte</Link>
+                        )}
                     </div>
 
                     <div className={styles["container-info-user"]}>

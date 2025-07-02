@@ -1,12 +1,19 @@
+@use '../../styles/variables' as variables;
 .container-user-chat{
     display: flex;
     align-items: center;
     .user-part{
         display: flex;
         align-items: center;
-        margin: 0 1%;
+        margin: 0.7% 2%;
         .list-info{
             list-style: none;
+            h3{
+                color: variables.$colorDarkGreen;
+            }
+            li:nth-child(2){
+                color: white;
+            }
         }
     }
 }

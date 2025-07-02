@@ -18,7 +18,7 @@ export default function QrCode() {
         const handleRequest = async () => {
             try {
                 const qrCodeContent = [randomString, id];
-                await sendMessageQr({ user: userId, chat: chatId, message: qrCodeContent });
+                await sendMessageQr({ userId: userId, chat: chatId, message: qrCodeContent });
                 navigate("/");
             } catch (error) {
                 console.error("Erreur lors de l'envoi du QR code :", error);
