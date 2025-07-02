@@ -248,7 +248,7 @@ class ApiUserController extends AbstractController
                 'message' => "You are not abilitated to perform this action"
             ], 401);
         }
-        if (isset($data['email'])) {
+        if (isset($data['email']) && $data["email"] !== $user->getEmail()) {
             $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
             if ($existingUser) 
             {
