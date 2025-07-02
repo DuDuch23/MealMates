@@ -19,10 +19,10 @@ export default function QrCode() {
             try {
                 const qrCodeContent = [randomString, id];
                 await sendMessageQr({ userId: userId, chat: chatId, message: qrCodeContent });
-                navigate("/");
+                // navigate("/");
             } catch (error) {
                 console.error("Erreur lors de l'envoi du QR code :", error);
-                navigate("/404");
+                // navigate("/404");
             }
         };
 
