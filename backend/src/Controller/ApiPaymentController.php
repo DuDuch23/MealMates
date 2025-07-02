@@ -100,7 +100,7 @@ class ApiPaymentController extends AbstractController
     }
 
 
-    #[Route('/success', name: 'api_success', methods: ['GET', 'POST'])]
+    #[Route('/api/stripe/success', name: 'api_success', methods: ['GET', 'POST'])]
     public function successStripe(Request $request, EntityManagerInterface $entityManager): JsonResponse|RedirectResponse
     {
         $frontUrl = $_ENV['FRONT_LINK'];
