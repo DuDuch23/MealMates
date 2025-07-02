@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router";
+import { useSearchParams, useNavigate, useParams } from "react-router";
 import { sendMessageQr } from "../../service/requestApi";
 
 export default function QrCode() {

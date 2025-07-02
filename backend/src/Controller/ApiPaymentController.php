@@ -44,7 +44,7 @@ class ApiPaymentController extends AbstractController
 
         if (!$order) {
             // Redirige vers la création d'une commande si elle n'existe pas
-            return $this->redirectToRoute('/api/order/create', ['offerId' => $chat->getOffer()->getId()]);
+            return $this->redirectToRoute('api_order_create', ['offerId' => $chat->getOffer()->getId()]);
         }
 
         $user = $security->getUser();
