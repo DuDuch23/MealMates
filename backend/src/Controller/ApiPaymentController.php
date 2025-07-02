@@ -159,7 +159,7 @@ class ApiPaymentController extends AbstractController
         }
 
         // Rediriger vers la page de confirmation avec code + mdp dans query string
-        return new RedirectResponse("{$frontUrl}/qrcode/{$orderId}?randomString={$randomString}&user={$user->getId()}&chat={$chat->getId()}");
+        return new RedirectResponse("{$frontUrl}/qrcode/{$orderId}?randomString={$randomString}&user={$user->getId()}&chat={$chat->getId()}&quantity={$quantity}");
     }
 
     #[Route('/confirm/qrcode/{code}', name: 'qr_code_confirm', methods: ['GET'])]
