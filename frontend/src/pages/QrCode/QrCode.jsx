@@ -6,21 +6,19 @@ export default function QrCode() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    const { id } = useParams();
+
     const randomString = searchParams.get("randomString");
-    const chatId = searchParams.get("chat_id");
-    const userId = searchParams.get("user_id");
-    const orderId = searchParams.get("order_id");
+    const chatId = searchParams.get("chat");
+    const userId = searchParams.get("user");
+    const orderId = searchParams.get("order");
     const quantity = searchParams.get("quantity");
 
     useEffect(() => {
-        if (!chatId || !userId || !orderId || !quantity) {
-            navigate("/404");
-        }
-
         const handleRequest = async () => {
             try {
-                const qrCodeContent = [randomString, orderId];
-                await sendMessageQr({ userId, chat: chatId, message: qrCodeContent });
+                const qrCodeContent = [randomString, id];
+                await sendMessageQr({ user: userId, chat: chatId, message: qrCodeContent });
                 navigate("/");
             } catch (error) {
                 console.error("Erreur lors de l'envoi du QR code :", error);

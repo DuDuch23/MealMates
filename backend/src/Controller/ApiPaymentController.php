@@ -39,7 +39,6 @@ class ApiPaymentController extends AbstractController
         if (!$chat || !$chat->getOffer()) {
             return new JsonResponse(['error' => 'Chat ou offre introuvable'], 404);
         }
-        $frontUrl = $_ENV['FRONT_LINK'];
 
         $order = $entityManager->getRepository(Order::class)->findOneBy(['offer' => $chat->getOffer()]);
 
