@@ -78,7 +78,7 @@ function UserModify() {
         try {
             const res = await editUser({ userData });
             if (res.code === 200) {
-                await updateUserIndexDB({ userId, userData });
+                await updateUserIndexDB(userId, userData);
                 alert("Informations mises à jour avec succès !");
                 navigate(`/userProfile/${userId}`);
             } else {
