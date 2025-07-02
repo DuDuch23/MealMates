@@ -141,6 +141,7 @@ class ApiPaymentController extends AbstractController
 
         $client = $chat->getClient();
 
+
         // Envoi du mail de confirmation au client
         if ($client && $client->getEmail()) {
             try{

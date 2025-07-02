@@ -13,9 +13,8 @@ export default function QrCode() {
     const quantity = searchParams.get("quantity");
 
     useEffect(() => {
-        if (!randomString || !chatId || !userId || !orderId || !quantity) {
+        if (!chatId || !userId || !orderId || !quantity) {
             navigate("/404");
-            return;
         }
 
         const handleRequest = async () => {
