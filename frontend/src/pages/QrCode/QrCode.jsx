@@ -1,4 +1,4 @@
-import { useEffect, useState  } from "react";
+import { useEffect } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router";
 import { sendMessageQr } from "../../service/requestApi";
 
@@ -9,21 +9,26 @@ export default function QrCode() {
     const randomString = searchParams.get("randomString");
     const chatId = searchParams.get("chat");
     const userId = searchParams.get("user");
+    const quantity = searchParams.get("quantity");
 
     useEffect(() => {
-        if (!randomString || !chatId || !userId || !id ) {
+        if (!randomString || !chatId || !userId || !id || !quantity) {
             navigate("/404");
-            return;
         }
 
-        const handleRequest = async() => {
-            const qrCodeContent = [randomString,id];
-            const res = await sendMessageQr({userId:userId, chat:chatId, message: qrCodeContent});
-        }
+        const handleRequest = async () => {
+            try {
+                const qrCodeContent = [randomString, id];
+                await sendMessageQr({ userId, chat: chatId, message: qrCodeContent });
+                navigate("/");
+            } catch (error) {
+                console.error("Erreur lors de l'envoi du QR code :", error);
+                navigate("/404");
+            }
+        };
 
         handleRequest();
-        navigate("/");
+    }, [randomString, chatId, userId, id, quantity, navigate]);
 
-    }, [randomString,chatId,userId,id, navigate]);
-
+    return null;
 }
