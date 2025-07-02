@@ -39,7 +39,6 @@ class ApiPaymentController extends AbstractController
         if (!$chat || !$chat->getOffer()) {
             return new JsonResponse(['error' => 'Chat ou offre introuvable'], 404);
         }
-        $frontUrl = $_ENV['FRONT_LINK'];
 
         $order = $entityManager->getRepository(Order::class)->findOneBy(['offer' => $chat->getOffer()]);
 
@@ -141,6 +140,7 @@ class ApiPaymentController extends AbstractController
 
         $client = $chat->getClient();
 
+
         // Envoi du mail de confirmation au client
         if ($client && $client->getEmail()) {
             try{
@@ -159,7 +159,7 @@ class ApiPaymentController extends AbstractController
         }
 
         // Rediriger vers la page de confirmation avec code + mdp dans query string
-        return new RedirectResponse("{$frontUrl}/qrcode/{$orderId}?randomString={$randomString}&user={$user->getId()}&chat={$chat->getId()}");
+        return new RedirectResponse("{$frontUrl}/qrcode/{$orderId}?randomString={$randomString}&user={$user->getId()}&chat={$chat->getId()}&quantity={$quantity}");
     }
 
     #[Route('/confirm/qrcode/{code}', name: 'qr_code_confirm', methods: ['GET'])]
