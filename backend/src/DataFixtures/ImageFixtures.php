@@ -83,7 +83,7 @@ class ImageFixtures extends Fixture
         ],
         [
             'name' => 'gallette',
-            'link' => 'gallette.jpg',
+            'link' => 'gallette2.jpg',
         ],
         [
             'name' => 'gallette2',

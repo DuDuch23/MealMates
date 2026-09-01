@@ -4,59 +4,70 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
-        "ext-ctype": "*",
-        "ext-iconv": "*",
-        "api-platform/doctrine-orm": "4.0",
-        "api-platform/symfony": "4.0",
-        "cocur/slugify": "^4.6",
-        "doctrine/dbal": "^3.9.5",
-        "doctrine/doctrine-bundle": "^2.15",
-        "doctrine/doctrine-migrations-bundle": "^3.4.2",
-        "doctrine/orm": "^3.4.2",
-        "endroid/qr-code": "4.0",
-        "google/apiclient": "^2.18.3",
-        "lexik/jwt-authentication-bundle": ">=3.1.1",
-        "nelmio/api-doc-bundle": "4.37",
-        "nelmio/cors-bundle": "2.5",
-        "phpdocumentor/reflection-docblock": "^5.6.2",
-        "phpstan/phpdoc-parser": "^2.1",
-        "spatie/array-to-xml": "^3.4",
-        "stripe/stripe-php": "^17.3",
-        "symfony/asset": "7.2.*",
-        "symfony/cache": "7.2.*",
-        "symfony/clock": "7.2.*",
-        "symfony/console": "7.2.*",
-        "symfony/dotenv": "7.2.*",
-        "symfony/expression-language": "7.2.*",
-        "symfony/flex": "^2.7.1",
-        "symfony/form": "7.2.*",
-        "symfony/framework-bundle": "7.2.*",
-        "symfony/http-client": "7.2.*",
-        "symfony/mailer": "7.2.*",
-        "symfony/mailtrap-mailer": "7.2.*",
-        "symfony/messenger": "7.2.*",
-        "symfony/monolog-bundle": "^3.10",
-        "symfony/property-access": "7.2.*",
-        "symfony/property-info": "7.2.*",
-        "symfony/runtime": "7.2.*",
-        "symfony/scheduler": "7.2.*",
-        "symfony/security-bundle": "7.2.*",
-        "symfony/security-core": "7.2.*",
-        "symfony/serializer": "7.2.*",
-        "symfony/twig-bundle": "7.2.*",
-        "symfony/validator": "7.2.*",
-        "symfony/yaml": "7.2.*",
-        "symfonycasts/verify-email-bundle": ">=1.17.3",
-        "twig/twig": "^3.21.1",
-        "vich/uploader-bundle": "^2.7"
+        "php": "^8.4",
+
+        "api-platform/doctrine-orm": "^4.3.16",
+        "api-platform/symfony": "^4.3.15",
+
+        "cocur/slugify": "^4.7.1",
+
+        "doctrine/dbal": "^3.10.5",
+        "doctrine/doctrine-bundle": "^2.18.3",
+        "doctrine/doctrine-migrations-bundle": "^3.7",
+        "doctrine/orm": "^3.6.7",
+
+        "endroid/qr-code": "^4.8.5",
+
+        "google/apiclient": "^2.19.4",
+
+        "lexik/jwt-authentication-bundle": "^3.2",
+
+        "nelmio/api-doc-bundle": "^5.10.3",
+        "nelmio/cors-bundle": "^2.6.1",
+
+        "phpdocumentor/reflection-docblock": "^5.6.7",
+        "phpstan/phpdoc-parser": "^2.3.2",
+
+        "spatie/array-to-xml": "^3.4.4",
+        "stripe/stripe-php": "^17.6",
+
+        "symfony/asset": "^7.4.8",
+        "symfony/cache": "^7.4.14",
+        "symfony/clock": "^7.4.8",
+        "symfony/console": "^7.4.14",
+        "symfony/dotenv": "^7.4.14",
+        "symfony/expression-language": "^7.4.14",
+        "symfony/flex": "^2.11",
+        "symfony/form": "^7.4.14",
+        "symfony/framework-bundle": "^7.4.14",
+        "symfony/http-client": "^7.4.14",
+        "symfony/mailer": "^7.4.14",
+        "symfony/mailtrap-mailer": "^7.4.12",
+        "symfony/messenger": "^7.4.14",
+        "symfony/monolog-bundle": "^3.11.2",
+        "symfony/property-access": "^7.4.8",
+        "symfony/property-info": "^7.4.8",
+        "symfony/runtime": "^7.4.14",
+        "symfony/scheduler": "^7.4.13",
+        "symfony/security-bundle": "^7.4.14",
+        "symfony/security-core": "^7.4.14",
+        "symfony/serializer": "^7.4.14",
+        "symfony/twig-bundle": "^7.4.14",
+        "symfony/validator": "^7.4.14",
+        "symfony/yaml": "^7.4.14",
+
+        "symfonycasts/verify-email-bundle": "^1.18",
+
+        "twig/twig": "^3.27.1",
+
+        "vich/uploader-bundle": "^2.9.4"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^4.1",
+        "doctrine/doctrine-fixtures-bundle": "^4.3.1",
         "fakerphp/faker": "^1.24.1",
-        "stof/doctrine-extensions-bundle": "^1.14",
-        "symfony/maker-bundle": "^1.63",
-        "symfony/web-profiler-bundle": "7.2.*"
+        "stof/doctrine-extensions-bundle": "^1.15.3",
+        "symfony/maker-bundle": "^1.67",
+        "symfony/web-profiler-bundle": "^7.4.14"
     },
     "config": {
         "allow-plugins": {
@@ -105,7 +116,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": "true",
-            "require": "7.2.*"
+            "require": "7.4.*"
         }
     }
 }

@@ -5,13 +5,11 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Offer;
+use App\Entity\Image;
 use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\HttpFoundation\File\File;
-use Doctrine\Common\Collections\ArrayCollection;
 
-use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Cocur\Slugify\Slugify;
@@ -20,12 +18,6 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
     public const NB_OFFERS = 100;
     public const OFFER_REF_PREFIX = 'offer_';
-    public $publicPath;
-
-    public function __construct(KernelInterface $kernel)
-    {
-        $this->publicPath = $kernel->getProjectDir();
-    }
 
     public function load(ObjectManager $manager): void
     {
@@ -124,18 +116,13 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
             $offer->setLongitude($cityCoords[$city]['lon']);
             $slots = $faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s');
             $offer->setAvailableSlots($slots);
-            $photosDirectory = $this->publicPath . '/public/uploads/offers-photos';
-            $availablePhotos = glob($photosDirectory . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE);
 
-            if (!empty($availablePhotos)) {
-                $photos = new ArrayCollection();
-                $selectedPhotos = $faker->randomElements($availablePhotos, rand(1, 3));
-
-                foreach ($selectedPhotos as $photoPath) {
-                    if (file_exists($photoPath)) {
-                        $photos[] = new File($photoPath);
-                    }
-                }
+            $imageNames = array_column(ImageFixtures::IMAGES, 'name');
+            $selectedImageNames = $faker->randomElements($imageNames, rand(1, 3));
+            foreach ($selectedImageNames as $imageName) {
+                /** @var Image $image */
+                $image = $this->getReference($imageName, Image::class);
+                $offer->addImage($image);
             }
 
             $randomCatCodes = $faker->randomElements($allCatIds, rand(1, 3));
@@ -159,6 +146,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         return [
             UserFixtures::class,
             CategoryFixtures::class,
+            ImageFixtures::class,
         ];
     }
 }

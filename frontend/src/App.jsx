@@ -1,130 +1,92 @@
-import React, { Suspense, useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router';
-import { getUserIndexDB, deleteUserIndexDB } from './service/indexDB';
-import NavLayout from './Layout/NavLayout';
-import logo from '../src/assets/logo-mealmates.png';
+import React, { Suspense, useEffect } from "react"
+import { Routes, Route, useNavigate } from "react-router"
+import NavLayout from "./layouts/NavLayout"
+import logo from "./assets/logo-mealmates.png"
+import { getSessionUser, isSessionExpired, logOut } from "./services/authApi"
 
-// Chargement différé des composants
+// Pages chargées à la demande pour alléger le bundle initial
+const Home = React.lazy(() => import("./pages/Home"))
+const Offer = React.lazy(() => import("./pages/Offer"))
+const AddOffer = React.lazy(() => import("./pages/AddOffer"))
+const ModifyOffer = React.lazy(() => import("./pages/ModifyOffer"))
+const SingleOffer = React.lazy(() => import("./pages/SingleOffer"))
+const Connexion = React.lazy(() => import("./pages/Connexion"))
+const Inscription = React.lazy(() => import("./pages/Inscription"))
+const Deconnexion = React.lazy(() => import("./pages/Deconnexion"))
+const UserProfile = React.lazy(() => import("./pages/UserProfile"))
+const UserModify = React.lazy(() => import("./pages/UserModify"))
+const UserMealCard = React.lazy(() => import("./pages/UserMealCard"))
+const UserDashboard = React.lazy(() => import("./pages/UserDashboard"))
+const Chat = React.lazy(() => import("./pages/Chat"))
+const ChooseChat = React.lazy(() => import("./pages/ChooseChat"))
+const QrCode = React.lazy(() => import("./pages/QrCode"))
+const Confirmation = React.lazy(() => import("./pages/Confirmation"))
+const NotFound = React.lazy(() => import("./pages/NotFound"))
 
-// Commun
-const Home = React.lazy(() => import('./pages/Home/Home'));
+/** La racine dépend de la session : offres pour un connecté, landing sinon. */
+function RootPage() {
+  return getSessionUser() !== null ? <Offer /> : <Home />
+}
 
-// Offre
-const Offer = React.lazy(() => import('./pages/Offer/Offer'));
-const AddOffer = React.lazy(() => import('./pages/AddOffer/addOffer'));
-const SingleOffer = React.lazy(() => import('./pages/SingleOffer/SingleOffer'));
+export default function App() {
+  const navigate = useNavigate()
 
-// User
-const Connexion = React.lazy(() => import('./pages/Connexion/Connexion'));
-const UserModify = React.lazy(() => import('./pages/UserModify/UserModify'));
-const UserProfile = React.lazy(() => import('./pages/UserProfile/UserProfile'));
-const Inscription = React.lazy(() => import('./pages/Inscription/Inscription'));
-const Deconnexion = React.lazy(() => import('./pages/Deconnexion/Deconnexion'));
-const UserMealCard = React.lazy(() => import('./pages/UserMealCard/UserMealCard'));
-const UserDashboard = React.lazy(() => import('./pages/UserDashboard/UserDashboard'));
-
-// Chat
-const Chat = React.lazy(()=> import('./pages/Chat/Chat'));
-const ChooseChat = React.lazy(()=>import('./pages/ChooseChat/ChooseChat'));
-const Qrcode = React.lazy(()=>import('./pages/QrCode/QrCode'));
-const Confirmation = React.lazy(()=>import('./pages/Confirmation/Confirmation'));
-
-// Erreur 404 (redirection)
-const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
-
-function App() {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-
+  // Déconnecte automatiquement l'utilisateur dont le token a expiré
   useEffect(() => {
-    const logout = async () => {
-      try {
-        const expiration = sessionStorage.getItem("token_expiration");
-
-        if (expiration && Date.now() > Number(expiration)) {
-          await deleteUserIndexDB();
-          sessionStorage.clear();
-          console.warn("Session expirée, mais redirection désactivée.");
-          navigate("/connexion");
-        }
-      } catch (err) {
-        console.error("Erreur pendant la déconnexion :", err);
-        navigate("/connexion");
+    const checkSession = async () => {
+      if (!isSessionExpired()) {
+        return
       }
-    };
 
-    logout();
-  }, []); // Retrait de [navigate] pour éviter ré-exécution inutile
-
-  useEffect(() => {
-    async function fetchUser() {
       try {
-        const userSession = sessionStorage.getItem("user");
-        if (userSession) {
-          const parsedUser = JSON.parse(userSession);
-          const id = parseInt(parsedUser.id, 10);
-          const userData = await getUserIndexDB(id);
-          setUser(userData);
-        }
-      } catch (err) {
-        console.error("Erreur lors de la récupération de l'utilisateur :", err);
+        await logOut()
+      } catch (error) {
+        console.error("Erreur pendant la déconnexion :", error)
+      } finally {
+        navigate("/connexion")
       }
     }
 
-    fetchUser();
-  }, []);
+    checkSession()
+    // Vérification unique au chargement de l'application
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
-    <Suspense fallback={
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh"
-      }}>
-        <img src={logo} alt="Logo MealMates" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center">
+          <img src={logo} alt="Logo MealMates" className="size-32 animate-pulse" />
+        </div>
+      }
+    >
       <Routes>
-        {/* route avec la nav bar */}
         <Route element={<NavLayout />}>
-          {/* Home selon connexion */}
-          {user ? (
-            <Route path="/" element={<Offer />} />
-          ) : (
-            <Route path="/" element={<Home />} />
-          )}
+          <Route path="/" element={<RootPage />} />
 
-          {/* discussion user */}
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/ChooseChat" element={<ChooseChat />} />
-
-          {/* offer */}
           <Route path="/offer" element={<Offer />} />
-          <Route path="/addOffer" element={<AddOffer />} />
           <Route path="/offer/:id" element={<SingleOffer />} />
+          <Route path="/addOffer" element={<AddOffer />} />
+          <Route path="/modifyOffer/:id" element={<ModifyOffer />} />
 
-          {/* user profile */}
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chooseChat" element={<ChooseChat />} />
+
           <Route path="/userProfile/:id" element={<UserProfile />} />
           <Route path="/userMealCard/:id" element={<UserMealCard />} />
           <Route path="/userModify/:id" element={<UserModify />} />
           <Route path="/dashboard" element={<UserDashboard />} />
         </Route>
 
-        {/* auth */}
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription />} />
         <Route path="/deconnexion" element={<Deconnexion />} />
 
-        {/* qrcode */}
-        <Route path="/qrcode/:id" element={< Qrcode />} />
-        <Route path="/confirmation" element={< Confirmation />} />
+        <Route path="/qrcode/:id" element={<QrCode />} />
+        <Route path="/confirmation" element={<Confirmation />} />
 
-        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
-  );
+  )
 }
-
-export default App;

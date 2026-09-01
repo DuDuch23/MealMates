@@ -355,6 +355,8 @@ class ApiUserController extends AbstractController
         $moneySaved = 0;
         $moneyEarned = 0;
         $quantitySaved = 0;
+        $totalBoughtKg = 0;
+        $totalGivenKg = 0;
         $transactionsByType = [
             'Ventes' => $itemsSold,
             'Dons' => $itemsDonated,
@@ -388,6 +390,11 @@ class ApiUserController extends AbstractController
                     ${$key}[$timeKey]['earned'] += $offer->getPrice() * $offer->getQuantity();
                 }
             }
+
+            $totalGivenKg += $offer->getQuantity();
+            if (!$offer->getIsDonation()) {
+                $moneyEarned += $offer->getPrice() * $offer->getQuantity();
+            }
         }
 
 
@@ -417,6 +424,11 @@ class ApiUserController extends AbstractController
                     ${$key}[$timeKey]['kg'] += $offer->getQuantity();
                 }
             }
+
+            if (!$offer->getIsDonation()) {
+                $moneySaved += $offer->getPrice() * $offer->getQuantity();
+                $totalBoughtKg += $offer->getQuantity();
+            }
         }
 
         $byMonth = array_values($byMonth);
@@ -434,6 +446,8 @@ class ApiUserController extends AbstractController
             'moneySaved' => $moneySaved,
             'moneyEarned' => $moneyEarned,
             'quantitySaved' => $quantitySaved,
+            'totalBoughtKg' => $totalBoughtKg,
+            'totalGivenKg' => $totalGivenKg,
             'transactionsByType' => $transactionsByType,
             'byMonth' => $byMonth,
             'byYear' => $byYear,

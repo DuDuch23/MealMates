@@ -25,9 +25,9 @@ class Chat
     #[ORM\Column(type: 'string',length: 1020, nullable: true)]
     private ?string $stripeUrl = null;
 
-    #[ORM\ManyToOne(targetEntity: Offer::class)]
+    #[ORM\ManyToOne(targetEntity: Offer::class, inversedBy: 'chat')]
     #[Groups("public","private")]
-    private Offer $offer;
+    private ?Offer $offer = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -112,12 +112,12 @@ class Chat
         return $this;
     }
 
-    public function getOffer(): Offer
+    public function getOffer(): ?Offer
     {
         return $this->offer;
     }
 
-    public function setOffer(Offer $offer): void
+    public function setOffer(?Offer $offer): void
     {
         $this->offer = $offer;
     }

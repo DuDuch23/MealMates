@@ -1,0 +1,7 @@
+# Sorties graphify (graphe de connaissances local, régénérable)
+graphify-out/
+.graphify_*
+
+# État local des outils Claude Code (cache, télémétrie, non partagé)
+.claude-flow/
+.claude/

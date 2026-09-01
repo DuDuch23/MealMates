@@ -162,25 +162,21 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        // Récupération des chats existants
-        $chats = $manager->getRepository(Chat::class)->findAll();
+        foreach (self::Message as $element) {
 
-        // Création d'un tableau indexé par l'ID du chat pour un accès rapide
-        $chatsById = [];
-        foreach ($chats as $chat) {
-            $chatsById[$chat->getId()] = $chat;
-        }
+            // Les chats sont référencés par clé de fixture ("chat_1", "chat_2", ...)
+            // plutôt que par identifiant auto-incrémenté : ce dernier dérive d'un
+            // rechargement à l'autre car le purgeur des fixtures fait un DELETE,
+            // pas un TRUNCATE.
+            $referenceKey = 'chat_' . $element['chat'];
 
-        foreach (self::Message as $element) { 
-        
-            // Récupérer le chat correspondant à l'ID
-            $actualChat = $chatsById[$element['chat']] ?? null;
-
-            if (!$actualChat) {
-                echo "Chat ID {$element['chat']} introuvable\n";
+            if (!$this->hasReference($referenceKey, Chat::class)) {
+                echo "Chat {$referenceKey} introuvable\n";
                 continue;
             }
-        
+
+            $actualChat = $this->getReference($referenceKey, Chat::class);
+
             // Récupérer l'utilisateur
             $user = $this->getReference($element['sender'], User::class);
         

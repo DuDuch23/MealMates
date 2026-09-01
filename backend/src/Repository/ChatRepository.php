@@ -37,7 +37,7 @@ class ChatRepository extends ServiceEntityRepository
              JOIN m.chat c
              JOIN c.client client
              JOIN c.seller seller
-             JOIN c.offer offer
+             LEFT JOIN c.offer offer
              WHERE (client.id = :userId OR seller.id = :userId)
                AND m.sentAt = (
                    SELECT MAX(m2.sentAt)
