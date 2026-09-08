@@ -20,7 +20,7 @@ export default function Message({ content, iconUser, senderId }) {
           href={paymentUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-md border border-white px-3 py-1.5 text-sm text-white transition-colors hover:border-primary hover:text-primary"
+          className="rounded-md border border-gray-500 px-3 py-1.5 text-sm text-white transition-colors hover:border-primary hover:text-primary"
         >
           Voici le lien vers le paiement
         </a>
@@ -29,7 +29,7 @@ export default function Message({ content, iconUser, senderId }) {
       ) : (
         <p
           className={`max-w-[70%] rounded-lg px-3 py-1.5 ${
-            isSender ? "bg-primary text-black" : "bg-white text-primary-dark"
+            isSender ? "bg-primary text-black" : "bg-surface-raised text-white"
           }`}
         >
           {content}

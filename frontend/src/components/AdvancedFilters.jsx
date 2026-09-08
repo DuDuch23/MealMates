@@ -26,7 +26,7 @@ export default function AdvancedFilters({ filters, setFilters }) {
         onClick={() => setIsVisible((visible) => !visible)}
         aria-expanded={isVisible}
         aria-controls="advanced-filters-form"
-        className="mb-4 w-full cursor-pointer rounded-lg bg-primary-dark py-2.5 font-semibold text-white md:hidden"
+        className="mb-4 w-full cursor-pointer rounded-lg bg-primary py-2.5 font-semibold text-black transition-colors hover:bg-primary-dark hover:text-white md:hidden"
       >
         {isVisible ? "Cacher les filtres" : "Afficher les filtres"}
       </button>

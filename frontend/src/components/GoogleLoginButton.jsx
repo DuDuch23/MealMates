@@ -3,6 +3,8 @@ import { useNavigate } from "react-router"
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"
 import { jwtDecode } from "jwt-decode"
 import { fetchSsoToken, storeSession } from "../services/authApi"
+import { getProfile } from "../services/userApi"
+import { addUserIndexDb } from "../services/indexDb"
 
 const CLIENT_ID = import.meta.env.VITE_APP_GOOGLE_CLIENT_ID
 
@@ -33,17 +35,20 @@ function LoginButton() {
       }
 
       const decoded = jwtDecode(credentialResponse.credential)
-      const user = {
-        email: decoded.email,
-        firstName: decoded.given_name,
-        iconUser: decoded.picture,
-      }
-
       const ssoResponse = await fetchSsoToken(credentialResponse.credential)
+
+      // Le token seul ne suffit pas : on récupère le profil canonique
+      // (id, iconUser numérique, etc.) depuis le backend, comme pour la
+      // connexion classique — les champs du JWT Google (photo, prénom) ne
+      // correspondent pas au format attendu par le reste de l'app.
+      sessionStorage.setItem("token", ssoResponse.token)
+      const { user: profileUser } = await getProfile({ email: decoded.email })
+
       storeSession({
         token: ssoResponse.token,
-        user,
+        user: profileUser,
       })
+      await addUserIndexDb(profileUser)
 
       navigate("/offer")
     } catch (error) {

@@ -387,7 +387,7 @@ export default function OfferForm({ initialValues = {}, initialImages = [], subm
         <button
           type="submit"
           disabled={submitting}
-          className="cursor-pointer self-start rounded-xl bg-primary-dark px-8 py-3 font-semibold text-white transition-colors hover:bg-primary hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
+          className="cursor-pointer self-start rounded-xl bg-primary px-8 py-3 font-semibold text-black transition-colors hover:bg-primary-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
           {submitting ? `${submitLabel}…` : submitLabel}
         </button>

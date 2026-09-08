@@ -66,7 +66,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate("/inscription")}
-            className="w-fit cursor-pointer rounded-2xl bg-primary-dark px-8 py-4 font-bold text-white transition-colors hover:bg-primary hover:text-black"
+            className="w-fit cursor-pointer rounded-2xl bg-primary px-8 py-4 font-bold text-black transition-colors hover:bg-primary-dark hover:text-white"
           >
             M'inscrire maintenant
           </button>

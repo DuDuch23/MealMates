@@ -113,7 +113,7 @@ export default function Connexion() {
           <button
             type="submit"
             disabled={loading}
-            className="cursor-pointer rounded-lg bg-white px-4 py-3 text-lg font-bold text-black transition-transform hover:-translate-y-0.5 disabled:opacity-50"
+            className="cursor-pointer rounded-lg bg-primary px-4 py-3 text-lg font-bold text-black transition-colors hover:bg-primary-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Connexion..." : "Connexion"}
           </button>

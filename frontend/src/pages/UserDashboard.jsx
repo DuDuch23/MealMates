@@ -6,9 +6,13 @@ import {
   XAxis,
   PieChart,
   Pie,
+  Cell,
+  Legend,
   Tooltip,
   ResponsiveContainer,
 } from "recharts"
+
+const PIE_COLORS = ["#32cd32", "#1d8915", "#6b7280"]
 import StatCard from "../components/StatCard"
 import { fetchStats } from "../services/userApi"
 import { getSessionUser } from "../services/authApi"
@@ -72,13 +76,18 @@ export default function UserDashboard() {
           <BarChart data={barData}>
             <XAxis dataKey="month" />
             <Tooltip />
-            <Bar dataKey="kg" fill="#82ca9d" />
+            <Bar dataKey="kg" fill="#32cd32" />
           </BarChart>
         </ResponsiveContainer>
 
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
-            <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={110} label />
+            <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={110} label>
+              {pieData.map((entry, index) => (
+                <Cell key={entry.name} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+              ))}
+            </Pie>
+            <Legend />
             <Tooltip />
           </PieChart>
         </ResponsiveContainer>

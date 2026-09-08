@@ -33,11 +33,11 @@ export default function Header({ onProfileClick }) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-700 bg-neutral-800/60 backdrop-blur-md">
-      <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-4 px-4 py-3">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Logo MealMates" className="h-12 w-12 object-contain" />
-            <span className="text-2xl font-bold text-white md:text-3xl">MealMates</span>
+      <div className="mx-auto flex w-full max-w-[1280px] flex-wrap items-center justify-between gap-2 px-4 py-3 sm:gap-4">
+        <div className="flex items-center gap-4 sm:gap-8">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3">
+            <img src={logo} alt="Logo MealMates" className="h-10 w-10 object-contain sm:h-12 sm:w-12" />
+            <span className="text-lg font-bold text-white sm:text-2xl md:text-3xl">MealMates</span>
           </Link>
 
           {user !== null && (
@@ -82,16 +82,16 @@ export default function Header({ onProfileClick }) {
             </button>
           </>
         ) : (
-          <nav className="flex items-center gap-3 md:gap-5">
+          <nav className="flex items-center gap-2 sm:gap-3 md:gap-5">
             <Link
               to="/inscription"
-              className="rounded-lg bg-primary px-4 py-2 font-semibold text-black transition-colors hover:bg-primary-dark hover:text-white md:px-6 md:py-3"
+              className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-black transition-colors hover:bg-primary-dark hover:text-white sm:px-4 sm:py-2 sm:text-base md:px-6 md:py-3"
             >
               Inscription
             </Link>
             <Link
               to="/connexion"
-              className="rounded-lg border border-primary px-4 py-2 font-semibold text-primary transition-colors hover:bg-primary hover:text-black md:px-6 md:py-3"
+              className="rounded-lg border border-primary px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-black sm:px-4 sm:py-2 sm:text-base md:px-6 md:py-3"
             >
               Connexion
             </Link>

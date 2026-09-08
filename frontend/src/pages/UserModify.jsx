@@ -7,7 +7,7 @@ import { getUserIndexDb, updateUserIndexDb } from "../services/indexDb"
 import { getSessionUser } from "../services/authApi"
 
 const inputClass =
-  "w-full rounded-lg border border-gray-600 bg-neutral-700 px-4 py-3 text-white placeholder-gray-400 focus:border-primary focus:outline-none"
+  "w-full rounded-lg border border-gray-600 bg-surface-sunken px-4 py-3 text-white placeholder-gray-400 focus:border-primary focus:outline-none"
 
 export default function UserModify() {
   const params = useParams()
@@ -15,7 +15,7 @@ export default function UserModify() {
   const userId = params.id ? parseInt(params.id, 10) : null
   const sessionUser = getSessionUser()
 
-  const [iconUser, setIconUser] = useState(1)
+  const [iconUser, setIconUser] = useState(null)
   const [email, setEmail] = useState("")
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -42,9 +42,12 @@ export default function UserModify() {
           setEmail(user.email || "")
           setFirstName(user.firstName || "")
           setLastName(user.lastName || "")
+        } else {
+          setIconUser(1)
         }
       } catch (error) {
         console.error("Erreur lors de la récupération des données :", error)
+        setIconUser(1)
       }
     }
 
@@ -106,7 +109,14 @@ export default function UserModify() {
             </p>
           )}
 
-          <AvatarPicker value={iconUser} onChange={setIconUser} />
+          {iconUser === null ? (
+            <div className="flex flex-col items-center gap-2">
+              <div className="size-24 animate-pulse rounded-full bg-surface-sunken" />
+              <span className="text-sm text-gray-400">Chargement de l'avatar…</span>
+            </div>
+          ) : (
+            <AvatarPicker value={iconUser} onChange={setIconUser} />
+          )}
 
           <div className="flex flex-col gap-4 md:flex-row">
             <div className="flex flex-1 flex-col gap-2">

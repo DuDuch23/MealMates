@@ -69,7 +69,9 @@ Règles :
 cd backend
 cp .env.example .env        # renseigner DATABASE_URL, JWT_PASSPHRASE, MAILER_DSN
 composer install
-php bin/console doctrine:migrations:migrate
+php bin/console lexik:jwt:generate-keypair   # génère config/jwt/{private,public}.pem
+php bin/console doctrine:schema:update --force
+php bin/console doctrine:migrations:version --add --all --no-interaction
 php bin/console doctrine:fixtures:load   # optionnel, données de dev
 symfony server:start -d     # https://127.0.0.1:8000
 
@@ -77,21 +79,24 @@ symfony server:start -d     # https://127.0.0.1:8000
 cd frontend
 cp .env.example .env        # renseigner les variables ci-dessous
 npm install
-npm run dev                 # http://localhost:5173
+npm run dev                 # http://localhost:5173, ou 5174 si le port est déjà pris
 ```
+
+`schema:update` + `migrations:version --add --all` plutôt que `migrations:migrate` : la plus ancienne migration suppose des tables déjà existantes et échoue sur une base neuve. Voir [README.MD](README.MD#dépannage) pour le détail. `start.bat` à la racine lance les deux serveurs d'un coup sous Windows.
 
 ## Variables d'environnement
 
 Frontend (`frontend/.env`) :
 ```
 VITE_API_BASE_URL           # URL de l'API Symfony (ex: https://127.0.0.1:8000)
-VITE_UPLOADS_URL            # chemin des photos d'offres (/uploads/offers-photos/)
-VITE_APP_GOOGLE_CLIENT_ID   # OAuth Google (SSO)
+VITE_APP_GOOGLE_CLIENT_ID   # OAuth Google (SSO) — doit égaler CLIENT_ID_GOOGLE côté backend
 VITE_GOOGLE_MAP             # clé Google Maps + Geocoding
 VITE_CRYPTO_KEY             # clé AES du cache IndexedDB
 ```
 
-Backend (`backend/.env`) : `DATABASE_URL`, `APP_SECRET`, `JWT_PASSPHRASE` (+ clés dans `config/jwt/`), `CORS_ALLOW_ORIGIN`, `MAILER_DSN`, clés Stripe.
+Backend (`backend/.env`) : `DATABASE_URL`, `APP_SECRET`, `JWT_PASSPHRASE` (+ clés dans `config/jwt/`), `CORS_ALLOW_ORIGIN`, `MAILER_DSN`, `CLIENT_ID_GOOGLE` (SSO, doit égaler `VITE_APP_GOOGLE_CLIENT_ID`), `STRIPE_SECRET_KEY`, `FRONT_LINK`.
+
+Liste complète, valeurs d'exemple et dépannage : voir [README.MD](README.MD#variables-denvironnement).
 
 Jamais de secret commité ; `.env` reste dans `.gitignore`.
 
